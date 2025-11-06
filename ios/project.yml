@@ -1,0 +1,132 @@
+name: MindLock
+options:
+  minimumXcodeGenVersion: 2.40.0
+
+configs:
+  Debug: debug
+  Release: release
+
+targets:
+  MindLock:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MindLock
+    settings:
+      base:
+        PRODUCT_NAME: MindLock
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucaszambranonavia.mindlock
+        SWIFT_VERSION: 5.0
+        CODE_SIGN_ENTITLEMENTS: MindLock/MindLock.entitlements
+        INFOPLIST_FILE: MindLock/Info.plist
+        CODE_SIGN_STYLE: Automatic
+    entitlements:
+      path: MindLock/MindLock.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups:
+          - group.com.YLUUT5U99U.mindlock
+    info:
+      path: MindLock/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    dependencies:
+      - target: MindLockMonitor
+      - target: MindLockShieldUI
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettings.framework
+      - sdk: DeviceActivity.framework
+      - sdk: _DeviceActivity_SwiftUI.framework
+
+  MindLockMonitor:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MindLockMonitor
+      - path: MindLock/Services/SharedSettings.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucaszambranonavia.mindlock.monitor
+        CODE_SIGN_STYLE: Automatic
+        INFOPLIST_FILE: MindLockMonitor/Info.plist
+    info:
+      path: MindLockMonitor/Info.plist
+      properties:
+        CFBundleDisplayName: MindLock Monitor
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).MindLockActivityMonitor
+    entitlements:
+      path: MindLockMonitor/MindLockMonitor.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups:
+          - group.com.YLUUT5U99U.mindlock
+    dependencies:
+      - sdk: DeviceActivity.framework
+      - sdk: ManagedSettings.framework
+      - sdk: FamilyControls.framework
+
+  MindLockShieldUI:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MindLockShieldUI
+      - path: MindLock/Services/SharedSettings.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucaszambranonavia.mindlock.shieldui
+        CODE_SIGN_STYLE: Automatic
+        INFOPLIST_FILE: MindLockShieldUI/Info.plist
+    info:
+      path: MindLockShieldUI/Info.plist
+      properties:
+        CFBundleDisplayName: MindLock Shield
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.ManagedSettingsUI.shield-configuration-service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).MindLockShieldDataSource
+    dependencies:
+      - sdk: ManagedSettingsUI.framework
+      - sdk: ManagedSettings.framework
+      - sdk: FamilyControls.framework
+
+  MindLockUsageReport:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MindLockUsageReport
+      - path: MindLock/Services/SharedSettings.swift
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucaszambranonavia.mindlock.usage
+        CODE_SIGN_STYLE: Automatic
+        INFOPLIST_FILE: MindLockUsageReport/Info.plist
+        CODE_SIGN_ENTITLEMENTS: MindLockUsageReport/MindLockUsageReport.entitlements
+    info:
+      path: MindLockUsageReport/Info.plist
+      properties:
+        CFBundleDisplayName: MindLock Usage Report
+        EXAppExtensionAttributes:
+          EXExtensionPointIdentifier: com.apple.deviceactivityui.report-extension
+    dependencies:
+      - sdk: DeviceActivity.framework
+      - sdk: _DeviceActivity_SwiftUI.framework
+      - sdk: FamilyControls.framework
+      - sdk: ManagedSettingsUI.framework
+
+schemes:
+  MindLock:
+    build:
+      targets:
+        MindLock: all
+        MindLockMonitor: all
+        MindLockShieldUI: all

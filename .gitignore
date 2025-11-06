@@ -1,0 +1,43 @@
+# macOS
+.DS_Store
+
+# Xcode / iOS
+DerivedData/
+build/
+xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+
+# Swift Package Manager
+.swiftpm/
+Package.resolved
+
+# CocoaPods (if added later)
+Pods/
+
+# Carthage
+Carthage/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Editor cruft
+.idea/
+.vscode/*
+!.vscode/settings.json
+
+# Node / Website project (kept in separate repo)
+website/
+website/.env
+website/node_modules/
+
+# Logs & temps
+*.log
+*.tmp
+.env
+.env.*
+.fleet/
