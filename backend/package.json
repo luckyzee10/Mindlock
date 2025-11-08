@@ -1,0 +1,46 @@
+{
+  "name": "mindlock-backend",
+  "version": "0.1.0",
+  "description": "Fast MVP backend for MindLock",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/app.ts",
+    "start": "node dist/app.js",
+    "build": "tsc -p tsconfig.json",
+    "worker": "tsx src/worker.ts",
+    "lint": "eslint src --ext .ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "reports:run": "tsx src/scripts/runReport.ts"
+  },
+  "dependencies": {
+    "@bull-board/api": "^5.10.0",
+    "@bull-board/express": "^5.10.0",
+    "@prisma/client": "^5.9.0",
+    "bullmq": "^4.12.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.0.0",
+    "ioredis": "^5.3.2",
+    "morgan": "^1.10.0",
+    "node-fetch": "^3.3.2",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/express-rate-limit": "^6.0.2",
+    "@types/node": "^20.10.5",
+    "@types/morgan": "^1.9.6",
+    "@types/cors": "^2.8.15",
+    "eslint": "^8.54.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.0",
+    "prisma": "^5.9.0",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3",
+    "tsx": "^4.6.0"
+  }
+}
