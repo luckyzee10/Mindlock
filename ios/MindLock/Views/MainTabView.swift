@@ -1,45 +1,23 @@
 import SwiftUI
-import FamilyControls
-import ManagedSettings
 
 struct MainTabView: View {
     @State private var selectedTab = 0
-    @EnvironmentObject private var limitsManager: DailyLimitsManager
-    @State private var activeBlockedApp: BlockedApp?
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            // Setup Section
             SetupView()
                 .tabItem {
-                    Image(systemName: "gearshape.fill")
-                    Text("Setup")
+                    Image(systemName: "lock.circle")
+                    Text("MindLock")
                 }
                 .tag(0)
-            
-            // Analytics Section
-            AnalyticsView()
-                .tabItem {
-                    Image(systemName: "chart.bar.fill")
-                    Text("Analytics")
-                }
-                .tag(1)
-            
-            // Social Section
-            SocialView()
-                .tabItem {
-                    Image(systemName: "globe")
-                    Text("Social")
-                }
-                .tag(2)
-            
-            // Profile Section
+
             ProfileView()
                 .tabItem {
-                    Image(systemName: "person.fill")
+                    Image(systemName: "person.crop.circle")
                     Text("Profile")
                 }
-                .tag(3)
+                .tag(1)
         }
         .preferredColorScheme(.dark)
         .accentColor(DesignSystem.Colors.primary)
@@ -70,9 +48,4 @@ struct MainTabView: View {
 
 #Preview {
     MainTabView()
-}
-
-private struct BlockedApp: Identifiable {
-    let token: ApplicationToken
-    var id: String { token.identifier }
 }

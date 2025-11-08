@@ -15,7 +15,6 @@ struct OnboardingView: View {
     @State private var userAge: Int = 0
     @State private var selectedCharity: Charity?
     @State private var dailyGoalHours: Double = 2
-    @State private var selectedPricingTier: PricingTier = .moderate
     
     private let pages = OnboardingPage.allPages
     
@@ -105,17 +104,6 @@ struct OnboardingView: View {
                                 }
                             )
                             .tag(index)
-                        } else if pages[index].isPricingTierPage {
-                            PricingTierSelectionView(
-                                page: pages[index],
-                                selectedPricingTier: $selectedPricingTier,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
                         } else if pages[index].isAnimatedLimitsIntroPage {
                             AnimatedLimitsIntroView(
                                 page: pages[index],
@@ -143,7 +131,7 @@ struct OnboardingView: View {
                             )
                             .tag(index)
                         } else {
-                            OnboardingPageView(page: pages[index])
+                            staticOnboardingView(for: pages[index])
                                 .tag(index)
                         }
                     }
@@ -201,10 +189,41 @@ struct OnboardingView: View {
         }
         UserDefaults.standard.set(dailyGoalHours, forKey: "dailyGoalHours")
         UserDefaults.standard.set(dailyGoalHours * 7, forKey: "weeklyGoalHours")
-        UserDefaults.standard.set(selectedPricingTier.name, forKey: "selectedPricingTier")
-        
         // Update ScreenTimeManager with selected apps (already handled by the manager)
-        print("💾 Saved user preferences: \(selectedPricingTier.name) tier, \(selectedCharity?.name ?? "no charity")")
+        print("💾 Saved user preferences: Charity \(selectedCharity?.name ?? "none")")
+    }
+    
+    private func staticOnboardingView(for page: OnboardingPage) -> some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            Spacer()
+            
+            Image(systemName: page.iconName)
+                .font(.system(size: 80, weight: .semibold))
+                .foregroundColor(page.accentColor)
+                .padding()
+                .background(
+                    Circle()
+                        .fill(page.accentColor.opacity(0.12))
+                        .frame(width: 180, height: 180)
+                )
+            
+            VStack(spacing: DesignSystem.Spacing.md) {
+                Text(page.title)
+                    .font(DesignSystem.Typography.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+                
+                Text(page.description)
+                    .font(DesignSystem.Typography.body)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+            }
+            
+            Spacer()
+        }
+        .padding(.horizontal, DesignSystem.Spacing.lg)
     }
 }
 
@@ -328,7 +347,7 @@ struct UsageQuestionView: View {
                 }
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
-            
+
             Spacer()
         }
         .padding(.top, 10)
@@ -461,7 +480,6 @@ struct AgeQuestionView: View {
                 }
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
-            
             Spacer()
         }
         .onAppear {
@@ -1225,46 +1243,6 @@ struct OnboardingAppSelectionLegacy: View {
     }
 }
 
-// MARK: - Pricing Tier Data Model
-struct PricingTier: Identifiable, Equatable, Codable {
-    var id = UUID()
-    let name: String
-    let description: String
-    let emoji: String
-    let fifteenMinPrice: String
-    let thirtyMinPrice: String
-    let fullDayPrice: String
-    
-    static let easy = PricingTier(
-        name: "Easy Mode",
-        description: "Gentle motivation with lower unlock costs",
-        emoji: "😊",
-        fifteenMinPrice: "$0.50",
-        thirtyMinPrice: "$1.00",
-        fullDayPrice: "$2.00"
-    )
-    
-    static let moderate = PricingTier(
-        name: "Balanced",
-        description: "Moderate pricing for steady progress",
-        emoji: "⚖️",
-        fifteenMinPrice: "$1.00",
-        thirtyMinPrice: "$2.00",
-        fullDayPrice: "$3.00"
-    )
-    
-    static let strict = PricingTier(
-        name: "Strict Mode",
-        description: "Higher costs for serious commitment",
-        emoji: "🔒",
-        fifteenMinPrice: "$2.00",
-        thirtyMinPrice: "$4.00",
-        fullDayPrice: "$6.00"
-    )
-    
-    static let allTiers = [easy, moderate, strict]
-}
-
 struct CharitySelectionView: View {
     let page: OnboardingPage
     @Binding var selectedCharity: Charity?
@@ -1332,12 +1310,20 @@ struct CharitySelectionView: View {
                         }
                     }) {
                         HStack(spacing: DesignSystem.Spacing.md) {
-                            // Charity icon
-                            Text(charity.emoji)
-                                .font(.system(size: 32))
-                                .frame(width: 44, height: 44)
-                                .background(charity.color.opacity(0.1))
-                                .cornerRadius(DesignSystem.CornerRadius.sm)
+                            // Charity icon (prefer logo without background)
+                            if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 36, height: 36)
+                                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                            } else {
+                                Text(charity.emoji)
+                                    .font(.system(size: 32))
+                                    .frame(width: 44, height: 44)
+                                    .background(charity.color.opacity(0.1))
+                                    .cornerRadius(DesignSystem.CornerRadius.sm)
+                            }
                             
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(charity.name)
@@ -1601,262 +1587,6 @@ struct GoalSettingView: View {
     }
 }
 
-// MARK: - Pricing Tier Selection View
-struct PricingTierSelectionView: View {
-    let page: OnboardingPage
-    @Binding var selectedPricingTier: PricingTier
-    let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
-    @State private var textOpacity: Double = 0.0
-    
-    private let tiers = [PricingTier.easy, PricingTier.moderate, PricingTier.strict]
-    
-    var body: some View {
-        VStack(spacing: 0) {
-            Spacer()
-            
-            // Illustration - Smaller for better layout
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                page.accentColor.opacity(0.2),
-                                page.accentColor.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 40,
-                            endRadius: 120
-                        )
-                    )
-                    .frame(width: 160, height: 160)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 48, weight: .medium))
-                    .foregroundColor(page.accentColor)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            .padding(.bottom, DesignSystem.Spacing.lg)
-            
-            // Content
-            VStack(spacing: DesignSystem.Spacing.md) {
-                Text(page.title)
-                    .font(DesignSystem.Typography.title1)
-                    .fontWeight(.bold)
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .opacity(textOpacity)
-                    .animation(DesignSystem.Animation.gentle.delay(0.6), value: textOpacity)
-                
-                Text(page.description)
-                    .font(DesignSystem.Typography.body)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .opacity(textOpacity)
-                    .animation(DesignSystem.Animation.gentle.delay(0.8), value: textOpacity)
-                
-                // Pricing Tier Selection
-                VStack(spacing: DesignSystem.Spacing.md) {
-                    ForEach(tiers) { tier in
-                        PricingTierCard(
-                            tier: tier,
-                            isSelected: selectedPricingTier.id == tier.id,
-                            onTap: {
-                                withAnimation(DesignSystem.Animation.gentle) {
-                                    selectedPricingTier = tier
-                                }
-                            }
-                        )
-                    }
-                }
-                .padding(.top, DesignSystem.Spacing.md)
-            }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            
-            Spacer()
-            
-            // Continue button (add extra bottom padding to avoid crowding nav dots)
-            VStack(spacing: DesignSystem.Spacing.md) {
-                Button("Continue") {
-                    onContinue()
-                }
-                .mindLockButton(style: .primary)
-            }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            .padding(.bottom, DesignSystem.Spacing.xxl)
-        }
-        .onAppear {
-            withAnimation {
-                iconScale = 1.0
-                textOpacity = 1.0
-            }
-        }
-        .onDisappear {
-            iconScale = 0.8
-            textOpacity = 0.0
-        }
-    }
-}
-
-// MARK: - Pricing Tier Card
-struct PricingTierCard: View {
-    let tier: PricingTier
-    let isSelected: Bool
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: onTap) {
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-                HStack {
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                        Text(tier.name)
-                            .font(DesignSystem.Typography.title3)
-                            .fontWeight(.bold)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                        
-                        Text(tier.description)
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                    }
-                    
-                    Spacer()
-                    
-                    if isSelected {
-                        Image(systemName: "checkmark.circle.fill")
-                            .font(.title2)
-                            .foregroundColor(DesignSystem.Colors.primary)
-                    } else {
-                        Image(systemName: "circle")
-                            .font(.title2)
-                            .foregroundColor(DesignSystem.Colors.textTertiary)
-                    }
-                }
-                
-                // Pricing details
-                HStack(spacing: DesignSystem.Spacing.lg) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("10 minutes")
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                        Text(tier.fifteenMinPrice)
-                            .font(DesignSystem.Typography.body)
-                            .fontWeight(.semibold)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("30 minutes")
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                        Text(tier.thirtyMinPrice)
-                            .font(DesignSystem.Typography.body)
-                            .fontWeight(.semibold)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Full day")
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                        Text(tier.fullDayPrice)
-                            .font(DesignSystem.Typography.body)
-                            .fontWeight(.semibold)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                    }
-                    
-                    Spacer()
-                }
-            }
-            .padding(DesignSystem.Spacing.lg)
-            .background(
-                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg)
-                    .fill(isSelected ? DesignSystem.Colors.primary.opacity(0.1) : DesignSystem.Colors.surface)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg)
-                            .stroke(
-                                isSelected ? DesignSystem.Colors.primary : DesignSystem.Colors.surface,
-                                lineWidth: isSelected ? 2 : 1
-                            )
-                    )
-            )
-        }
-        .buttonStyle(PlainButtonStyle())
-        .contentShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg))
-    }
-}
-
-struct OnboardingPageView: View {
-    let page: OnboardingPage
-    @State private var iconScale: CGFloat = 0.8
-    @State private var textOpacity: Double = 0.0
-    
-    var body: some View {
-        VStack(spacing: DesignSystem.Spacing.xl) {
-            Spacer()
-            
-            // Illustration
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                page.accentColor.opacity(0.2),
-                                page.accentColor.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 50,
-                            endRadius: 150
-                        )
-                    )
-                    .frame(width: 200, height: 200)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 60, weight: .medium))
-                    .foregroundColor(page.accentColor)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            
-            // Content
-            VStack(spacing: DesignSystem.Spacing.lg) {
-                Text(page.title)
-                    .font(DesignSystem.Typography.title1)
-                    .fontWeight(.bold)
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .opacity(textOpacity)
-                    .offset(y: textOpacity == 1.0 ? 0 : 20)
-                    .animation(DesignSystem.Animation.gentle.delay(0.6), value: textOpacity)
-                
-                Text(page.description)
-                    .font(DesignSystem.Typography.body)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .opacity(textOpacity)
-                    .offset(y: textOpacity == 1.0 ? 0 : 20)
-                    .animation(DesignSystem.Animation.gentle.delay(0.8), value: textOpacity)
-            }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            
-            Spacer()
-        }
-        .onAppear {
-            withAnimation {
-                iconScale = 1.0
-                textOpacity = 1.0
-            }
-        }
-        .onDisappear {
-            iconScale = 0.8
-            textOpacity = 0.0
-        }
-    }
-}
-
 struct ConceptExplanationView: View {
     let page: OnboardingPage
     let onContinue: () -> Void
@@ -1886,7 +1616,7 @@ struct ConceptExplanationView: View {
                     .animation(DesignSystem.Animation.gentle.delay(0.4), value: textOpacity)
                 
                 VStack(spacing: DesignSystem.Spacing.xxl) {
-                    Text("Every time you lose control, you create change.")
+                    Text("When the urge hits, pause with purpose.")
                         .font(DesignSystem.Typography.title2)
                         .foregroundColor(DesignSystem.Colors.textPrimary)
                         .multilineTextAlignment(.center)
@@ -1895,12 +1625,12 @@ struct ConceptExplanationView: View {
                         .animation(DesignSystem.Animation.gentle.delay(0.6), value: textOpacity)
                     
                     VStack(spacing: DesignSystem.Spacing.xl) {
-                        Text("A small fee to scroll again.")
+                        Text("Wait 30 seconds and unlock 10 mindful minutes for free.")
                             .font(DesignSystem.Typography.title3)
                             .foregroundColor(DesignSystem.Colors.textSecondary)
                             .lineSpacing(6)
                         
-                        Text("A cause of your choice gets funded.")
+                        Text("Need the day? Donate $1 toward your charity and get full access until midnight.")
                             .font(DesignSystem.Typography.title3)
                             .foregroundStyle(
                                 LinearGradient(
@@ -2429,6 +2159,12 @@ struct Charity: Identifiable, Equatable, Codable {
     let emoji: String
     let colorName: String // Store color as string for Codable
     
+    var shortName: String {
+        let words = name.split(separator: " ")
+        guard words.count > 1 else { return name }
+        return words.prefix(2).joined(separator: " ")
+    }
+    
     var color: Color {
         switch colorName {
         case "red": return .red
@@ -2439,7 +2175,24 @@ struct Charity: Identifiable, Equatable, Codable {
         default: return DesignSystem.Colors.primary
         }
     }
-    
+    // Asset name mapping for charity logos in Assets.xcassets
+    var logoAssetName: String? {
+        switch id {
+        case "red-cross":
+            return "americanredcross"
+        case "doctors-without-borders":
+            return "doctorswithoutborders"
+        case "world-wildlife-fund":
+            return "wwf"
+        case "feeding-america":
+            return "feedingamerica"
+        case "unicef":
+            return "unicef"
+        default:
+            return nil
+        }
+    }
+
     static let popularCharities = [
         Charity(
             id: "red-cross",
@@ -2492,12 +2245,11 @@ struct OnboardingPage {
     let isTimeLimitPage: Bool
     let isCharityPage: Bool
     let isGoalSettingPage: Bool
-    let isPricingTierPage: Bool
     let isConceptPage: Bool
     let isAnimatedLimitsIntroPage: Bool
     
     var isInteractivePage: Bool {
-        return isPermissionPage || isUsageQuestionPage || isAgeQuestionPage || isImpactPage || isTimeLimitPage || isCharityPage || isGoalSettingPage || isPricingTierPage || isConceptPage || isAnimatedLimitsIntroPage
+        return isPermissionPage || isUsageQuestionPage || isAgeQuestionPage || isImpactPage || isTimeLimitPage || isCharityPage || isGoalSettingPage || isConceptPage || isAnimatedLimitsIntroPage
     }
     
     static let allPages = [
@@ -2513,7 +2265,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2529,7 +2280,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2545,7 +2295,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2561,7 +2310,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2577,7 +2325,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2593,14 +2340,13 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: true
         ),
         // Defunct page removed: app selection happens inline in the animated intro
         OnboardingPage(
             title: "Turn Slips Into Impact",
-            description: "Every time you lose control, you create change.\nA small fee to scroll again. A cause gets funded.",
+            description: "Wait 30 seconds for a 10-minute break, or donate $1 for the rest of the day. Every Day Pass funds the cause you choose.",
             iconName: "hands.and.sparkles.fill",
             accentColor: DesignSystem.Colors.warning,
             isPermissionPage: false,
@@ -2610,7 +2356,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: true,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2626,7 +2371,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: true,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2642,23 +2386,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: true,
-            isPricingTierPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
-        ),
-        OnboardingPage(
-            title: "Choose Your Pricing Tier",
-            description: "Select the level of restrictions and unlock fees for your MindLock experience.",
-            iconName: "creditcard.fill",
-            accentColor: DesignSystem.Colors.primary,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isPricingTierPage: true,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         ),
@@ -2674,7 +2401,6 @@ struct OnboardingPage {
             isTimeLimitPage: false,
             isCharityPage: false,
             isGoalSettingPage: false,
-            isPricingTierPage: false,
             isConceptPage: false,
             isAnimatedLimitsIntroPage: false
         )
@@ -2701,6 +2427,8 @@ private extension Color {
         return RGBComponents(red: 0, green: 0, blue: 0)
         #endif
     }
+
+    // (logos live in Assets.xcassets; Color has no logo mapping)
 }
 
 // Visual fades at the top/bottom edges to hint scrollability

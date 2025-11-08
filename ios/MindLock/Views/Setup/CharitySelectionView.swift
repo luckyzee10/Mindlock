@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct SetupCharitySelectionView: View {
     @State private var selectedCharity: Charity?
@@ -28,6 +29,11 @@ struct SetupCharitySelectionView: View {
                         // Current Selection (if any)
                         if let selectedCharity = selectedCharity {
                             CurrentCharityCard(charity: selectedCharity)
+                            
+                            Button("Choose later") {
+                                clearSelection()
+                            }
+                            .mindLockButton(style: .ghost)
                         }
                         
                         // Available Charities
@@ -63,21 +69,23 @@ struct SetupCharitySelectionView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Done") {
+                    Button("Close") {
                         dismiss()
                     }
-                    .foregroundColor(DesignSystem.Colors.primary)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    if selectedCharity != nil {
-                        Button("Save") {
+                    Button(selectedCharity == nil ? "Skip" : "Save") {
+                        if selectedCharity != nil {
                             saveSelection()
-                            dismiss()
+                        } else {
+                            clearSelection()
                         }
-                        .foregroundColor(DesignSystem.Colors.primary)
-                        .fontWeight(.semibold)
+                        dismiss()
                     }
+                    .foregroundColor(DesignSystem.Colors.primary)
+                    .fontWeight(.semibold)
                 }
             }
         }
@@ -102,6 +110,11 @@ struct SetupCharitySelectionView: View {
             UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
         }
     }
+    
+    private func clearSelection() {
+        selectedCharity = nil
+        UserDefaults.standard.removeObject(forKey: "selectedCharityId")
+    }
 }
 
 // MARK: - Current Charity Card
@@ -123,8 +136,16 @@ struct CurrentCharityCard: View {
             }
             
             HStack(spacing: DesignSystem.Spacing.md) {
-                Text(charity.emoji)
-                    .font(.system(size: 40))
+                if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                } else {
+                    Text(charity.emoji)
+                        .font(.system(size: 40))
+                }
                 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
                     Text(charity.name)
@@ -160,14 +181,21 @@ struct CharityCard: View {
     var body: some View {
         Button(action: onSelect) {
             HStack(spacing: DesignSystem.Spacing.md) {
-                // Emoji and Color Indicator
-                ZStack {
-                    Circle()
-                        .fill(charity.color.opacity(0.2))
-                        .frame(width: 60, height: 60)
-                    
-                    Text(charity.emoji)
-                        .font(.system(size: 28))
+                // Logo or Emoji Indicator
+                if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+                } else {
+                    ZStack {
+                        Circle()
+                            .fill(charity.color.opacity(0.2))
+                            .frame(width: 60, height: 60)
+                        Text(charity.emoji)
+                            .font(.system(size: 28))
+                    }
                 }
                 
                 // Content

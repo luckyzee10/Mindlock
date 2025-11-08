@@ -1,6 +1,5 @@
 import Foundation
 import UserNotifications
-import ManagedSettings
 import UIKit
 
 final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
@@ -23,12 +22,24 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
 
     // MARK: - Notifications
 
-    func postUnlockNotification(appToken: ApplicationToken, minutes: Int) {
-        let application = Application(token: appToken)
-        let name = application.localizedDisplayName ?? "App"
+    func postFreeUnlockNotification(minutes: Int) {
         let content = UNMutableNotificationContent()
-        content.title = "\(minutes) minutes of \(name) unlocked"
-        content.body = "Enjoy your extra focused time — we’re cheering for you."
+        content.title = "\(minutes)-minute break unlocked"
+        content.body = "Every limited app is open for \(minutes) minutes. Use the time intentionally."
+        content.sound = .default
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+    }
+
+    func postDayPassNotification(minutesUntilMidnight: Int) {
+        let content = UNMutableNotificationContent()
+        content.title = "Day pass unlocked"
+        if minutesUntilMidnight >= 60 {
+            let hours = Double(minutesUntilMidnight) / 60
+            content.body = String(format: "All limited apps are available for the rest of today (~%.1f hours). Make it count.", hours)
+        } else {
+            content.body = "All limited apps stay open for the rest of today. Stay intentional."
+        }
         content.sound = .default
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)

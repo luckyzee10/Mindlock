@@ -4,6 +4,12 @@
 
 Complete guide for implementing Apple In-App Purchases using StoreKit 2, with backend validation and charity donation calculation.
 
+> **MVP update (Nov 2025).** The fast-launch build ships with a single consumable:
+>
+> - `mindlock.daypass` — $0.99 USD. Unlocks the device until midnight. Apple’s Small Developer rate takes 15%, so net revenue is `$0.99 * 0.85 = $0.8415`. We reserve 15% of that net (`≈ $0.13`) for the user’s selected charity.
+>
+> The former 10/30/60 minute SKUs have been removed. The free “10-minute Focus Break” unlock is handled entirely on-device via a 30-second countdown (no purchase or receipt involved). The rest of this guide still documents the StoreKit wiring; just substitute the single product identifier wherever multiple IDs were referenced before.
+
 ---
 
 ## Apple In-App Purchase Setup
@@ -14,25 +20,13 @@ Complete guide for implementing Apple In-App Purchases using StoreKit 2, with ba
 ```
 Navigate to App Store Connect > My Apps > MindLock > Features > In-App Purchases
 
-Create 3 Consumable Products:
+Create one Consumable Product:
 
-1. mindlock.unlock.30min
-   - Reference Name: "Unlock 30 Minutes"
-   - Product ID: mindlock.unlock.30min
-   - Price: $0.99 USD (Tier 1)
-   - Description: "Unlock 30 minutes of app access"
-
-2. mindlock.unlock.1hour
-   - Reference Name: "Unlock 1 Hour"  
-   - Product ID: mindlock.unlock.1hour
-   - Price: $1.99 USD (Tier 2)
-   - Description: "Unlock 1 hour of app access"
-
-3. mindlock.unlock.2hour
-   - Reference Name: "Unlock 2 Hours"
-   - Product ID: mindlock.unlock.2hour  
-   - Price: $2.99 USD (Tier 3)
-   - Description: "Unlock 2 hours of app access"
+1. mindlock.daypass  
+   - Reference Name: "MindLock Day Pass"  
+   - Product ID: `mindlock.daypass`  
+   - Price: $0.99 USD (Tier 1)  
+   - Description: "Unlock MindLock until midnight. 15% of net revenue funds your chosen charity."
 ```
 
 #### Shared Secret Generation
@@ -97,11 +91,7 @@ class PaymentManager: ObservableObject {
     @Published var isLoading = false
     @Published var purchaseState: PurchaseState = .idle
     
-    private let productIDs: Set<String> = [
-        "mindlock.unlock.30min",
-        "mindlock.unlock.1hour", 
-        "mindlock.unlock.2hour"
-    ]
+    private let productIDs: Set<String> = ["mindlock.daypass"]
     
     private var transactionListener: Task<Void, Error>?
     private var apiClient: APIClient

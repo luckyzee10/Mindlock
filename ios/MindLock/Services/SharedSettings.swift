@@ -33,6 +33,28 @@ struct AnalyticsDaySummary: Codable {
 
 /// Shared constants and helpers for communicating between the main app and the extension.
 enum SharedSettings {
+    struct CharityAggregate: Codable, Identifiable {
+        let id: String
+        var name: String
+        var amount: Double
+    }
+
+    struct UnlockStatsRecord: Codable, Identifiable {
+        let id: String
+        var freeUnlocks: Int
+        var dayPassUnlocks: Int
+        var freeMinutes: Double
+        var dayPassMinutes: Double
+
+        var totalUnlocks: Int { freeUnlocks + dayPassUnlocks }
+        var totalMinutes: Double { freeMinutes + dayPassMinutes }
+    }
+
+    enum UnlockEventKind {
+        case free(minutes: Double)
+        case dayPass(minutes: Double)
+    }
+
     static let appGroupIdentifier = "group.com.YLUUT5U99U.mindlock"
     static let extensionBundleIdentifierKey = "MindLockMonitorBundleIdentifier"
     static let limitEventNotificationName = "com.YLUUT5U99U.mindlock.limitEvent"
@@ -51,6 +73,9 @@ enum SharedSettings {
         static let todayUsage = "shared.usage.today"
         static let lastRollover = "shared.rollover.timestamp"
         static let unlockSuppressions = "shared.unlock.suppressions"
+        static let profileTotalDonation = "profile.totalDonation"
+        static let profileCharityTotals = "profile.charityTotals"
+        static let profileUnlockStats = "profile.unlock.stats"
     }
     
     static var sharedDefaults: UserDefaults? {
@@ -204,15 +229,52 @@ enum SharedSettings {
 
     @discardableResult
     static func setTemporaryUnlock(for token: ApplicationToken, until expiry: Date) -> Date {
+        return setTemporaryUnlock(for: [token], until: expiry)
+    }
+
+    /// Apply the same temporary unlock expiry to a collection of tokens.
+    @discardableResult
+    static func setTemporaryUnlock(for tokens: [ApplicationToken], until expiry: Date) -> Date {
+        guard !tokens.isEmpty else { return expiry }
+
         var suppressions = loadTemporaryUnlocks()
-        suppressions[token.identifier] = expiry.timeIntervalSince1970
-        saveTemporaryUnlocks(suppressions)
+        let timestamp = expiry.timeIntervalSince1970
+        var didChange = false
+
+        for token in tokens {
+            if suppressions[token.identifier] != timestamp {
+                suppressions[token.identifier] = timestamp
+                didChange = true
+            }
+        }
+
+        if didChange {
+            saveTemporaryUnlocks(suppressions)
+        }
+
         return expiry
     }
 
     static func removeTemporaryUnlock(for token: ApplicationToken) {
         var suppressions = loadTemporaryUnlocks()
         if suppressions.removeValue(forKey: token.identifier) != nil {
+            saveTemporaryUnlocks(suppressions)
+        }
+    }
+
+    /// Remove any temporary unlock overrides for the provided tokens.
+    static func removeTemporaryUnlocks(for tokens: [ApplicationToken]) {
+        guard !tokens.isEmpty else { return }
+        var suppressions = loadTemporaryUnlocks()
+        var didChange = false
+
+        for token in tokens {
+            if suppressions.removeValue(forKey: token.identifier) != nil {
+                didChange = true
+            }
+        }
+
+        if didChange {
             saveTemporaryUnlocks(suppressions)
         }
     }
@@ -251,6 +313,60 @@ enum SharedSettings {
         suppressions.removeValue(forKey: token.identifier)
         saveTemporaryUnlocks(suppressions)
         return nil
+    }
+
+    // MARK: - Profile Metrics Aggregation
+
+    static func aggregatedDonationTotal() -> Double {
+        sharedDefaults?.double(forKey: Keys.profileTotalDonation) ?? 0
+    }
+
+    static func topCharities(limit: Int = 3) -> [CharityAggregate] {
+        let map = loadCharityAggregates()
+        let sorted = map.values.sorted { $0.amount > $1.amount }
+        guard limit > 0 else { return sorted }
+        return Array(sorted.prefix(limit))
+    }
+
+    static func unlockHistory() -> [UnlockStatsRecord] {
+        let stats = loadUnlockStatsDictionary()
+        return stats.values.sorted { $0.id > $1.id }
+    }
+
+    static func unlockStats(for date: Date) -> UnlockStatsRecord? {
+        loadUnlockStatsDictionary()[dayString(for: date)]
+    }
+
+    static func estimatedUsageMinutes(for date: Date) -> Double {
+        var baseMinutes: Double = 0
+        if let usage = loadTodayUsage(),
+           Calendar.current.isDate(usage.date, inSameDayAs: date) {
+            let totalSeconds = usage.appSeconds.values.reduce(0, +)
+            baseMinutes = totalSeconds / 60
+        }
+        let additional = unlockStats(for: date)?.totalMinutes ?? 0
+        return baseMinutes + additional
+    }
+
+    static func recordUnlock(kind: UnlockEventKind) {
+        var stats = loadUnlockStatsDictionary()
+        let key = dayString(for: Date())
+        var record = stats[key] ?? UnlockStatsRecord(id: key, freeUnlocks: 0, dayPassUnlocks: 0, freeMinutes: 0, dayPassMinutes: 0)
+
+        switch kind {
+        case .free(let minutes):
+            guard minutes > 0 else { break }
+            record.freeUnlocks += 1
+            record.freeMinutes += minutes
+        case .dayPass(let minutes):
+            guard minutes > 0 else { break }
+            record.dayPassUnlocks += 1
+            record.dayPassMinutes += minutes
+        }
+
+        stats[key] = record
+        pruneUnlockStats(&stats)
+        saveUnlockStatsDictionary(stats)
     }
 
     // MARK: - Analytics Summaries (DeviceActivityReport)
@@ -301,6 +417,7 @@ enum SharedSettings {
 
     static func recordDonation(amount: Double, charityId: String, charityName: String, on date: Date = Date()) {
         guard amount > 0 else { return }
+        updateDonationAggregates(amount: amount, charityId: charityId, charityName: charityName)
         updateAnalyticsDaySummary(for: date) { summary in
             let currentTotal = summary.totalDonated ?? 0
             summary.totalDonated = currentTotal + amount
@@ -415,6 +532,60 @@ enum SharedSettings {
     private static func analyticsSummaryURL(for day: String, base: URL) -> URL {
         base.appendingPathComponent("\(day).json", isDirectory: false)
     }
+
+    private static func updateDonationAggregates(amount: Double, charityId: String, charityName: String) {
+        guard amount > 0 else { return }
+        if let defaults = sharedDefaults {
+            let total = (defaults.double(forKey: Keys.profileTotalDonation) + amount)
+            defaults.set(total, forKey: Keys.profileTotalDonation)
+        }
+
+        var totals = loadCharityAggregates()
+        var entry = totals[charityId] ?? CharityAggregate(id: charityId, name: charityName, amount: 0)
+        entry.name = charityName
+        entry.amount += amount
+        totals[charityId] = entry
+        saveCharityAggregates(totals)
+    }
+
+    private static func loadCharityAggregates() -> [String: CharityAggregate] {
+        guard
+            let data = sharedDefaults?.data(forKey: Keys.profileCharityTotals),
+            let totals = try? JSONDecoder().decode([String: CharityAggregate].self, from: data)
+        else {
+            return [:]
+        }
+        return totals
+    }
+
+    private static func saveCharityAggregates(_ totals: [String: CharityAggregate]) {
+        guard let data = try? JSONEncoder().encode(totals) else { return }
+        sharedDefaults?.set(data, forKey: Keys.profileCharityTotals)
+    }
+
+    private static func loadUnlockStatsDictionary() -> [String: UnlockStatsRecord] {
+        guard
+            let data = sharedDefaults?.data(forKey: Keys.profileUnlockStats),
+            let stats = try? JSONDecoder().decode([String: UnlockStatsRecord].self, from: data)
+        else {
+            return [:]
+        }
+        return stats
+    }
+
+    private static func saveUnlockStatsDictionary(_ stats: [String: UnlockStatsRecord]) {
+        guard let data = try? JSONEncoder().encode(stats) else { return }
+        sharedDefaults?.set(data, forKey: Keys.profileUnlockStats)
+    }
+
+    private static func pruneUnlockStats(_ stats: inout [String: UnlockStatsRecord]) {
+        let sortedKeys = stats.keys.sorted(by: >)
+        if sortedKeys.count <= 14 { return }
+        for key in sortedKeys.dropFirst(14) {
+            stats.removeValue(forKey: key)
+        }
+    }
+
     
     /// Persist the current selection of applications so the extension can access them.
     static func persistSelection(_ selection: FamilyActivitySelection) {
@@ -512,6 +683,14 @@ extension ApplicationToken: Codable {
             return nil
         }
         self = token
+    }
+}
+
+extension ApplicationToken: Identifiable, Equatable {
+    public var id: String { identifier }
+    
+    public static func == (lhs: ApplicationToken, rhs: ApplicationToken) -> Bool {
+        lhs.identifier == rhs.identifier
     }
 }
 

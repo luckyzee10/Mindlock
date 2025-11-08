@@ -47,6 +47,11 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         print("🔔 Extension process ID: \(ProcessInfo.processInfo.processIdentifier)")
         print("🔔 Extension bundle: \(Bundle.main.bundleIdentifier ?? "Unknown")")
 
+        defer {
+            SharedSettings.sharedDefaults?.set(Date().timeIntervalSince1970, forKey: "monitor.heartbeat")
+            SharedSettings.sharedDefaults?.synchronize()
+        }
+
         if activity == DeviceActivityName("MindLockDemo") || event.rawValue.hasPrefix("demo_") {
             print("🔕 Demo event triggered; skipping shield application.")
             return
@@ -68,22 +73,23 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
             return
         }
 
-        SharedSettings.storeLimitEvent(name: event.rawValue, blockedTokens: Array(tokens))
-
         let activeSuppressions = SharedSettings.activeTemporaryUnlocks()
         let tokensToShield = tokens.filter { activeSuppressions[$0.identifier] == nil }
-
         if tokensToShield.isEmpty {
-            print("⏳ Limit reached but app is in temporary unlock window; skipping shield update")
-        } else {
-            let store = ManagedSettingsStore()
-            let existing = store.shield.applications ?? []
-            store.shield.applications = existing.union(tokensToShield)
-            print("🔒 Blocked \(tokensToShield.count) application(s) due to limit reached (per-app)")
+            if let soonestExpiry = activeSuppressions.values.min() {
+                print("⏳ Limit reached during an active unlock (expires \(soonestExpiry)). Skipping shield update.")
+            } else {
+                print("⏳ Limit reached but temporary unlock state prevented shielding.")
+            }
+            return
         }
 
-        SharedSettings.sharedDefaults?.set(Date().timeIntervalSince1970, forKey: "monitor.heartbeat")
-        SharedSettings.sharedDefaults?.synchronize()
+        SharedSettings.storeLimitEvent(name: event.rawValue, blockedTokens: Array(tokensToShield))
+
+        let store = ManagedSettingsStore()
+        let existing = store.shield.applications ?? []
+        store.shield.applications = existing.union(tokensToShield)
+        print("🔒 Blocked \(tokensToShield.count) application(s) due to limit reached (per-app)")
     }
     
     public override func eventWillReachThresholdWarning(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {

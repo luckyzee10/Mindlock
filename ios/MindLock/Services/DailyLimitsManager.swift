@@ -12,9 +12,7 @@ class DailyLimitsManager: ObservableObject {
     @Published var currentLimits: DailyLimits
     @Published var pendingLimits: DailyLimits
     @Published var todayUsage: AppUsageDay
-    @Published var unlockTransactions: [UnlockTransaction] = []
     @Published var isBlocking: Bool = false
-    @Published var userPricingTier: PricingTier = .moderate
     @Published var recentlyBlockedTokens: [ApplicationToken] = []
     
     // MARK: - Private Properties
@@ -25,7 +23,6 @@ class DailyLimitsManager: ObservableObject {
     // MARK: - Keys for UserDefaults
     private enum Keys {
         static let lastMidnightCheck = "lastMidnightCheck"
-        static let unlockTransactions = "unlockTransactions"
     }
     
     init() {
@@ -38,7 +35,6 @@ class DailyLimitsManager: ObservableObject {
         
         loadStoredData()
         startMidnightTimer()
-        loadUserPricingTier()
         isBlocking = SharedSettings.sharedBlockingState()
         DispatchQueue.main.async {
             ScreenTimeManager.shared.refreshMonitoringSchedule(reason: "launch")
@@ -207,31 +203,44 @@ class DailyLimitsManager: ObservableObject {
             print("❌ Demo schedule failed: \(error)")
         }
     }
-    
-    /// Purchase unlock for an app
-    func purchaseUnlock(for token: ApplicationToken, duration: TimeInterval, amount: Double, charity: Charity) async throws {
-        print("🔓 Starting unlock purchase for \(token.identifier.prefix(8))… duration=\(duration)")
-        let charityAmount = amount * 0.5 // 50% to charity
-        let transaction = UnlockTransaction(
-            appToken: token,
-            duration: duration,
-            amount: amount,
-            charityId: charity.id,
-            charityAmount: charityAmount
-        )
-        
-        // TODO: Process actual payment here
-        
-        unlockTransactions.append(transaction)
-        saveUnlockTransactions()
 
-        print("🔓 Unlock transaction recorded. Applying temporary unblock…")
-        temporarilyUnblock(token: token, duration: duration)
-        print("🔓 Temporary unblock applied for \(token.identifier.prefix(8))…")
+    func grantFreeUnlock(minutes: Int = 10) {
+        let tokens = allLimitedTokens()
+        guard !tokens.isEmpty else {
+            print("⚠️ Free unlock skipped: no limited apps configured")
+            return
+        }
 
-        SharedSettings.recordDonation(amount: charityAmount, charityId: charity.id, charityName: charity.name)
+        let duration = TimeInterval(minutes * 60)
+        let expiry = Date().addingTimeInterval(duration)
+        SharedSettings.setTemporaryUnlock(for: tokens, until: expiry)
+        SharedSettings.recordUnlock(kind: .free(minutes: Double(minutes)))
+        ScreenTimeManager.shared.temporaryUnlock(tokens: tokens, duration: duration)
+        recentlyBlockedTokens.removeAll(where: { tokens.contains($0) })
+        print("⏳ Granted free unlock for \(minutes) minutes on \(tokens.count) app(s)")
+    }
 
-        print("💝 Unlock purchased: $\(amount) -> $\(charityAmount) to \(charity.name)")
+    @discardableResult
+    func grantDayPass(charity: Charity?) -> Int? {
+        let tokens = allLimitedTokens()
+        guard !tokens.isEmpty else {
+            print("⚠️ Day pass skipped: no limited apps configured")
+            return nil
+        }
+
+        let seconds = max(60, secondsUntilMidnight(from: Date()))
+        let expiry = Date().addingTimeInterval(seconds)
+        SharedSettings.setTemporaryUnlock(for: tokens, until: expiry)
+        SharedSettings.recordUnlock(kind: .dayPass(minutes: seconds / 60))
+        ScreenTimeManager.shared.temporaryUnlock(tokens: tokens, duration: seconds)
+        recentlyBlockedTokens.removeAll(where: { tokens.contains($0) })
+        if let charity = charity {
+            let donation = dayPassDonationAmount()
+            SharedSettings.recordDonation(amount: donation, charityId: charity.id, charityName: charity.name)
+            print("💝 Recorded $\(String(format: "%.2f", donation)) donation to \(charity.name)")
+        }
+        print("🔓 Granted day pass for \(tokens.count) app(s) until midnight")
+        return Int(ceil(seconds / 60))
     }
     
     // MARK: - Private Methods
@@ -274,11 +283,6 @@ class DailyLimitsManager: ObservableObject {
         } else if promotedPending == nil {
             todayUsage = AppUsageDay(date: today)
             SharedSettings.storeTodayUsage(snapshot(from: todayUsage))
-        }
-
-        if let data = userDefaults.data(forKey: Keys.unlockTransactions),
-           let transactions = try? JSONDecoder().decode([UnlockTransaction].self, from: data) {
-            unlockTransactions = transactions
         }
 
         backfillUsageForPendingBlock()
@@ -347,12 +351,6 @@ class DailyLimitsManager: ObservableObject {
         SharedSettings.storeTodayUsage(snapshot(from: todayUsage))
     }
     
-    private func saveUnlockTransactions() {
-        if let data = try? JSONEncoder().encode(unlockTransactions) {
-            userDefaults.set(data, forKey: Keys.unlockTransactions)
-        }
-    }
-    
     private func startMidnightTimer() {
         // Create a timer that checks for midnight transition
         Timer.publish(every: 60, on: .main, in: .common)
@@ -394,39 +392,24 @@ class DailyLimitsManager: ObservableObject {
         recomputeBlockingAfterLimitChange()
     }
     
-    private func temporarilyUnblock(token: ApplicationToken, duration: TimeInterval) {
-        // Temporarily remove the specified token from the shield set, then restore as needed
-        let store = ManagedSettingsStore()
-        print("🔧 Preparing to store temporary unlock for \(token.identifier.prefix(8))…")
-        let expiry = SharedSettings.setTemporaryUnlock(for: token, until: Date().addingTimeInterval(duration))
-        print("🔧 Temporary unlock suppression stored until \(expiry)")
-        // Compute current per-app exceeded set and remove the unlocked token
-        var blockedSet = Set<ApplicationToken>()
-        for t in ScreenTimeManager.shared.selectedApps.applicationTokens {
-            if hasExceededLimit(for: t) { blockedSet.insert(t) }
-        }
-        print("🔧 Remaining exceeded apps before unblock: \(blockedSet.count)")
-        blockedSet.remove(token)
-        store.shield.applications = blockedSet
-        print("✅ Temporarily unblocked one app for \(formatTime(duration)) (expires \(expiry.formatted(.dateTime.hour().minute()))) Now blocking \(blockedSet.count) app(s)")
-        isBlocking = !blockedSet.isEmpty
-        recentlyBlockedTokens = Array(blockedSet)
-        SharedSettings.setBlockingState(isBlocking)
-
-        // Re-block after duration
-        Task.detached { [weak self] in
-            try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
-            await MainActor.run {
-                SharedSettings.removeTemporaryUnlock(for: token)
-                self?.recomputeBlockingAfterLimitChange()
-                print("🔒 Recomputed blocking after temporary unlock expired")
-            }
-        }
-    }
-    
     private func applyScreenTimeBlocking() {
         // Recompute per-app shields based on current selection and usage
         recomputeBlockingAfterLimitChange()
+    }
+    
+    private func secondsUntilMidnight(from date: Date) -> TimeInterval {
+        let startOfNextDay = calendar.startOfDay(for: calendar.date(byAdding: .day, value: 1, to: date) ?? date)
+        return startOfNextDay.timeIntervalSince(date)
+    }
+    
+    private func allLimitedTokens() -> [ApplicationToken] {
+        Array(ScreenTimeManager.shared.selectedApps.applicationTokens)
+    }
+
+    private func dayPassDonationAmount() -> Double {
+        let amount: Double = 0.99
+        let net = amount * 0.85 // 15% Apple fee
+        return net * 0.15 // 15% of net revenue to charity
     }
 
     /// Public wrapper to re-apply blocking immediately based on current selection
@@ -449,15 +432,6 @@ class DailyLimitsManager: ObservableObject {
         saveTodayUsage()
         recomputeBlockingAfterLimitChange()
         print("📥 Processed limit event \(eventName) for \(tokens.count) apps")
-    }
-    
-    private func loadUserPricingTier() {
-        if let tierName = UserDefaults.standard.string(forKey: "selectedPricingTier") {
-            if let tier = PricingTier.allTiers.first(where: { $0.name == tierName }) {
-                userPricingTier = tier
-                print("💰 Loaded user pricing tier: \(tier.name)")
-            }
-        }
     }
     
     // MARK: - Utility Methods

@@ -51,24 +51,3 @@ struct AppUsageDay: Codable, Equatable {
         return usageForApp(token) >= limit
     }
 }
-
-// MARK: - Unlock Transaction
-struct UnlockTransaction: Codable, Identifiable {
-    let id: UUID
-    let date: Date
-    let appToken: String
-    let duration: TimeInterval
-    let amount: Double
-    let charityId: String
-    let charityAmount: Double
-    
-    init(appToken: ApplicationToken, duration: TimeInterval, amount: Double, charityId: String, charityAmount: Double) {
-        self.id = UUID()
-        self.date = Date()
-        self.appToken = appToken.identifier
-        self.duration = duration
-        self.amount = amount
-        self.charityId = charityId
-        self.charityAmount = charityAmount
-    }
-} 

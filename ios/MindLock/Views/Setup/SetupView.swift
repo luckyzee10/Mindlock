@@ -1,20 +1,18 @@
 import SwiftUI
 import FamilyControls
 import ManagedSettings
+import UIKit
 
 struct SetupView: View {
     @ObservedObject private var screenTimeManager = ScreenTimeManager.shared
     @ObservedObject private var limitsManager = DailyLimitsManager.shared
     @State private var selectedCharity: Charity?
-    @State private var selectedPricingTier: PricingTier = .moderate
     @State private var showingAppPicker = false
     @State private var showingAppLimits = false
     @State private var showingCharitySelection = false
-    @State private var showingDifficultySelection = false
     @State private var appTimeLimits: [String: Int] = [:]
-    // Unlock flow presentation from "limit reached" cards
-    @State private var unlockSheetToken: SelectedAppToken?
-    @State private var unlockPreferredDuration: UnlockDuration = .tenMinutes
+    @State private var tokenPendingDayPass: ApplicationToken?
+    @State private var tokenPendingWait: ApplicationToken?
     
     var body: some View {
         NavigationView {
@@ -25,12 +23,12 @@ struct SetupView: View {
                     VStack(spacing: DesignSystem.Spacing.xl) {
                         // Header
                         VStack(spacing: DesignSystem.Spacing.md) {
-                            Text("Setup")
+                            Text("MindLock")
                                 .font(DesignSystem.Typography.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(DesignSystem.Colors.textPrimary)
                             
-                            Text("Configure your app limits and preferences")
+                            Text("Fine-tune your limits, charities, and unlock options")
                                 .font(DesignSystem.Typography.body)
                                 .foregroundColor(DesignSystem.Colors.textSecondary)
                                 .multilineTextAlignment(.center)
@@ -50,77 +48,24 @@ struct SetupView: View {
                             title: "Your Charity",
                             description: "Choose where your unlock fees go",
                             icon: "heart.fill",
-                            status: selectedCharity?.name ?? "Not selected"
+                            status: selectedCharity?.name ?? "Not selected",
+                            emoji: selectedCharity?.emoji,
+                            logoName: selectedCharity?.logoAssetName
                         ) {
                             showingCharitySelection = true
                         }
-                        
-                        // Difficulty Settings Section
-                        SetupSectionCard(
-                            title: "Difficulty Level",
-                            description: "How much to pay for unlock time",
-                            icon: "slider.horizontal.3",
-                            status: selectedPricingTier.name
-                        ) {
-                            showingDifficultySelection = true
-                        }
-                        
-                        // Limit Reached Cards (show when any app has exceeded its limit)
-                        if !reachedLimitTokens.isEmpty {
-                            VStack(spacing: DesignSystem.Spacing.sm) {
-                                ForEach(Array(reachedLimitTokens.prefix(3)).sorted(by: { $0.identifier < $1.identifier }), id: \.identifier) { token in
-                                    LimitReachedCard(
-                                        token: token,
-                                        onSelectDuration: { duration in
-                                            unlockPreferredDuration = duration
-                                            unlockSheetToken = SelectedAppToken(token: token)
-                                        }
-                                    )
-                                }
-                                if reachedLimitTokens.count > 3 {
-                                    let extra = reachedLimitTokens.count - 3
-                                    Button("and \(extra) more limits reached") {
-                                        showingAppLimits = true
-                                    }
-                                    .font(DesignSystem.Typography.caption)
-                                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                            }
-                        }
-                        
-                        // Testing and troubleshooting UI removed for production
-                        
-                        // Quick Stats
-                        if !screenTimeManager.selectedApps.applicationTokens.isEmpty {
-                            VStack(spacing: DesignSystem.Spacing.md) {
-                                Text("Current Configuration")
-                                    .font(DesignSystem.Typography.headline)
-                                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                                
-                                HStack(spacing: DesignSystem.Spacing.lg) {
-                                    QuickStatCard(
-                                        title: "\(screenTimeManager.selectedApps.applicationTokens.count)",
-                                        subtitle: "Apps Limited",
-                                        color: DesignSystem.Colors.primary
-                                    )
-                                    
-                                    QuickStatCard(
-                                        title: selectedPricingTier.name,
-                                        subtitle: "Difficulty",
-                                        color: DesignSystem.Colors.warning
-                                    )
-                                    
-                                    QuickStatCard(
-                                        title: selectedCharity?.name ?? "None",
-                                        subtitle: "Charity",
-                                        color: DesignSystem.Colors.success
-                                    )
-                                }
-                            }
-                            .padding(.top, DesignSystem.Spacing.lg)
-                        }
 
+                        // Streak Card
+                        StreakCard(days: currentStreakDays)
+                        
+                        if !reachedLimitTokens.isEmpty {
+                            LimitReachedGlobalCard(
+                                tokens: reachedLimitTokens,
+                                waitAction: { if let token = representativeToken { tokenPendingWait = token } },
+                                dayPassAction: { if let token = representativeToken { tokenPendingDayPass = token } }
+                            )
+                        }
+                        
 #if DEBUG
                         SetupDebugActions(limitsManager: limitsManager)
 #endif
@@ -128,25 +73,22 @@ struct SetupView: View {
                     .padding(.horizontal, DesignSystem.Spacing.lg)
                     .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
+                .sheet(item: $tokenPendingDayPass) { token in
+                    UnlockPromptView(appToken: token)
+                        .environmentObject(limitsManager)
+                }
+                .sheet(item: $tokenPendingWait) { token in
+                    WaitUnlockView(appToken: token)
+                        .environmentObject(limitsManager)
+                }
             }
             .navigationBarHidden(true)
         }
         .sheet(isPresented: $showingAppLimits) {
             AppLimitsSetupView(isPresented: $showingAppLimits)
         }
-        .sheet(item: $unlockSheetToken) { wrapper in
-            UnlockFlowView(
-                blockedApp: wrapper.token,
-                preferredDuration: unlockPreferredDuration,
-                onDismiss: { unlockSheetToken = nil },
-                onUnlockPurchased: { unlockSheetToken = nil }
-            )
-        }
         .sheet(isPresented: $showingCharitySelection) {
             SetupCharitySelectionView()
-        }
-        .sheet(isPresented: $showingDifficultySelection) {
-            DifficultySelectionView()
         }
         .familyActivityPicker(isPresented: $showingAppPicker, selection: $screenTimeManager.selectedApps)
         .onAppear {
@@ -164,23 +106,9 @@ struct SetupView: View {
                 print("💝 Charity selection sheet closed, reloading preferences")
             }
         }
-        .onChange(of: showingDifficultySelection) { _, isShowing in
-            if !isShowing {
-                // Reload difficulty selection when sheet closes
-                loadUserPreferences()
-                print("⚖️ Difficulty selection sheet closed, reloading preferences")
-            }
-        }
     }
     
     private func loadUserPreferences() {
-        // Load pricing tier
-        if let pricingData = UserDefaults.standard.data(forKey: "userPricingTier"),
-           let pricing = try? JSONDecoder().decode(PricingTier.self, from: pricingData) {
-            limitsManager.userPricingTier = pricing
-            selectedPricingTier = pricing
-        }
-        
         // Load selected charity – prefer id, fallback to legacy JSON blob
         if let charityId = UserDefaults.standard.string(forKey: "selectedCharityId"),
            let charity = Charity.popularCharities.first(where: { $0.id == charityId }) {
@@ -194,7 +122,7 @@ struct SetupView: View {
             selectedCharity = nil
         }
         
-        print("📱 Loaded user preferences - Pricing: \(selectedPricingTier.name), Charity: \(selectedCharity?.name ?? "None")")
+        print("📱 Loaded user preferences - Charity: \(selectedCharity?.name ?? "None")")
     }
 
     // Tokens that have reached today's limit (union of computed + recent blocks)
@@ -204,6 +132,30 @@ struct SetupView: View {
         for t in selected { if limitsManager.hasExceededLimit(for: t) { set.insert(t) } }
         for t in limitsManager.recentlyBlockedTokens { if selected.contains(t) { set.insert(t) } }
         return Array(set)
+    }
+
+    private var representativeToken: ApplicationToken? {
+        reachedLimitTokens.first ?? screenTimeManager.selectedApps.applicationTokens.first
+    }
+
+    // Compute the number of consecutive days (starting today) with zero unlocks recorded
+    private var currentStreakDays: Int {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        var streak = 0
+        for i in 0..<365 {
+            guard let day = cal.date(byAdding: .day, value: -i, to: today) else { break }
+            if let stats = SharedSettings.unlockStats(for: day) {
+                if stats.totalUnlocks > 0 { break }
+                streak += 1
+            } else {
+                // If there's no record for the day, don't assume success —
+                // treat as unknown and stop counting (ensures first-time users start at 0)
+                if i == 0 { /* today has no record -> keep at 0 */ }
+                break
+            }
+        }
+        return streak
     }
     
 }
@@ -285,26 +237,157 @@ struct AppLimitsSectionCard: View {
     }
 }
 
+// MARK: - Streak Card
+private struct StreakCard: View {
+    let days: Int
+
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.md) {
+            // Centered title + subtitle
+            VStack(spacing: 4) {
+                Text("Streak")
+                    .font(DesignSystem.Typography.headline)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+                Text(subtitle)
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            // Centered flame between text and progress bar
+            Image(systemName: "flame.fill")
+                .font(.system(size: 28, weight: .semibold))
+                .foregroundColor(fireColor)
+                .shadow(color: fireColor.opacity(0.35), radius: days == 0 ? 0 : 6)
+
+            // Segmented line (not pill), with subtle separators
+            VStack(spacing: 8) {
+                GeometryReader { geo in
+                    let width = geo.size.width
+                    let ratio = min(Double(days), 5.0) / 5.0
+                    let trackColor = DesignSystem.Colors.textTertiary.opacity(days == 0 ? 0.35 : 0.22)
+                    let separatorColor = DesignSystem.Colors.textTertiary.opacity(days == 0 ? 0.35 : 0.25)
+                    ZStack(alignment: .leading) {
+                        // Base line (always visible, greyed out at 0)
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(trackColor)
+                            .frame(height: 8)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(DesignSystem.Colors.textTertiary.opacity(0.12), lineWidth: 1)
+                            )
+
+                        // Filled portion
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(barGradient)
+                            .frame(width: width * ratio, height: 8)
+
+                        // Tick separators (no dots)
+                        HStack(spacing: 0) {
+                            ForEach(1..<5, id: \.self) { _ in
+                                Spacer()
+                                Rectangle()
+                                    .fill(separatorColor)
+                                    .frame(width: 1, height: 8)
+                            }
+                            Spacer(minLength: 0)
+                        }
+                    }
+                }
+                .frame(height: 8)
+
+                // Centered numeric label
+                Text("\(days) \(days == 1 ? "day" : "days")")
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+            }
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .frame(maxWidth: .infinity)
+        .background(DesignSystem.Colors.surface)
+        .cornerRadius(DesignSystem.CornerRadius.xl)
+    }
+
+    private var subtitle: String {
+        if days == 0 { return "Start your streak — skip unlocks today" }
+        return "Without using an unlock"
+    }
+
+    private var fireColor: Color {
+        let capped = min(days, 5)
+        switch capped {
+        case 0: return DesignSystem.Colors.textTertiary
+        case 1: return .yellow
+        case 2: return .orange
+        case 3: return Color.orange.opacity(0.9)
+        case 4: return Color(red: 1.0, green: 0.5, blue: 0.2)
+        default: return .red
+        }
+    }
+
+    private var barGradient: LinearGradient {
+        let start = Color.yellow
+        let end = Color.red
+        return LinearGradient(colors: [start, end], startPoint: .leading, endPoint: .trailing)
+    }
+}
+
+#if DEBUG
+struct StreakCard_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            VStack(spacing: 16) {
+                StreakCard(days: 0)
+                StreakCard(days: 1)
+                StreakCard(days: 2)
+                StreakCard(days: 3)
+                StreakCard(days: 4)
+                StreakCard(days: 5)
+                StreakCard(days: 12) // beyond 5, bar stays full, count continues
+            }
+            .padding()
+            .background(DesignSystem.Colors.background)
+            .previewDisplayName("Streak Levels 0–5+")
+        }
+    }
+}
+#endif
+
 // MARK: - Setup Section Card
 struct SetupSectionCard: View {
     let title: String
     let description: String
     let icon: String
     let status: String
+    let emoji: String?
+    let logoName: String?
     let action: () -> Void
     
     var body: some View {
         Button(action: action) {
             HStack(spacing: DesignSystem.Spacing.lg) {
                 // Icon
-                ZStack {
-                    Circle()
-                        .fill(DesignSystem.Colors.primary.opacity(0.1))
-                        .frame(width: 50, height: 50)
-                    
-                    Image(systemName: icon)
-                        .font(.system(size: 20, weight: .medium))
-                        .foregroundColor(DesignSystem.Colors.primary)
+                if let logoName = logoName, let uiImage = UIImage(named: logoName) {
+                    Image(uiImage: uiImage)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 40, height: 40)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                } else {
+                    ZStack {
+                        Circle()
+                            .fill(DesignSystem.Colors.primary.opacity(0.1))
+                            .frame(width: 50, height: 50)
+                        if let emoji = emoji, !emoji.isEmpty {
+                            Text(emoji)
+                                .font(.system(size: 24))
+                        } else {
+                            Image(systemName: icon)
+                                .font(.system(size: 20, weight: .medium))
+                                .foregroundColor(DesignSystem.Colors.primary)
+                        }
+                    }
                 }
                 
                 // Content
@@ -336,39 +419,6 @@ struct SetupSectionCard: View {
         }
         .buttonStyle(PlainButtonStyle())
     }
-}
-
-// MARK: - Quick Stat Card
-struct QuickStatCard: View {
-    let title: String
-    let subtitle: String
-    let color: Color
-    
-    var body: some View {
-        VStack(spacing: DesignSystem.Spacing.sm) {
-            Text(title)
-                .font(DesignSystem.Typography.title2)
-                .fontWeight(.bold)
-                .foregroundColor(color)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
-            
-            Text(subtitle)
-                .font(DesignSystem.Typography.caption)
-                .foregroundColor(DesignSystem.Colors.textSecondary)
-                .multilineTextAlignment(.center)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(DesignSystem.Spacing.md)
-        .background(DesignSystem.Colors.surface)
-        .cornerRadius(DesignSystem.CornerRadius.md)
-    }
-}
-
-// Wrapper to use ApplicationToken with .sheet(item:)
-private struct SelectedAppToken: Identifiable, Equatable {
-    let id = UUID()
-    let token: ApplicationToken
 }
 
 #if DEBUG
@@ -403,53 +453,81 @@ private struct SetupDebugActions: View {
 }
 #endif
 
-// MARK: - Limit Reached Card
-private struct LimitReachedCard: View {
-    let token: ApplicationToken
-    let onSelectDuration: (UnlockDuration) -> Void
+// MARK: - Limit Reached Global Card
+private struct LimitReachedGlobalCard: View {
+    let tokens: [ApplicationToken]
+    let waitAction: () -> Void
+    let dayPassAction: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-            HStack(alignment: .center, spacing: DesignSystem.Spacing.md) {
-                Label(token).labelStyle(.iconOnly).frame(width: 40, height: 40)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("You've reached your daily limit on")
-                        .font(DesignSystem.Typography.headline)
-                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                    Text(Application(token: token).localizedDisplayName ?? "This app")
-                        .font(DesignSystem.Typography.callout)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text(limitTitle)
+                .font(DesignSystem.Typography.headline)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+
+            Text(detailLine)
+                .font(DesignSystem.Typography.callout)
+                .foregroundColor(DesignSystem.Colors.textSecondary)
+
+            HStack(spacing: DesignSystem.Spacing.sm) {
+                ForEach(previewTokens, id: \.identifier) { token in
+                    Label(token)
+                        .labelStyle(.iconOnly)
+                        .frame(width: 36, height: 36)
+                        .background(DesignSystem.Colors.primary.opacity(0.08))
+                        .cornerRadius(12)
                 }
-                Spacer()
+                if tokens.count > previewTokens.count {
+                    Text("+\(tokens.count - previewTokens.count)")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.primary)
+                        .fontWeight(.semibold)
+                }
             }
-            HStack(spacing: DesignSystem.Spacing.lg) {
-                DurationPill(text: "10m", color: DesignSystem.Colors.success) { onSelectDuration(.tenMinutes) }
-                DurationPill(text: "30m", color: DesignSystem.Colors.warning) { onSelectDuration(.thirtyMinutes) }
-                DurationPill(text: "Full Day", color: DesignSystem.Colors.accent) { onSelectDuration(.fullDay) }
+
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                Button(action: waitAction) {
+                    Label {
+                        Text("Unlock 10 minutes")
+                            .fontWeight(.semibold)
+                    } icon: {
+                        Image(systemName: "clock.arrow.circlepath")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .mindLockButton(style: .secondary)
+
+                Button(action: dayPassAction) {
+                    Label {
+                        Text("Day Pass")
+                            .fontWeight(.semibold)
+                    } icon: {
+                        Image(systemName: "heart.circle.fill")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                }
+                .mindLockButton(style: .primary)
             }
         }
         .padding(DesignSystem.Spacing.lg)
-        .background(DesignSystem.Colors.surface)
-        .cornerRadius(DesignSystem.CornerRadius.lg)
+        .background(DesignSystem.Colors.surface.opacity(0.5))
+        .cornerRadius(DesignSystem.CornerRadius.xl)
     }
-}
 
-private struct DurationPill: View {
-    let text: String
-    let color: Color
-    let action: () -> Void
-    var body: some View {
-        Button(action: action) {
-            Text(text)
-                .font(DesignSystem.Typography.body)
-                .fontWeight(.semibold)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(color.opacity(0.2))
-                .foregroundColor(color)
-                .cornerRadius(10)
-        }
-        .buttonStyle(PlainButtonStyle())
+    private var previewTokens: [ApplicationToken] {
+        Array(tokens.prefix(3))
+    }
+
+    private var limitTitle: String {
+        let count = tokens.count
+        if count == 1 { return "1 Limit Reached" }
+        return "\(count) Limits Reached"
+    }
+
+    private var detailLine: String {
+        let count = tokens.count
+        let appWord = count == 1 ? "app" : "apps"
+        return "You’ve hit today’s limit for \(count) \(appWord). Earn a 10‑minute break or unlock all apps for the day."
     }
 }
 
@@ -473,7 +551,6 @@ struct AppLimitsSetupView: View {
 
     @State private var pendingImmediateOps: [ApplicationToken: Int] = [:] // minutes
     @State private var pendingDeferredOps: [ApplicationToken: DeferredLimitOp] = [:]
-    @State private var showUnlockSheetForToken: SelectedAppToken?
     @State private var originalSelection = FamilyActivitySelection()
     @State private var originalTimeLimits: [String: Int] = [:]
     @State private var showDiscardChangesAlert = false
@@ -527,13 +604,6 @@ struct AppLimitsSetupView: View {
                 applyDeferredImmediately()
             }
         }
-        .sheet(item: $showUnlockSheetForToken) { wrapper in
-            UnlockFlowView(
-                blockedApp: wrapper.token,
-                onDismiss: { showUnlockSheetForToken = nil },
-                onUnlockPurchased: { showUnlockSheetForToken = nil }
-            )
-        }
         .alert("Discard unsaved changes?", isPresented: $showDiscardChangesAlert) {
             Button("Discard", role: .destructive) { isPresented = false }
             Button("Cancel", role: .cancel) {}
@@ -568,8 +638,7 @@ struct AppLimitsSetupView: View {
                             AppLimitRow(
                                 token: token,
                                 appTimeLimits: $appTimeLimits,
-                                reached: limitsManager.hasExceededLimit(for: token),
-                                onUnlock: { showUnlockSheetForToken = SelectedAppToken(token: token) }
+                                reached: limitsManager.hasExceededLimit(for: token)
                             )
                         }
                         if !persistedPendingItems.isEmpty { pendingChangesSection }
@@ -926,7 +995,6 @@ struct AppLimitCard: View {
     let applicationToken: ApplicationToken
     @Binding var timeLimit: Int
     let reachedLimit: Bool
-    let onUnlock: () -> Void
     
     private let timeLimitOptions = [10, 15, 20, 30, 45, 60, 90, 120, 180, 240] // Minutes
     
@@ -962,15 +1030,6 @@ struct AppLimitCard: View {
                 .cornerRadius(DesignSystem.CornerRadius.sm)
             }
 
-            if reachedLimit {
-                Button("Unlock") { onUnlock() }
-                    .font(DesignSystem.Typography.caption)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(DesignSystem.Colors.success.opacity(0.2))
-                    .foregroundColor(DesignSystem.Colors.success)
-                    .cornerRadius(8)
-            }
         }
         .padding(DesignSystem.Spacing.md)
         .background(reachedLimit ? DesignSystem.Colors.accent.opacity(0.06) : DesignSystem.Colors.surface)
@@ -997,7 +1056,6 @@ private struct AppLimitRow: View {
     let token: ApplicationToken
     @Binding var appTimeLimits: [String: Int]
     let reached: Bool
-    let onUnlock: () -> Void
 
     private var timeLimitBinding: Binding<Int> {
         Binding(
@@ -1010,8 +1068,7 @@ private struct AppLimitRow: View {
         AppLimitCard(
             applicationToken: token,
             timeLimit: timeLimitBinding,
-            reachedLimit: reached,
-            onUnlock: onUnlock
+            reachedLimit: reached
         )
     }
 }
@@ -1039,12 +1096,8 @@ private struct PendingLimitPill: View {
 private struct InstantChangePaywallView: View {
     @Binding var isPresented: Bool
     let onConfirm: () -> Void
-    @ObservedObject private var limitsManager = DailyLimitsManager.shared
     @State private var selectedCharity: Charity?
-
-    var middlePrice: String {
-        limitsManager.userPricingTier.thirtyMinPrice
-    }
+    private let dayPassPrice = "$1.00"
 
     var body: some View {
         ZStack {
@@ -1082,7 +1135,15 @@ private struct InstantChangePaywallView: View {
                                     .foregroundColor(DesignSystem.Colors.primary)
                             }
                             HStack(spacing: DesignSystem.Spacing.md) {
-                                Text(charity.emoji).font(.system(size: 24))
+                                if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                                    Image(uiImage: uiImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 24, height: 24)
+                                        .clipShape(RoundedRectangle(cornerRadius: 5))
+                                } else {
+                                    Text(charity.emoji).font(.system(size: 24))
+                                }
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(charity.name)
                                         .font(DesignSystem.Typography.headline)
@@ -1109,7 +1170,15 @@ private struct InstantChangePaywallView: View {
                                                 UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
                                             }) {
                                                 HStack(spacing: 8) {
-                                                    Text(charity.emoji)
+                                                    if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                                                        Image(uiImage: uiImage)
+                                                            .resizable()
+                                                            .scaledToFit()
+                                                            .frame(width: 18, height: 18)
+                                                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                                                    } else {
+                                                        Text(charity.emoji)
+                                                    }
                                                     Text(charity.name)
                                                         .font(DesignSystem.Typography.caption)
                                                         .foregroundColor(DesignSystem.Colors.textPrimary)
@@ -1128,7 +1197,7 @@ private struct InstantChangePaywallView: View {
                     }
 
                     HStack(spacing: DesignSystem.Spacing.sm) {
-                        Text(middlePrice)
+                        Text(dayPassPrice)
                             .font(DesignSystem.Typography.largeTitle)
                             .fontWeight(.bold)
                             .foregroundColor(DesignSystem.Colors.primary)

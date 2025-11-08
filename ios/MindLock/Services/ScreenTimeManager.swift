@@ -178,17 +178,7 @@ class ScreenTimeManager: ObservableObject {
             print("❌ Cannot block apps: not authorized")
             return
         }
-        
-        let store = ManagedSettingsStore()
-        
-        // Apply restrictions
-        if !selectedApps.applicationTokens.isEmpty {
-            // Note: This might not work in development without proper entitlements
-            // but we'll attempt it anyway
-            store.shield.applications = selectedApps.applicationTokens
-            print("🛡️ Applied app blocking (may not work in development)")
-            debugState(tag: "blockApps")
-        }
+        DailyLimitsManager.shared.refreshBlockingNow()
     }
     
     func unblockApps() {
@@ -198,14 +188,14 @@ class ScreenTimeManager: ObservableObject {
         debugState(tag: "unblockApps")
     }
     
-    func temporaryUnlock(duration: TimeInterval) {
-        unblockApps()
+    func temporaryUnlock(tokens: [ApplicationToken], duration: TimeInterval) {
+        guard !tokens.isEmpty else { return }
+        DailyLimitsManager.shared.refreshBlockingNow()
         
-        // Re-apply blocks after the specified duration
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
-            self?.blockApps()
-            print("🔒 Temporary unlock expired, re-applying blocks")
-            self?.debugState(tag: "temporaryUnlock.expired")
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            SharedSettings.removeTemporaryUnlocks(for: tokens)
+            DailyLimitsManager.shared.refreshBlockingNow()
+            print("🔒 Temporary unlock expired for \(tokens.count) app(s)")
         }
     }
     

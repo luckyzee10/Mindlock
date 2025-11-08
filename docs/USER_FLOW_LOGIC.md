@@ -4,6 +4,14 @@
 
 This document defines the complete user experience flow for MindLock, including system architecture, data flows, and UI wireframes. It serves as the single source of truth for implementation decisions.
 
+> **Fast MVP Update (Nov 2025)**  
+> - Navigation trimmed to two tabs: **Status** (current lock state + unlock CTA) and **Setup** (limits, charity). Analytics/Social/Profile are deferred.  
+> - Unlock flow now has only two paths: a free 30-second wait that grants 10 minutes, and a $0.99 Day Pass that unlocks until midnight with 15% of net revenue going to the selected charity.  
+> - Charity selection can be skipped during onboarding; we prompt again before the first paid unlock.  
+> - Difficulty tiers, multi-duration products, and per-app unlock paywalls have been removed to reduce friction.
+> 
+> The remaining sections still describe the full architecture, but the items above represent the MVP scope we are implementing now.
+
 ---
 
 ## 🎯 **Core Value Proposition**
@@ -21,8 +29,8 @@ This document defines the complete user experience flow for MindLock, including 
 ### **Flow 1: Initial Setup & Onboarding**
 ```
 Start → Welcome → Usage Survey → Screen Time Permission → 
-App Selection → Limit Setting → Charity Selection → 
-Difficulty Level → Concept Explanation → Main App
+App Selection → Limit Setting → Charity Selection (skip allowed) → 
+Concept Explanation → Main App
 ```
 
 ### **Flow 2: Daily Limit Management**
@@ -33,16 +41,13 @@ Save → Limits Apply at Midnight
 
 ### **Flow 3: Limit Exceeded & Unlock**
 ```
-App Usage Hits Limit → Blocking Screen → 
-Choose Charity → Select Duration → Payment → 
-Temporary Unlock → Impact Confirmation
+App Usage Hits Limit → Blocking Screen → Unlock Prompt
+    ↳ Option A: Wait 30 seconds → 10-minute unlock
+    ↳ Option B: Purchase $1 Day Pass → Unlock until midnight (15% net to charity)
 ```
 
 ### **Flow 4: Analytics & Progress**
-```
-Analytics Tab → Today's Usage → Weekly Trends → 
-App Breakdown → Goal Progress → Social Impact
-```
+_Deferred for MVP_
 
 ---
 
@@ -74,30 +79,27 @@ App Breakdown → Goal Progress → Social Impact
 - Usage analytics data
 
 ### **Module 2: Unlock & Payment System**
-**Purpose**: Handle charity selection and unlock purchases
+**Purpose**: Present the two unlock choices and process the Day Pass receipt.
 
 **Components:**
-- `UnlockFlowView` (charity selection UI)
-- `PaymentManager` (Apple IAP integration)
-- `UnlockTransaction` (transaction logging)
+- `UnlockPromptView` (wait vs. day pass UI + countdown)
+- `DailyLimitsManager.grantFreeUnlock / grantDayPass`
+- `PaymentManager` (StoreKit 2, single SKU `mindlock.daypass`)
 
 **Key Functions:**
-- `presentUnlockFlow(app)` - Show charity selection
-- `purchaseUnlock(duration, charity, amount)` - Process payment
-- `temporaryUnblock(app, duration)` - Grant access
-- `logTransaction(details)` - Record for reporting
+- `startCountdown()` – Runs the 30-second wait, then grants a 10-minute temporary unlock.
+- `purchaseDayPass(charity)` – Triggers StoreKit purchase, validates receipt, donates 15% of net revenue, and unlocks until midnight.
+- `refreshBlockingNow()` – Reapplies ManagedSettings when the unlock expires.
 
 **Inputs:**
 - Limit violation events
-- User charity selection
-- User unlock duration choice
-- Payment completion callbacks
+- Stored charity preference (optional)
+- StoreKit purchase callbacks
 
 **Outputs:**
-- Charity donation transactions
-- Temporary app access grants
-- Impact reporting data
-- Revenue tracking
+- Temporary unlock state (free or paid)
+- Donation ledger entries (via `SharedSettings.recordDonation`)
+- Blocking status updates for the Status tab
 
 ### **Module 3: Screen Time Integration**
 **Purpose**: Monitor usage and enforce blocking
@@ -129,18 +131,16 @@ App Breakdown → Goal Progress → Social Impact
 
 **Components:**
 - `UserDefaults` (preferences)
-- `CoreData/SQLite` (transactions - future)
-- Local JSON files (backup)
+- Local JSON files via `SharedSettings` (daily limits, usage snapshots, donation summaries)
 
 **Key Functions:**
-- `saveUserPreferences()` - Limits, charity, pricing
+- `saveUserPreferences()` - Limits, charity
 - `loadDailyConfiguration()` - Bootstrap each day
-- `syncTransactionHistory()` - Backend integration
-- `exportDonationReport()` - Monthly summaries
+- `recordDonation()` - Append donation metadata for backend rollup
 
 **Inputs:**
 - User preference changes
-- Transaction completions
+- Day Pass purchases
 - Configuration updates
 
 **Outputs:**
@@ -156,9 +156,9 @@ App Breakdown → Goal Progress → Social Impact
 ### **1. Main Tab Structure**
 ```
 ┌─────────────────────────────────────┐
-│ ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐    │
-│ │Setup│ │Analyt│ │Social│ │Profil│   │
-│ └─────┘ └─────┘ └─────┘ └─────┘    │
+│ ┌──────┐ ┌─────┐                   │
+│ │Status│ │Setup│                   │
+│ └──────┘ └─────┘                   │
 ├─────────────────────────────────────┤
 │              CONTENT                │
 │                                     │
@@ -179,15 +179,14 @@ App Breakdown → Goal Progress → Social Impact
 ├─────────────────────────────────────┤
 │ ┌─┐  Your Charity                   │
 │ │💝│  World Wildlife Fund        > │
-│ └─┘  Choose where fees go           │
+│ └─┘  Choose where day-pass fees go  │
 ├─────────────────────────────────────┤
-│ ┌─┐  Difficulty Level               │
-│ │⚖️│  Balanced Mode              > │
-│ └─┘  $1.00 • $2.00 • $3.00         │
+│ ┌─┐  Unlock Options                 │
+│ │🔓│  10m wait / $1 day pass   > │
 ├─────────────────────────────────────┤
 │          Quick Stats                │
 │   📊 3 apps configured              │
-│   💰 $12 donated this month         │
+│   💰 $0.13 per day pass donated     │
 └─────────────────────────────────────┘
 ```
 

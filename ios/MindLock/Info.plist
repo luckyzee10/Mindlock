@@ -18,6 +18,34 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>MindLockAPIBaseURL</key>
+	<string>https://mindlock-api.onrender.com</string>
+	<key>MindLockAppAPIKey</key>
+	<string>eDmSONWWHINQaKKCi/VvhZH2I2PexuS4+hXFNSkKnws</string>
+	<key>MindLockEnvironment</key>
+	<string>production</string>
+	<key>MindLockAPIBaseURL_Production</key>
+	<string>https://mindlock-api.onrender.com</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>127.0.0.1</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

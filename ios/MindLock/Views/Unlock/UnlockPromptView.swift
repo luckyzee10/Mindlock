@@ -1,256 +1,262 @@
 import SwiftUI
+import FamilyControls
+import ManagedSettings
+import StoreKit
+import UIKit
 
 struct UnlockPromptView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedOption: UnlockOption?
-    @State private var showingLearnMore = false
-    @State private var isAnimating = false
-    
-    private let selectedCharity = "Clean Water Fund"
-    
+    @EnvironmentObject private var limitsManager: DailyLimitsManager
+    let appToken: ApplicationToken
+
+    @StateObject private var paymentManager = PaymentManager()
+    @State private var selectedCharity: Charity?
+    @State private var showingCharityPicker = false
+    @State private var purchaseErrorMessage: String?
+    @State private var showingPurchaseError = false
+
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: DesignSystem.Spacing.xl) {
-                    // Header
-                    headerSection
-                    
-                    // Main message
-                    messageSection
-                    
-                    // Unlock options
-                    unlockOptionsSection
-                    
-                    // Charity section
-                    charitySection
-                    
-                    Spacer(minLength: DesignSystem.Spacing.xl)
-                    
-                    // Action buttons
-                    actionButtonsSection
+                    heroSection
+                    selectedCharitySection
+                    quickCharityList
+                    unlockCTA
+                    Button("Not now") { dismiss() }
+                        .font(DesignSystem.Typography.body.weight(.semibold))
+                        .foregroundColor(DesignSystem.Colors.primary)
                 }
                 .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.top, DesignSystem.Spacing.xl)
+                .padding(.bottom, DesignSystem.Spacing.xxl)
             }
-            .background(DesignSystem.Colors.backgroundGradient.ignoresSafeArea())
+            .background(DesignSystem.Colors.background.ignoresSafeArea())
             .navigationBarHidden(true)
         }
+        .sheet(isPresented: $showingCharityPicker, onDismiss: loadSelectedCharity) {
+            SetupCharitySelectionView()
+        }
         .onAppear {
-            withAnimation(DesignSystem.Animation.spring) {
-                isAnimating = true
-            }
+            loadSelectedCharity()
+            loadProductsIfNeeded()
         }
+        .alert("Purchase Failed", isPresented: $showingPurchaseError, actions: {
+            Button("OK", role: .cancel) {}
+        }, message: {
+            Text(purchaseErrorMessage ?? "Something went wrong. Please try again.")
+        })
     }
-    
-    private var headerSection: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
-            // App icon/illustration
-            ZStack {
-                Circle()
-                    .fill(DesignSystem.Colors.accent.opacity(0.1))
-                    .frame(width: 80, height: 80)
-                
-                Image(systemName: "lock.fill")
-                    .font(.system(size: 30, weight: .medium))
-                    .foregroundColor(DesignSystem.Colors.accent)
-            }
-            .scaleEffect(isAnimating ? 1.0 : 0.8)
-            .animation(DesignSystem.Animation.spring, value: isAnimating)
-            
-            Text("Time's Up!")
-                .font(DesignSystem.Typography.title1)
-                .fontWeight(.bold)
+
+    private var heroSection: some View {
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            Text("You’ve reached your limit")
+                .font(.system(size: 30, weight: .heavy))
                 .foregroundColor(DesignSystem.Colors.textPrimary)
-        }
-        .padding(.top, DesignSystem.Spacing.xl)
-    }
-    
-    private var messageSection: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
-            Text("You've reached your daily limit for social apps")
-                .font(DesignSystem.Typography.body)
+                .multilineTextAlignment(.center)
+            Text("\(appDisplayName) is locked, along with the rest of your tracked apps.")
+                .font(DesignSystem.Typography.callout)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
-            
-            Text("Choose an unlock option below to continue using your apps. A portion of your payment supports charity.")
+            Text("Unlock every app for the rest of today. 15% of your day pass supports your cause.")
                 .font(DesignSystem.Typography.callout)
-                .foregroundColor(DesignSystem.Colors.textTertiary)
+                .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .opacity(isAnimating ? 1.0 : 0.0)
-        .offset(y: isAnimating ? 0 : 20)
-        .animation(DesignSystem.Animation.gentle.delay(0.3), value: isAnimating)
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+        .padding(.vertical, DesignSystem.Spacing.xl)
     }
-    
-    private var unlockOptionsSection: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
-            Text("Unlock Options")
+
+    private var selectedCharitySection: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+            Text("Your selected charity")
                 .font(DesignSystem.Typography.headline)
                 .foregroundColor(DesignSystem.Colors.textPrimary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            ForEach(UnlockOption.allOptions, id: \.id) { option in
-                UnlockOptionCard(
-                    option: option,
-                    isSelected: selectedOption?.id == option.id
-                ) {
-                    withAnimation(DesignSystem.Animation.gentle) {
-                        selectedOption = option
+            if let charity = selectedCharity {
+                HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
+                    if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                        Image(uiImage: uiImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 36, height: 36)
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                    } else {
+                        Text(charity.emoji)
+                            .font(.system(size: 36))
                     }
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(charity.name)
+                            .font(DesignSystem.Typography.body)
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                        Text(charity.description)
+                            .font(DesignSystem.Typography.caption)
+                            .foregroundColor(DesignSystem.Colors.textSecondary)
+                    }
+                    Spacer()
                 }
-            }
-        }
-        .opacity(isAnimating ? 1.0 : 0.0)
-        .offset(y: isAnimating ? 0 : 30)
-        .animation(DesignSystem.Animation.gentle.delay(0.5), value: isAnimating)
-    }
-    
-    private var charitySection: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            Text("Supporting: \(selectedCharity)")
-                .font(DesignSystem.Typography.headline)
-                .foregroundColor(DesignSystem.Colors.textPrimary)
-            
-            HStack(spacing: DesignSystem.Spacing.md) {
-                Image(systemName: "heart.fill")
-                    .foregroundColor(DesignSystem.Colors.success)
-                
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                    Text("10% of your payment goes to charity")
-                        .font(DesignSystem.Typography.callout)
+                .padding()
+                .background(DesignSystem.Colors.surface.opacity(0.9))
+                .cornerRadius(DesignSystem.CornerRadius.lg)
+            } else {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+                    Text("No charity selected yet.")
+                        .font(DesignSystem.Typography.body)
                         .foregroundColor(DesignSystem.Colors.textSecondary)
-                    
-                    Button("Learn more about \(selectedCharity)") {
-                        showingLearnMore = true
-                    }
-                    .font(DesignSystem.Typography.footnote)
-                    .foregroundColor(DesignSystem.Colors.primary)
+                    Button("Choose a charity") { showingCharityPicker = true }
+                        .mindLockButton(style: .secondary)
                 }
-                
-                Spacer()
+                .padding()
+                .background(DesignSystem.Colors.surface.opacity(0.9))
+                .cornerRadius(DesignSystem.CornerRadius.lg)
             }
-            .padding(DesignSystem.Spacing.md)
-            .background(DesignSystem.Colors.success.opacity(0.05))
-            .cornerRadius(DesignSystem.CornerRadius.md)
         }
     }
-    
-    private var actionButtonsSection: some View {
+
+    private var quickCharityList: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            HStack {
+                Text("Change your charity")
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                Spacer()
+                Button("See all") { showingCharityPicker = true }
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.primary)
+            }
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                ForEach(Charity.popularCharities) { charity in
+                    Button {
+                        selectedCharity = charity
+                        UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
+                    } label: {
+                        HStack(spacing: DesignSystem.Spacing.md) {
+                            if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 26, height: 26)
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
+                            } else {
+                                Text(charity.emoji)
+                                    .font(.system(size: 26))
+                            }
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(charity.name)
+                                    .font(DesignSystem.Typography.body)
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                                Text(charity.description)
+                                    .font(DesignSystem.Typography.caption)
+                                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                                    .lineLimit(2)
+                            }
+                            Spacer()
+                            if selectedCharity?.id == charity.id {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(DesignSystem.Colors.primary)
+                            }
+                        }
+                        .padding()
+                        .background(DesignSystem.Colors.surface.opacity(selectedCharity?.id == charity.id ? 0.8 : 0.5))
+                        .cornerRadius(DesignSystem.CornerRadius.lg)
+                    }
+                }
+            }
+        }
+    }
+
+    private var unlockCTA: some View {
         VStack(spacing: DesignSystem.Spacing.md) {
-            Button(action: {
-                handleUnlockPurchase()
-            }) {
-                HStack {
-                    Image(systemName: "unlock.fill")
-                    Text("Unlock for \(selectedOption?.price ?? "$0.99")")
+            Button(action: purchaseDayPass) {
+                if paymentManager.isProcessing {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .padding(.vertical, 10)
+                        .frame(maxWidth: .infinity)
+                } else {
+                    Text(buttonTitle)
                         .fontWeight(.semibold)
+                        .frame(maxWidth: .infinity)
                 }
             }
             .mindLockButton(style: .primary)
-            .disabled(selectedOption == nil)
-            .opacity(selectedOption == nil ? 0.6 : 1.0)
-            
-            Button("Maybe Later") {
+            .disabled(paymentManager.isProcessing || paymentManager.availableProduct == nil)
+
+            if let failureMessage = failureMessage {
+                Text(failureMessage)
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .frame(maxWidth: .infinity)
+        .background(DesignSystem.Colors.surface.opacity(0.35))
+        .cornerRadius(32)
+    }
+
+    private func purchaseDayPass() {
+        if selectedCharity == nil {
+            showingCharityPicker = true
+            return
+        }
+        guard let charity = selectedCharity else { return }
+        Task {
+            await executePurchase(with: charity)
+        }
+    }
+
+    private func executePurchase(with charity: Charity) async {
+        do {
+            try await paymentManager.purchaseDayPass(for: charity)
+            await MainActor.run {
+                let unlockedMinutes = limitsManager.grantDayPass(charity: charity)
+                if let unlockedMinutes {
+                    NotificationManager.shared.postDayPassNotification(minutesUntilMidnight: unlockedMinutes)
+                }
                 dismiss()
             }
-            .mindLockButton(style: .secondary)
+        } catch PaymentError.userCancelled {
+            // no-op
+        } catch {
+            purchaseErrorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
+            showingPurchaseError = true
         }
     }
-    
-    private func handleUnlockPurchase() {
-        guard let option = selectedOption else { return }
-        
-        // TODO: Implement Apple In-App Purchase
-        print("🔓 Attempting to unlock for \(option.duration) at \(option.price)")
-        print("💝 \(option.charityAmount) will go to \(selectedCharity)")
-        
-        // For now, just dismiss
-        dismiss()
-    }
-}
 
-struct UnlockOptionCard: View {
-    let option: UnlockOption
-    let isSelected: Bool
-    let onTap: () -> Void
-    
-    var body: some View {
-        Button(action: onTap) {
-            HStack(spacing: DesignSystem.Spacing.md) {
-                // Selection indicator
-                ZStack {
-                    Circle()
-                        .fill(isSelected ? DesignSystem.Colors.primary : DesignSystem.Colors.surfaceSecondary)
-                        .frame(width: 24, height: 24)
-                    
-                    if isSelected {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundColor(.white)
-                    }
-                }
-                
-                // Option details
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-                    Text(option.duration)
-                        .font(DesignSystem.Typography.headline)
-                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                    
-                    Text("Charity contribution: \(option.charityAmount)")
-                        .font(DesignSystem.Typography.footnote)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                }
-                
-                Spacer()
-                
-                // Price
-                Text(option.price)
-                    .font(DesignSystem.Typography.title3)
-                    .fontWeight(.bold)
-                    .foregroundColor(isSelected ? DesignSystem.Colors.primary : DesignSystem.Colors.textPrimary)
-            }
-            .padding(DesignSystem.Spacing.md)
+    private func loadProductsIfNeeded() {
+        Task {
+            await paymentManager.loadProductIfNeeded()
         }
-        .mindLockCard()
-        .overlay(
-            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md)
-                .stroke(
-                    isSelected ? DesignSystem.Colors.primary : Color.clear,
-                    lineWidth: 2
-                )
-        )
-        .scaleEffect(isSelected ? 1.02 : 1.0)
-        .shadow(
-            color: isSelected ? DesignSystem.Colors.primary.opacity(0.2) : DesignSystem.Shadows.small.color,
-            radius: isSelected ? 8 : DesignSystem.Shadows.small.radius,
-            x: DesignSystem.Shadows.small.x,
-            y: DesignSystem.Shadows.small.y
-        )
-        .animation(DesignSystem.Animation.gentle, value: isSelected)
+    }
+
+    private func loadSelectedCharity() {
+        if let charityId = UserDefaults.standard.string(forKey: "selectedCharityId"),
+           let charity = Charity.popularCharities.first(where: { $0.id == charityId }) {
+            selectedCharity = charity
+        } else {
+            selectedCharity = nil
+        }
+    }
+
+    private var appDisplayName: String {
+        Application(token: appToken).localizedDisplayName ?? "your apps"
+    }
+
+    private var buttonTitle: String {
+        if let price = paymentManager.availableProduct?.displayPrice {
+            return "Unlock for \(price)"
+        }
+        return "Unlock Day Pass"
+    }
+
+    private var failureMessage: String? {
+        if case .failed(let message) = paymentManager.purchaseState {
+            return message
+        }
+        if case .pending = paymentManager.purchaseState {
+            return "Your purchase is pending approval. You’ll be able to unlock once Apple finishes processing."
+        }
+        return nil
     }
 }
-
-// MARK: - Data Models
-
-struct UnlockOption: Equatable {
-    let id = UUID()
-    let duration: String
-    let price: String
-    let charityAmount: String
-    let unlockMinutes: Int
-    
-    // Implement Equatable
-    static func == (lhs: UnlockOption, rhs: UnlockOption) -> Bool {
-        lhs.id == rhs.id
-    }
-    
-    static let allOptions = [
-        UnlockOption(duration: "10 minutes", price: "$0.99", charityAmount: "$0.10", unlockMinutes: 10),
-        UnlockOption(duration: "30 minutes", price: "$1.99", charityAmount: "$0.20", unlockMinutes: 30),
-        UnlockOption(duration: "1 hour", price: "$2.99", charityAmount: "$0.30", unlockMinutes: 60),
-        UnlockOption(duration: "2 hours", price: "$4.99", charityAmount: "$0.50", unlockMinutes: 120)
-    ]
-}
-
-#Preview {
-    UnlockPromptView()
-} 
