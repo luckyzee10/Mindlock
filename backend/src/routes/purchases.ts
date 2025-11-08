@@ -5,6 +5,9 @@ import { prisma } from '../lib/prisma.js';
 import { purchasesRateLimiter, requireAppKey } from '../middleware/auth.js';
 import { validateReceiptQueue } from '../lib/queues.js';
 
+const log = (...args: unknown[]) => console.log('[purchases]', ...args);
+const logError = (...args: unknown[]) => console.error('[purchases]', ...args);
+
 const createPurchaseSchema = z.object({
   userId: z.string().min(1),
   userEmail: z.string().email().optional(),
@@ -39,6 +42,16 @@ purchasesRouter.post(
       const appleFeeCents = Math.round(grossCents * 0.15);
       const netCents = grossCents - appleFeeCents;
       const donationCents = Math.round(netCents * 0.15);
+
+      log(
+        'Received purchase submission',
+        JSON.stringify({
+          userId,
+          charityId,
+          productId,
+          transactionId
+        })
+      );
 
       const purchase = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         await tx.user.upsert({
@@ -77,6 +90,8 @@ purchasesRouter.post(
         return record;
       });
 
+      log('Stored purchase', { purchaseId: purchase.id, status: purchase.status });
+
       await validateReceiptQueue.add(
         'validate-receipt',
         { purchaseId: purchase.id },
@@ -92,19 +107,24 @@ purchasesRouter.post(
         }
       );
 
+      log('Enqueued receipt validation job', { purchaseId: purchase.id });
+
       res.status(202).json({
         purchaseId: purchase.id,
         status: purchase.status
       });
     } catch (err: unknown) {
       if (err instanceof z.ZodError) {
+        logError('Validation error', err.flatten());
         res.status(400).json({ error: err.flatten() });
         return;
       }
       if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+        logError('Duplicate purchase submission rejected', { code: err.code, meta: err.meta });
         res.status(409).json({ error: 'Purchase already submitted' });
         return;
       }
+      logError('Unhandled purchase error', err);
       next(err);
     }
   }
