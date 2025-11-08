@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import { prisma } from '../lib/prisma.js';
 import { config } from '../lib/config.js';
+import { verifyStoreKitTransaction } from '../lib/storekit.js';
 const retryableStatuses = new Set([21002, 21005, 21009]);
 export async function handleValidateReceipt(job) {
     const { purchaseId } = job.data;
@@ -16,34 +17,12 @@ export async function handleValidateReceipt(job) {
         return;
     }
     try {
-        const result = await validateWithApple(job, purchase.receiptData);
-        const match = findTransaction(result, purchase.appleTransactionId);
-        if (!match) {
-            await markFailed(purchaseId, `Transaction ${purchase.appleTransactionId ?? 'unknown'} not present in receipt`);
-            return;
+        if (purchase.receiptData) {
+            await validateViaReceipt(job, purchase);
         }
-        const completedAt = match.purchase_date_ms
-            ? new Date(Number(match.purchase_date_ms))
-            : new Date();
-        await prisma.$transaction(async (tx) => {
-            await tx.purchase.update({
-                where: { id: purchaseId },
-                data: {
-                    status: 'completed',
-                    completedAt,
-                    failureReason: null
-                }
-            });
-            await tx.charityDonation.upsert({
-                where: { purchaseId },
-                create: {
-                    purchaseId,
-                    charityId: purchase.charityId,
-                    donationCents: purchase.donationCents
-                },
-                update: {}
-            });
-        });
+        else {
+            await validateViaTransactionJws(job, purchase);
+        }
         await job.log(`Purchase ${purchaseId} validated successfully`);
     }
     catch (err) {
@@ -109,5 +88,56 @@ async function markFailed(purchaseId, reason) {
             status: 'failed',
             failureReason: reason
         }
+    });
+}
+async function validateViaReceipt(job, purchase) {
+    const result = await validateWithApple(job, purchase.receiptData);
+    const match = findTransaction(result, purchase.appleTransactionId);
+    if (!match) {
+        await markFailed(purchase.id, `Transaction ${purchase.appleTransactionId ?? 'unknown'} not present in receipt`);
+        return;
+    }
+    const completedAt = match.purchase_date_ms
+        ? new Date(Number(match.purchase_date_ms))
+        : new Date();
+    await markCompleted(purchase, completedAt);
+}
+async function validateViaTransactionJws(job, purchase) {
+    if (!purchase.transactionJws) {
+        await markFailed(purchase.id, 'Transaction JWS missing');
+        return;
+    }
+    const payload = await verifyStoreKitTransaction(purchase.transactionJws);
+    if (payload.transactionId !== purchase.appleTransactionId) {
+        await markFailed(purchase.id, 'Transaction ID mismatch');
+        return;
+    }
+    if (payload.productId !== purchase.productId) {
+        await markFailed(purchase.id, 'Product ID mismatch');
+        return;
+    }
+    const completedAt = new Date(payload.purchaseDate);
+    await markCompleted(purchase, completedAt);
+    await job.log('Validated via StoreKit JWS payload');
+}
+async function markCompleted(purchase, completedAt) {
+    await prisma.$transaction(async (tx) => {
+        await tx.purchase.update({
+            where: { id: purchase.id },
+            data: {
+                status: 'completed',
+                completedAt,
+                failureReason: null
+            }
+        });
+        await tx.charityDonation.upsert({
+            where: { purchaseId: purchase.id },
+            create: {
+                purchaseId: purchase.id,
+                charityId: purchase.charityId,
+                donationCents: purchase.donationCents
+            },
+            update: {}
+        });
     });
 }

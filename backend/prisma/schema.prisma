@@ -35,7 +35,8 @@ model Purchase {
   charityId          String
   productId          String
   appleTransactionId String?        @unique
-  receiptData        String
+  receiptData        String?
+  transactionJws     String
   status             PurchaseStatus @default(pending_validation)
   grossCents         Int
   appleFeeCents      Int

@@ -15,7 +15,8 @@ const createPurchaseSchema = z.object({
   charityName: z.string().min(1).optional(),
   productId: z.literal('mindlock.daypass'),
   transactionId: z.string().min(1),
-  receiptData: z.string().min(10)
+  transactionJWS: z.string().min(10),
+  receiptData: z.string().min(10).optional()
 });
 
 export const purchasesRouter = Router();
@@ -35,6 +36,7 @@ purchasesRouter.post(
         charityName,
         productId,
         transactionId,
+        transactionJWS,
         receiptData
       } = payload;
 
@@ -43,15 +45,12 @@ purchasesRouter.post(
       const netCents = grossCents - appleFeeCents;
       const donationCents = Math.round(netCents * 0.15);
 
-      log(
-        'Received purchase submission',
-        JSON.stringify({
-          userId,
-          charityId,
-          productId,
-          transactionId
-        })
-      );
+      log('Received purchase submission', {
+        userId,
+        charityId,
+        productId,
+        transactionId
+      });
 
       const purchase = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
         await tx.user.upsert({
@@ -79,7 +78,8 @@ purchasesRouter.post(
             charityId,
             productId,
             appleTransactionId: transactionId,
-            receiptData,
+            receiptData: receiptData ?? null,
+            transactionJws: transactionJWS,
             grossCents,
             appleFeeCents,
             netCents,
