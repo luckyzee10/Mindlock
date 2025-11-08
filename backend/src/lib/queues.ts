@@ -1,16 +1,13 @@
 import { Queue, QueueEvents } from 'bullmq';
 import { createRedisConnection } from './redis.js';
 
-const queueConnection = {
-  connection: createRedisConnection()
-};
+// Create a single shared connection and fixed prefix so API and worker
+// definitely talk to the same Bull keyspace.
+export const redisConnection = createRedisConnection();
+const bullOptions = { connection: redisConnection, prefix: 'mindlock' } as const;
 
-export const validateReceiptQueue = new Queue('validate-receipt', queueConnection);
-export const reportQueue = new Queue('generate-report', queueConnection);
+export const validateReceiptQueue = new Queue('validate-receipt', bullOptions);
+export const reportQueue = new Queue('generate-report', bullOptions);
 
-export const validateReceiptEvents = new QueueEvents('validate-receipt', {
-  connection: createRedisConnection()
-});
-export const reportEvents = new QueueEvents('generate-report', {
-  connection: createRedisConnection()
-});
+export const validateReceiptEvents = new QueueEvents('validate-receipt', bullOptions);
+export const reportEvents = new QueueEvents('generate-report', bullOptions);

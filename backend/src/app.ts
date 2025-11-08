@@ -6,6 +6,7 @@ import { config } from './lib/config.js';
 import { purchasesRouter } from './routes/purchases.js';
 import { reportsRouter } from './routes/reports.js';
 import { healthRouter } from './routes/health.js';
+import { debugRouter } from './routes/debug.js';
 import { enforceHttps } from './middleware/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
@@ -32,6 +33,7 @@ app.use((_, res, next) => {
 
 app.use('/v1/purchases', purchasesRouter);
 app.use('/v1/reports', reportsRouter);
+app.use(debugRouter);
 app.use(healthRouter);
 
 app.use(errorHandler);

@@ -1,5 +1,5 @@
 import { Worker } from 'bullmq';
-import { createRedisConnection } from './lib/redis.js';
+import { redisConnection } from './lib/queues.js';
 import { handleValidateReceipt } from './jobs/validateReceipt.js';
 import { handleMonthlyReport } from './jobs/monthlyReport.js';
 import { reportQueue } from './lib/queues.js';
@@ -8,11 +8,13 @@ async function bootstrap() {
   await ensureMonthlyJob();
 
   const validateWorker = new Worker('validate-receipt', handleValidateReceipt, {
-    connection: createRedisConnection()
+    connection: redisConnection,
+    prefix: 'mindlock'
   });
 
   const reportWorker = new Worker('generate-report', handleMonthlyReport, {
-    connection: createRedisConnection()
+    connection: redisConnection,
+    prefix: 'mindlock'
   });
 
   validateWorker.on('ready', () => {
