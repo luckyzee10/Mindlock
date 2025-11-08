@@ -11,8 +11,26 @@ async function bootstrap() {
     const reportWorker = new Worker('generate-report', handleMonthlyReport, {
         connection: createRedisConnection()
     });
+    validateWorker.on('ready', () => {
+        console.log('[worker] validate-receipt ready');
+    });
+    validateWorker.on('active', (job) => {
+        console.log(`[worker] validate active ${job.id}`);
+    });
+    validateWorker.on('completed', (job) => {
+        console.log(`[worker] validate completed ${job?.id}`);
+    });
     validateWorker.on('failed', (job, err) => {
         console.error(`[worker] validate job ${job?.id} failed`, err);
+    });
+    reportWorker.on('ready', () => {
+        console.log('[worker] generate-report ready');
+    });
+    reportWorker.on('active', (job) => {
+        console.log(`[worker] report active ${job.id}`);
+    });
+    reportWorker.on('completed', (job) => {
+        console.log(`[worker] report completed ${job?.id}`);
     });
     reportWorker.on('failed', (job, err) => {
         console.error(`[worker] report job ${job?.id} failed`, err);

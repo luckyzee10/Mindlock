@@ -24,6 +24,7 @@ export async function handleValidateReceipt(job) {
             await validateViaTransactionJws(job, purchase);
         }
         await job.log(`Purchase ${purchaseId} validated successfully`);
+        console.log(`[worker] validated purchase ${purchaseId}`);
     }
     catch (err) {
         if (err instanceof RetryableError) {
