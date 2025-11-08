@@ -10,7 +10,9 @@ import { enforceHttps } from './middleware/auth.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 const app = express();
-app.set('trust proxy', true);
+// Rate limiters and IP-based middleware require a non-permissive trust proxy.
+// Render sits behind a single reverse proxy, so trust the first hop only.
+app.set('trust proxy', 1);
 
 app.disable('x-powered-by');
 app.use(helmet());

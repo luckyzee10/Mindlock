@@ -116,7 +116,10 @@ async function validateViaTransactionJws(job, purchase) {
         await markFailed(purchase.id, 'Product ID mismatch');
         return;
     }
-    const completedAt = new Date(payload.purchaseDate);
+    const dateMs = typeof payload.purchaseDate === 'string'
+        ? Number(payload.purchaseDate)
+        : payload.purchaseDate;
+    const completedAt = Number.isFinite(dateMs) ? new Date(dateMs) : new Date();
     await markCompleted(purchase, completedAt);
     await job.log('Validated via StoreKit JWS payload');
 }
