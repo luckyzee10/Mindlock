@@ -3,7 +3,7 @@ import { Prisma } from '@prisma/client';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
 import { purchasesRateLimiter, requireAppKey } from '../middleware/auth.js';
-import { validateReceiptQueue } from '../lib/queues.js';
+import { verifyStoreKitTransaction } from '../lib/storekit.js';
 
 const log = (...args: unknown[]) => console.log('[purchases]', ...args);
 const logError = (...args: unknown[]) => console.error('[purchases]', ...args);
@@ -92,27 +92,46 @@ purchasesRouter.post(
 
       log('Stored purchase', { purchaseId: purchase.id, status: purchase.status });
 
-      await validateReceiptQueue.add(
-        'validate-receipt',
-        { purchaseId: purchase.id },
-        {
-          jobId: `validate-${purchase.id}`,
-          attempts: 5,
-          backoff: {
-            type: 'exponential',
-            delay: 1000
-          },
-          removeOnComplete: true,
-          removeOnFail: false
+      // Inline validation using StoreKit 2 JWS
+      try {
+        const txn = await verifyStoreKitTransaction(transactionJWS);
+        if (txn.transactionId !== transactionId) {
+          throw new Error('Transaction ID mismatch');
         }
-      );
+        if (txn.productId !== productId) {
+          throw new Error('Product ID mismatch');
+        }
 
-      log('Enqueued receipt validation job', { purchaseId: purchase.id });
+        const dateMs = typeof txn.purchaseDate === 'string' ? Number(txn.purchaseDate) : txn.purchaseDate;
+        const completedAt = Number.isFinite(dateMs) ? new Date(Number(dateMs)) : new Date();
 
-      res.status(202).json({
-        purchaseId: purchase.id,
-        status: purchase.status
-      });
+        await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
+          await tx.purchase.update({
+            where: { id: purchase.id },
+            data: { status: 'completed', completedAt, failureReason: null }
+          });
+
+          await tx.charityDonation.upsert({
+            where: { purchaseId: purchase.id },
+            create: {
+              purchaseId: purchase.id,
+              charityId,
+              donationCents
+            },
+            update: {}
+          });
+        });
+
+        res.status(200).json({ purchaseId: purchase.id, status: 'completed' });
+      } catch (e) {
+        const reason = (e as Error).message ?? 'Unknown validation error';
+        logError('Inline validation failed', reason);
+        await prisma.purchase.update({
+          where: { id: purchase.id },
+          data: { status: 'failed', failureReason: reason }
+        });
+        res.status(400).json({ error: reason, purchaseId: purchase.id, status: 'failed' });
+      }
     } catch (err: unknown) {
       if (err instanceof z.ZodError) {
         logError('Validation error', err.flatten());

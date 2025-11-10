@@ -12,7 +12,15 @@ interface CharityAggregate {
 
 export async function handleMonthlyReport(job: MonthlyReportJob) {
   const month = job.data.month ?? previousMonth();
-  const { start, end } = monthRange(month);
+  await generateMonthlyReport(month, async (msg) => job.log(msg));
+}
+
+export async function generateMonthlyReport(
+  month?: string,
+  logger?: (message: string) => Promise<void> | void
+) {
+  const m = month ?? previousMonth();
+  const { start, end } = monthRange(m);
 
   const purchases = await prisma.purchase.findMany({
     where: {
@@ -64,7 +72,7 @@ export async function handleMonthlyReport(job: MonthlyReportJob) {
   }));
 
   const payload: Prisma.InputJsonValue = {
-    month,
+    month: m,
     totals: {
       purchases: purchases.length,
       grossCents: totalGrossCents,
@@ -75,12 +83,13 @@ export async function handleMonthlyReport(job: MonthlyReportJob) {
   };
 
   await prisma.monthlyReport.upsert({
-    where: { month },
+    where: { month: m },
     update: { payload, generatedAt: new Date() },
-    create: { month, payload }
+    create: { month: m, payload }
   });
 
-  await job.log(`Monthly report generated for ${month}`);
+  if (logger) await logger(`Monthly report generated for ${m}`);
+  return { month: m, payload };
 }
 
 function previousMonth(): string {

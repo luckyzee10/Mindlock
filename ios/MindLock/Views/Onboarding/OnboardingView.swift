@@ -2256,7 +2256,7 @@ struct OnboardingPage {
         OnboardingPage(
             title: "Welcome to MindLock",
             description: "Transform your relationship with technology by setting mindful limits and supporting great causes.",
-            iconName: "brain.head.profile",
+            iconName: "lock.fill",
             accentColor: DesignSystem.Colors.primary,
             isPermissionPage: false,
             isUsageQuestionPage: false,
