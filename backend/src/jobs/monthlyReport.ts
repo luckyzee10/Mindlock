@@ -12,7 +12,9 @@ interface CharityAggregate {
 
 export async function handleMonthlyReport(job: MonthlyReportJob) {
   const month = job.data.month ?? previousMonth();
-  await generateMonthlyReport(month, async (msg) => job.log(msg));
+  await generateMonthlyReport(month, async (msg) => {
+    await job.log(msg);
+  });
 }
 
 export async function generateMonthlyReport(

@@ -10,15 +10,12 @@ async function bootstrap() {
   const validateWorker = new Worker('validate-receipt', handleValidateReceipt, {
     connection: redisConnection,
     prefix: 'mindlock',
-    // Reduce Upstash command volume when idle
-    blockingTimeout: 60000, // ms to block on BRPOPLPUSH
-    stalledInterval: 60000  // check stalled jobs less frequently
+    stalledInterval: 60000
   });
 
   const reportWorker = new Worker('generate-report', handleMonthlyReport, {
     connection: redisConnection,
     prefix: 'mindlock',
-    blockingTimeout: 60000,
     stalledInterval: 60000
   });
 
