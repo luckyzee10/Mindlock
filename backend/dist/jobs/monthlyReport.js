@@ -1,7 +1,13 @@
 import { prisma } from '../lib/prisma.js';
 export async function handleMonthlyReport(job) {
     const month = job.data.month ?? previousMonth();
-    const { start, end } = monthRange(month);
+    await generateMonthlyReport(month, async (msg) => {
+        await job.log(msg);
+    });
+}
+export async function generateMonthlyReport(month, logger) {
+    const m = month ?? previousMonth();
+    const { start, end } = monthRange(m);
     const purchases = await prisma.purchase.findMany({
         where: {
             status: 'completed',
@@ -46,7 +52,7 @@ export async function handleMonthlyReport(job) {
         donationCents: aggregate.donationCents
     }));
     const payload = {
-        month,
+        month: m,
         totals: {
             purchases: purchases.length,
             grossCents: totalGrossCents,
@@ -56,11 +62,13 @@ export async function handleMonthlyReport(job) {
         charities: charitySummaries
     };
     await prisma.monthlyReport.upsert({
-        where: { month },
+        where: { month: m },
         update: { payload, generatedAt: new Date() },
-        create: { month, payload }
+        create: { month: m, payload }
     });
-    await job.log(`Monthly report generated for ${month}`);
+    if (logger)
+        await logger(`Monthly report generated for ${m}`);
+    return { month: m, payload };
 }
 function previousMonth() {
     const date = new Date();

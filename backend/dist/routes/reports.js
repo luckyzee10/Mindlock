@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma.js';
-import { reportQueue } from '../lib/queues.js';
+import { generateMonthlyReport } from '../jobs/monthlyReport.js';
 import { requireAdminKey } from '../middleware/auth.js';
 const runSchema = z.object({
     month: z
@@ -29,12 +29,8 @@ reportsRouter.post('/run', requireAdminKey, async (req, res, next) => {
     try {
         const parsed = runSchema.parse(req.body ?? {});
         const month = parsed.month ?? previousMonth();
-        await reportQueue.add('monthly-report', { month }, {
-            jobId: `monthly-report-${month}-${Date.now()}`,
-            removeOnComplete: true,
-            removeOnFail: false
-        });
-        res.status(202).json({ month });
+        const report = await generateMonthlyReport(month);
+        res.status(200).json(report);
     }
     catch (err) {
         if (err instanceof z.ZodError) {

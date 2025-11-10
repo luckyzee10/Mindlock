@@ -4,14 +4,20 @@ import { handleValidateReceipt } from './jobs/validateReceipt.js';
 import { handleMonthlyReport } from './jobs/monthlyReport.js';
 import { reportQueue } from './lib/queues.js';
 async function bootstrap() {
+    if (!redisConnection) {
+        console.error('[worker] Redis not configured; worker cannot start.');
+        process.exit(1);
+    }
     await ensureMonthlyJob();
     const validateWorker = new Worker('validate-receipt', handleValidateReceipt, {
         connection: redisConnection,
-        prefix: 'mindlock'
+        prefix: 'mindlock',
+        stalledInterval: 60000
     });
     const reportWorker = new Worker('generate-report', handleMonthlyReport, {
         connection: redisConnection,
-        prefix: 'mindlock'
+        prefix: 'mindlock',
+        stalledInterval: 60000
     });
     validateWorker.on('ready', () => {
         console.log('[worker] validate-receipt ready');
@@ -50,12 +56,11 @@ bootstrap().catch((err) => {
     process.exit(1);
 });
 async function ensureMonthlyJob() {
+    if (!reportQueue)
+        return;
     await reportQueue.add('monthly-report', {}, {
         jobId: 'monthly-report-cron',
-        repeat: {
-            pattern: '0 5 1 * *',
-            tz: 'UTC'
-        },
+        repeat: { pattern: '0 5 1 * *', tz: 'UTC' },
         removeOnComplete: true
     });
 }

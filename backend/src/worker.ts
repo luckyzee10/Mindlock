@@ -5,6 +5,11 @@ import { handleMonthlyReport } from './jobs/monthlyReport.js';
 import { reportQueue } from './lib/queues.js';
 
 async function bootstrap() {
+  if (!redisConnection) {
+    console.error('[worker] Redis not configured; worker cannot start.');
+    process.exit(1);
+  }
+
   await ensureMonthlyJob();
 
   const validateWorker = new Worker('validate-receipt', handleValidateReceipt, {
@@ -67,16 +72,10 @@ bootstrap().catch((err) => {
 });
 
 async function ensureMonthlyJob() {
-  await reportQueue.add(
-    'monthly-report',
-    {},
-    {
-      jobId: 'monthly-report-cron',
-      repeat: {
-        pattern: '0 5 1 * *',
-        tz: 'UTC'
-      },
-      removeOnComplete: true
-    }
-  );
+  if (!reportQueue) return;
+  await reportQueue.add('monthly-report', {}, {
+    jobId: 'monthly-report-cron',
+    repeat: { pattern: '0 5 1 * *', tz: 'UTC' },
+    removeOnComplete: true
+  });
 }

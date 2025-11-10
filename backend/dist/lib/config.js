@@ -11,7 +11,8 @@ export const config = {
     nodeEnv: process.env.NODE_ENV ?? 'development',
     port: Number(process.env.PORT ?? 4000),
     databaseUrl: requireEnv('DATABASE_URL'),
-    redisUrl: requireEnv('REDIS_URL'),
+    // Redis is optional. If absent, queue-related features are disabled.
+    redisUrl: process.env.REDIS_URL,
     appApiKey: requireEnv('APP_API_KEY'),
     adminApiKey: requireEnv('ADMIN_API_KEY'),
     appleSharedSecret: requireEnv('APPLE_SHARED_SECRET'),
