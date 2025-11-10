@@ -1,7 +1,14 @@
 import { Redis } from 'ioredis';
 import { config } from './config.js';
 
-export function createRedisConnection() {
+/**
+ * Creates a Redis connection if REDIS_URL is set; otherwise returns null.
+ * This lets the API run without Redis for environments where queues are disabled.
+ */
+export function createRedisConnection(): Redis | null {
+  if (!config.redisUrl) {
+    return null;
+  }
   const client = new Redis(config.redisUrl, {
     // BullMQ requires this to be null to avoid crashing future releases.
     maxRetriesPerRequest: null,
@@ -12,4 +19,5 @@ export function createRedisConnection() {
   return client;
 }
 
-export const redis = createRedisConnection();
+// Do NOT create a global connection at import time; keep optional.
+export const redis: Redis | null = null;

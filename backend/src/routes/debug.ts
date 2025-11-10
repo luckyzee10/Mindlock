@@ -6,6 +6,10 @@ export const debugRouter = Router();
 
 debugRouter.get('/debug/queues', requireAdminKey, async (_req, res, next) => {
   try {
+    if (!validateReceiptQueue || !reportQueue) {
+      res.status(200).json({ queues: 'disabled' });
+      return;
+    }
     const [vr, rep] = await Promise.all([
       validateReceiptQueue.getJobCounts(),
       reportQueue.getJobCounts()
@@ -15,4 +19,3 @@ debugRouter.get('/debug/queues', requireAdminKey, async (_req, res, next) => {
     next(err);
   }
 });
-
