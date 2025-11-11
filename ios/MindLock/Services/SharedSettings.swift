@@ -242,8 +242,9 @@ enum SharedSettings {
         var didChange = false
 
         for token in tokens {
-            if suppressions[token.identifier] != timestamp {
-                suppressions[token.identifier] = timestamp
+            let key = tokenKey(token)
+            if suppressions[key] != timestamp {
+                suppressions[key] = timestamp
                 didChange = true
             }
         }
@@ -257,7 +258,7 @@ enum SharedSettings {
 
     static func removeTemporaryUnlock(for token: ApplicationToken) {
         var suppressions = loadTemporaryUnlocks()
-        if suppressions.removeValue(forKey: token.identifier) != nil {
+        if suppressions.removeValue(forKey: tokenKey(token)) != nil {
             saveTemporaryUnlocks(suppressions)
         }
     }
@@ -269,7 +270,7 @@ enum SharedSettings {
         var didChange = false
 
         for token in tokens {
-            if suppressions.removeValue(forKey: token.identifier) != nil {
+            if suppressions.removeValue(forKey: tokenKey(token)) != nil {
                 didChange = true
             }
         }
@@ -306,11 +307,11 @@ enum SharedSettings {
     static func temporaryUnlockExpiry(for token: ApplicationToken) -> Date? {
         var suppressions = loadTemporaryUnlocks()
         let now = Date().timeIntervalSince1970
-        guard let timestamp = suppressions[token.identifier] else { return nil }
+        guard let timestamp = suppressions[tokenKey(token)] else { return nil }
         if timestamp > now {
             return Date(timeIntervalSince1970: timestamp)
         }
-        suppressions.removeValue(forKey: token.identifier)
+        suppressions.removeValue(forKey: tokenKey(token))
         saveTemporaryUnlocks(suppressions)
         return nil
     }
@@ -717,3 +718,16 @@ private final class LimitEventObserver {
         }
     }
 }
+    // MARK: - Token Key Canonicalization
+    /// Returns the canonical string key used to store ApplicationToken-based state
+    /// in shared defaults. Centralizing this ensures both the host app and
+    /// extensions use identical keys for lookups.
+    static func tokenKey(_ token: ApplicationToken) -> String {
+        // Currently we use the base64-encoded JSON identifier. Centralizing the
+        // accessor lets us swap implementations later without touching call sites.
+        return token.identifier
+    }
+
+    static func tokenKeys(_ tokens: [ApplicationToken]) -> [String] {
+        tokens.map { tokenKey($0) }
+    }

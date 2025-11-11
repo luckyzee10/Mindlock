@@ -22,7 +22,7 @@ struct WaitUnlockView: View {
                 countdownCard
                 supportCopy
                 VStack(spacing: DesignSystem.Spacing.md) {
-                    Button("Unlock 10 minutes") {
+                    Button("Free 10‑minute break") {
                         confirmUnlock()
                     }
                     .mindLockButton(style: .primary)
@@ -55,7 +55,7 @@ struct WaitUnlockView: View {
                 .fontWeight(.bold)
                 .foregroundColor(DesignSystem.Colors.textPrimary)
                 .multilineTextAlignment(.center)
-            Text("\(appName) hit its cap. Pause for 30 seconds and every limited app unlocks for 10 mindful minutes.")
+            Text("\(appName) hit its cap. Pause for 30 seconds and your MindLock limits will relax for 10 mindful minutes.")
                 .font(DesignSystem.Typography.callout)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
@@ -83,7 +83,7 @@ struct WaitUnlockView: View {
                         .foregroundColor(DesignSystem.Colors.textPrimary)
                 }
             }
-            Text("Keep the screen on to complete the mindful wait. Once finished, all tracked apps open for 10 minutes.")
+            Text("Keep the screen on to complete the mindful wait. Once finished, your MindLock limits relax for 10 minutes.")
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)

@@ -74,7 +74,7 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         }
 
         let activeSuppressions = SharedSettings.activeTemporaryUnlocks()
-        let tokensToShield = tokens.filter { activeSuppressions[$0.identifier] == nil }
+        let tokensToShield = tokens.filter { activeSuppressions[SharedSettings.tokenKey($0)] == nil }
         if tokensToShield.isEmpty {
             if let soonestExpiry = activeSuppressions.values.min() {
                 print("⏳ Limit reached during an active unlock (expires \(soonestExpiry)). Skipping shield update.")

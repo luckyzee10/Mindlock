@@ -298,7 +298,7 @@ class DailyLimitsManager: ObservableObject {
         // Compute the set of tokens that have exceeded their limit
         var blockedSet = Set<ApplicationToken>()
         for token in selectedTokens {
-            if suppressedIds.contains(token.identifier) {
+            if suppressedIds.contains(SharedSettings.tokenKey(token)) {
                 continue
             }
             if hasExceededLimit(for: token) { blockedSet.insert(token) }

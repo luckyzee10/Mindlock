@@ -54,11 +54,11 @@ struct UnlockPromptView: View {
                 .font(.system(size: 30, weight: .heavy))
                 .foregroundColor(DesignSystem.Colors.textPrimary)
                 .multilineTextAlignment(.center)
-            Text("\(appDisplayName) is locked, along with the rest of your tracked apps.")
+            Text("\(appDisplayName) is currently limited by MindLock.")
                 .font(DesignSystem.Typography.callout)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
-            Text("Unlock every app for the rest of today. 15% of your day pass supports your cause.")
+            Text("Temporarily relax your MindLock limits for the rest of today. MindLock donates 15% of net proceeds to your selected charity.")
                 .font(DesignSystem.Typography.callout)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
@@ -245,9 +245,9 @@ struct UnlockPromptView: View {
 
     private var buttonTitle: String {
         if let price = paymentManager.availableProduct?.displayPrice {
-            return "Unlock for \(price)"
+            return "Buy Day Pass • \(price)"
         }
-        return "Unlock Day Pass"
+        return "Buy Day Pass"
     }
 
     private var failureMessage: String? {
