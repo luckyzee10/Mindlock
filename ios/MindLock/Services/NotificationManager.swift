@@ -31,20 +31,6 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
     }
 
-    func postDayPassNotification(minutesUntilMidnight: Int) {
-        let content = UNMutableNotificationContent()
-        content.title = "Day pass unlocked"
-        if minutesUntilMidnight >= 60 {
-            let hours = Double(minutesUntilMidnight) / 60
-            content.body = String(format: "All limited apps are available for the rest of today (~%.1f hours). Make it count.", hours)
-        } else {
-            content.body = "All limited apps stay open for the rest of today. Stay intentional."
-        }
-        content.sound = .default
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
-    }
-
     func postSettingsUpdatedNotification() {
         let content = UNMutableNotificationContent()
         content.title = "Time limit settings updated"
@@ -56,7 +42,7 @@ final class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
 
     func scheduleSettingsUpdatedAtMidnightIfNeeded() {
         // Schedule a best-effort notification at next midnight
-        var date = Calendar.current.date(byAdding: .day, value: 0, to: Date()) ?? Date()
+        let date = Calendar.current.date(byAdding: .day, value: 0, to: Date()) ?? Date()
         let comps = Calendar.current.dateComponents([.year, .month, .day], from: date)
         let nextMidnight = Calendar.current.date(from: DateComponents(year: comps.year, month: comps.month, day: comps.day, hour: 0, minute: 0)) ?? Date()
         let triggerDate = nextMidnight > Date() ? nextMidnight : Calendar.current.date(byAdding: .day, value: 1, to: nextMidnight) ?? Date()

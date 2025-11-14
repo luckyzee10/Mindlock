@@ -215,6 +215,7 @@ class ScreenTimeManager: ObservableObject {
         lastRefreshReason = reason
         do {
             try configureDailyMonitoring()
+            try configureTimeBlockMonitoring()
         } catch {
             print("❌ Failed to refresh monitoring: \(error)")
         }
@@ -290,6 +291,37 @@ class ScreenTimeManager: ObservableObject {
             print("❌ Failed to start monitoring with events: \(error)")
             throw ScreenTimeError.monitoringFailed
         }
+    }
+
+    private func configureTimeBlockMonitoring() throws {
+        guard isAuthorized else { throw ScreenTimeError.notAuthorized }
+        let blocks = SharedSettings.loadTimeBlocks().filter { $0.enabled && $0.isSameDayValid() && $0.durationSeconds() >= 3600 }
+
+        let center = DeviceActivityCenter()
+        // Stop previously monitored timeblock names to avoid stale schedules
+        let prev = SharedSettings.loadPreviouslyMonitoredTimeBlockNames()
+        if !prev.isEmpty {
+            let names = prev.map { DeviceActivityName($0) }
+            center.stopMonitoring(names)
+        }
+
+        var startedNames: [String] = []
+        for block in blocks {
+            let name = SharedSettings.deviceActivityName(for: block)
+            let schedule = DeviceActivitySchedule(
+                intervalStart: block.startComponents(),
+                intervalEnd: block.endComponents(),
+                repeats: true
+            )
+            do {
+                try center.startMonitoring(name, during: schedule)
+                startedNames.append(name.rawValue)
+                print("⏱️ TimeBlock scheduled: \(block.name) [\(block.startHour):\(String(format: "%02d", block.startMinute))–\(block.endHour):\(String(format: "%02d", block.endMinute))]")
+            } catch {
+                print("❌ Failed to start timeblock \(block.name): \(error)")
+            }
+        }
+        SharedSettings.saveMonitoredTimeBlockNames(startedNames)
     }
     
     // MARK: - Debug Methods

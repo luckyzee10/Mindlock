@@ -3,6 +3,10 @@ import DeviceActivity
 import FamilyControls
 import ManagedSettings
 
+extension DeviceActivityName {
+    static let daily = DeviceActivityName("daily")
+}
+
 public class MindLockActivityMonitor: DeviceActivityMonitor {
     public override init() {
         super.init()
@@ -17,14 +21,45 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         print("🔔 Is this a test activity? \(activity == DeviceActivityName("MindLockTest"))")
         // Called at start of scheduled monitoring interval
 
-        // Treat the start of any non-demo interval as a new day and clear previous shields.
-        if activity != DeviceActivityName("MindLockDemo") {
+        // Treat the start of daily monitoring as a new day and clear previous shields.
+        if activity == DeviceActivityName("MindLockDemo") {
+            // demo: no-op
+        } else if activity == .daily {
             _ = SharedSettings.performMidnightRollover(referenceDate: Date())
             let store = ManagedSettingsStore()
-            store.shield.applications = []
+            store.shield.applications = [] as Set<ApplicationToken>
             SharedSettings.setBlockingState(false)
             SharedSettings.clearLimitEvent()
             print("🌅 Cleared shields and refreshed limits for new interval")
+        } else if activity.rawValue.hasPrefix("tb_") {
+            // Time Block start: if the block is active today, apply shields for selected apps (respect unlocks)
+            let blockId = String(activity.rawValue.dropFirst(3))
+            let now = Date()
+            guard let block = SharedSettings.loadTimeBlocks().first(where: { $0.id == blockId }), block.isActive(on: now) else {
+                print("ℹ️ TimeBlock \(activity.rawValue) not active today; skipping")
+                return
+            }
+            var tokenSet = SharedSettings.storedApplicationTokens()
+            if tokenSet.isEmpty {
+                print("ℹ️ No selected apps for TimeBlock")
+                return
+            }
+            let suppress = SharedSettings.activeTemporaryUnlocks()
+            tokenSet = Set(tokenSet.filter { suppress[SharedSettings.tokenKey($0)] == nil })
+            let store = ManagedSettingsStore()
+            var shielded = store.shield.applications ?? []
+            shielded.formUnion(tokenSet)
+            store.shield.applications = shielded
+            SharedSettings.setActiveTokens(Array(tokenSet), forBlockId: blockId)
+            if let endDate = Self.endDate(for: block, reference: now) {
+                let state = SharedSettings.ActiveTimeBlockState(
+                    id: block.id,
+                    name: block.name,
+                    endsAt: endDate.timeIntervalSince1970
+                )
+                SharedSettings.setActiveTimeBlockState(state, forBlockId: blockId)
+            }
+            print("🧱 TimeBlock applied shields for \(tokenSet.count) app(s)")
         }
 
         SharedSettings.sharedDefaults?.set(Date().timeIntervalSince1970, forKey: "monitor.heartbeat")
@@ -36,6 +71,18 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         print("🔔 Current time: \(Date())")
         print("🔔 Is this a test activity? \(activity == DeviceActivityName("MindLockTest"))")
         // Called at end of scheduled monitoring interval
+        if activity.rawValue.hasPrefix("tb_") {
+            let blockId = String(activity.rawValue.dropFirst(3))
+            let added = SharedSettings.activeTokens(forBlockId: blockId)
+            SharedSettings.clearActiveTokens(forBlockId: blockId)
+            SharedSettings.removeActiveTimeBlockState(forBlockId: blockId)
+            guard !added.isEmpty else { return }
+            let store = ManagedSettingsStore()
+            var shielded = store.shield.applications ?? []
+            shielded.subtract(Set(added))
+            store.shield.applications = shielded
+            print("🧱 TimeBlock removed shields for \(added.count) app(s)")
+        }
     }
 
     public override func eventDidReachThreshold(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {
@@ -74,7 +121,7 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         }
 
         let activeSuppressions = SharedSettings.activeTemporaryUnlocks()
-        let tokensToShield = tokens.filter { activeSuppressions[SharedSettings.tokenKey($0)] == nil }
+        let tokensToShield = Set(tokens.filter { activeSuppressions[SharedSettings.tokenKey($0)] == nil })
         if tokensToShield.isEmpty {
             if let soonestExpiry = activeSuppressions.values.min() {
                 print("⏳ Limit reached during an active unlock (expires \(soonestExpiry)). Skipping shield update.")
@@ -87,8 +134,9 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         SharedSettings.storeLimitEvent(name: event.rawValue, blockedTokens: Array(tokensToShield))
 
         let store = ManagedSettingsStore()
-        let existing = store.shield.applications ?? []
-        store.shield.applications = existing.union(tokensToShield)
+        var shielded = store.shield.applications ?? []
+        shielded.formUnion(tokensToShield)
+        store.shield.applications = shielded
         print("🔒 Blocked \(tokensToShield.count) application(s) due to limit reached (per-app)")
     }
     
@@ -109,5 +157,11 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         let sortedKeys = currentLimits.appSeconds.keys.sorted()
         guard index >= 0, index < sortedKeys.count else { return nil }
         return ApplicationToken(identifier: sortedKeys[index])
+    }
+    private static func endDate(for block: SharedSettings.TimeBlock, reference now: Date) -> Date? {
+        var comps = Calendar.current.dateComponents([.year, .month, .day], from: now)
+        comps.hour = block.endHour
+        comps.minute = block.endMinute
+        return Calendar.current.date(from: comps)
     }
 }

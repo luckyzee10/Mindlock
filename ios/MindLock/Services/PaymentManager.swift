@@ -4,6 +4,12 @@ import StoreKit
 
 @MainActor
 final class PaymentManager: ObservableObject {
+    enum SubscriptionStatus: Equatable {
+        case unknown
+        case notSubscribed
+        case subscribed(expiration: Date?)
+    }
+
     enum PurchaseState: Equatable {
         case idle
         case loadingProducts
@@ -13,18 +19,21 @@ final class PaymentManager: ObservableObject {
         case failed(String)
     }
 
-    @Published private(set) var availableProduct: Product?
+    @Published private(set) var availableProducts: [Product] = []
     @Published private(set) var purchaseState: PurchaseState = .idle
+    @Published private(set) var subscriptionStatus: SubscriptionStatus = .unknown
 
     private let logger = Logger(subsystem: "com.lucaszambranonavia.mindlock", category: "PaymentManager")
     private let apiClient: APIClient
     private let userIdentity: UserIdentity
     private var transactionListenerTask: Task<Void, Never>?
+    private let subscriptionProductIds: [String] = ["mindlock.plus.monthly", "mindlock.plus.annual"]
 
     init(apiClient: APIClient = .shared, userIdentity: UserIdentity = .shared) {
         self.apiClient = apiClient
         self.userIdentity = userIdentity
         transactionListenerTask = listenForTransactions()
+        Task { await refreshSubscriptionStatus() }
     }
 
     deinit {
@@ -40,18 +49,22 @@ final class PaymentManager: ObservableObject {
         }
     }
 
-    func loadProductIfNeeded() async {
-        guard availableProduct == nil else { return }
+    var primaryProduct: Product? {
+        availableProducts.sorted(by: { $0.price < $1.price }).first
+    }
+
+    func loadProductsIfNeeded() async {
+        guard availableProducts.isEmpty else { return }
         purchaseState = .loadingProducts
-        logger.info("🔄 Loading products for day pass purchase")
+        logger.info("🔄 Loading MindLock+ products")
         do {
-            let products = try await Product.products(for: ["mindlock.daypass"])
-            guard let product = products.first else {
-                logger.error("❌ StoreKit returned 0 products for mindlock.daypass")
+            let products = try await Product.products(for: subscriptionProductIds)
+            if products.isEmpty {
+                logger.error("❌ StoreKit returned 0 products for MindLock+")
                 throw PaymentError.productUnavailable
             }
-            availableProduct = product
-            logger.info("✅ Loaded product \(product.id, privacy: .public)")
+            availableProducts = products
+            logger.info("✅ Loaded \(products.count) MindLock+ product(s)")
             purchaseState = .idle
         } catch {
             logger.error("❌ Failed to load product: \(error.localizedDescription, privacy: .public)")
@@ -59,13 +72,13 @@ final class PaymentManager: ObservableObject {
         }
     }
 
-    func purchaseDayPass(for charity: Charity) async throws {
-        guard let product = availableProduct else {
+    func purchaseSubscription(for charity: Charity) async throws {
+        guard let product = primaryProduct else {
             throw PaymentError.productUnavailable
         }
 
         purchaseState = .purchasing
-        logger.info("🛒 Attempting purchase for charity \(charity.id, privacy: .public)")
+        logger.info("🛒 Attempting MindLock+ purchase for charity \(charity.id, privacy: .public)")
         let result = try await product.purchase()
 
         switch result {
@@ -83,12 +96,14 @@ final class PaymentManager: ObservableObject {
                 productId: transaction.productID,
                 transactionId: String(transaction.id),
                 transactionJWS: transactionJWS,
-                receiptData: receiptData
+                receiptData: receiptData,
+                subscriptionTier: transaction.productID
             )
             do {
                 logger.info("📨 Submitting receipt to backend for transaction \(transaction.id, privacy: .public)")
                 _ = try await apiClient.submitPurchase(submission)
                 await transaction.finish()
+                await refreshSubscriptionStatus()
                 logger.info("🏁 Purchase flow completed successfully")
                 purchaseState = .idle
             } catch {
@@ -111,6 +126,49 @@ final class PaymentManager: ObservableObject {
             logger.error("❌ Purchase hit unknown StoreKit result")
             purchaseState = .failed(PaymentError.unknown.userFacingMessage)
             throw PaymentError.unknown
+        }
+    }
+
+    func refreshSubscriptionStatus() async {
+        do {
+            var latestExpiration: Date?
+            var hasNonExpiringEntitlement = false
+            for await result in Transaction.currentEntitlements {
+                guard case .verified(let transaction) = result else { continue }
+                guard subscriptionProductIds.contains(transaction.productID) else { continue }
+                guard transaction.revocationDate == nil else { continue }
+                if let expiration = transaction.expirationDate {
+                    if let latest = latestExpiration {
+                        if expiration > latest {
+                            latestExpiration = expiration
+                        }
+                    } else {
+                        latestExpiration = expiration
+                    }
+                } else {
+                    hasNonExpiringEntitlement = true
+                }
+            }
+
+            await MainActor.run {
+                if hasNonExpiringEntitlement {
+                    subscriptionStatus = .subscribed(expiration: nil)
+                    SharedSettings.updateSubscriptionStatus(activeUntil: nil, isNonExpiring: true)
+                } else if let latestExpiration {
+                    subscriptionStatus = .subscribed(expiration: latestExpiration)
+                    SharedSettings.updateSubscriptionStatus(activeUntil: latestExpiration)
+                } else {
+                    SharedSettings.updateSubscriptionStatus(activeUntil: nil)
+                    subscriptionStatus = .notSubscribed
+                }
+            }
+        } catch {
+            logger.error("❌ Failed to refresh subscription status: \(error.localizedDescription, privacy: .public)")
+            await MainActor.run {
+                if case .unknown = subscriptionStatus {
+                    subscriptionStatus = .notSubscribed
+                }
+            }
         }
     }
 
@@ -144,6 +202,9 @@ final class PaymentManager: ObservableObject {
             for await result in Transaction.updates {
                 if case .verified(let transaction) = result {
                     await transaction.finish()
+                    if self.subscriptionProductIds.contains(transaction.productID) {
+                        await self.refreshSubscriptionStatus()
+                    }
                 }
             }
         }
@@ -161,7 +222,7 @@ enum PaymentError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .productUnavailable:
-            return "We couldn’t load the MindLock Day Pass. Check your App Store connection and try again."
+            return "We couldn’t load MindLock+. Check your App Store connection and try again."
         case .userCancelled:
             return "Purchase cancelled."
         case .pending:

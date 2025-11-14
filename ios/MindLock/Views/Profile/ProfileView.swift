@@ -52,23 +52,33 @@ struct ProfileView: View {
                 .background(Color.white.opacity(0.3))
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Top Charity")
+                    Text("This month")
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(.white.opacity(0.8))
-                    Text(viewModel.topCharities.first?.name ?? "TBD")
+                    Text(formatCurrency(viewModel.monthDonation))
                         .font(DesignSystem.Typography.body)
                         .foregroundColor(.white)
                 }
                 Spacer()
-                if viewModel.totalDonation > 0 {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Avg / Unlock")
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(.white.opacity(0.8))
-                        Text(formatCurrency(viewModel.averageDonationPerUnlock))
-                            .font(DesignSystem.Typography.body)
-                            .foregroundColor(.white)
-                    }
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Contributions")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                    Text("\(viewModel.totalImpactEvents)")
+                        .font(DesignSystem.Typography.body)
+                        .foregroundColor(.white)
+                }
+            }
+            if let topCharity = viewModel.topCharities.first {
+                Divider()
+                    .background(Color.white.opacity(0.2))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Top Charity")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(.white.opacity(0.8))
+                    Text(topCharity.name)
+                        .font(DesignSystem.Typography.body)
+                        .foregroundColor(.white)
                 }
             }
         }
@@ -119,7 +129,7 @@ struct ProfileView: View {
             HStack {
                 mixLegend(color: DesignSystem.Colors.accent, label: "Free", value: "\(viewModel.freeUnlocks)")
                 Spacer()
-                mixLegend(color: DesignSystem.Colors.primary, label: "Day Pass", value: "\(viewModel.dayPassUnlocks)")
+                mixLegend(color: DesignSystem.Colors.primary, label: "MindLock+", value: "\(viewModel.dayPassUnlocks)")
             }
         }
         .padding()
@@ -146,7 +156,7 @@ struct ProfileView: View {
                 )
             }
             usageCard(
-                title: "Day Pass Minutes",
+                title: "MindLock+ Minutes",
                 value: formatMinutes(viewModel.dayPassMinutes),
                 subtitle: "Full access windows",
                 icon: "infinity.circle.fill",
@@ -186,7 +196,7 @@ struct ProfileView: View {
             
             if viewModel.topCharities.isEmpty {
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                    Text("Make your first Day Pass purchase to unlock detailed impact stats.")
+                    Text("Join MindLock+ to unlock detailed impact stats.")
                         .font(DesignSystem.Typography.callout)
                         .foregroundColor(DesignSystem.Colors.textSecondary)
                 }
@@ -232,7 +242,7 @@ struct ProfileView: View {
                     .textCase(.uppercase)
                     .tracking(0.3)
             }
-            Text("MindLock adds up time spent on tracked apps that hit their limit plus any unlock windows you triggered. Day Passes assume you made full use of the unlocked period, so actual usage may be lower.")
+            Text("MindLock adds up time spent on tracked apps that hit their limit plus any unlock windows you triggered. Extended unlocks assume you used the entire window, so actual usage may be lower.")
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(DesignSystem.Colors.textTertiary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -351,6 +361,7 @@ private struct MetricCard: View {
 
 private final class ProfileViewModel: ObservableObject {
     @Published var totalDonation: Double = 0
+    @Published var monthDonation: Double = 0
     @Published var topCharities: [SharedSettings.CharityAggregate] = []
     @Published var totalUnlocks: Int = 0
     @Published var freeUnlocks: Int = 0
@@ -359,11 +370,24 @@ private final class ProfileViewModel: ObservableObject {
     @Published var estimatedUsageMinutes: Double = 0
     @Published var freeUnlockMinutes: Double = 0
     @Published var dayPassMinutes: Double = 0
+    @Published var totalImpactEvents: Int = 0
+    
+    private let apiClient: APIClient
+    private let userIdentity: UserIdentity
+    
+    init(apiClient: APIClient = .shared, userIdentity: UserIdentity = .shared) {
+        self.apiClient = apiClient
+        self.userIdentity = userIdentity
+    }
     
     func refresh() {
-        totalDonation = SharedSettings.aggregatedDonationTotal()
-        topCharities = SharedSettings.topCharities(limit: 3)
-        
+        loadUnlockStats()
+        Task {
+            await fetchImpactSummary()
+        }
+    }
+    
+    private func loadUnlockStats() {
         var history: [String: SharedSettings.UnlockStatsRecord] = [:]
         for record in SharedSettings.unlockHistory() {
             history[record.id] = record
@@ -396,14 +420,49 @@ private final class ProfileViewModel: ObservableObject {
         estimatedUsageMinutes = SharedSettings.estimatedUsageMinutes(for: today)
     }
     
+    private func fetchImpactSummary() async {
+        do {
+            let summary = try await apiClient.fetchImpactSummary(userId: userIdentity.userId)
+            await MainActor.run {
+                apply(summary: summary)
+            }
+        } catch {
+            await MainActor.run {
+                applyLocalImpactFallback()
+            }
+        }
+    }
+    
+    @MainActor
+    private func apply(summary: ImpactSummaryResponse) {
+        totalDonation = Double(summary.totalDonationCents) / 100.0
+        monthDonation = Double(summary.monthDonationCents) / 100.0
+        totalImpactEvents = summary.totalDonations
+        topCharities = summary.charities.map {
+            SharedSettings.CharityAggregate(
+                id: $0.charityId,
+                name: $0.charityName,
+                amount: Double($0.donationCents) / 100.0
+            )
+        }
+    }
+    
+    @MainActor
+    private func applyLocalImpactFallback() {
+        totalDonation = SharedSettings.aggregatedDonationTotal()
+        monthDonation = 0
+        totalImpactEvents = 0
+        topCharities = SharedSettings.topCharities(limit: 3)
+    }
+    
     var averageDonationPerUnlock: Double {
         guard totalUnlocks > 0, totalDonation > 0 else { return 0 }
         return totalDonation / Double(totalUnlocks)
     }
     
     var unlockMixText: String {
-        if totalUnlocks == 0 { return "0 free · 0 day" }
-        return "\(freeUnlocks) free · \(dayPassUnlocks) day"
+        if totalUnlocks == 0 { return "0 mindful · 0 extended" }
+        return "\(freeUnlocks) mindful · \(dayPassUnlocks) extended"
     }
     
     var unlockMixProgress: Double {

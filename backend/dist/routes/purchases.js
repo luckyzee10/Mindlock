@@ -6,25 +6,34 @@ import { purchasesRateLimiter, requireAppKey } from '../middleware/auth.js';
 import { verifyStoreKitTransaction } from '../lib/storekit.js';
 const log = (...args) => console.log('[purchases]', ...args);
 const logError = (...args) => console.error('[purchases]', ...args);
+const allowedProducts = {
+    'mindlock.plus.monthly': { grossCents: 999 },
+    'mindlock.plus.annual': { grossCents: 5999 }
+};
 const createPurchaseSchema = z.object({
     userId: z.string().min(1),
     userEmail: z.string().email().optional(),
     charityId: z.string().min(1),
     charityName: z.string().min(1).optional(),
-    productId: z.literal('mindlock.daypass'),
+    productId: z.enum(['mindlock.plus.monthly', 'mindlock.plus.annual']),
     transactionId: z.string().min(1),
     transactionJWS: z.string().min(10),
-    receiptData: z.string().min(10).optional()
+    receiptData: z.string().min(10).optional(),
+    subscriptionTier: z.string().optional()
 });
 export const purchasesRouter = Router();
 purchasesRouter.post('/', requireAppKey, purchasesRateLimiter, async (req, res, next) => {
     try {
         const payload = createPurchaseSchema.parse(req.body);
         const { userId, userEmail, charityId, charityName, productId, transactionId, transactionJWS, receiptData } = payload;
-        const grossCents = 99;
+        const pricing = allowedProducts[productId];
+        if (!pricing) {
+            throw new Error(`Unsupported product: ${productId}`);
+        }
+        const grossCents = pricing.grossCents;
         const appleFeeCents = Math.round(grossCents * 0.15);
         const netCents = grossCents - appleFeeCents;
-        const donationCents = Math.round(netCents * 0.15);
+        const donationCents = Math.round(netCents * 0.20);
         log('Received purchase submission', {
             userId,
             charityId,

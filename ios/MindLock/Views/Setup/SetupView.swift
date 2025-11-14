@@ -3,6 +3,11 @@ import FamilyControls
 import ManagedSettings
 import UIKit
 
+private struct IdentifiedApplicationToken: Identifiable, Equatable {
+    let token: ApplicationToken
+    var id: String { SharedSettings.tokenKey(token) }
+}
+
 struct SetupView: View {
     @ObservedObject private var screenTimeManager = ScreenTimeManager.shared
     @ObservedObject private var limitsManager = DailyLimitsManager.shared
@@ -11,8 +16,8 @@ struct SetupView: View {
     @State private var showingAppLimits = false
     @State private var showingCharitySelection = false
     @State private var appTimeLimits: [String: Int] = [:]
-    @State private var tokenPendingDayPass: ApplicationToken?
-    @State private var tokenPendingWait: ApplicationToken?
+    @State private var tokenPendingMindLockPlus: IdentifiedApplicationToken?
+    @State private var tokenPendingWait: IdentifiedApplicationToken?
     
     var body: some View {
         NavigationView {
@@ -55,14 +60,19 @@ struct SetupView: View {
                             showingCharitySelection = true
                         }
 
+                        // Time Blocks Section
+                        TimeBlocksView()
+                            .environmentObject(screenTimeManager)
+                            .padding(.top, DesignSystem.Spacing.lg)
+
                         // Streak Card
                         StreakCard(days: currentStreakDays)
                         
                         if !reachedLimitTokens.isEmpty {
                             LimitReachedGlobalCard(
                                 tokens: reachedLimitTokens,
-                                waitAction: { if let token = representativeToken { tokenPendingWait = token } },
-                                dayPassAction: { if let token = representativeToken { tokenPendingDayPass = token } }
+                                waitAction: { if let token = representativeToken { tokenPendingWait = IdentifiedApplicationToken(token: token) } },
+                                mindLockPlusAction: { if let token = representativeToken { tokenPendingMindLockPlus = IdentifiedApplicationToken(token: token) } }
                             )
                         }
                         
@@ -73,12 +83,11 @@ struct SetupView: View {
                     .padding(.horizontal, DesignSystem.Spacing.lg)
                     .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
-                .sheet(item: $tokenPendingDayPass) { token in
-                    UnlockPromptView(appToken: token)
-                        .environmentObject(limitsManager)
+                .sheet(item: $tokenPendingMindLockPlus) { wrapper in
+                    UnlockPromptView(appToken: wrapper.token)
                 }
-                .sheet(item: $tokenPendingWait) { token in
-                    WaitUnlockView(appToken: token)
+                .sheet(item: $tokenPendingWait) { wrapper in
+                    WaitUnlockView(appToken: wrapper.token)
                         .environmentObject(limitsManager)
                 }
             }
@@ -140,22 +149,7 @@ struct SetupView: View {
 
     // Compute the number of consecutive days (starting today) with zero unlocks recorded
     private var currentStreakDays: Int {
-        let cal = Calendar.current
-        let today = cal.startOfDay(for: Date())
-        var streak = 0
-        for i in 0..<365 {
-            guard let day = cal.date(byAdding: .day, value: -i, to: today) else { break }
-            if let stats = SharedSettings.unlockStats(for: day) {
-                if stats.totalUnlocks > 0 { break }
-                streak += 1
-            } else {
-                // If there's no record for the day, don't assume success —
-                // treat as unknown and stop counting (ensures first-time users start at 0)
-                if i == 0 { /* today has no record -> keep at 0 */ }
-                break
-            }
-        }
-        return streak
+        SharedSettings.consecutiveUnlockFreeDays()
     }
     
 }
@@ -265,7 +259,7 @@ private struct StreakCard: View {
             VStack(spacing: 8) {
                 GeometryReader { geo in
                     let width = geo.size.width
-                    let ratio = min(Double(days), 5.0) / 5.0
+                    let ratio = min(Double(days), 28.0) / 28.0
                     let trackColor = DesignSystem.Colors.textTertiary.opacity(days == 0 ? 0.35 : 0.22)
                     let separatorColor = DesignSystem.Colors.textTertiary.opacity(days == 0 ? 0.35 : 0.25)
                     ZStack(alignment: .leading) {
@@ -301,6 +295,20 @@ private struct StreakCard: View {
                 Text("\(days) \(days == 1 ? "day" : "days")")
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(DesignSystem.Colors.textSecondary)
+
+                Text("Impact multiplier ×\(SharedSettings.impactMultiplier(forStreak: days))")
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+
+                if let next = SharedSettings.daysUntilNextImpactBoost(from: days) {
+                    Text("Next boost in \(next) day\(next == 1 ? "" : "s")")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textTertiary)
+                } else if days >= 28 {
+                    Text("You’ve maxed out this month’s boost.")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textTertiary)
+                }
             }
         }
         .padding(DesignSystem.Spacing.lg)
@@ -311,18 +319,23 @@ private struct StreakCard: View {
 
     private var subtitle: String {
         if days == 0 { return "Start your streak — skip unlocks today" }
-        return "Without using an unlock"
+        return "Keep going to amplify donations"
     }
 
     private var fireColor: Color {
-        let capped = min(days, 5)
-        switch capped {
-        case 0: return DesignSystem.Colors.textTertiary
-        case 1: return .yellow
-        case 2: return .orange
-        case 3: return Color.orange.opacity(0.9)
-        case 4: return Color(red: 1.0, green: 0.5, blue: 0.2)
-        default: return .red
+        switch days {
+        case 0:
+            return DesignSystem.Colors.textTertiary
+        case 1..<7:
+            return .yellow
+        case 7..<14:
+            return .orange
+        case 14..<21:
+            return Color.orange.opacity(0.9)
+        case 21..<28:
+            return Color(red: 1.0, green: 0.6, blue: 0.2)
+        default:
+            return .red
         }
     }
 
@@ -457,7 +470,7 @@ private struct SetupDebugActions: View {
 private struct LimitReachedGlobalCard: View {
     let tokens: [ApplicationToken]
     let waitAction: () -> Void
-    let dayPassAction: () -> Void
+    let mindLockPlusAction: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
@@ -488,7 +501,7 @@ private struct LimitReachedGlobalCard: View {
             VStack(spacing: DesignSystem.Spacing.sm) {
                 Button(action: waitAction) {
                     Label {
-                        Text("Unlock 10 minutes")
+                        Text("Take a break")
                             .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "clock.arrow.circlepath")
@@ -497,12 +510,12 @@ private struct LimitReachedGlobalCard: View {
                 }
                 .mindLockButton(style: .secondary)
 
-                Button(action: dayPassAction) {
+                Button(action: mindLockPlusAction) {
                     Label {
-                        Text("Day Pass")
+                        Text("MindLock+")
                             .fontWeight(.semibold)
                     } icon: {
-                        Image(systemName: "heart.circle.fill")
+                        Image(systemName: "sparkles")
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
@@ -527,7 +540,7 @@ private struct LimitReachedGlobalCard: View {
     private var detailLine: String {
         let count = tokens.count
         let appWord = count == 1 ? "app" : "apps"
-        return "You’ve hit today’s limit for \(count) \(appWord). Earn a 10‑minute break or unlock all apps for the day."
+        return "You’ve hit today’s limit for \(count) \(appWord). Take a quick break or unlock MindLock+ to amplify your impact."
     }
 }
 
@@ -871,8 +884,8 @@ struct AppLimitsSetupView: View {
 
         // Apply deferred ops to pending only
         hasDeferredChanges = !pendingDeferredOps.isEmpty
-        if hasDeferredChanges {
-            for (token, op) in pendingDeferredOps {
+            if hasDeferredChanges {
+                for (token, op) in pendingDeferredOps {
                 switch op {
                 case .increase(let minutes):
                     lm.setPendingLimitOnly(for: token, limit: TimeInterval(minutes * 60))
@@ -897,7 +910,7 @@ struct AppLimitsSetupView: View {
             }
         }
     }
-    
+
     private func initializeTimeLimitsForNewApps() {
         // Initialize time limits for new app tokens
         for token in localSelection.applicationTokens {
@@ -1097,7 +1110,6 @@ private struct InstantChangePaywallView: View {
     @Binding var isPresented: Bool
     let onConfirm: () -> Void
     @State private var selectedCharity: Charity?
-    private let dayPassPrice = "$1.00"
 
     var body: some View {
         ZStack {
@@ -1117,7 +1129,7 @@ private struct InstantChangePaywallView: View {
                     }
 
                     VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-                        Text("Some limits have been deferred to tomorrow to keep you in line with your goals. You can apply changes now and support \(selectedCharity?.name ?? "your chosen charity"). Would you like to do so now?")
+                        Text("Some limits have been deferred to tomorrow to keep you in line with your goals. MindLock+ members can apply changes immediately and boost donations to \(selectedCharity?.name ?? "their chosen charity"). Would you like to continue?")
                             .font(DesignSystem.Typography.callout)
                             .foregroundColor(DesignSystem.Colors.textSecondary)
                     }
@@ -1196,17 +1208,7 @@ private struct InstantChangePaywallView: View {
                         }
                     }
 
-                    HStack(spacing: DesignSystem.Spacing.sm) {
-                        Text(dayPassPrice)
-                            .font(DesignSystem.Typography.largeTitle)
-                            .fontWeight(.bold)
-                            .foregroundColor(DesignSystem.Colors.primary)
-                        Text("one-time")
-                            .font(DesignSystem.Typography.callout)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                    }
-
-                    Button("Confirm and Apply Now") { onConfirm(); isPresented = false }
+                    Button("Apply instantly with MindLock+") { onConfirm(); isPresented = false }
                         .mindLockButton(style: .primary)
                     Button("Cancel") { isPresented = false }
                         .mindLockButton(style: .secondary)

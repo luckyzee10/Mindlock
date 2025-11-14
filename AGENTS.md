@@ -17,3 +17,6 @@ Use conventional commits such as `feat(screen-time): add usage ring animation`; 
 
 ## Security & Configuration Tips
 Never commit real Firebase or StoreKit credentials—use sanitized `GoogleService-Info.plist` placeholders and keep secrets in local `.xcconfig` files. Review `MindLock/MindLock.entitlements` and `MindLockMonitor/MindLockMonitor.entitlements` after capability changes to avoid shipping unused permissions. Document new background modes or Screen Time touchpoints in `docs/ARCHITECTURE.md` before merge.
+
+##Style Guidelines
+In chat keep it informative but brief. Like a coder talking to their boss, be mindful of the user's time.

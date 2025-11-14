@@ -220,28 +220,6 @@ class DailyLimitsManager: ObservableObject {
         print("⏳ Granted free unlock for \(minutes) minutes on \(tokens.count) app(s)")
     }
 
-    @discardableResult
-    func grantDayPass(charity: Charity?) -> Int? {
-        let tokens = allLimitedTokens()
-        guard !tokens.isEmpty else {
-            print("⚠️ Day pass skipped: no limited apps configured")
-            return nil
-        }
-
-        let seconds = max(60, secondsUntilMidnight(from: Date()))
-        let expiry = Date().addingTimeInterval(seconds)
-        SharedSettings.setTemporaryUnlock(for: tokens, until: expiry)
-        SharedSettings.recordUnlock(kind: .dayPass(minutes: seconds / 60))
-        ScreenTimeManager.shared.temporaryUnlock(tokens: tokens, duration: seconds)
-        recentlyBlockedTokens.removeAll(where: { tokens.contains($0) })
-        if let charity = charity {
-            let donation = dayPassDonationAmount()
-            SharedSettings.recordDonation(amount: donation, charityId: charity.id, charityName: charity.name)
-            print("💝 Recorded $\(String(format: "%.2f", donation)) donation to \(charity.name)")
-        }
-        print("🔓 Granted day pass for \(tokens.count) app(s) until midnight")
-        return Int(ceil(seconds / 60))
-    }
     
     // MARK: - Private Methods
 
@@ -404,12 +382,6 @@ class DailyLimitsManager: ObservableObject {
     
     private func allLimitedTokens() -> [ApplicationToken] {
         Array(ScreenTimeManager.shared.selectedApps.applicationTokens)
-    }
-
-    private func dayPassDonationAmount() -> Double {
-        let amount: Double = 0.99
-        let net = amount * 0.85 // 15% Apple fee
-        return net * 0.15 // 15% of net revenue to charity
     }
 
     /// Public wrapper to re-apply blocking immediately based on current selection

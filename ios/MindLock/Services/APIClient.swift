@@ -9,11 +9,27 @@ struct PurchaseSubmissionRequest: Encodable {
     let transactionId: String
     let transactionJWS: String
     let receiptData: String?
+    let subscriptionTier: String?
 }
 
 struct PurchaseSubmissionResponse: Decodable {
     let purchaseId: String
     let status: String
+}
+
+struct ImpactSummaryResponse: Decodable {
+    struct Charity: Decodable, Identifiable {
+        let charityId: String
+        let charityName: String
+        let donationCents: Int
+
+        var id: String { charityId }
+    }
+
+    let totalDonationCents: Int
+    let monthDonationCents: Int
+    let totalDonations: Int
+    let charities: [Charity]
 }
 
 enum APIError: LocalizedError {
@@ -63,6 +79,33 @@ final class APIClient {
             throw APIError.server(status: httpResponse.statusCode, message: message)
         }
         return try JSONDecoder().decode(PurchaseSubmissionResponse.self, from: data)
+    }
+
+    func fetchImpactSummary(userId: String) async throws -> ImpactSummaryResponse {
+        let baseURL = try AppConfiguration.apiBaseURL()
+        let appKey = try AppConfiguration.appAPIKey()
+        var components = URLComponents(
+            url: baseURL.appendingPathComponent("v1/impact/summary"),
+            resolvingAgainstBaseURL: false
+        )
+        components?.queryItems = [URLQueryItem(name: "userId", value: userId)]
+        guard let url = components?.url else {
+            throw APIError.invalidResponse
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue(appKey, forHTTPHeaderField: "X-App-Key")
+
+        let (data, response) = try await session.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+        guard 200 ..< 300 ~= httpResponse.statusCode else {
+            let message = decodeErrorMessage(from: data)
+            throw APIError.server(status: httpResponse.statusCode, message: message)
+        }
+        return try JSONDecoder().decode(ImpactSummaryResponse.self, from: data)
     }
 
     private func decodeErrorMessage(from data: Data) -> String? {

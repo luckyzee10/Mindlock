@@ -38,6 +38,7 @@
 		92D73E5239FE31E4C9FA4697 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5A0E3848878EACCB6D7715EC /* Preview Assets.xcassets */; };
 		93A74FE4343970BFD3DF11A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F73DBC310DB450FC6C56C232 /* Assets.xcassets */; };
 		96E4A04D673828BA0B1AFE34 /* DailyLimits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 029981B145CB3AB1C33F8924 /* DailyLimits.swift */; };
+		9C7E6EBC2AAB42B3AC7E22D3 /* TimeBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FD1CF0C274F44F899A3A31F /* TimeBlocksView.swift */; };
 		9F7120C16345266A8F47C3D9 /* PaymentManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F0B38B3DB91420EAB37AA4 /* PaymentManager.swift */; };
 		A3CABC32E541E4EDA558AA18 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D755021AAFC076E51737BD /* SharedSettings.swift */; };
 		A7B61856FA2ACEF05027357E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4623952B7AFB948DC24966AB /* ContentView.swift */; };
@@ -109,6 +110,7 @@
 		644440A7D2460E7538B46977 /* UsageSummaryProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSummaryProcessor.swift; sourceTree = "<group>"; };
 		6756A0EAF273F757FE522BBF /* MindLockActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockActivityMonitor.swift; sourceTree = "<group>"; };
 		6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MindLockMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FD1CF0C274F44F899A3A31F /* TimeBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBlocksView.swift; sourceTree = "<group>"; };
 		7662BF9E3F7187C88341E37D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		8098F56AB2E7C1320D1C769D /* MindLockShieldDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockShieldDataSource.swift; sourceTree = "<group>"; };
 		86F029AA5A0F24E92E7D1B81 /* MindLockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockApp.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				B6B2CA0ACEDB7C329D4B0792 /* AppSelectionView.swift */,
 				A4C8C41E296E08F3CA1DE783 /* CharitySelectionView.swift */,
 				1983CCFD291A21A2EA1D52D7 /* SetupView.swift */,
+				6FD1CF0C274F44F899A3A31F /* TimeBlocksView.swift */,
 			);
 			path = Setup;
 			sourceTree = "<group>";
@@ -440,7 +443,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					2B4DBADF7840FDA343328AF4 = {
 						ProvisioningStyle = Automatic;
@@ -538,6 +541,7 @@
 				FF4FCAF5B9085DEAFB06B296 /* ProfileView.swift in Sources */,
 				2CF5459C311B56719AC85433 /* ScreenTimeManager.swift in Sources */,
 				6B6501B4C6223864465DDD18 /* SetupView.swift in Sources */,
+				9C7E6EBC2AAB42B3AC7E22D3 /* TimeBlocksView.swift in Sources */,
 				A3CABC32E541E4EDA558AA18 /* SharedSettings.swift in Sources */,
 				42D4BB4CE74C83D873983507 /* UnlockPromptView.swift in Sources */,
 				7E07334EA392945B5146494D /* WaitUnlockView.swift in Sources */,
@@ -700,6 +704,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -825,6 +830,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

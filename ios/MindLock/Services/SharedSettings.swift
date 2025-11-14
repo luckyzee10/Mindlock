@@ -55,10 +55,72 @@ enum SharedSettings {
         case dayPass(minutes: Double)
     }
 
+    // MARK: - Subscription Helpers
+
+    static func updateSubscriptionStatus(activeUntil date: Date?, isNonExpiring: Bool = false) {
+        if let date {
+            sharedDefaults?.set(date.timeIntervalSince1970, forKey: Keys.subscriptionExpiration)
+        } else if isNonExpiring {
+            sharedDefaults?.set(0, forKey: Keys.subscriptionExpiration)
+        } else {
+            sharedDefaults?.removeObject(forKey: Keys.subscriptionExpiration)
+        }
+        NotificationCenter.default.post(name: subscriptionStatusChangedNotification, object: nil)
+    }
+
+    static func isSubscriptionActive(reference date: Date = Date()) -> Bool {
+        guard let defaults = sharedDefaults else { return false }
+        guard defaults.object(forKey: Keys.subscriptionExpiration) != nil else { return false }
+        let timestamp = defaults.double(forKey: Keys.subscriptionExpiration)
+        if timestamp == 0 { return true }
+        return timestamp > date.timeIntervalSince1970
+    }
+
+    // MARK: - Impact & Streak Helpers
+
+    static func impactPoints(reference date: Date = Date()) -> Int {
+        consecutiveUnlockFreeDays(reference: date)
+    }
+
+    static func impactMultiplier(forStreak streak: Int) -> Int {
+        switch streak {
+        case 0..<7: return 1
+        case 7..<14: return 2
+        case 14..<21: return 3
+        case 21..<28: return 4
+        default:
+            return streak == 0 ? 1 : 5
+        }
+    }
+
+    static func daysUntilNextImpactBoost(from streak: Int) -> Int? {
+        let thresholds = [7, 14, 21, 28]
+        guard let next = thresholds.first(where: { streak < $0 }) else { return nil }
+        return max(0, next - streak)
+    }
+
+    static func consecutiveUnlockFreeDays(reference date: Date = Date()) -> Int {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: date)
+        var streak = 0
+        for offset in 0..<365 {
+            guard let day = calendar.date(byAdding: .day, value: -offset, to: today) else { break }
+            if let stats = unlockStats(for: day) {
+                if stats.totalUnlocks > 0 { break }
+                streak += 1
+            } else {
+                if offset == 0 { continue }
+                break
+            }
+        }
+        return streak
+    }
+
     static let appGroupIdentifier = "group.com.YLUUT5U99U.mindlock"
     static let extensionBundleIdentifierKey = "MindLockMonitorBundleIdentifier"
     static let limitEventNotificationName = "com.YLUUT5U99U.mindlock.limitEvent"
     static let analyticsUpdatedNotification = Notification.Name("MindLockAnalyticsUpdated")
+    static let subscriptionStatusChangedNotification = Notification.Name("MindLockSubscriptionStatusChanged")
     
     private enum Keys {
         static let selectionData = "shared.selectionData"
@@ -76,6 +138,7 @@ enum SharedSettings {
         static let profileTotalDonation = "profile.totalDonation"
         static let profileCharityTotals = "profile.charityTotals"
         static let profileUnlockStats = "profile.unlock.stats"
+        static let subscriptionExpiration = "profile.subscription.expiration"
     }
     
     static var sharedDefaults: UserDefaults? {
@@ -663,6 +726,134 @@ enum SharedSettings {
         }
         return fallback
     }
+
+    // MARK: - Token Key Canonicalization
+    static func tokenKey(_ token: ApplicationToken) -> String {
+        token.identifier
+    }
+
+    static func tokenKeys(_ tokens: [ApplicationToken]) -> [String] {
+        tokens.map { tokenKey($0) }
+    }
+
+    // MARK: - Time Blocks
+    struct TimeBlock: Codable, Identifiable, Equatable {
+        let id: String
+        var name: String
+        var startHour: Int
+        var startMinute: Int
+        var endHour: Int
+        var endMinute: Int
+        var daysOfWeek: Set<Int>
+        var enabled: Bool
+
+        func startComponents() -> DateComponents { DateComponents(hour: startHour, minute: startMinute) }
+        func endComponents() -> DateComponents { DateComponents(hour: endHour, minute: endMinute) }
+        func durationSeconds() -> TimeInterval {
+            let start = startHour * 60 + startMinute
+            let end = endHour * 60 + endMinute
+            return TimeInterval(max(0, end - start) * 60)
+        }
+        func isSameDayValid() -> Bool {
+            endHour > startHour || (endHour == startHour && endMinute > startMinute)
+        }
+        func isActive(on date: Date) -> Bool {
+            let weekday = Calendar.current.component(.weekday, from: date)
+            return enabled && daysOfWeek.contains(weekday)
+        }
+    }
+
+    private enum TimeBlockKeys {
+        static let blocks = "timeblocks.blocks"
+        static let activeBlockTokens = "timeblocks.active." // suffix with block id
+        static let monitoredNames = "timeblocks.monitored.names"
+        static let activeStates = "timeblocks.active.states"
+    }
+
+    struct ActiveTimeBlockState: Codable, Equatable, Identifiable {
+        let id: String
+        var name: String
+        var endsAt: TimeInterval
+    }
+
+    static func loadTimeBlocks() -> [TimeBlock] {
+        guard let data = sharedDefaults?.data(forKey: TimeBlockKeys.blocks) else { return [] }
+        return (try? JSONDecoder().decode([TimeBlock].self, from: data)) ?? []
+    }
+
+    static func saveTimeBlocks(_ blocks: [TimeBlock]) {
+        if let data = try? JSONEncoder().encode(blocks) {
+            sharedDefaults?.set(data, forKey: TimeBlockKeys.blocks)
+        }
+    }
+
+    static func deviceActivityName(for block: TimeBlock) -> DeviceActivityName {
+        DeviceActivityName("tb_\(block.id)")
+    }
+
+    static func setActiveTokens(_ tokens: [ApplicationToken], forBlockId id: String) {
+        let key = TimeBlockKeys.activeBlockTokens + id
+        if let data = try? JSONEncoder().encode(tokens) {
+            sharedDefaults?.set(data, forKey: key)
+        }
+    }
+
+    static func clearActiveTokens(forBlockId id: String) {
+        let key = TimeBlockKeys.activeBlockTokens + id
+        sharedDefaults?.removeObject(forKey: key)
+    }
+
+    static func activeTokens(forBlockId id: String) -> [ApplicationToken] {
+        let key = TimeBlockKeys.activeBlockTokens + id
+        guard let data = sharedDefaults?.data(forKey: key) else { return [] }
+        return (try? JSONDecoder().decode([ApplicationToken].self, from: data)) ?? []
+    }
+
+    static func loadPreviouslyMonitoredTimeBlockNames() -> [String] {
+        guard let arr = sharedDefaults?.array(forKey: TimeBlockKeys.monitoredNames) as? [String] else { return [] }
+        return arr
+    }
+
+    static func saveMonitoredTimeBlockNames(_ names: [String]) {
+        sharedDefaults?.set(names, forKey: TimeBlockKeys.monitoredNames)
+    }
+
+    private static func loadActiveTimeBlockStatesMap() -> [String: ActiveTimeBlockState] {
+        guard let data = sharedDefaults?.data(forKey: TimeBlockKeys.activeStates),
+              let decoded = try? JSONDecoder().decode([String: ActiveTimeBlockState].self, from: data) else {
+            return [:]
+        }
+        return decoded
+    }
+
+    private static func storeActiveTimeBlockStatesMap(_ map: [String: ActiveTimeBlockState]) {
+        if let data = try? JSONEncoder().encode(map) {
+            sharedDefaults?.set(data, forKey: TimeBlockKeys.activeStates)
+        }
+    }
+
+    static func setActiveTimeBlockState(_ state: ActiveTimeBlockState, forBlockId id: String) {
+        var map = loadActiveTimeBlockStatesMap()
+        map[id] = state
+        storeActiveTimeBlockStatesMap(map)
+    }
+
+    static func removeActiveTimeBlockState(forBlockId id: String) {
+        var map = loadActiveTimeBlockStatesMap()
+        map.removeValue(forKey: id)
+        storeActiveTimeBlockStatesMap(map)
+    }
+
+    static func activeTimeBlockStates() -> [ActiveTimeBlockState] {
+        loadActiveTimeBlockStatesMap().values.map { $0 }
+    }
+
+    static func currentTimeBlockContext(reference date: Date = Date()) -> ActiveTimeBlockState? {
+        let now = date.timeIntervalSince1970
+        return activeTimeBlockStates()
+            .filter { $0.endsAt > now }
+            .min(by: { $0.endsAt < $1.endsAt })
+    }
 }
 
 struct LimitEvent {
@@ -670,7 +861,7 @@ struct LimitEvent {
     let blockedTokens: [ApplicationToken]
 }
 
-extension ApplicationToken: Codable {
+extension ApplicationToken {
     var identifier: String {
         guard let data = try? JSONEncoder().encode(self) else {
             return ""
@@ -684,14 +875,6 @@ extension ApplicationToken: Codable {
             return nil
         }
         self = token
-    }
-}
-
-extension ApplicationToken: Identifiable, Equatable {
-    public var id: String { identifier }
-    
-    public static func == (lhs: ApplicationToken, rhs: ApplicationToken) -> Bool {
-        lhs.identifier == rhs.identifier
     }
 }
 
@@ -718,16 +901,3 @@ private final class LimitEventObserver {
         }
     }
 }
-    // MARK: - Token Key Canonicalization
-    /// Returns the canonical string key used to store ApplicationToken-based state
-    /// in shared defaults. Centralizing this ensures both the host app and
-    /// extensions use identical keys for lookups.
-    static func tokenKey(_ token: ApplicationToken) -> String {
-        // Currently we use the base64-encoded JSON identifier. Centralizing the
-        // accessor lets us swap implementations later without touching call sites.
-        return token.identifier
-    }
-
-    static func tokenKeys(_ tokens: [ApplicationToken]) -> [String] {
-        tokens.map { tokenKey($0) }
-    }
