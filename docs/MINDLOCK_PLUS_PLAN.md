@@ -1,6 +1,6 @@
 # MindLock+ Subscription & Impact Plan
 
-This document supersedes the legacy Day Pass specs. Keep the older plans for context, but treat this doc as the source of truth for the subscription rollout.
+This document replaces the legacy consumable unlock specs. Treat it as the source of truth for the MindLock+ subscription rollout.
 
 ## Product Pillars
 
@@ -23,7 +23,7 @@ This document supersedes the legacy Day Pass specs. Keep the older plans for con
 
 ### 1. StoreKit / Client
 
-- Replace Day Pass consumable logic with the two MindLock+ auto-renewables.
+- Use the two MindLock+ auto-renewable tiers in place of any consumable unlock logic.
 - PaymentManager responsibilities:
   - Load both products, expose lowest-priced offer for UI.
   - Handle subscription status refresh via `Transaction.currentEntitlements`.
@@ -32,7 +32,7 @@ This document supersedes the legacy Day Pass specs. Keep the older plans for con
   - Shows current streak / impact multiplier.
   - Requires a selected charity prior to purchase.
   - Hides CTA when already subscribed.
-- Setup/Limit cards now route to MindLock+ paywall rather than Day Pass sheet.
+- Setup/Limit cards now route to the MindLock+ paywall instead of the retired unlock sheet.
 
 ### 2. Backend
 
@@ -47,11 +47,11 @@ This document supersedes the legacy Day Pass specs. Keep the older plans for con
 - Dashboard streak card displays current multiplier + days until next boost.
 - Unlock flow and Setup view share the same impact summary component.
 - Charity selection acts as a funnel for non-subscribers (“Unlock Impact” CTA).
-- Profile screen highlights cumulative donations from MindLock+ instead of Day Pass purchases.
+- Profile screen highlights cumulative donations driven by MindLock+.
 
 ### 4. Migration Notes
 
-- Archive prior Day Pass copy but leave it unchanged for historical context.
-- Remove Day Pass-specific analytics (minutes/unlocks) once subscription metrics are live.
+- Archive the prior consumable copy but leave it unchanged for historical context.
+- Remove consumable-specific analytics (minutes/unlocks) once subscription metrics are live.
 - Coordinate App Store metadata, screenshots, and privacy descriptions to reflect the new model.
 *** End Patch*** to=functions.apply_patchistí

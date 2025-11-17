@@ -16,8 +16,9 @@ struct SetupView: View {
     @State private var showingAppLimits = false
     @State private var showingCharitySelection = false
     @State private var appTimeLimits: [String: Int] = [:]
-    @State private var tokenPendingMindLockPlus: IdentifiedApplicationToken?
     @State private var tokenPendingWait: IdentifiedApplicationToken?
+    @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
+    @State private var showingMindLockPlusPaywall = false
     
     var body: some View {
         NavigationView {
@@ -51,13 +52,19 @@ struct SetupView: View {
                         // Charity Selection Section
                         SetupSectionCard(
                             title: "Your Charity",
-                            description: "Choose where your unlock fees go",
+                            description: "Choose where your donations go",
                             icon: "heart.fill",
                             status: selectedCharity?.name ?? "Not selected",
                             emoji: selectedCharity?.emoji,
                             logoName: selectedCharity?.logoAssetName
                         ) {
                             showingCharitySelection = true
+                        }
+
+                        if !subscriptionActive {
+                            MindLockPlusPromoCard(selectedCharity: selectedCharity) {
+                                showingMindLockPlusPaywall = true
+                            }
                         }
 
                         // Time Blocks Section
@@ -68,11 +75,11 @@ struct SetupView: View {
                         // Streak Card
                         StreakCard(days: currentStreakDays)
                         
-                        if !reachedLimitTokens.isEmpty {
+                        if !subscriptionActive && !reachedLimitTokens.isEmpty {
                             LimitReachedGlobalCard(
                                 tokens: reachedLimitTokens,
                                 waitAction: { if let token = representativeToken { tokenPendingWait = IdentifiedApplicationToken(token: token) } },
-                                mindLockPlusAction: { if let token = representativeToken { tokenPendingMindLockPlus = IdentifiedApplicationToken(token: token) } }
+                                mindLockPlusAction: { showingMindLockPlusPaywall = true }
                             )
                         }
                         
@@ -83,8 +90,8 @@ struct SetupView: View {
                     .padding(.horizontal, DesignSystem.Spacing.lg)
                     .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
-                .sheet(item: $tokenPendingMindLockPlus) { wrapper in
-                    UnlockPromptView(appToken: wrapper.token)
+                .sheet(isPresented: $showingMindLockPlusPaywall) {
+                    UnlockPromptView()
                 }
                 .sheet(item: $tokenPendingWait) { wrapper in
                     WaitUnlockView(appToken: wrapper.token)
@@ -114,6 +121,9 @@ struct SetupView: View {
                 loadUserPreferences()
                 print("💝 Charity selection sheet closed, reloading preferences")
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: SharedSettings.subscriptionStatusChangedNotification)) { _ in
+            subscriptionActive = SharedSettings.isSubscriptionActive()
         }
     }
     
@@ -300,11 +310,7 @@ private struct StreakCard: View {
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(DesignSystem.Colors.textSecondary)
 
-                if let next = SharedSettings.daysUntilNextImpactBoost(from: days) {
-                    Text("Next boost in \(next) day\(next == 1 ? "" : "s")")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(DesignSystem.Colors.textTertiary)
-                } else if days >= 28 {
+                if days >= 28 {
                     Text("You’ve maxed out this month’s boost.")
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(DesignSystem.Colors.textTertiary)
@@ -318,7 +324,7 @@ private struct StreakCard: View {
     }
 
     private var subtitle: String {
-        if days == 0 { return "Start your streak — skip unlocks today" }
+        if days == 0 { return "Start your streak" }
         return "Keep going to amplify donations"
     }
 
@@ -512,7 +518,7 @@ private struct LimitReachedGlobalCard: View {
 
                 Button(action: mindLockPlusAction) {
                     Label {
-                        Text("MindLock+")
+                        Text("Unlock impact")
                             .fontWeight(.semibold)
                     } icon: {
                         Image(systemName: "sparkles")
@@ -533,14 +539,65 @@ private struct LimitReachedGlobalCard: View {
 
     private var limitTitle: String {
         let count = tokens.count
-        if count == 1 { return "1 Limit Reached" }
-        return "\(count) Limits Reached"
+        if count == 1 { return "1 App Limited" }
+        return "\(count) Apps Limited"
     }
 
-    private var detailLine: String {
+    private var detailLine: String {    
         let count = tokens.count
-        let appWord = count == 1 ? "app" : "apps"
-        return "You’ve hit today’s limit for \(count) \(appWord). Take a quick break or unlock MindLock+ to amplify your impact."
+        if count == 1 {
+            return "1 app is being limited by MindLock."
+        } else {
+            return "\(count) apps are being limited by MindLock."
+        }
+    }
+}
+
+private struct MindLockPlusPromoCard: View {
+    let selectedCharity: Charity?
+    let action: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text("MindLock+ Impact")
+                .font(DesignSystem.Typography.headline)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+
+            Text(description)
+                .font(DesignSystem.Typography.callout)
+                .foregroundColor(DesignSystem.Colors.textSecondary)
+
+            Button(action: action) {
+                Label {
+                    Text("Join MindLock+")
+                        .fontWeight(.semibold)
+                } icon: {
+                    Image(systemName: "sparkles")
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .mindLockButton(style: .primary)
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .background(DesignSystem.Colors.surface.opacity(0.5))
+        .cornerRadius(DesignSystem.CornerRadius.xl)
+    }
+
+    private var description: String {
+        if let charity = selectedCharity {
+            return """
+turn your time saved into real-world impact:
+- Earn streaks
+- accumulate impact points
+- unlock donations to \(charity.name).
+"""
+        }
+        return """
+turn your time saved into real-world impact:
+- Earn streaks
+- accumulate impact points
+- unlock donations to your chosen charity.
+"""
     }
 }
 
@@ -1105,130 +1162,140 @@ private struct PendingLimitPill: View {
     }
 }
 
-// MARK: - Instant Change Paywall (simple)
+// MARK: - Instant Change Confirmation
 private struct InstantChangePaywallView: View {
     @Binding var isPresented: Bool
     let onConfirm: () -> Void
-    @State private var selectedCharity: Charity?
+    @State private var remaining = 30
+    @State private var timer: Timer?
+    @State private var readyToConfirm = false
+    private let logoSize: CGFloat = 120
+    private var progress: Double { Double(30 - remaining) / 30 }
 
     var body: some View {
-        ZStack {
-            DesignSystem.Colors.background.ignoresSafeArea()
-            VStack(spacing: DesignSystem.Spacing.xl) {
-                // Card
-                VStack(spacing: DesignSystem.Spacing.lg) {
-                    HStack(spacing: DesignSystem.Spacing.md) {
-                        Image(systemName: "lock.open.trianglebadge.exclamationmark")
-                            .font(.system(size: 28, weight: .semibold))
-                            .foregroundColor(DesignSystem.Colors.accent)
-                        Text("Apply Changes Now")
-                            .font(DesignSystem.Typography.title1)
-                            .fontWeight(.bold)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                        Spacer()
-                    }
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            Text("Mindful change")
+                .font(DesignSystem.Typography.title2)
+                .fontWeight(.bold)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+                .padding(.top, DesignSystem.Spacing.xl)
 
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-                        Text("Some limits have been deferred to tomorrow to keep you in line with your goals. MindLock+ members can apply changes immediately and boost donations to \(selectedCharity?.name ?? "their chosen charity"). Would you like to continue?")
-                            .font(DesignSystem.Typography.callout)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                    }
-
-                    // Charity selection (similar to unlock flow)
-                    VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                        if let charity = selectedCharity {
-                            HStack {
-                                Text("Supporting")
-                                    .font(DesignSystem.Typography.caption)
-                                    .foregroundColor(DesignSystem.Colors.textTertiary)
-                                Spacer()
-                                Button("Change") { selectedCharity = nil }
-                                    .font(DesignSystem.Typography.caption)
-                                    .foregroundColor(DesignSystem.Colors.primary)
-                            }
-                            HStack(spacing: DesignSystem.Spacing.md) {
-                                if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 24, height: 24)
-                                        .clipShape(RoundedRectangle(cornerRadius: 5))
-                                } else {
-                                    Text(charity.emoji).font(.system(size: 24))
-                                }
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(charity.name)
-                                        .font(DesignSystem.Typography.headline)
-                                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                                    Text(charity.description)
-                                        .font(DesignSystem.Typography.caption)
-                                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                                }
-                                Spacer()
-                            }
-                            .padding(DesignSystem.Spacing.md)
-                            .background(DesignSystem.Colors.primary.opacity(0.08))
-                            .cornerRadius(DesignSystem.CornerRadius.md)
-                        } else {
-                            VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                                Text("Choose a charity")
-                                    .font(DesignSystem.Typography.caption)
-                                    .foregroundColor(DesignSystem.Colors.textTertiary)
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack(spacing: DesignSystem.Spacing.sm) {
-                                        ForEach(Charity.popularCharities) { charity in
-                                            Button(action: {
-                                                selectedCharity = charity
-                                                UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
-                                            }) {
-                                                HStack(spacing: 8) {
-                                                    if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
-                                                        Image(uiImage: uiImage)
-                                                            .resizable()
-                                                            .scaledToFit()
-                                                            .frame(width: 18, height: 18)
-                                                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                                                    } else {
-                                                        Text(charity.emoji)
-                                                    }
-                                                    Text(charity.name)
-                                                        .font(DesignSystem.Typography.caption)
-                                                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                                                }
-                                                .padding(.horizontal, 12)
-                                                .padding(.vertical, 8)
-                                                .background(DesignSystem.Colors.surface)
-                                                .cornerRadius(12)
-                                            }
-                                            .buttonStyle(PlainButtonStyle())
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    Button("Apply instantly with MindLock+") { onConfirm(); isPresented = false }
-                        .mindLockButton(style: .primary)
-                    Button("Cancel") { isPresented = false }
-                        .mindLockButton(style: .secondary)
+            VStack(spacing: DesignSystem.Spacing.md) {
+                logoProgressView
+                VStack(spacing: DesignSystem.Spacing.xs) {
+                    Text(readyToConfirm ? "Ready when you are" : "Take a breath")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                    Text(readyToConfirm ? "✓" : "\(remaining)s")
+                        .font(.system(size: readyToConfirm ? 42 : 48, weight: .bold))
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
                 }
-                .padding(DesignSystem.Spacing.lg)
-                .background(DesignSystem.Colors.surface)
-                .cornerRadius(DesignSystem.CornerRadius.lg)
-                .shadow(color: Color.black.opacity(0.3), radius: 20, x: 0, y: 10)
-                .padding(DesignSystem.Spacing.lg)
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(DesignSystem.Colors.surface)
+            .cornerRadius(DesignSystem.CornerRadius.xl)
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+
+            VStack(alignment: .center, spacing: DesignSystem.Spacing.sm) {
+                Text("Apply limit changes immediately")
+                    .font(DesignSystem.Typography.headline)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                Text("Use this 30-second pause to make sure you truly want to loosen today’s limits. When you’re ready, we’ll apply all pending changes at once.")
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, DesignSystem.Spacing.xl)
+            }
+
+            VStack(spacing: DesignSystem.Spacing.md) {
+                Button("Apply pending limits now") {
+                    guard readyToConfirm else { return }
+                    onConfirm()
+                    dismiss()
+                }
+                .mindLockButton(style: .primary)
+                .disabled(!readyToConfirm)
+                .opacity(readyToConfirm ? 1 : 0.5)
+
+                Button("Keep limits as-is") {
+                    dismiss()
+                }
+                .mindLockButton(style: .ghost)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(DesignSystem.Colors.background.ignoresSafeArea())
+        .onAppear(perform: beginCountdown)
+        .onDisappear(perform: invalidate)
+    }
+
+    private func beginCountdown() {
+        remaining = 30
+        readyToConfirm = false
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+            if remaining <= 1 {
+                timer.invalidate()
+                remaining = 0
+                readyToConfirm = true
+            } else {
+                remaining -= 1
             }
         }
-        .onAppear {
-            if let id = UserDefaults.standard.string(forKey: "selectedCharityId"),
-               let charity = Charity.popularCharities.first(where: { $0.id == id }) {
-                selectedCharity = charity
-            }
+    }
+
+    private func invalidate() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    private func dismiss() {
+        isPresented = false
+    }
+
+    private var logoProgressView: some View {
+        let clamped = min(max(progress, 0), 1)
+        return ZStack {
+            Circle()
+                .fill(DesignSystem.Colors.background.opacity(0.4))
+                .frame(width: logoSize + 24, height: logoSize + 24)
+                .overlay(
+                    Circle()
+                        .stroke(DesignSystem.Colors.surface.opacity(0.6), lineWidth: 2)
+                )
+            resolvedLogoImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: logoSize, height: logoSize)
+                .clipShape(Circle())
+                .opacity(0.25)
+            resolvedLogoImage
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: logoSize, height: logoSize)
+                .clipShape(Circle())
+                .mask(
+                    Circle()
+                        .trim(from: 0, to: CGFloat(clamped))
+                        .stroke(style: StrokeStyle(lineWidth: logoSize, lineCap: .butt))
+                        .scaleEffect(x: -1, y: 1, anchor: .center)
+                        .rotationEffect(.degrees(-90))
+                )
         }
+    }
+
+    private var resolvedLogoImage: Image {
+        if let uiImage = UIImage(named: "MindLockLogo") {
+            return Image(uiImage: uiImage).renderingMode(.original)
+        }
+        return Image(systemName: "lock.shield.fill")
     }
 }
 
 #Preview {
     SetupView()
-} 
+}

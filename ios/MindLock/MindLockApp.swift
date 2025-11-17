@@ -20,6 +20,7 @@ struct MindLockApp: App {
                     NotificationManager.shared.configure()
                     setupNotificationHandling()
                     reevaluateScreenTimePrompt()
+                    ImpactTracker.shared.refreshImpactReport(reason: "appLaunch")
                 }
                 .onOpenURL { _ in
                     // Ensure we present the unlock flow if launched from shield
@@ -28,6 +29,10 @@ struct MindLockApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Re-check on every foreground entry
                     reevaluateScreenTimePrompt()
+                    ImpactTracker.shared.refreshImpactReport(reason: "foreground")
+                }
+                .onReceive(NotificationCenter.default.publisher(for: SharedSettings.analyticsUpdatedNotification)) { _ in
+                    ImpactTracker.shared.refreshImpactReport(reason: "analytics")
                 }
                 .sheet(isPresented: $showScreenTimePrompt) {
                     ScreenTimeEnablePrompt(onEnable: {

@@ -7,8 +7,12 @@ import { verifyStoreKitTransaction } from '../lib/storekit.js';
 const log = (...args) => console.log('[purchases]', ...args);
 const logError = (...args) => console.error('[purchases]', ...args);
 const allowedProducts = {
-    'mindlock.plus.monthly': { grossCents: 999 },
-    'mindlock.plus.annual': { grossCents: 5999 }
+    'mindlock.plus.monthly': {
+        grossCents: 1499
+    },
+    'mindlock.plus.annual': {
+        grossCents: 14399
+    }
 };
 const createPurchaseSchema = z.object({
     userId: z.string().min(1),

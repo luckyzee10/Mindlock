@@ -10,10 +10,10 @@ const logError = (...args: unknown[]) => console.error('[purchases]', ...args);
 
 const allowedProducts = {
   'mindlock.plus.monthly': {
-    grossCents: 999
+    grossCents: 1499
   },
   'mindlock.plus.annual': {
-    grossCents: 5999
+    grossCents: 14399
   }
 } as const;
 

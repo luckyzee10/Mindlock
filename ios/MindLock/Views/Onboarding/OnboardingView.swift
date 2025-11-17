@@ -1371,7 +1371,7 @@ struct ConceptExplanationView: View {
                             .foregroundColor(DesignSystem.Colors.textSecondary)
                             .lineSpacing(6)
                         
-                        Text("Need the day? Donate $1 toward your charity and get full access until midnight.")
+                        Text("Need the full toolkit? Join MindLock+ to turn every streak into monthly donations—up to 20% of your plan.")
                             .font(DesignSystem.Typography.title3)
                             .foregroundStyle(
                                 LinearGradient(
@@ -1661,7 +1661,7 @@ struct AnimatedLimitsIntroView: View {
                             .transition(.opacity)
                     }
                     if showB2 {
-                        Text("Well, you can unlock… For a price...")
+                        Text("Stick with the mindful wait, or upgrade to MindLock+ and let your streaks fund your cause.")
                             .font(DesignSystem.Typography.title3)
                             .foregroundColor(DesignSystem.Colors.textPrimary)
                             .multilineTextAlignment(.center)
@@ -1673,7 +1673,7 @@ struct AnimatedLimitsIntroView: View {
             }
 
             if showFinal {
-                Text("But don’t worry! Part of it goes to a good cause…\nAnd the best part, you get to choose.🕊️")
+                Text("MindLock+ turns your discipline into impact every month—up to 20% donated, and you pick the cause.🕊️")
                     .font(DesignSystem.Typography.title3)
                     .foregroundColor(DesignSystem.Colors.textPrimary)
                     .multilineTextAlignment(.center)
@@ -2102,7 +2102,7 @@ struct OnboardingPage {
         ),
         OnboardingPage(
             title: "Choose Your Charity",
-            description: "Select an organization to receive a percentage of your unlock fees. Every extra minute supports a good cause.",
+            description: "Select an organization to receive monthly MindLock+ donations. Every focused streak grows their impact.",
             iconName: "heart.fill",
             accentColor: DesignSystem.Colors.success,
             isPermissionPage: false,

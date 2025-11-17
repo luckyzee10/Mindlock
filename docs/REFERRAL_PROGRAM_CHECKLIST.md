@@ -1,6 +1,6 @@
 # Referral Program – Development Checklist
 
-This document outlines a lean, end‑to‑end referral program for MindLock. Users share a link; a friend installs/opens via that link and completes their “first contribution” (first Day Pass). We record an additional donation in the referrer’s name.
+This document outlines a lean, end‑to‑end referral program for MindLock. Users share a link; a friend installs/opens via that link and completes their first MindLock+ purchase. We record an additional donation in the referrer’s name.
 
 ## Goals
 - Frictionless share → open app via Universal Link → claim referral → award donation on first completed purchase.
@@ -99,4 +99,3 @@ This document outlines a lean, end‑to‑end referral program for MindLock. Use
 ## Notes & Alternatives
 - You can host the AASA and `/r/:code` on the API domain instead of the marketing site; point Associated Domains to that host.
 - If you skip Universal Links, add a simple “Enter referral code” field in onboarding (with more friction).
-

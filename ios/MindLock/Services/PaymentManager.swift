@@ -103,6 +103,7 @@ final class PaymentManager: ObservableObject {
                 logger.info("📨 Submitting receipt to backend for transaction \(transaction.id, privacy: .public)")
                 _ = try await apiClient.submitPurchase(submission)
                 await transaction.finish()
+                SharedSettings.updateSubscriptionTier(productId: transaction.productID)
                 await refreshSubscriptionStatus()
                 logger.info("🏁 Purchase flow completed successfully")
                 purchaseState = .idle
@@ -130,44 +131,43 @@ final class PaymentManager: ObservableObject {
     }
 
     func refreshSubscriptionStatus() async {
-        do {
-            var latestExpiration: Date?
-            var hasNonExpiringEntitlement = false
-            for await result in Transaction.currentEntitlements {
-                guard case .verified(let transaction) = result else { continue }
-                guard subscriptionProductIds.contains(transaction.productID) else { continue }
-                guard transaction.revocationDate == nil else { continue }
-                if let expiration = transaction.expirationDate {
-                    if let latest = latestExpiration {
-                        if expiration > latest {
-                            latestExpiration = expiration
-                        }
-                    } else {
+        var latestExpiration: Date?
+        var latestProductId: String?
+        var hasNonExpiringEntitlement = false
+
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result else { continue }
+            guard subscriptionProductIds.contains(transaction.productID) else { continue }
+            guard transaction.revocationDate == nil else { continue }
+            if latestProductId == nil || (transaction.expirationDate ?? .distantFuture) > (latestExpiration ?? .distantPast) {
+                latestProductId = transaction.productID
+            }
+            if let expiration = transaction.expirationDate {
+                if let latest = latestExpiration {
+                    if expiration > latest {
                         latestExpiration = expiration
                     }
                 } else {
-                    hasNonExpiringEntitlement = true
+                    latestExpiration = expiration
                 }
+            } else {
+                hasNonExpiringEntitlement = true
             }
+        }
 
-            await MainActor.run {
-                if hasNonExpiringEntitlement {
-                    subscriptionStatus = .subscribed(expiration: nil)
-                    SharedSettings.updateSubscriptionStatus(activeUntil: nil, isNonExpiring: true)
-                } else if let latestExpiration {
-                    subscriptionStatus = .subscribed(expiration: latestExpiration)
-                    SharedSettings.updateSubscriptionStatus(activeUntil: latestExpiration)
-                } else {
-                    SharedSettings.updateSubscriptionStatus(activeUntil: nil)
-                    subscriptionStatus = .notSubscribed
-                }
-            }
-        } catch {
-            logger.error("❌ Failed to refresh subscription status: \(error.localizedDescription, privacy: .public)")
-            await MainActor.run {
-                if case .unknown = subscriptionStatus {
-                    subscriptionStatus = .notSubscribed
-                }
+        await MainActor.run {
+            if hasNonExpiringEntitlement {
+                subscriptionStatus = .subscribed(expiration: nil)
+                SharedSettings.updateSubscriptionStatus(activeUntil: nil, isNonExpiring: true)
+                SharedSettings.updateSubscriptionTier(productId: latestProductId)
+            } else if let latestExpiration {
+                subscriptionStatus = .subscribed(expiration: latestExpiration)
+                SharedSettings.updateSubscriptionStatus(activeUntil: latestExpiration)
+                SharedSettings.updateSubscriptionTier(productId: latestProductId)
+            } else {
+                SharedSettings.updateSubscriptionStatus(activeUntil: nil)
+                subscriptionStatus = .notSubscribed
+                SharedSettings.updateSubscriptionTier(productId: nil)
             }
         }
     }

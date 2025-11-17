@@ -1,19 +1,15 @@
 import SwiftUI
-import FamilyControls
-import ManagedSettings
 import StoreKit
 import UIKit
 
 struct UnlockPromptView: View {
     @Environment(\.dismiss) private var dismiss
-    let appToken: ApplicationToken
 
     @StateObject private var paymentManager = PaymentManager()
     @State private var selectedCharity: Charity?
     @State private var showingCharityPicker = false
     @State private var purchaseErrorMessage: String?
     @State private var showingPurchaseError = false
-    @State private var timeBlockContext: SharedSettings.ActiveTimeBlockState?
     @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
     @State private var impactPoints = SharedSettings.impactPoints()
 
@@ -23,6 +19,11 @@ struct UnlockPromptView: View {
                 VStack(spacing: DesignSystem.Spacing.xl) {
                     heroSection
                     impactSummary
+                    Text("Stack up impact points to transform up to 20% of your plan into donations for the causes you choose.")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, DesignSystem.Spacing.md)
                     selectedCharitySection
                     quickCharityList
                     subscriptionCTA
@@ -44,7 +45,6 @@ struct UnlockPromptView: View {
             loadSelectedCharity()
             refreshImpactMetrics()
             Task { await paymentManager.loadProductsIfNeeded() }
-            refreshTimeBlockContext()
         }
         .onReceive(NotificationCenter.default.publisher(for: SharedSettings.analyticsUpdatedNotification)) { _ in
             refreshImpactMetrics()
@@ -61,28 +61,16 @@ struct UnlockPromptView: View {
 
     private var heroSection: some View {
         VStack(spacing: DesignSystem.Spacing.sm) {
-            if let context = timeBlockContext, context.endsAt > Date().timeIntervalSince1970 {
-                Text("Apps limited by your \(context.name) block")
-                    .font(.system(size: 30, weight: .heavy))
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .multilineTextAlignment(.center)
-                Text("Only \(timeRemainingString(context.endsAt)) to go — relax MindLock for the rest of today.")
-                    .font(DesignSystem.Typography.callout)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-            } else {
-                Text(subscriptionActive ? "MindLock+ active" : "MindLock+ Impact")
-                    .font(.system(size: 30, weight: .heavy))
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .multilineTextAlignment(.center)
-                Text(subscriptionActive ? "Your subscription unlocks enhanced analytics, unlimited time blocks, and charitable impact tracking."
-                     : "Join MindLock+ to unlock enhanced tools and automatically donate up to 20% of your plan to the cause you choose.")
-                    .font(DesignSystem.Typography.callout)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            Text(subscriptionActive ? "MindLock+ active" : "You Focus, We Donate")
+                .font(.system(size: 30, weight: .heavy))
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+                .multilineTextAlignment(.center)
+            Text(subscriptionActive ? "Your subscription delivers enhanced analytics, unlimited time blocks, and transparent giving."
+                 : "Join MindLock+ to use your focus to create change. The more you focus, the more we donate.")
+                .font(DesignSystem.Typography.callout)
+                .foregroundColor(DesignSystem.Colors.textSecondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .padding(.horizontal, DesignSystem.Spacing.lg)
         .padding(.vertical, DesignSystem.Spacing.xl)
@@ -108,17 +96,6 @@ struct UnlockPromptView: View {
                     .foregroundColor(DesignSystem.Colors.primary)
             }
 
-            if let days = SharedSettings.daysUntilNextImpactBoost(from: impactPoints) {
-                Text("Stay focused \(days == 0 ? "today" : "for \(days) more day\(days == 1 ? "" : "s")") to unlock the next donation boost.")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Text("You’ve maxed out the current multiplier. Amazing work.")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
         }
         .padding()
         .background(DesignSystem.Colors.surface.opacity(0.7))
@@ -224,6 +201,11 @@ struct UnlockPromptView: View {
 
     private var subscriptionCTA: some View {
         VStack(spacing: DesignSystem.Spacing.md) {
+            Text("Save Your Time, Save the World")
+                .font(DesignSystem.Typography.caption)
+                .foregroundColor(DesignSystem.Colors.primary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
             Button(action: subscribeTapped) {
                 if paymentManager.isProcessing {
                     ProgressView()
@@ -288,10 +270,6 @@ struct UnlockPromptView: View {
         }
     }
 
-    private var appDisplayName: String {
-        Application(token: appToken).localizedDisplayName ?? "your apps"
-    }
-
     private var buttonTitle: String {
         if let price = paymentManager.primaryProduct?.displayPrice {
             return "Join MindLock+ • \(price)"
@@ -299,28 +277,8 @@ struct UnlockPromptView: View {
         return "Join MindLock+"
     }
 
-    private func refreshTimeBlockContext() {
-        timeBlockContext = SharedSettings.currentTimeBlockContext()
-    }
-
     private func refreshImpactMetrics() {
         impactPoints = SharedSettings.impactPoints()
-    }
-
-    private func timeRemainingString(_ endsAt: TimeInterval) -> String {
-        let remaining = max(0, endsAt - Date().timeIntervalSince1970)
-        let minutes = Int(remaining / 60)
-        if minutes >= 120 {
-            let hours = Double(minutes) / 60.0
-            return String(format: "%.1f hours", hours)
-        } else if minutes >= 60 {
-            let hours = minutes / 60
-            let mins = minutes % 60
-            if mins == 0 { return "\(hours)h" }
-            return "\(hours)h \(mins)m"
-        } else {
-            return "\(max(1, minutes))m"
-        }
     }
 
     private var failureMessage: String? {
@@ -328,7 +286,7 @@ struct UnlockPromptView: View {
             return message
         }
         if case .pending = paymentManager.purchaseState {
-            return "Your purchase is pending approval. You’ll be able to unlock once Apple finishes processing."
+            return "Your purchase is pending approval. You’ll be able to complete checkout once Apple finishes processing."
         }
         return nil
     }

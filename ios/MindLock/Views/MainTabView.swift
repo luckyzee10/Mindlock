@@ -12,12 +12,19 @@ struct MainTabView: View {
                 }
                 .tag(0)
 
+            MindLockUsageReportScreen()
+                .tabItem {
+                    Image(systemName: "chart.bar")
+                    Text("Usage")
+                }
+                .tag(1)
+
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.crop.circle")
                     Text("Profile")
                 }
-                .tag(1)
+                .tag(2)
         }
         .preferredColorScheme(.dark)
         .accentColor(DesignSystem.Colors.primary)

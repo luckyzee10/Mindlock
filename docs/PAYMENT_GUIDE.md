@@ -4,11 +4,12 @@
 
 Complete guide for implementing Apple In-App Purchases using StoreKit 2, with backend validation and charity donation calculation.
 
-> **MVP update (Nov 2025).** The fast-launch build ships with a single consumable:
+> **Subscription update (Nov 2025).** MindLock now offers MindLock+ exclusively through two auto-renewable subscriptions:
 >
-> - `mindlock.daypass` — $0.99 USD. Unlocks the device until midnight. Apple’s Small Developer rate takes 15%, so net revenue is `$0.99 * 0.85 = $0.8415`. We reserve 15% of that net (`≈ $0.13`) for the user’s selected charity.
+> - `mindlock.plus.monthly` — $14.99 USD
+> - `mindlock.plus.annual` — $143.99 USD
 >
-> The former 10/30/60 minute SKUs have been removed. The free “10-minute Focus Break” unlock is handled entirely on-device via a 30-second countdown (no purchase or receipt involved). The rest of this guide still documents the StoreKit wiring; just substitute the single product identifier wherever multiple IDs were referenced before.
+> Both tiers unlock the premium analytics, unlimited time blocks, and charity impact tracking. The free “Mindful Wait” unlock remains local-only with no StoreKit component. The rest of this guide documents the StoreKit wiring for these subscriptions.
 
 ---
 
@@ -20,13 +21,18 @@ Complete guide for implementing Apple In-App Purchases using StoreKit 2, with ba
 ```
 Navigate to App Store Connect > My Apps > MindLock > Features > In-App Purchases
 
-Create one Consumable Product:
+Create two Auto-Renewable Subscriptions in an appropriate subscription group:
 
-1. mindlock.daypass  
-   - Reference Name: "MindLock Day Pass"  
-   - Product ID: `mindlock.daypass`  
-   - Price: $0.99 USD (Tier 1)  
-   - Description: "Unlock MindLock until midnight. 15% of net revenue funds your chosen charity."
+1. mindlock.plus.monthly  
+   - Reference Name: "MindLock+ Monthly"  
+   - Product ID: `mindlock.plus.monthly`  
+   - Price: $14.99 USD  
+   - Description: "Monthly MindLock+ access with up to 20% donated to your charity."
+2. mindlock.plus.annual  
+   - Reference Name: "MindLock+ Annual"  
+   - Product ID: `mindlock.plus.annual`  
+   - Price: $143.99 USD  
+   - Description: "Annual MindLock+ access with up to 20% donated to your charity."
 ```
 
 #### Shared Secret Generation
@@ -91,7 +97,7 @@ class PaymentManager: ObservableObject {
     @Published var isLoading = false
     @Published var purchaseState: PurchaseState = .idle
     
-    private let productIDs: Set<String> = ["mindlock.daypass"]
+    private let productIDs: Set<String> = ["mindlock.plus.monthly", "mindlock.plus.annual"]
     
     private var transactionListener: Task<Void, Error>?
     private var apiClient: APIClient

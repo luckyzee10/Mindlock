@@ -33,26 +33,17 @@ struct AnalyticsDaySummary: Codable {
 
 /// Shared constants and helpers for communicating between the main app and the extension.
 enum SharedSettings {
-    struct CharityAggregate: Codable, Identifiable {
-        let id: String
-        var name: String
-        var amount: Double
-    }
-
     struct UnlockStatsRecord: Codable, Identifiable {
         let id: String
         var freeUnlocks: Int
-        var dayPassUnlocks: Int
         var freeMinutes: Double
-        var dayPassMinutes: Double
 
-        var totalUnlocks: Int { freeUnlocks + dayPassUnlocks }
-        var totalMinutes: Double { freeMinutes + dayPassMinutes }
+        var totalUnlocks: Int { freeUnlocks }
+        var totalMinutes: Double { freeMinutes }
     }
 
     enum UnlockEventKind {
         case free(minutes: Double)
-        case dayPass(minutes: Double)
     }
 
     // MARK: - Subscription Helpers
@@ -74,6 +65,19 @@ enum SharedSettings {
         let timestamp = defaults.double(forKey: Keys.subscriptionExpiration)
         if timestamp == 0 { return true }
         return timestamp > date.timeIntervalSince1970
+    }
+
+    static func updateSubscriptionTier(productId: String?) {
+        guard let defaults = sharedDefaults else { return }
+        if let productId {
+            defaults.set(productId, forKey: Keys.subscriptionTier)
+        } else {
+            defaults.removeObject(forKey: Keys.subscriptionTier)
+        }
+    }
+
+    static func currentSubscriptionTier() -> String? {
+        sharedDefaults?.string(forKey: Keys.subscriptionTier)
     }
 
     // MARK: - Impact & Streak Helpers
@@ -135,10 +139,10 @@ enum SharedSettings {
         static let todayUsage = "shared.usage.today"
         static let lastRollover = "shared.rollover.timestamp"
         static let unlockSuppressions = "shared.unlock.suppressions"
-        static let profileTotalDonation = "profile.totalDonation"
-        static let profileCharityTotals = "profile.charityTotals"
         static let profileUnlockStats = "profile.unlock.stats"
         static let subscriptionExpiration = "profile.subscription.expiration"
+        static let subscriptionTier = "profile.subscription.tier"
+        static let installationDate = "profile.installation.date"
     }
     
     static var sharedDefaults: UserDefaults? {
@@ -381,15 +385,50 @@ enum SharedSettings {
 
     // MARK: - Profile Metrics Aggregation
 
-    static func aggregatedDonationTotal() -> Double {
-        sharedDefaults?.double(forKey: Keys.profileTotalDonation) ?? 0
+    @discardableResult
+    static func installationDate() -> Date {
+        guard let defaults = sharedDefaults else { return Date() }
+        let timestamp = defaults.double(forKey: Keys.installationDate)
+        if timestamp > 0 {
+            return Date(timeIntervalSince1970: timestamp)
+        }
+        let now = Date()
+        defaults.set(now.timeIntervalSince1970, forKey: Keys.installationDate)
+        return now
     }
 
-    static func topCharities(limit: Int = 3) -> [CharityAggregate] {
-        let map = loadCharityAggregates()
-        let sorted = map.values.sorted { $0.amount > $1.amount }
-        guard limit > 0 else { return sorted }
-        return Array(sorted.prefix(limit))
+    static func monthIdentifier(for date: Date = Date()) -> String {
+        let components = Calendar.current.dateComponents([.year, .month], from: date)
+        let year = components.year ?? 0
+        let month = components.month ?? 1
+        return String(format: "%04d-%02d", year, month)
+    }
+
+    static func monthlyImpactPoints(reference date: Date = Date(), includeToday: Bool = false) -> Int {
+        let calendar = Calendar.current
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: date)) else {
+            return 0
+        }
+        let installStart = calendar.startOfDay(for: installationDate())
+        var cursor = max(startOfMonth, installStart)
+        var boundary = calendar.startOfDay(for: date)
+        if includeToday {
+            boundary = calendar.date(byAdding: .day, value: 1, to: boundary) ?? boundary
+        }
+        guard cursor < boundary else { return 0 }
+        var points = 0
+        while cursor < boundary {
+            if let stats = unlockStats(for: cursor) {
+                if stats.totalUnlocks == 0 {
+                    points += 1
+                }
+            } else if cursor >= installStart {
+                points += 1
+            }
+            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { break }
+            cursor = next
+        }
+        return points
     }
 
     static func unlockHistory() -> [UnlockStatsRecord] {
@@ -415,17 +454,13 @@ enum SharedSettings {
     static func recordUnlock(kind: UnlockEventKind) {
         var stats = loadUnlockStatsDictionary()
         let key = dayString(for: Date())
-        var record = stats[key] ?? UnlockStatsRecord(id: key, freeUnlocks: 0, dayPassUnlocks: 0, freeMinutes: 0, dayPassMinutes: 0)
+        var record = stats[key] ?? UnlockStatsRecord(id: key, freeUnlocks: 0, freeMinutes: 0)
 
         switch kind {
         case .free(let minutes):
             guard minutes > 0 else { break }
             record.freeUnlocks += 1
             record.freeMinutes += minutes
-        case .dayPass(let minutes):
-            guard minutes > 0 else { break }
-            record.dayPassUnlocks += 1
-            record.dayPassMinutes += minutes
         }
 
         stats[key] = record
@@ -476,34 +511,6 @@ enum SharedSettings {
         updateAnalyticsDaySummary(for: date) { summary in
             let current = summary.blockCount ?? 0
             summary.blockCount = current + count
-        }
-    }
-
-    static func recordDonation(amount: Double, charityId: String, charityName: String, on date: Date = Date()) {
-        guard amount > 0 else { return }
-        updateDonationAggregates(amount: amount, charityId: charityId, charityName: charityName)
-        updateAnalyticsDaySummary(for: date) { summary in
-            let currentTotal = summary.totalDonated ?? 0
-            summary.totalDonated = currentTotal + amount
-
-            var breakdown = summary.charityBreakdown ?? []
-            if let index = breakdown.firstIndex(where: { $0.charityId == charityId }) {
-                let existing = breakdown[index]
-                breakdown[index] = AnalyticsDaySummary.CharityContribution(
-                    charityId: charityId,
-                    displayName: existing.displayName ?? charityName,
-                    amount: existing.amount + amount
-                )
-            } else {
-                breakdown.append(
-                    AnalyticsDaySummary.CharityContribution(
-                        charityId: charityId,
-                        displayName: charityName,
-                        amount: amount
-                    )
-                )
-            }
-            summary.charityBreakdown = breakdown
         }
     }
 
@@ -595,36 +602,6 @@ enum SharedSettings {
 
     private static func analyticsSummaryURL(for day: String, base: URL) -> URL {
         base.appendingPathComponent("\(day).json", isDirectory: false)
-    }
-
-    private static func updateDonationAggregates(amount: Double, charityId: String, charityName: String) {
-        guard amount > 0 else { return }
-        if let defaults = sharedDefaults {
-            let total = (defaults.double(forKey: Keys.profileTotalDonation) + amount)
-            defaults.set(total, forKey: Keys.profileTotalDonation)
-        }
-
-        var totals = loadCharityAggregates()
-        var entry = totals[charityId] ?? CharityAggregate(id: charityId, name: charityName, amount: 0)
-        entry.name = charityName
-        entry.amount += amount
-        totals[charityId] = entry
-        saveCharityAggregates(totals)
-    }
-
-    private static func loadCharityAggregates() -> [String: CharityAggregate] {
-        guard
-            let data = sharedDefaults?.data(forKey: Keys.profileCharityTotals),
-            let totals = try? JSONDecoder().decode([String: CharityAggregate].self, from: data)
-        else {
-            return [:]
-        }
-        return totals
-    }
-
-    private static func saveCharityAggregates(_ totals: [String: CharityAggregate]) {
-        guard let data = try? JSONEncoder().encode(totals) else { return }
-        sharedDefaults?.set(data, forKey: Keys.profileCharityTotals)
     }
 
     private static func loadUnlockStatsDictionary() -> [String: UnlockStatsRecord] {

@@ -6,7 +6,7 @@ This document defines the complete user experience flow for MindLock, including 
 
 > **Fast MVP Update (Nov 2025)**  
 > - Navigation trimmed to two tabs: **Status** (current lock state + unlock CTA) and **Setup** (limits, charity). Analytics/Social/Profile are deferred.  
-> - Unlock flow now has only two paths: a free 30-second wait that grants 10 minutes, and a $0.99 Day Pass that unlocks until midnight with 15% of net revenue going to the selected charity.  
+- Unlock flow now has only two paths: a free 30-second wait that grants 10 minutes, and a MindLock+ subscription upsell that unlocks premium tools while funding the user’s charity.  
 > - Charity selection can be skipped during onboarding; we prompt again before the first paid unlock.  
 > - Difficulty tiers, multi-duration products, and per-app unlock paywalls have been removed to reduce friction.
 > 
@@ -43,7 +43,7 @@ Save → Limits Apply at Midnight
 ```
 App Usage Hits Limit → Blocking Screen → Unlock Prompt
     ↳ Option A: Wait 30 seconds → 10-minute unlock
-    ↳ Option B: Purchase $1 Day Pass → Unlock until midnight (15% net to charity)
+    ↳ Option B: Join MindLock+ → Unlock premium tools + donation tracking
 ```
 
 ### **Flow 4: Analytics & Progress**
@@ -79,16 +79,16 @@ _Deferred for MVP_
 - Usage analytics data
 
 ### **Module 2: Unlock & Payment System**
-**Purpose**: Present the two unlock choices and process the Day Pass receipt.
+**Purpose**: Present the two unlock choices and process MindLock+ subscription receipts.
 
 **Components:**
-- `UnlockPromptView` (wait vs. day pass UI + countdown)
-- `DailyLimitsManager.grantFreeUnlock / grantDayPass`
-- `PaymentManager` (StoreKit 2, single SKU `mindlock.daypass`)
+- `UnlockPromptView` (wait vs. MindLock+ UI + countdown)
+- `DailyLimitsManager.grantFreeUnlock`
+- `PaymentManager` (StoreKit 2, SKUs `mindlock.plus.monthly` / `mindlock.plus.annual`)
 
 **Key Functions:**
 - `startCountdown()` – Runs the 30-second wait, then grants a 10-minute temporary unlock.
-- `purchaseDayPass(charity)` – Triggers StoreKit purchase, validates receipt, donates 15% of net revenue, and unlocks until midnight.
+- `purchaseSubscription(charity)` – Triggers StoreKit, validates receipt, donates up to 20% of net revenue, and refreshes MindLock+ status.
 - `refreshBlockingNow()` – Reapplies ManagedSettings when the unlock expires.
 
 **Inputs:**
@@ -97,8 +97,8 @@ _Deferred for MVP_
 - StoreKit purchase callbacks
 
 **Outputs:**
-- Temporary unlock state (free or paid)
-- Donation ledger entries (via `SharedSettings.recordDonation`)
+- Temporary unlock state (free wait)
+- MindLock+ subscription status + donation ledger entries (via `SharedSettings.recordDonation`)
 - Blocking status updates for the Status tab
 
 ### **Module 3: Screen Time Integration**
@@ -140,7 +140,7 @@ _Deferred for MVP_
 
 **Inputs:**
 - User preference changes
-- Day Pass purchases
+- MindLock+ purchases
 - Configuration updates
 
 **Outputs:**
@@ -182,11 +182,11 @@ _Deferred for MVP_
 │ └─┘  Choose where day-pass fees go  │
 ├─────────────────────────────────────┤
 │ ┌─┐  Unlock Options                 │
-│ │🔓│  10m wait / $1 day pass   > │
+│ │🔓│  10m wait / MindLock+ upgrade  > │
 ├─────────────────────────────────────┤
 │          Quick Stats                │
 │   📊 3 apps configured              │
-│   💰 $0.13 per day pass donated     │
+│   💰 Up to 20% of MindLock+ net donated     │
 └─────────────────────────────────────┘
 ```
 

@@ -1,7 +1,7 @@
 # fast-mvp-backend – Lean, Best-Practice Stack
 
 Goal: ship the backend this week without cutting corners on correctness or security. Focus on:
-1. Verifying the single in-app purchase SKU (`mindlock.daypass`) and recording donation flows.
+1. Verifying the MindLock+ subscription SKUs (`mindlock.plus.monthly`, `mindlock.plus.annual`) and recording donation flows.
 2. Generating a trustworthy end-of-month donation report per charity.
 
 We keep scope tight, rely on pay-as-you-go managed services, and follow standard backend practices.
@@ -53,7 +53,7 @@ No other endpoints for MVP.
 2. **Worker**:
    - Fetch purchase + receipt, call Apple verify endpoint (`APPLE_VERIFY_RECEIPT_URL` from env).
    - Use shared secret (`APPLE_SHARED_SECRET`).
-   - Validate `productId` matches `mindlock.daypass`.
+   - Validate `productId` matches one of the MindLock+ subscription IDs.
    - If success and `apple_transaction_id` not seen:
      - Update purchase to `completed`.
      - Calculate revenue splits.
@@ -82,10 +82,10 @@ Optimistic client unlock is acceptable for now; Apple validation is authoritativ
 ## 5. Donation Math
 
 ```
-gross = product price ($0.99 default)
+gross = product price (tier price from StoreKit)
 appleFee = gross * 0.15  (Small Business Program)
 net = gross - appleFee
-donation = net * 0.15
+donation = net * 0.20   // up to 20% of net revenue
 platformRevenue = net - donation
 ```
 

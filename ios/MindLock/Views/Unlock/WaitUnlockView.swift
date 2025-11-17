@@ -16,6 +16,7 @@ struct WaitUnlockView: View {
     @State private var timeBlockContext: SharedSettings.ActiveTimeBlockState?
     @State private var showingBreakPicker = false
     @State private var selectedBreakMinutes: Int = 10
+    private let breakOptions: [Int] = Array(1...15) + [24 * 60]
     
     private let logoSize: CGFloat = 140
 
@@ -206,9 +207,14 @@ struct WaitUnlockView: View {
             }
 
             Picker("Minutes", selection: $selectedBreakMinutes) {
-                ForEach(1...15, id: \.self) { minute in
-                    Text("\(minute) minute\(minute == 1 ? "" : "s")")
-                        .font(DesignSystem.Typography.body)
+                ForEach(breakOptions, id: \.self) { minute in
+                    if minute == 24 * 60 {
+                        Text("Full day")
+                            .font(DesignSystem.Typography.body)
+                    } else {
+                        Text("\(minute) minute\(minute == 1 ? "" : "s")")
+                            .font(DesignSystem.Typography.body)
+                    }
                 }
             }
             .pickerStyle(.wheel)

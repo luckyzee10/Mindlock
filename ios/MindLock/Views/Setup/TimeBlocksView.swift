@@ -33,33 +33,37 @@ struct TimeBlocksView: View {
                     .foregroundColor(DesignSystem.Colors.textSecondary)
             } else {
                 ForEach(blocks) { block in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(block.name)
-                                .font(DesignSystem.Typography.body.weight(.semibold))
-                            Text("\(twoDigits(block.startHour)):\(twoDigits(block.startMinute)) – \(twoDigits(block.endHour)):\(twoDigits(block.endMinute)) · \(daysLabel(block))")
-                                .font(DesignSystem.Typography.caption)
-                                .foregroundColor(DesignSystem.Colors.textSecondary)
-                        }
-                        Spacer()
-                        Toggle("", isOn: binding(for: block))
-                            .labelsHidden()
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text(block.name)
+                            .font(DesignSystem.Typography.body.weight(.semibold))
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                        Text("\(twoDigits(block.startHour)):\(twoDigits(block.startMinute)) – \(twoDigits(block.endHour)):\(twoDigits(block.endMinute)) • \(daysLabel(block))")
+                            .font(DesignSystem.Typography.callout)
+                            .foregroundColor(DesignSystem.Colors.textSecondary)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     .contentShape(Rectangle())
                     .onTapGesture { presentingEditor = block }
                     .padding()
-                    .background(DesignSystem.Colors.surface.opacity(0.5))
-                    .cornerRadius(12)
-                    .contextMenu {
-                        Button(role: .destructive) { delete(block) } label: { Label("Delete", systemImage: "trash") }
-                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(DesignSystem.Colors.surface.opacity(0.6))
+                    .cornerRadius(DesignSystem.CornerRadius.md)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md)
+                            .stroke(block.enabled ? Color.green.opacity(0.7) : Color.red.opacity(0.7), lineWidth: 2)
+                    )
                 }
             }
         }
+        .padding(DesignSystem.Spacing.lg)
+        .background(DesignSystem.Colors.surfaceSecondary.opacity(0.5))
+        .cornerRadius(DesignSystem.CornerRadius.xl)
         .onAppear { blocks = SharedSettings.loadTimeBlocks() }
         .sheet(item: $presentingEditor) { block in
             TimeBlockEditor(block: block) { updated in
                 upsert(updated)
+            } onDelete: { deleted in
+                delete(deleted)
             }
         }
         .onChange(of: blocks) { _, newValue in
@@ -83,14 +87,6 @@ struct TimeBlocksView: View {
         blocks.removeAll { $0.id == block.id }
     }
 
-    private func binding(for block: SharedSettings.TimeBlock) -> Binding<Bool> {
-        let idx = blocks.firstIndex(where: { $0.id == block.id })!
-        return Binding<Bool>(
-            get: { blocks[idx].enabled },
-            set: { blocks[idx].enabled = $0 }
-        )
-    }
-
     private func twoDigits(_ n: Int) -> String { String(format: "%02d", n) }
     private func daysLabel(_ block: SharedSettings.TimeBlock) -> String {
         let map = [1:"S",2:"M",3:"T",4:"W",5:"T",6:"F",7:"S"]
@@ -100,12 +96,28 @@ struct TimeBlocksView: View {
 
 private struct TimeBlockEditor: View {
     @Environment(\.dismiss) private var dismiss
-    @State var block: SharedSettings.TimeBlock
+    @State private var block: SharedSettings.TimeBlock
     let onSave: (SharedSettings.TimeBlock) -> Void
+    let onDelete: (SharedSettings.TimeBlock) -> Void
 
     @State private var start = Date()
     @State private var end = Date()
     @State private var error: String?
+    @State private var showDisableConfirm = false
+    @State private var showDeleteConfirm = false
+    @State private var pendingDisable = false
+
+    init(block: SharedSettings.TimeBlock, onSave: @escaping (SharedSettings.TimeBlock) -> Void, onDelete: @escaping (SharedSettings.TimeBlock) -> Void) {
+        self._block = State(initialValue: block)
+        self.onSave = onSave
+        self.onDelete = onDelete
+        let calendar = Calendar.current
+        let now = Date()
+        let startDate = calendar.date(bySettingHour: block.startHour, minute: block.startMinute, second: 0, of: now) ?? now
+        let endDate = calendar.date(bySettingHour: block.endHour, minute: block.endMinute, second: 0, of: now) ?? now
+        self._start = State(initialValue: startDate)
+        self._end = State(initialValue: endDate)
+    }
 
     var body: some View {
         NavigationView {
@@ -139,7 +151,22 @@ private struct TimeBlockEditor: View {
                     }
                 }
                 Section {
-                    Toggle("Enabled", isOn: $block.enabled)
+                    Toggle("Enabled", isOn: Binding(
+                        get: { block.enabled },
+                        set: { newValue in
+                            if newValue {
+                                block.enabled = true
+                            } else {
+                                pendingDisable = true
+                                showDisableConfirm = true
+                            }
+                        }
+                    ))
+                    Button(role: .destructive) {
+                        showDeleteConfirm = true
+                    } label: {
+                        Label("Delete Time Block", systemImage: "trash")
+                    }
                 }
                 if let error { Text(error).foregroundColor(.red) }
             }
@@ -149,16 +176,25 @@ private struct TimeBlockEditor: View {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) { Button("Save") { save() } }
             }
-            .onAppear { hydrateTimes() }
+            .alert("Are you sure you want to proceed? This will turn off shielding for this time block.", isPresented: $showDisableConfirm) {
+                Button("Cancel", role: .cancel) {
+                    pendingDisable = false
+                }
+                Button("Proceed", role: .destructive) {
+                    if pendingDisable {
+                        block.enabled = false
+                    }
+                    pendingDisable = false
+                }
+            }
+            .alert("Are you sure? This time block will be deleted.", isPresented: $showDeleteConfirm) {
+                Button("Cancel", role: .cancel) {}
+                Button("Delete", role: .destructive) {
+                    onDelete(block)
+                    dismiss()
+                }
+            }
         }
-    }
-
-    private func hydrateTimes() {
-        var comps = DateComponents()
-        comps.hour = block.startHour; comps.minute = block.startMinute
-        start = Calendar.current.date(from: comps) ?? Date()
-        comps.hour = block.endHour; comps.minute = block.endMinute
-        end = Calendar.current.date(from: comps) ?? Date().addingTimeInterval(3600)
     }
 
     private func save() {

@@ -110,26 +110,13 @@ struct ProfileView: View {
                 }
                 Spacer()
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Mix")
+                    Text("Mindful unlocks")
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(DesignSystem.Colors.textSecondary)
-                    Text(viewModel.unlockMixText)
-                        .font(DesignSystem.Typography.body)
+                    Text("\(viewModel.freeUnlocks)")
+                        .font(DesignSystem.Typography.body.weight(.semibold))
                         .foregroundColor(DesignSystem.Colors.textPrimary)
                 }
-            }
-            
-            ProgressView(value: viewModel.unlockMixProgress)
-                .progressViewStyle(
-                    LinearProgressViewStyle(tint: DesignSystem.Colors.accent)
-                )
-                .frame(height: 6)
-                .clipShape(Capsule())
-            
-            HStack {
-                mixLegend(color: DesignSystem.Colors.accent, label: "Free", value: "\(viewModel.freeUnlocks)")
-                Spacer()
-                mixLegend(color: DesignSystem.Colors.primary, label: "MindLock+", value: "\(viewModel.dayPassUnlocks)")
             }
         }
         .padding()
@@ -155,14 +142,6 @@ struct ProfileView: View {
                     tint: DesignSystem.Colors.accent.opacity(0.9)
                 )
             }
-            usageCard(
-                title: "MindLock+ Minutes",
-                value: formatMinutes(viewModel.dayPassMinutes),
-                subtitle: "Full access windows",
-                icon: "infinity.circle.fill",
-                tint: DesignSystem.Colors.primary.opacity(0.85),
-                fullWidth: true
-            )
         }
     }
     
@@ -281,15 +260,6 @@ struct ProfileView: View {
         return String(format: "%.0fm", minutes)
     }
     
-    private func mixLegend(color: Color, label: String, value: String) -> some View {
-        HStack(spacing: 6) {
-            Circle().fill(color).frame(width: 10, height: 10)
-            Text("\(label) • \(value)")
-                .font(DesignSystem.Typography.caption)
-                .foregroundColor(DesignSystem.Colors.textSecondary)
-        }
-    }
-    
     private var deltaChip: some View {
         Group {
             if let delta = viewModel.unlockDelta {
@@ -359,17 +329,21 @@ private struct MetricCard: View {
     }
 }
 
+private struct ImpactCharity: Identifiable {
+    let id: String
+    let name: String
+    let amount: Double
+}
+
 private final class ProfileViewModel: ObservableObject {
     @Published var totalDonation: Double = 0
     @Published var monthDonation: Double = 0
-    @Published var topCharities: [SharedSettings.CharityAggregate] = []
+    @Published var topCharities: [ImpactCharity] = []
     @Published var totalUnlocks: Int = 0
     @Published var freeUnlocks: Int = 0
-    @Published var dayPassUnlocks: Int = 0
     @Published var unlockDelta: Double?
     @Published var estimatedUsageMinutes: Double = 0
     @Published var freeUnlockMinutes: Double = 0
-    @Published var dayPassMinutes: Double = 0
     @Published var totalImpactEvents: Int = 0
     
     private let apiClient: APIClient
@@ -397,15 +371,11 @@ private final class ProfileViewModel: ObservableObject {
         if let todayStats = history[todayKey] {
             totalUnlocks = todayStats.totalUnlocks
             freeUnlocks = todayStats.freeUnlocks
-            dayPassUnlocks = todayStats.dayPassUnlocks
             freeUnlockMinutes = todayStats.freeMinutes
-            dayPassMinutes = todayStats.dayPassMinutes
         } else {
             totalUnlocks = 0
             freeUnlocks = 0
-            dayPassUnlocks = 0
             freeUnlockMinutes = 0
-            dayPassMinutes = 0
         }
         
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today) ?? today
@@ -439,7 +409,7 @@ private final class ProfileViewModel: ObservableObject {
         monthDonation = Double(summary.monthDonationCents) / 100.0
         totalImpactEvents = summary.totalDonations
         topCharities = summary.charities.map {
-            SharedSettings.CharityAggregate(
+            ImpactCharity(
                 id: $0.charityId,
                 name: $0.charityName,
                 amount: Double($0.donationCents) / 100.0
@@ -449,10 +419,10 @@ private final class ProfileViewModel: ObservableObject {
     
     @MainActor
     private func applyLocalImpactFallback() {
-        totalDonation = SharedSettings.aggregatedDonationTotal()
+        totalDonation = 0
         monthDonation = 0
         totalImpactEvents = 0
-        topCharities = SharedSettings.topCharities(limit: 3)
+        topCharities = []
     }
     
     var averageDonationPerUnlock: Double {
@@ -460,15 +430,6 @@ private final class ProfileViewModel: ObservableObject {
         return totalDonation / Double(totalUnlocks)
     }
     
-    var unlockMixText: String {
-        if totalUnlocks == 0 { return "0 mindful · 0 extended" }
-        return "\(freeUnlocks) mindful · \(dayPassUnlocks) extended"
-    }
-    
-    var unlockMixProgress: Double {
-        guard totalUnlocks > 0 else { return 0.5 }
-        return Double(freeUnlocks) / Double(totalUnlocks)
-    }
 }
 
 private extension NumberFormatter {

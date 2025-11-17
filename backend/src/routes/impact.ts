@@ -9,6 +9,21 @@ const summaryQuerySchema = z.object({
   userId: z.string().min(1)
 });
 
+const monthlyBudgets = {
+  'mindlock.plus.monthly': 255, // cents
+  'mindlock.plus.annual': 204 // monthly allocation of annual donation
+} as const;
+
+const impactReportSchema = z.object({
+  userId: z.string().min(1),
+  userEmail: z.string().email().optional(),
+  subscriptionTier: z.enum(['mindlock.plus.monthly', 'mindlock.plus.annual']),
+  month: z.string().regex(/^[0-9]{4}-[0-9]{2}$/),
+  impactPoints: z.number().int().min(0),
+  streakDays: z.number().int().min(0).optional(),
+  multiplier: z.number().int().min(1).optional()
+});
+
 impactRouter.get('/summary', requireAppKey, async (req, res, next) => {
   try {
     const { userId } = summaryQuerySchema.parse(req.query);
@@ -67,6 +82,67 @@ impactRouter.get('/summary', requireAppKey, async (req, res, next) => {
       monthDonationCents,
       totalDonations: donations.length,
       charities
+    });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      res.status(400).json({ error: err.flatten() });
+      return;
+    }
+    next(err);
+  }
+});
+
+impactRouter.post('/report', requireAppKey, async (req, res, next) => {
+  try {
+    const payload = impactReportSchema.parse(req.body);
+    const { userId, userEmail, subscriptionTier, month, impactPoints, streakDays, multiplier } =
+      payload;
+
+    const budgetCents = monthlyBudgets[subscriptionTier];
+    if (budgetCents == null) {
+      throw new Error(`Unsupported tier: ${subscriptionTier}`);
+    }
+
+    const cappedPoints = Math.max(0, Math.min(impactPoints, 60));
+    const projectedDonationCents = Math.round((budgetCents * cappedPoints) / 60);
+
+    await prisma.$transaction(async (tx) => {
+      await tx.user.upsert({
+        where: { id: userId },
+        create: { id: userId, email: userEmail },
+        update: userEmail ? { email: userEmail } : {}
+      });
+
+      await tx.impactLedger.upsert({
+        where: { userId_month: { userId, month } },
+        update: {
+          subscriptionTier,
+          impactPoints,
+          cappedPoints,
+          streakDays: streakDays ?? null,
+          multiplier: multiplier ?? null,
+          budgetCents,
+          projectedDonationCents
+        },
+        create: {
+          userId,
+          month,
+          subscriptionTier,
+          impactPoints,
+          cappedPoints,
+          streakDays: streakDays ?? null,
+          multiplier: multiplier ?? null,
+          budgetCents,
+          projectedDonationCents
+        }
+      });
+    });
+
+    res.json({
+      month,
+      impactPoints,
+      cappedPoints,
+      projectedDonationCents
     });
   } catch (err) {
     if (err instanceof z.ZodError) {

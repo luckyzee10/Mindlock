@@ -73,15 +73,48 @@ export async function generateMonthlyReport(
     donationCents: aggregate.donationCents
   }));
 
+  const impactLedgers = await prisma.impactLedger.findMany({
+    where: { month: m }
+  });
+
+  let totalProjectedImpactCents = 0;
+  let totalImpactPoints = 0;
+  const impactByTier = new Map<
+    string,
+    { tier: string; reports: number; projectedDonationCents: number; points: number }
+  >();
+
+  for (const ledger of impactLedgers) {
+    totalProjectedImpactCents += ledger.projectedDonationCents;
+    totalImpactPoints += ledger.cappedPoints;
+    const existing = impactByTier.get(ledger.subscriptionTier) ?? {
+      tier: ledger.subscriptionTier,
+      reports: 0,
+      projectedDonationCents: 0,
+      points: 0
+    };
+    existing.reports += 1;
+    existing.projectedDonationCents += ledger.projectedDonationCents;
+    existing.points += ledger.cappedPoints;
+    impactByTier.set(ledger.subscriptionTier, existing);
+  }
+
   const payload: Prisma.InputJsonValue = {
     month: m,
     totals: {
       purchases: purchases.length,
       grossCents: totalGrossCents,
       netCents: totalNetCents,
-      donationCents: totalDonationCents
+      donationCents: totalDonationCents,
+      impactProjectedCents: totalProjectedImpactCents,
+      impactPoints: totalImpactPoints
     },
-    charities: charitySummaries
+    charities: charitySummaries,
+    impact: {
+      reports: impactLedgers.length,
+      tiers: Array.from(impactByTier.values()),
+      projectedDonationCents: totalProjectedImpactCents
+    }
   };
 
   await prisma.monthlyReport.upsert({

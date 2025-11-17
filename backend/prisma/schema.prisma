@@ -18,6 +18,7 @@ model User {
   email     String?   @unique
   createdAt DateTime  @default(now())
   purchases Purchase[]
+  impactLedgers ImpactLedger[]
 }
 
 model Charity {
@@ -67,4 +68,23 @@ model MonthlyReport {
   month       String   @unique
   generatedAt DateTime @default(now())
   payload     Json
+}
+
+model ImpactLedger {
+  id                     String   @id @default(cuid())
+  userId                 String
+  month                  String
+  subscriptionTier       String
+  impactPoints           Int
+  cappedPoints           Int
+  streakDays             Int?
+  multiplier             Int?
+  budgetCents            Int
+  projectedDonationCents Int
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, month])
 }

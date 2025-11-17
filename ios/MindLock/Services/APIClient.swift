@@ -32,6 +32,16 @@ struct ImpactSummaryResponse: Decodable {
     let charities: [Charity]
 }
 
+struct ImpactReportRequest: Encodable {
+    let userId: String
+    let userEmail: String?
+    let subscriptionTier: String
+    let month: String
+    let impactPoints: Int
+    let streakDays: Int
+    let multiplier: Int
+}
+
 enum APIError: LocalizedError {
     case invalidResponse
     case server(status: Int, message: String?)
@@ -106,6 +116,24 @@ final class APIClient {
             throw APIError.server(status: httpResponse.statusCode, message: message)
         }
         return try JSONDecoder().decode(ImpactSummaryResponse.self, from: data)
+    }
+
+    func submitImpactReport(_ requestBody: ImpactReportRequest) async throws {
+        let baseURL = try AppConfiguration.apiBaseURL()
+        let appKey = try AppConfiguration.appAPIKey()
+        let endpoint = baseURL.appendingPathComponent("v1/impact/report")
+        var urlRequest = URLRequest(url: endpoint)
+        urlRequest.httpMethod = "POST"
+        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.addValue(appKey, forHTTPHeaderField: "X-App-Key")
+        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
+        let (_, response) = try await session.data(for: urlRequest)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+        guard 200 ..< 300 ~= httpResponse.statusCode else {
+            throw APIError.server(status: httpResponse.statusCode, message: nil)
+        }
     }
 
     private func decodeErrorMessage(from data: Data) -> String? {

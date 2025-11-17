@@ -23,7 +23,9 @@
 		352FCECB3C8BDF2C65995F9B /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB25021D34AF3E41B45546F /* ManagedSettings.framework */; };
 		39E80BA1FED5CF2F2537020B /* UsageReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C5E3A6B632A4C2CFB2708 /* UsageReportExtension.swift */; };
 		3E7E5958915458440309CD7C /* CharitySelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C8C41E296E08F3CA1DE783 /* CharitySelectionView.swift */; };
+		45F0AE8E2A3D2B4800F2F63A /* MindLockUsageReportScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70FAD2682A3D2AF300082E25 /* MindLockUsageReportScreen.swift */; };
 		40E8A9088B6ED0C9F0386C64 /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C0F2800D3A460E95530C4D /* UserIdentity.swift */; };
+		4126D0F5286EE2270051C88B /* ImpactTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E2E3C9E29244570A26F0EA4 /* ImpactTracker.swift */; };
 		42D4BB4CE74C83D873983507 /* UnlockPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0B53ACD3D8E3036B31B02F /* UnlockPromptView.swift */; };
 		45A5B837B6840E87739BFBC1 /* _DeviceActivity_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7FB1A45FF439280D266B46 /* _DeviceActivity_SwiftUI.framework */; };
 		45B3C8E2AADE4C7F4FF97030 /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A3F47F0703167EB7D6A24F /* AppConfiguration.swift */; };
@@ -111,6 +113,7 @@
 		6756A0EAF273F757FE522BBF /* MindLockActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockActivityMonitor.swift; sourceTree = "<group>"; };
 		6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MindLockMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		6FD1CF0C274F44F899A3A31F /* TimeBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBlocksView.swift; sourceTree = "<group>"; };
+		70FAD2682A3D2AF300082E25 /* MindLockUsageReportScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockUsageReportScreen.swift; sourceTree = "<group>"; };
 		7662BF9E3F7187C88341E37D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		8098F56AB2E7C1320D1C769D /* MindLockShieldDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockShieldDataSource.swift; sourceTree = "<group>"; };
 		86F029AA5A0F24E92E7D1B81 /* MindLockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockApp.swift; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 		C5F0B38B3DB91420EAB37AA4 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
 		CE7FB1A45FF439280D266B46 /* _DeviceActivity_SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = _DeviceActivity_SwiftUI.framework; path = System/Library/Frameworks/_DeviceActivity_SwiftUI.framework; sourceTree = SDKROOT; };
 		D7C0F2800D3A460E95530C4D /* UserIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIdentity.swift; sourceTree = "<group>"; };
+		6E2E3C9E29244570A26F0EA4 /* ImpactTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImpactTracker.swift; sourceTree = "<group>"; };
 		DC0EAFF07C25ADBAC544671D /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		E8A3F47F0703167EB7D6A24F /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		E95EA241E11446FD4DD9F4C3 /* DailyLimitsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLimitsManager.swift; sourceTree = "<group>"; };
@@ -289,10 +293,19 @@
 				DC0EAFF07C25ADBAC544671D /* MainTabView.swift */,
 				A9EFACE751200239001CC011 /* Onboarding */,
 				A119AFF4FA6E6CD632C566E9 /* Profile */,
+				6D748E5B2A3D2CA400D7B57F /* Usage */,
 				09B7A385A7829880633BEA7D /* Setup */,
 				D3B7A20E68CE0E507D6F4770 /* Unlock */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		6D748E5B2A3D2CA400D7B57F /* Usage */ = {
+			isa = PBXGroup;
+			children = (
+				70FAD2682A3D2AF300082E25 /* MindLockUsageReportScreen.swift */,
+			);
+			path = Usage;
 			sourceTree = "<group>";
 		};
 		A119AFF4FA6E6CD632C566E9 /* Profile */ = {
@@ -340,6 +353,7 @@
 				E8A3F47F0703167EB7D6A24F /* AppConfiguration.swift */,
 				AA9E6E3E2B5230E1C5D8A6B1 /* APIClient.swift */,
 				D7C0F2800D3A460E95530C4D /* UserIdentity.swift */,
+				6E2E3C9E29244570A26F0EA4 /* ImpactTracker.swift */,
 				C5F0B38B3DB91420EAB37AA4 /* PaymentManager.swift */,
 			);
 			path = Services;
@@ -531,10 +545,12 @@
 				C1E786EC0E23D009BCAB0139 /* DailyLimitsManager.swift in Sources */,
 				092EB700AB874D7728EB7D47 /* DesignSystem.swift in Sources */,
 				8269A12B103172D5822CC056 /* MainTabView.swift in Sources */,
+				45F0AE8E2A3D2B4800F2F63A /* MindLockUsageReportScreen.swift in Sources */,
 				0D3E095C215A2D8650B47AE2 /* MindLockApp.swift in Sources */,
 				CE62A0D20A907E3FAC4751FF /* NotificationManager.swift in Sources */,
 				45B3C8E2AADE4C7F4FF97030 /* AppConfiguration.swift in Sources */,
 				1C04087A50B4EF7E1E6E6F7C /* APIClient.swift in Sources */,
+				4126D0F5286EE2270051C88B /* ImpactTracker.swift in Sources */,
 				40E8A9088B6ED0C9F0386C64 /* UserIdentity.swift in Sources */,
 				9F7120C16345266A8F47C3D9 /* PaymentManager.swift in Sources */,
 				0079351B2CD4BB1B47F1879A /* OnboardingView.swift in Sources */,
