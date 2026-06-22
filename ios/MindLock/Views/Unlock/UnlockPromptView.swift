@@ -96,6 +96,17 @@ struct UnlockPromptView: View {
                     .foregroundColor(DesignSystem.Colors.primary)
             }
 
+            if let days = SharedSettings.daysUntilNextImpactBoost(from: impactPoints) {
+                Text("Stay focused \(days == 0 ? "today" : "for \(days) more day\(days == 1 ? "" : "s")") to reach the next donation boost.")
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            } else {
+                Text("You’ve maxed out the current multiplier. Amazing work.")
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
         .padding()
         .background(DesignSystem.Colors.surface.opacity(0.7))

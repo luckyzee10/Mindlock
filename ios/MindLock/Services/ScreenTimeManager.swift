@@ -24,6 +24,8 @@ class ScreenTimeManager: ObservableObject {
     // Debug verbosity controls
     private let enableMonitoringHeartbeatLogs = false
     private var cancellables = Set<AnyCancellable>()
+    private var blockListSubscription: AnyCancellable?
+    private var manualTimeBlockWorkItems: [String: DispatchWorkItem] = [:]
     
     // Check if running on simulator
     private var isSimulator: Bool {
@@ -35,6 +37,7 @@ class ScreenTimeManager: ObservableObject {
     }
     
     init() {
+        selectedApps = BlockListManager.shared.selection
         updateAuthorizationStatus()
         loadSettings()
         print("🏗️ ScreenTimeManager initialized. selectedApps count: \(selectedApps.applicationTokens.count)")
@@ -51,6 +54,9 @@ class ScreenTimeManager: ObservableObject {
             .sink { [weak self] _ in self?.updateAuthorizationStatus() }
             .store(in: &cancellables)
 #endif
+        observeBlockList()
+        cleanupExpiredTimeBlocks()
+        enforceActiveTimeBlocksNow()
         // Avoid accessing DailyLimitsManager during our own initialization to prevent circular init.
         DispatchQueue.main.async { [weak self] in
             self?.debugState(tag: "post-init")
@@ -130,31 +136,8 @@ class ScreenTimeManager: ObservableObject {
         return authorizationStatus == .approved
     }
     
-    func updateSelectedApps(_ selection: FamilyActivitySelection) {
-        selectedApps = selection
-        saveSelectedApps()
-        refreshMonitoringSchedule(reason: "selection updated")
-        print("🔄 Updated selectedApps: \(selectedApps.applicationTokens.count) apps")
-        debugState(tag: "updateSelectedApps")
-    }
-    
-    private func saveSelectedApps() {
-        SharedSettings.persistSelection(selectedApps)
-        UserDefaults.standard.set(selectedApps.applicationTokens.count, forKey: "selectedAppsCount")
-        print("💾 Saved selected apps to shared app group")
-    }
-    
-    private func loadSelectedApps() {
-        if let data = SharedSettings.sharedDefaults?.data(forKey: "shared.selectionData"),
-           let selection = try? JSONDecoder().decode(FamilyActivitySelection.self, from: data) {
-            selectedApps = selection
-            print("📱 Restored \(selection.applicationTokens.count) selected app(s) from shared defaults")
-        } else {
-            let storedCount = SharedSettings.storedApplicationTokens().count
-            if storedCount > 0 {
-                print("📱 Shared defaults contain \(storedCount) app token(s) but selection data missing")
-            }
-        }
+    func updateSelectedApps(_ selection: FamilyActivitySelection, reason: String = "selection updated") {
+        BlockListManager.shared.update(selection: selection, reason: reason)
     }
     
     // MARK: - Screen Time Operations
@@ -198,6 +181,34 @@ class ScreenTimeManager: ObservableObject {
             print("🔒 Temporary unlock expired for \(tokens.count) app(s)")
         }
     }
+
+    func startReviewerBlock(duration: TimeInterval = 120) {
+        guard isAuthorized else {
+            print("⚠️ Cannot start reviewer block: Screen Time permissions missing")
+            return
+        }
+        let tokens = selectedApps.applicationTokens
+        guard !tokens.isEmpty else {
+            print("⚠️ Reviewer block aborted: no apps in block list")
+            return
+        }
+        let store = ManagedSettingsStore()
+        var shielded = store.shield.applications ?? []
+        let tokenSet = Set(tokens)
+        shielded.formUnion(tokenSet)
+        store.shield.applications = shielded
+        SharedSettings.setBlockingState(true)
+        print("🧪 Reviewer block started for \(tokenSet.count) app(s) for \(Int(duration)) seconds")
+        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            var current = store.shield.applications ?? []
+            current.subtract(tokenSet)
+            store.shield.applications = current
+            if current.isEmpty {
+                SharedSettings.setBlockingState(false)
+            }
+            print("🧪 Reviewer block ended")
+        }
+    }
     
     func updateDailyLimit(_ minutes: Int) {
         dailyLimitMinutes = minutes
@@ -216,6 +227,7 @@ class ScreenTimeManager: ObservableObject {
         do {
             try configureDailyMonitoring()
             try configureTimeBlockMonitoring()
+            enforceActiveTimeBlocksNow()
         } catch {
             print("❌ Failed to refresh monitoring: \(error)")
         }
@@ -227,7 +239,21 @@ class ScreenTimeManager: ObservableObject {
         if dailyLimitMinutes == 0 {
             dailyLimitMinutes = 120 // Default 2 hours
         }
-        loadSelectedApps()
+    }
+
+    private func observeBlockList() {
+        blockListSubscription = BlockListManager.shared.$selection
+            .receive(on: RunLoop.main)
+            .sink { [weak self] newSelection in
+                guard let self else { return }
+                self.selectedApps = newSelection
+                self.refreshMonitoringSchedule(reason: "block list updated")
+                self.debugState(tag: "block list update")
+            }
+    }
+
+    func enforceActiveTimeBlocksNow() {
+        syncTimeBlockStates()
     }
 
     private func configureDailyMonitoring() throws {
@@ -322,6 +348,91 @@ class ScreenTimeManager: ObservableObject {
             }
         }
         SharedSettings.saveMonitoredTimeBlockNames(startedNames)
+    }
+
+    private func cleanupExpiredTimeBlocks() {
+        let now = Date().timeIntervalSince1970
+        for state in SharedSettings.activeTimeBlockStates() where state.endsAt <= now {
+            clearTimeBlock(blockId: state.id)
+        }
+    }
+
+    private func syncTimeBlockStates() {
+        cleanupExpiredTimeBlocks()
+        let now = Date()
+        let blocks = SharedSettings.loadTimeBlocks()
+        let blockMap = Dictionary(uniqueKeysWithValues: blocks.map { ($0.id, $0) })
+
+        for state in SharedSettings.activeTimeBlockStates() {
+            guard let block = blockMap[state.id] else {
+                clearTimeBlock(blockId: state.id)
+                continue
+            }
+            if !block.enabled || !block.isSameDayValid() || !block.isActive(on: now) {
+                clearTimeBlock(blockId: state.id)
+            }
+        }
+
+        let refreshedStates = SharedSettings.activeTimeBlockStates().filter { $0.endsAt > now.timeIntervalSince1970 }
+        let activeIds = Set(refreshedStates.map { $0.id })
+        for block in blocks where block.enabled && block.isSameDayValid() && block.isActive(on: now) {
+            if !activeIds.contains(block.id) {
+                applyManualTimeBlock(block)
+            }
+        }
+    }
+
+    private func applyManualTimeBlock(_ block: SharedSettings.TimeBlock) {
+        guard isAuthorized else { return }
+        var tokens = BlockListManager.shared.selection.applicationTokens
+        guard !tokens.isEmpty else { return }
+        let suppress = SharedSettings.activeTemporaryUnlocks()
+        tokens = Set(tokens.filter { suppress[SharedSettings.tokenKey($0)] == nil })
+        guard !tokens.isEmpty else { return }
+
+        let store = ManagedSettingsStore()
+        var shielded = store.shield.applications ?? []
+        shielded.formUnion(tokens)
+        store.shield.applications = shielded
+
+        SharedSettings.setActiveTokens(Array(tokens), forBlockId: block.id)
+        let remaining = block.remainingSeconds()
+        guard remaining > 0 else { return }
+        let endsAt = Date().addingTimeInterval(remaining).timeIntervalSince1970
+        let state = SharedSettings.ActiveTimeBlockState(id: block.id, name: block.name, endsAt: endsAt)
+        SharedSettings.setActiveTimeBlockState(state, forBlockId: block.id)
+
+        manualTimeBlockWorkItems[block.id]?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.clearTimeBlock(blockId: block.id)
+        }
+        manualTimeBlockWorkItems[block.id] = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + remaining, execute: workItem)
+        print("🧱 Manually enforced Time Block \(block.name) for \(tokens.count) app(s)")
+    }
+
+    private func clearTimeBlock(blockId: String) {
+        manualTimeBlockWorkItems[blockId]?.cancel()
+        manualTimeBlockWorkItems.removeValue(forKey: blockId)
+
+        let tokensToRemove = Set(SharedSettings.activeTokens(forBlockId: blockId))
+        SharedSettings.clearActiveTokens(forBlockId: blockId)
+        SharedSettings.removeActiveTimeBlockState(forBlockId: blockId)
+        guard !tokensToRemove.isEmpty else { return }
+
+        var tokensStillNeeded = Set<ApplicationToken>()
+        for state in SharedSettings.activeTimeBlockStates() {
+            let tokens = SharedSettings.activeTokens(forBlockId: state.id)
+            tokensStillNeeded.formUnion(tokens)
+        }
+
+        let removable = tokensToRemove.subtracting(tokensStillNeeded)
+        guard !removable.isEmpty else { return }
+        let store = ManagedSettingsStore()
+        var shielded = store.shield.applications ?? []
+        shielded.subtract(removable)
+        store.shield.applications = shielded
+        print("🧱 Cleared Time Block \(blockId) shields for \(removable.count) app(s)")
     }
     
     // MARK: - Debug Methods

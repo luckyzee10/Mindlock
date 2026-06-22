@@ -3,6 +3,11 @@ import FamilyControls
 import ManagedSettings
 import UIKit
 
+enum SetupWalkthroughStep: Int {
+    case appLimits
+    case timeBlocks
+}
+
 private struct IdentifiedApplicationToken: Identifiable, Equatable {
     let token: ApplicationToken
     var id: String { SharedSettings.tokenKey(token) }
@@ -19,12 +24,14 @@ struct SetupView: View {
     @State private var tokenPendingWait: IdentifiedApplicationToken?
     @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
     @State private var showingMindLockPlusPaywall = false
-    
+    @AppStorage("setup.walkthrough.completed") private var setupWalkthroughCompleted = false
+    @State private var walkthroughStep: SetupWalkthroughStep?
+
     var body: some View {
         NavigationView {
             ZStack {
                 DesignSystem.Colors.background.ignoresSafeArea()
-                
+
                 ScrollView {
                     VStack(spacing: DesignSystem.Spacing.xl) {
                         // Header
@@ -33,48 +40,31 @@ struct SetupView: View {
                                 .font(DesignSystem.Typography.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(DesignSystem.Colors.textPrimary)
-                            
+
                             Text("Fine-tune your limits, charities, and unlock options")
                                 .font(DesignSystem.Typography.body)
                                 .foregroundColor(DesignSystem.Colors.textSecondary)
                                 .multilineTextAlignment(.center)
                         }
                         .padding(.top, DesignSystem.Spacing.lg)
-                        
-                        // App Limits Section
-                        AppLimitsSectionCard(
-                            selectedApps: screenTimeManager.selectedApps,
-                            limitsManager: limitsManager
-                        ) {
-                            showingAppLimits = true
-                        }
-                        
-                        // Charity Selection Section
-                        SetupSectionCard(
-                            title: "Your Charity",
-                            description: "Choose where your donations go",
-                            icon: "heart.fill",
-                            status: selectedCharity?.name ?? "Not selected",
-                            emoji: selectedCharity?.emoji,
-                            logoName: selectedCharity?.logoAssetName
-                        ) {
-                            showingCharitySelection = true
-                        }
 
-                        if !subscriptionActive {
-                            MindLockPlusPromoCard(selectedCharity: selectedCharity) {
-                                showingMindLockPlusPaywall = true
-                            }
-                        }
+                        appLimitsSection
 
                         // Time Blocks Section
-                        TimeBlocksView()
-                            .environmentObject(screenTimeManager)
-                            .padding(.top, DesignSystem.Spacing.lg)
+                        TimeBlocksView(
+                            walkthroughStep: $walkthroughStep,
+                            walkthroughComplete: $setupWalkthroughCompleted
+                        )
+                        .environmentObject(screenTimeManager)
+                        .padding(.top, DesignSystem.Spacing.lg)
 
-                        // Streak Card
-                        StreakCard(days: currentStreakDays)
-                        
+                        MindLockImpactSection(
+                            selectedCharity: selectedCharity,
+                            subscriptionActive: subscriptionActive,
+                            onSelectCharity: { showingCharitySelection = true },
+                            onSubscribe: { showingMindLockPlusPaywall = true }
+                        )
+
                         if !subscriptionActive && !reachedLimitTokens.isEmpty {
                             LimitReachedGlobalCard(
                                 tokens: reachedLimitTokens,
@@ -82,9 +72,11 @@ struct SetupView: View {
                                 mindLockPlusAction: { showingMindLockPlusPaywall = true }
                             )
                         }
-                        
+
 #if DEBUG
-                        SetupDebugActions(limitsManager: limitsManager)
+                        SetupDebugActions(screenTimeManager: screenTimeManager, limitsManager: limitsManager, showPaywall: {
+                            showingMindLockPlusPaywall = true
+                        })
 #endif
                     }
                     .padding(.horizontal, DesignSystem.Spacing.lg)
@@ -110,6 +102,10 @@ struct SetupView: View {
         .onAppear {
             loadUserPreferences()
             print("🏠 SetupView appeared. ScreenTimeManager selectedApps count: \(screenTimeManager.selectedApps.applicationTokens.count)")
+            let onboardingDone = UserDefaults.standard.bool(forKey: "onboardingCompleted")
+            if onboardingDone && !setupWalkthroughCompleted && walkthroughStep == nil {
+                walkthroughStep = .appLimits
+            }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             // Refresh data when app comes to foreground
@@ -126,7 +122,7 @@ struct SetupView: View {
             subscriptionActive = SharedSettings.isSubscriptionActive()
         }
     }
-    
+
     private func loadUserPreferences() {
         // Load selected charity – prefer id, fallback to legacy JSON blob
         if let charityId = UserDefaults.standard.string(forKey: "selectedCharityId"),
@@ -140,94 +136,114 @@ struct SetupView: View {
         } else {
             selectedCharity = nil
         }
-        
+
         print("📱 Loaded user preferences - Charity: \(selectedCharity?.name ?? "None")")
     }
 
     // Tokens that have reached today's limit (union of computed + recent blocks)
+    private var limitedTokensFromLimits: [ApplicationToken] {
+        let currentIDs = Set(limitsManager.currentLimits.appLimits.keys)
+        let pendingIDs = Set(limitsManager.pendingLimits.appLimits.keys)
+        let allIDs = currentIDs.union(pendingIDs)
+        return allIDs.compactMap { ApplicationToken(identifier: $0) }
+    }
+
     private var reachedLimitTokens: [ApplicationToken] {
-        let selected = screenTimeManager.selectedApps.applicationTokens
-        var set = Set<ApplicationToken>()
-        for t in selected { if limitsManager.hasExceededLimit(for: t) { set.insert(t) } }
-        for t in limitsManager.recentlyBlockedTokens { if selected.contains(t) { set.insert(t) } }
-        return Array(set)
+        // Depend on recentlyBlockedTokens for SwiftUI updates, but read canonical snapshot for accuracy.
+        _ = limitsManager.recentlyBlockedTokens
+        return Array(SharedSettings.currentShieldSnapshot().allTokens)
     }
 
     private var representativeToken: ApplicationToken? {
-        reachedLimitTokens.first ?? screenTimeManager.selectedApps.applicationTokens.first
+        reachedLimitTokens.first ?? limitedTokensFromLimits.first
     }
 
-    // Compute the number of consecutive days (starting today) with zero unlocks recorded
-    private var currentStreakDays: Int {
-        SharedSettings.consecutiveUnlockFreeDays()
+    private var appLimitsSection: some View {
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            if walkthroughStep == .appLimits {
+                SetupTooltip(
+                    text: "Set daily minutes per app. When you run out, MindLock locks that app until tomorrow.",
+                    actionTitle: "Next",
+                    arrow: .down
+                ) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+                        walkthroughStep = .timeBlocks
+                    }
+                }
+            }
+            AppLimitsSectionCard(
+                limitsManager: limitsManager
+            ) {
+                showingAppLimits = true
+            }
+        }
     }
-    
+
 }
 
 // MARK: - App Limits Section Card
 struct AppLimitsSectionCard: View {
-    let selectedApps: FamilyActivitySelection
     let limitsManager: DailyLimitsManager
     let action: () -> Void
-    
+
     private let maxDisplayedApps = 3
-    
+
+    private var limitedTokens: [ApplicationToken] {
+        let currentIDs = Set(limitsManager.currentLimits.appLimits.keys)
+        let pendingIDs = Set(limitsManager.pendingLimits.appLimits.keys)
+        let allIDs = currentIDs.union(pendingIDs)
+
+        let tokens = allIDs.compactMap { ApplicationToken(identifier: $0) }
+        return tokens.sorted { $0.identifier < $1.identifier }
+    }
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: DesignSystem.Spacing.lg) {
-                // Icon
                 ZStack {
                     Circle()
                         .fill(DesignSystem.Colors.primary.opacity(0.1))
                         .frame(width: 50, height: 50)
-                    
+
                     Image(systemName: "apps.iphone")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(DesignSystem.Colors.primary)
                 }
-                
-                // Content
+
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
                     Text("App Limits")
                         .font(DesignSystem.Typography.headline)
                         .foregroundColor(DesignSystem.Colors.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
+
                     Text("Set daily time limits for your apps")
                         .font(DesignSystem.Typography.callout)
                         .foregroundColor(DesignSystem.Colors.textSecondary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                                         // App icons or status
-                     if selectedApps.applicationTokens.isEmpty {
-                         Text("Not configured")
-                             .font(DesignSystem.Typography.caption)
-                             .foregroundColor(DesignSystem.Colors.primary)
-                             .frame(maxWidth: .infinity, alignment: .leading)
-                     } else {
-                                                HStack(spacing: DesignSystem.Spacing.xs) {
-                             // Convert set to sorted array to ensure consistent ordering
-                             let sortedTokens = Array(selectedApps.applicationTokens).sorted { $0.identifier < $1.identifier }
-                             
-                             // Show up to 3 app icons
-                             ForEach(Array(sortedTokens.prefix(maxDisplayedApps).enumerated()), id: \.offset) { index, token in
-                                 Label(token)
-                                     .labelStyle(.iconOnly)
-                                     .frame(width: 20, height: 20)
-                             }
-                             
-                             // Show +X if there are more apps
-                             if selectedApps.applicationTokens.count > maxDisplayedApps {
-                                 Text("+\(selectedApps.applicationTokens.count - maxDisplayedApps)")
-                                     .font(DesignSystem.Typography.caption)
-                                     .foregroundColor(DesignSystem.Colors.primary)
-                                     .fontWeight(.medium)
-                             }
-                         }
+
+                    if limitedTokens.isEmpty {
+                        Text("Not configured")
+                            .font(DesignSystem.Typography.caption)
+                            .foregroundColor(DesignSystem.Colors.primary)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    } else {
+                        HStack(spacing: DesignSystem.Spacing.xs) {
+                            ForEach(Array(limitedTokens.prefix(maxDisplayedApps).enumerated()), id: \.offset) { _, token in
+                                Label(token)
+                                    .labelStyle(.iconOnly)
+                                    .frame(width: 20, height: 20)
+                            }
+
+                            if limitedTokens.count > maxDisplayedApps {
+                                Text("+\(limitedTokens.count - maxDisplayedApps)")
+                                    .font(DesignSystem.Typography.caption)
+                                    .foregroundColor(DesignSystem.Colors.primary)
+                                    .fontWeight(.medium)
+                            }
+                        }
                     }
                 }
-                
-                // Arrow
+
                 Image(systemName: "chevron.right")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundColor(DesignSystem.Colors.textTertiary)
@@ -241,208 +257,12 @@ struct AppLimitsSectionCard: View {
     }
 }
 
-// MARK: - Streak Card
-private struct StreakCard: View {
-    let days: Int
-
-    var body: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
-            // Centered title + subtitle
-            VStack(spacing: 4) {
-                Text("Streak")
-                    .font(DesignSystem.Typography.headline)
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .multilineTextAlignment(.center)
-                Text(subtitle)
-                    .font(DesignSystem.Typography.callout)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
-            }
-
-            // Centered flame between text and progress bar
-            Image(systemName: "flame.fill")
-                .font(.system(size: 28, weight: .semibold))
-                .foregroundColor(fireColor)
-                .shadow(color: fireColor.opacity(0.35), radius: days == 0 ? 0 : 6)
-
-            // Segmented line (not pill), with subtle separators
-            VStack(spacing: 8) {
-                GeometryReader { geo in
-                    let width = geo.size.width
-                    let ratio = min(Double(days), 28.0) / 28.0
-                    let trackColor = DesignSystem.Colors.textTertiary.opacity(days == 0 ? 0.35 : 0.22)
-                    let separatorColor = DesignSystem.Colors.textTertiary.opacity(days == 0 ? 0.35 : 0.25)
-                    ZStack(alignment: .leading) {
-                        // Base line (always visible, greyed out at 0)
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(trackColor)
-                            .frame(height: 8)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(DesignSystem.Colors.textTertiary.opacity(0.12), lineWidth: 1)
-                            )
-
-                        // Filled portion
-                        RoundedRectangle(cornerRadius: 4)
-                            .fill(barGradient)
-                            .frame(width: width * ratio, height: 8)
-
-                        // Tick separators (no dots)
-                        HStack(spacing: 0) {
-                            ForEach(1..<5, id: \.self) { _ in
-                                Spacer()
-                                Rectangle()
-                                    .fill(separatorColor)
-                                    .frame(width: 1, height: 8)
-                            }
-                            Spacer(minLength: 0)
-                        }
-                    }
-                }
-                .frame(height: 8)
-
-                // Centered numeric label
-                Text("\(days) \(days == 1 ? "day" : "days")")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-
-                Text("Impact multiplier ×\(SharedSettings.impactMultiplier(forStreak: days))")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-
-                if days >= 28 {
-                    Text("You’ve maxed out this month’s boost.")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(DesignSystem.Colors.textTertiary)
-                }
-            }
-        }
-        .padding(DesignSystem.Spacing.lg)
-        .frame(maxWidth: .infinity)
-        .background(DesignSystem.Colors.surface)
-        .cornerRadius(DesignSystem.CornerRadius.xl)
-    }
-
-    private var subtitle: String {
-        if days == 0 { return "Start your streak" }
-        return "Keep going to amplify donations"
-    }
-
-    private var fireColor: Color {
-        switch days {
-        case 0:
-            return DesignSystem.Colors.textTertiary
-        case 1..<7:
-            return .yellow
-        case 7..<14:
-            return .orange
-        case 14..<21:
-            return Color.orange.opacity(0.9)
-        case 21..<28:
-            return Color(red: 1.0, green: 0.6, blue: 0.2)
-        default:
-            return .red
-        }
-    }
-
-    private var barGradient: LinearGradient {
-        let start = Color.yellow
-        let end = Color.red
-        return LinearGradient(colors: [start, end], startPoint: .leading, endPoint: .trailing)
-    }
-}
-
-#if DEBUG
-struct StreakCard_Previews: PreviewProvider {
-    static var previews: some View {
-        Group {
-            VStack(spacing: 16) {
-                StreakCard(days: 0)
-                StreakCard(days: 1)
-                StreakCard(days: 2)
-                StreakCard(days: 3)
-                StreakCard(days: 4)
-                StreakCard(days: 5)
-                StreakCard(days: 12) // beyond 5, bar stays full, count continues
-            }
-            .padding()
-            .background(DesignSystem.Colors.background)
-            .previewDisplayName("Streak Levels 0–5+")
-        }
-    }
-}
-#endif
-
-// MARK: - Setup Section Card
-struct SetupSectionCard: View {
-    let title: String
-    let description: String
-    let icon: String
-    let status: String
-    let emoji: String?
-    let logoName: String?
-    let action: () -> Void
-    
-    var body: some View {
-        Button(action: action) {
-            HStack(spacing: DesignSystem.Spacing.lg) {
-                // Icon
-                if let logoName = logoName, let uiImage = UIImage(named: logoName) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40)
-                        .clipShape(RoundedRectangle(cornerRadius: 8))
-                } else {
-                    ZStack {
-                        Circle()
-                            .fill(DesignSystem.Colors.primary.opacity(0.1))
-                            .frame(width: 50, height: 50)
-                        if let emoji = emoji, !emoji.isEmpty {
-                            Text(emoji)
-                                .font(.system(size: 24))
-                        } else {
-                            Image(systemName: icon)
-                                .font(.system(size: 20, weight: .medium))
-                                .foregroundColor(DesignSystem.Colors.primary)
-                        }
-                    }
-                }
-                
-                // Content
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                    Text(title)
-                        .font(DesignSystem.Typography.headline)
-                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Text(description)
-                        .font(DesignSystem.Typography.callout)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    
-                    Text(status)
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(DesignSystem.Colors.primary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                
-                // Arrow
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(DesignSystem.Colors.textTertiary)
-            }
-            .padding(DesignSystem.Spacing.lg)
-            .background(DesignSystem.Colors.surface)
-            .cornerRadius(DesignSystem.CornerRadius.lg)
-        }
-        .buttonStyle(PlainButtonStyle())
-    }
-}
 
 #if DEBUG
 private struct SetupDebugActions: View {
+    @ObservedObject var screenTimeManager: ScreenTimeManager
     @ObservedObject var limitsManager: DailyLimitsManager
+    let showPaywall: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
@@ -457,6 +277,33 @@ private struct SetupDebugActions: View {
                 HStack {
                     Image(systemName: "bolt.fill")
                     Text("Force Block Selected Apps")
+                    Spacer()
+                }
+                .padding()
+                .background(DesignSystem.Colors.surfaceSecondary)
+                .cornerRadius(DesignSystem.CornerRadius.md)
+            }
+            .buttonStyle(.plain)
+
+            Button(action: showPaywall) {
+                HStack {
+                    Image(systemName: "creditcard")
+                    Text("Show MindLock+ Paywall")
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding()
+                .background(DesignSystem.Colors.surfaceSecondary)
+                .cornerRadius(DesignSystem.CornerRadius.md)
+            }
+            .buttonStyle(.plain)
+
+            Button {
+                screenTimeManager.startReviewerBlock()
+            } label: {
+                HStack {
+                    Image(systemName: "eye")
+                    Text("Start 2-min Reviewer Block")
                     Spacer()
                 }
                 .padding()
@@ -543,7 +390,7 @@ private struct LimitReachedGlobalCard: View {
         return "\(count) Apps Limited"
     }
 
-    private var detailLine: String {    
+    private var detailLine: String {
         let count = tokens.count
         if count == 1 {
             return "1 app is being limited by MindLock."
@@ -553,13 +400,15 @@ private struct LimitReachedGlobalCard: View {
     }
 }
 
-private struct MindLockPlusPromoCard: View {
+private struct MindLockImpactSection: View {
     let selectedCharity: Charity?
-    let action: () -> Void
+    let subscriptionActive: Bool
+    let onSelectCharity: () -> Void
+    let onSubscribe: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            Text("MindLock+ Impact")
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            Text("MindLock Impact")
                 .font(DesignSystem.Typography.headline)
                 .foregroundColor(DesignSystem.Colors.textPrimary)
 
@@ -567,16 +416,67 @@ private struct MindLockPlusPromoCard: View {
                 .font(DesignSystem.Typography.callout)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
 
-            Button(action: action) {
-                Label {
-                    Text("Join MindLock+")
-                        .fontWeight(.semibold)
-                } icon: {
-                    Image(systemName: "sparkles")
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+                HStack {
+                    Text("Your charity")
+                        .font(DesignSystem.Typography.subheadline)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                    Spacer()
+                    Button(selectedCharity == nil ? "Choose" : "Change") {
+                        onSelectCharity()
+                    }
+                    .font(DesignSystem.Typography.footnote.bold())
                 }
-                .frame(maxWidth: .infinity)
+
+                if let charity = selectedCharity {
+                    HStack(spacing: DesignSystem.Spacing.md) {
+                        if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 36, height: 36)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        } else {
+                            Text(charity.emoji)
+                                .font(.system(size: 28))
+                                .frame(width: 36, height: 36)
+                        }
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(charity.name)
+                                .font(DesignSystem.Typography.body.weight(.semibold))
+                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                            Text(charity.description)
+                                .font(DesignSystem.Typography.caption)
+                                .foregroundColor(DesignSystem.Colors.textSecondary)
+                                .lineLimit(2)
+                        }
+                    }
+                } else {
+                    Text("Select a charity to direct MindLock+ donations.")
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                }
             }
-            .mindLockButton(style: .primary)
+            .padding()
+            .background(DesignSystem.Colors.surface.opacity(0.6))
+            .cornerRadius(DesignSystem.CornerRadius.lg)
+
+            if subscriptionActive {
+                Text("MindLock+ is active. Your focus streaks power monthly donations.")
+                    .font(DesignSystem.Typography.footnote)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+            } else {
+                Button(action: onSubscribe) {
+                    Label {
+                        Text("Join MindLock+")
+                            .fontWeight(.semibold)
+                    } icon: {
+                        Image(systemName: "sparkles")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                .mindLockButton(style: .impact)
+            }
         }
         .padding(DesignSystem.Spacing.lg)
         .background(DesignSystem.Colors.surface.opacity(0.5))
@@ -586,17 +486,11 @@ private struct MindLockPlusPromoCard: View {
     private var description: String {
         if let charity = selectedCharity {
             return """
-turn your time saved into real-world impact:
-- Earn streaks
-- accumulate impact points
-- unlock donations to \(charity.name).
+Turn your saved time into real-world impact: earn streaks, accumulate impact points, and unlock donations to \(charity.name).
 """
         }
         return """
-turn your time saved into real-world impact:
-- Earn streaks
-- accumulate impact points
-- unlock donations to your chosen charity.
+Turn your saved time into real-world impact: earn streaks, accumulate impact points, and unlock donations to your chosen charity.
 """
     }
 }
@@ -626,7 +520,7 @@ struct AppLimitsSetupView: View {
     @State private var showDiscardChangesAlert = false
     // Collapsible Pending Changes
     @State private var pendingExpanded: Bool = false
-    
+
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -766,7 +660,7 @@ struct AppLimitsSetupView: View {
         .padding(.horizontal, DesignSystem.Spacing.lg)
         .padding(.bottom, DesignSystem.Spacing.xxl)
     }
-    
+
     // Removed top selected count banner per updated UX
 
     // MARK: - Pending Changes Section
@@ -855,44 +749,36 @@ struct AppLimitsSetupView: View {
     }
 
     private func loadAppLimits() {
-        // Try to load from the main screen time manager first (current session)
-        localSelection = screenTimeManager.selectedApps
-        
-        // If that's empty, try to load from saved data
-        if localSelection.applicationTokens.isEmpty {
-            if let data = UserDefaults.standard.data(forKey: "selectedApps") {
-                do {
-                    localSelection = try JSONDecoder().decode(FamilyActivitySelection.self, from: data)
-                } catch {
-                    print("❌ Failed to load selected apps: \(error)")
-                    localSelection = FamilyActivitySelection()
-                }
-            }
-        }
-        
-        // Build UI time limits from active/pending limits (not UserDefaults)
+        let currentIDs = Set(limitsManager.currentLimits.appLimits.keys)
+        let pendingIDs = Set(limitsManager.pendingLimits.appLimits.keys)
+        let allIDs = currentIDs.union(pendingIDs)
+
+        var selection = FamilyActivitySelection()
+        var tokens: Set<ApplicationToken> = []
         var uiLimits: [String: Int] = [:]
-        for token in localSelection.applicationTokens {
-            let id = token.identifier
+
+        for id in allIDs {
+            guard let token = ApplicationToken(identifier: id) else { continue }
+            tokens.insert(token)
             if let seconds = limitsManager.getCurrentLimit(for: token) {
                 uiLimits[id] = max(1, Int(seconds) / 60)
-            } else if let pSeconds = limitsManager.getPendingLimit(for: token) {
-                uiLimits[id] = max(1, Int(pSeconds) / 60)
+            } else if let pendingSeconds = limitsManager.getPendingLimit(for: token) {
+                uiLimits[id] = max(1, Int(pendingSeconds) / 60)
             } else {
                 uiLimits[id] = 20
             }
         }
-        appTimeLimits = uiLimits
 
-        // Capture originals for dirty-state detection
+        selection.applicationTokens = tokens
+        localSelection = selection
+        appTimeLimits = uiLimits
         originalSelection = localSelection
         originalTimeLimits = appTimeLimits
-
     }
-    
+
     private func saveAppLimitsWithPolicy() {
         pendingImmediateOps.removeAll(); pendingDeferredOps.removeAll()
-        let currentTokens = Set(screenTimeManager.selectedApps.applicationTokens.map { $0.identifier })
+        let currentTokens = Set(originalSelection.applicationTokens.map { $0.identifier })
         let newTokens = Set(localSelection.applicationTokens.map { $0.identifier })
         let additions = newTokens.subtracting(currentTokens)
         let removals = currentTokens.subtracting(newTokens)
@@ -1065,9 +951,9 @@ struct AppLimitCard: View {
     let applicationToken: ApplicationToken
     @Binding var timeLimit: Int
     let reachedLimit: Bool
-    
+
     private let timeLimitOptions = [10, 15, 20, 30, 45, 60, 90, 120, 180, 240] // Minutes
-    
+
     var body: some View {
         HStack {
             // Use FamilyControls Label - the official App Store compliant way
@@ -1089,7 +975,7 @@ struct AppLimitCard: View {
                         .font(DesignSystem.Typography.body)
                         .fontWeight(.medium)
                         .foregroundColor(reachedLimit ? DesignSystem.Colors.accent : DesignSystem.Colors.primary)
-                    
+
                     Image(systemName: "chevron.down")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(reachedLimit ? DesignSystem.Colors.accent : DesignSystem.Colors.primary)
@@ -1105,7 +991,7 @@ struct AppLimitCard: View {
         .background(reachedLimit ? DesignSystem.Colors.accent.opacity(0.06) : DesignSystem.Colors.surface)
         .cornerRadius(DesignSystem.CornerRadius.md)
     }
-    
+
     private func formatTime(_ minutes: Int) -> String {
         if minutes < 60 {
             return "\(minutes)m"

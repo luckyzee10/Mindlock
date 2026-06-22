@@ -30,6 +30,7 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
             store.shield.applications = [] as Set<ApplicationToken>
             SharedSettings.setBlockingState(false)
             SharedSettings.clearLimitEvent()
+            SharedSettings.clearLimitShieldTokens()
             print("🌅 Cleared shields and refreshed limits for new interval")
         } else if activity.rawValue.hasPrefix("tb_") {
             // Time Block start: if the block is active today, apply shields for selected apps (respect unlocks)
@@ -132,6 +133,7 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
         }
 
         SharedSettings.storeLimitEvent(name: event.rawValue, blockedTokens: Array(tokensToShield))
+        SharedSettings.addLimitShieldTokens(tokensToShield)
 
         let store = ManagedSettingsStore()
         var shielded = store.shield.applications ?? []

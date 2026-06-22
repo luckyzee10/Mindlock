@@ -2,10 +2,35 @@ import SwiftUI
 
 struct TimeBlocksView: View {
     @EnvironmentObject private var screenTimeManager: ScreenTimeManager
+    @Binding var walkthroughStep: SetupWalkthroughStep?
+    @Binding var walkthroughComplete: Bool
     @State private var blocks: [SharedSettings.TimeBlock] = []
     @State private var presentingEditor: SharedSettings.TimeBlock?
+    @State private var showingBlockListEditor = false
+    @State private var showEmptyBlockListAlert = false
+    @AppStorage("tooltip.firstBlockPrompt.seen") private var firstBlockPromptSeen = false
+    @State private var showFirstBlockPrompt = false
 
     var body: some View {
+        VStack(spacing: DesignSystem.Spacing.sm) {
+            if walkthroughStep == .timeBlocks {
+                SetupTooltip(
+                    text: "Schedule focus sessions. When a block runs, every app on your Block List is locked.",
+                    actionTitle: "Got it",
+                    arrow: .down
+                ) {
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.85)) {
+                        walkthroughComplete = true
+                        walkthroughStep = nil
+                    }
+                    initializePromptState()
+                }
+            }
+            cardContent
+        }
+    }
+
+    private var cardContent: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text("Time Blocks")
@@ -13,19 +38,25 @@ struct TimeBlocksView: View {
                     .foregroundColor(DesignSystem.Colors.textPrimary)
                 Spacer()
                 Button {
-                    presentingEditor = SharedSettings.TimeBlock(
-                        id: UUID().uuidString,
-                        name: "My Block",
-                        startHour: 9, startMinute: 0,
-                        endHour: 17, endMinute: 0,
-                        daysOfWeek: Set([2,3,4,5,6]), // Mon–Fri
-                        enabled: true
-                    )
+                    if screenTimeManager.selectedApps.applicationTokens.isEmpty {
+                        showEmptyBlockListAlert = true
+                    } else {
+                        presentingEditor = SharedSettings.TimeBlock(
+                            id: UUID().uuidString,
+                            name: "My Block",
+                            startHour: 9, startMinute: 0,
+                            endHour: 17, endMinute: 0,
+                            daysOfWeek: Set([2,3,4,5,6]), // Mon–Fri
+                            enabled: true
+                        )
+                    }
                 } label: {
                     Image(systemName: "plus.circle.fill")
                         .font(.title3)
                 }
             }
+
+            blockListSummary
 
             if blocks.isEmpty {
                 Text("Block selected apps during specific hours. Free breaks still apply.")
@@ -58,7 +89,22 @@ struct TimeBlocksView: View {
         .padding(DesignSystem.Spacing.lg)
         .background(DesignSystem.Colors.surfaceSecondary.opacity(0.5))
         .cornerRadius(DesignSystem.CornerRadius.xl)
-        .onAppear { blocks = SharedSettings.loadTimeBlocks() }
+        .overlay(alignment: .topTrailing) {
+            if showFirstBlockPrompt {
+                SetupTooltip(text: "Tap the + button to create your first Time Block.", arrow: .down) {
+                    showFirstBlockPrompt = false
+                    firstBlockPromptSeen = true
+                }
+                .padding()
+            }
+        }
+        .onAppear {
+            blocks = SharedSettings.loadTimeBlocks()
+            initializePromptState()
+        }
+        .sheet(isPresented: $showingBlockListEditor) {
+            BlockListEditorView()
+        }
         .sheet(item: $presentingEditor) { block in
             TimeBlockEditor(block: block) { updated in
                 upsert(updated)
@@ -66,9 +112,26 @@ struct TimeBlocksView: View {
                 delete(deleted)
             }
         }
+        .alert("Block list needed", isPresented: $showEmptyBlockListAlert) {
+            Button("Add Apps") {
+                showingBlockListEditor = true
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Add apps to your Block List before creating a Time Block.")
+        }
         .onChange(of: blocks) { _, newValue in
             SharedSettings.saveTimeBlocks(newValue)
             screenTimeManager.refreshMonitoringSchedule(reason: "time blocks updated")
+            screenTimeManager.enforceActiveTimeBlocksNow()
+            if newValue.isEmpty {
+                if walkthroughComplete && !firstBlockPromptSeen {
+                    showFirstBlockPrompt = true
+                }
+            } else {
+                showFirstBlockPrompt = false
+                firstBlockPromptSeen = true
+            }
         }
     }
 
@@ -85,6 +148,63 @@ struct TimeBlocksView: View {
 
     private func delete(_ block: SharedSettings.TimeBlock) {
         blocks.removeAll { $0.id == block.id }
+    }
+
+    private func initializePromptState() {
+        if walkthroughComplete && !firstBlockPromptSeen && blocks.isEmpty {
+            showFirstBlockPrompt = true
+        } else {
+            showFirstBlockPrompt = false
+        }
+    }
+
+    private var blockListSummary: some View {
+        Button {
+            showingBlockListEditor = true
+        } label: {
+            VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+                HStack {
+                    Text("Block List")
+                        .font(DesignSystem.Typography.callout)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundColor(DesignSystem.Colors.textTertiary)
+                }
+                Text("These apps pause whenever a Time Block runs.")
+                    .font(DesignSystem.Typography.footnote)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+
+                if screenTimeManager.selectedApps.applicationTokens.isEmpty {
+                    Text("No apps yet. Add apps so Time Blocks know what to lock.")
+                        .font(DesignSystem.Typography.footnote)
+                        .foregroundColor(DesignSystem.Colors.textTertiary)
+                } else {
+                    let tokens = Array(screenTimeManager.selectedApps.applicationTokens).sorted { $0.identifier < $1.identifier }
+                    HStack(spacing: DesignSystem.Spacing.xs) {
+                        ForEach(Array(tokens.prefix(3).enumerated()), id: \.offset) { _, token in
+                            Label(token)
+                                .labelStyle(.iconOnly)
+                                .frame(width: 28, height: 28)
+                                .background(DesignSystem.Colors.primary.opacity(0.08))
+                                .cornerRadius(10)
+                        }
+                        if tokens.count > 3 {
+                            Text("+\(tokens.count - 3)")
+                                .font(DesignSystem.Typography.footnote)
+                                .foregroundColor(DesignSystem.Colors.textSecondary)
+                                .fontWeight(.medium)
+                        }
+                    }
+                }
+            }
+            .padding(DesignSystem.Spacing.md)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(DesignSystem.Colors.surface.opacity(0.7))
+            .cornerRadius(DesignSystem.CornerRadius.lg)
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 
     private func twoDigits(_ n: Int) -> String { String(format: "%02d", n) }

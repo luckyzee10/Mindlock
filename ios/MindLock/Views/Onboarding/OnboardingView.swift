@@ -925,65 +925,6 @@ struct ScreenTimePermissionView: View {
 }
 
 // MARK: - Real App Limit Card (App Store Compliant)
-struct RealAppLimitCard: View {
-    let applicationToken: ApplicationToken
-    @Binding var timeLimit: Int
-    
-    private let timeLimitOptions = [10, 15, 20, 30, 45, 60, 90, 120, 180, 240] // Minutes
-    
-    var body: some View {
-        HStack {
-            // Use FamilyControls Label - the official App Store compliant way
-            // This automatically displays the real app icon and name
-            Label(applicationToken)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Spacer()
-            
-            // Time picker
-            Menu {
-                ForEach(timeLimitOptions, id: \.self) { minutes in
-                    Button(formatTime(minutes)) {
-                        timeLimit = minutes
-                    }
-                }
-            } label: {
-                HStack(spacing: 4) {
-                    Text(formatTime(timeLimit))
-                        .font(DesignSystem.Typography.body)
-                        .fontWeight(.medium)
-                        .foregroundColor(DesignSystem.Colors.primary)
-                    
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundColor(DesignSystem.Colors.primary)
-                }
-                .padding(.horizontal, DesignSystem.Spacing.md)
-                .padding(.vertical, DesignSystem.Spacing.sm)
-                .background(DesignSystem.Colors.primary.opacity(0.1))
-                .cornerRadius(DesignSystem.CornerRadius.sm)
-            }
-        }
-        .padding(DesignSystem.Spacing.md)
-        .background(DesignSystem.Colors.surface)
-        .cornerRadius(DesignSystem.CornerRadius.md)
-    }
-    
-    private func formatTime(_ minutes: Int) -> String {
-        if minutes < 60 {
-            return "\(minutes)m"
-        } else {
-            let hours = minutes / 60
-            let remainingMinutes = minutes % 60
-            if remainingMinutes == 0 {
-                return "\(hours)h"
-            } else {
-                return "\(hours)h \(remainingMinutes)m"
-            }
-        }
-    }
-}
-
 struct CharitySelectionView: View {
     let page: OnboardingPage
     @Binding var selectedCharity: Charity?
@@ -1331,126 +1272,236 @@ struct GoalSettingView: View {
 struct ConceptExplanationView: View {
     let page: OnboardingPage
     let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
-    @State private var textOpacity: Double = 0.0
-    @State private var cardsOpacity: Double = 0.0
-    
+
+    @State private var showButton = false
+    @State private var pulse = false
+    @State private var visibleStepCount = 0
+    @State private var visibleExampleCount = 0
+    @State private var showFirstBlockContainer = true
+    @State private var showSecondBlockContainer = false
+    @State private var showTxt1 = false
+    @State private var showCircle = false
+    @State private var showTxt2 = false
+
+    private let subheadText = "MindLock+ turns your daily focus into donations for the charity you choose."
+    private let explainerText = "How it works is simple."
+
+    private let steps: [(String, String, String)] = [
+        ("Choose your charity", "You decide who receives the impact.", "heart.fill"),
+        ("Rack up impact points", "Every unlock-free day grows your streak.", "bolt.heart.fill"),
+        ("More focus = more donations", "Max out at 60 points each month for the full budget.", "hands.sparkles.fill")
+    ]
+
+    private let examples: [(String, String)] = [
+        ("🍽️", "2–5 meals for people in need"),
+        ("💧", "One week of clean drinking water for a family"),
+        ("📚", "Essential school supplies for a child"),
+        ("🌱", "Planting 5 trees in reforestation programs")
+    ]
+
     var body: some View {
-        VStack(spacing: DesignSystem.Spacing.xl) {
-            Spacer()
-            
-            // Content - Clean and punchy like Opal, centered in screen
-            VStack(spacing: DesignSystem.Spacing.xxl) {
-                Text(page.title)
-                    .font(DesignSystem.Typography.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [DesignSystem.Colors.primary, DesignSystem.Colors.success],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .multilineTextAlignment(.center)
-                    .opacity(textOpacity)
-                    .animation(DesignSystem.Animation.gentle.delay(0.4), value: textOpacity)
-                
-                VStack(spacing: DesignSystem.Spacing.xxl) {
-                    Text("When the urge hits, pause with purpose.")
-                        .font(DesignSystem.Typography.title2)
-                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                        .multilineTextAlignment(.center)
-                        .lineSpacing(6)
-                        .opacity(textOpacity)
-                        .animation(DesignSystem.Animation.gentle.delay(0.6), value: textOpacity)
-                    
+        VStack(spacing: DesignSystem.Spacing.lg) {
+            if showFirstBlockContainer {
+                ScrollView {
                     VStack(spacing: DesignSystem.Spacing.xl) {
-                        Text("Wait 30 seconds and unlock 10 mindful minutes for free.")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                            .lineSpacing(6)
-                        
-                        Text("Need the full toolkit? Join MindLock+ to turn every streak into monthly donations—up to 20% of your plan.")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundStyle(
-                                LinearGradient(
-                                    colors: [DesignSystem.Colors.success, DesignSystem.Colors.primary],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
+                        VStack(spacing: DesignSystem.Spacing.md) {
+                            Text(page.title)
+                                .font(DesignSystem.Typography.largeTitle)
+                                .fontWeight(.bold)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                                .opacity(showTxt1 ? 1 : 0)
+
+                            Text(subheadText)
+                                .font(DesignSystem.Typography.title3)
+                                .foregroundColor(DesignSystem.Colors.textSecondary)
+                                .multilineTextAlignment(.center)
+                                .opacity(showTxt1 ? 1 : 0)
+
+                            Text(explainerText)
+                                .font(DesignSystem.Typography.title2)
+                                .fontWeight(.semibold)
+                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                                .opacity(showTxt1 ? 1 : 0)
+                        }
+
+                        ZStack {
+                            Circle()
+                                .stroke(DesignSystem.Colors.success.opacity(0.3), lineWidth: 12)
+                                .scaleEffect(pulse ? 1.05 : 0.95)
+                                .animation(.easeInOut(duration: 1.8).repeatForever(autoreverses: true), value: pulse)
+
+                            Circle()
+                                .fill(
+                                    LinearGradient(
+                                        colors: [DesignSystem.Colors.success.opacity(0.35), DesignSystem.Colors.primary.opacity(0.2)],
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    )
                                 )
-                            )
-                            .fontWeight(.semibold)
-                            .lineSpacing(6)
+
+                            VStack(spacing: DesignSystem.Spacing.md) {
+                                Image(systemName: "hands.sparkles.fill")
+                                    .font(.system(size: 42, weight: .medium))
+                                    .foregroundColor(DesignSystem.Colors.success)
+                                Text("Impact points → donations")
+                                    .font(DesignSystem.Typography.body)
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                            }
+                        }
+                        .frame(width: 200, height: 200)
+                        .opacity(showCircle ? 1 : 0)
+
+                        VStack(spacing: DesignSystem.Spacing.md) {
+                            ForEach(Array(steps.enumerated()), id: \ .offset) { index, step in
+                                if index < visibleStepCount {
+                                    ImpactStepRow(iconName: step.2, title: step.0, detail: step.1)
+                                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                                }
+                            }
+                        }
                     }
-                    .multilineTextAlignment(.center)
-                    .opacity(textOpacity)
-                    .animation(DesignSystem.Animation.gentle.delay(0.8), value: textOpacity)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.vertical, DesignSystem.Spacing.lg)
                 }
             }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            
-            Spacer()
-            
-            // Icon at bottom - Giving hands with sparkles
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                DesignSystem.Colors.success.opacity(0.3),
-                                DesignSystem.Colors.success.opacity(0.1)
-                            ],
-                            center: .center,
-                            startRadius: 40,
-                            endRadius: 100
-                        )
-                    )
-                    .frame(width: 120, height: 120)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 40, weight: .medium))
-                    .foregroundStyle(
-                        LinearGradient(
-                            colors: [DesignSystem.Colors.success, DesignSystem.Colors.primary],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
+
+            if showSecondBlockContainer {
+                ScrollView {
+                    VStack(spacing: DesignSystem.Spacing.lg) {
+                        Text("Maxing out your monthly impact could mean:")
+                            .font(DesignSystem.Typography.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                            .multilineTextAlignment(.leading)
+                            .opacity(showTxt2 ? 1 : 0)
+
+                        VStack(spacing: DesignSystem.Spacing.sm) {
+                            ForEach(Array(examples.enumerated()), id: \ .offset) { index, example in
+                                if index < visibleExampleCount {
+                                    ImpactExampleRow(emoji: example.0, text: example.1)
+                                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                                }
+                            }
+                        }
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.vertical, DesignSystem.Spacing.lg)
+                }
             }
-            .opacity(textOpacity)
-            .animation(DesignSystem.Animation.gentle.delay(1.0), value: textOpacity)
-            .padding(.bottom, DesignSystem.Spacing.xxl)
-            
-            // Tap hint instead of a button
-            Text("Tap to continue")
-                .font(DesignSystem.Typography.footnote)
-                .foregroundColor(DesignSystem.Colors.textSecondary)
-                .padding(.bottom, DesignSystem.Spacing.xxl)
-                .opacity(textOpacity)
-                .animation(DesignSystem.Animation.gentle.delay(1.2), value: textOpacity)
-        }
-        // Allow tap anywhere to continue
-        .contentShape(Rectangle())
-        .onTapGesture {
-            onContinue()
-        }
-        .onAppear {
-            withAnimation {
-                iconScale = 1.0
-                textOpacity = 1.0
+
+            if showButton {
+                Button("Choose your charity") {
+                    onContinue()
+                }
+                .mindLockButton(style: .primary)
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.bottom, DesignSystem.Spacing.lg)
+                .transition(.opacity)
             }
         }
-        .onDisappear {
-            iconScale = 0.8
-            textOpacity = 0.0
-            cardsOpacity = 0.0
+        .onAppear { startSequence() }
+        .onDisappear { resetSequence() }
+    }
+
+    private func startSequence() {
+        resetSequence()
+
+        let textIntroDuration: Double = 0.5
+        let textIntroHold: Double = 1.0
+        let circleAnimationDuration: Double = 0.3
+        let circleHold: Double = 1.0
+        let listOneDuration: Double = 0.7
+        let listTwoDuration: Double = 0.7
+
+        schedule(after: 0.0) {
+            withAnimation(.easeIn(duration: textIntroDuration)) {
+                showTxt1 = true
+            }
+        }
+
+        let circleStart = textIntroDuration + textIntroHold
+        schedule(after: circleStart) {
+            withAnimation(.easeIn(duration: circleAnimationDuration)) {
+                showCircle = true
+            }
+            pulse = true
+        }
+
+        let listOneStart = circleStart + circleAnimationDuration + circleHold
+        animateList(count: steps.count, startDelay: listOneStart, totalDuration: listOneDuration) { newCount in
+            visibleStepCount = newCount
+        }
+
+        let fadeStart = listOneStart + listOneDuration + 3.0
+        schedule(after: fadeStart) {
+            withAnimation(.easeInOut(duration: 0.5)) {
+                showTxt1 = false
+                showCircle = false
+                visibleStepCount = 0
+            }
+            pulse = false
+            schedule(after: 0.5) {
+                showFirstBlockContainer = false
+            }
+        }
+
+        let textTwoStart = fadeStart + 0.5
+        schedule(after: textTwoStart) {
+            showSecondBlockContainer = true
+            withAnimation(.easeIn(duration: 0.5)) {
+                showTxt2 = true
+            }
+        }
+
+        let listTwoStart = textTwoStart + 1.0
+        animateList(count: examples.count, startDelay: listTwoStart, totalDuration: listTwoDuration) { newCount in
+            visibleExampleCount = newCount
+        }
+
+        let buttonTime = listTwoStart + listTwoDuration + 2.0
+        schedule(after: buttonTime) {
+            withAnimation(.easeIn(duration: 0.4)) {
+                showButton = true
+            }
+        }
+    }
+
+    private func resetSequence() {
+        showTxt1 = false
+        showCircle = false
+        showTxt2 = false
+        showFirstBlockContainer = true
+        showSecondBlockContainer = false
+        showButton = false
+        pulse = false
+        visibleStepCount = 0
+        visibleExampleCount = 0
+    }
+
+    private func schedule(after delay: Double, perform: @escaping () -> Void) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: perform)
+    }
+
+    private func animateList(count: Int, startDelay: Double, totalDuration: Double, update: @escaping (Int) -> Void) {
+        guard count > 0 else { return }
+        let interval = count > 1 ? totalDuration / Double(count - 1) : 0
+        schedule(after: startDelay) {
+            withAnimation(.easeIn(duration: 0.25)) {
+                update(1)
+            }
+        }
+        if count > 1 {
+            for index in 1..<count {
+                schedule(after: startDelay + interval * Double(index)) {
+                    withAnimation(.easeIn(duration: 0.25)) {
+                        update(index + 1)
+                    }
+                }
+            }
         }
     }
 }
-
 // MARK: - Final Inspire View (Stay Mindful replacement)
 struct FinalInspireView: View {
     let page: OnboardingPage
@@ -1573,222 +1624,171 @@ struct FinalInspireView: View {
     }
 }
 
-// MARK: - Animated Limits Intro View
+
+
+private struct ImpactStepRow: View {
+    let iconName: String
+    let title: String
+    let detail: String
+
+    var body: some View {
+        HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
+            ZStack {
+                Circle()
+                    .fill(DesignSystem.Colors.success.opacity(0.15))
+                    .frame(width: 36, height: 36)
+                Image(systemName: iconName)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(DesignSystem.Colors.success)
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(DesignSystem.Typography.body)
+                    .fontWeight(.semibold)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                Text(detail)
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+            }
+
+            Spacer()
+        }
+        .padding(DesignSystem.Spacing.md)
+        .background(DesignSystem.Colors.surface)
+        .cornerRadius(DesignSystem.CornerRadius.md)
+    }
+}
+
+private struct ImpactExampleRow: View {
+    let emoji: String
+    let text: String
+
+    var body: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            Text(emoji)
+                .font(.system(size: 20))
+            Text(text)
+                .font(DesignSystem.Typography.body)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+            Spacer()
+        }
+        .padding(.horizontal, DesignSystem.Spacing.md)
+        .padding(.vertical, DesignSystem.Spacing.sm)
+        .background(DesignSystem.Colors.surface)
+        .cornerRadius(DesignSystem.CornerRadius.md)
+    }
+}
+// MARK: - Animated Limits Intro View (Block List Selection)
 struct AnimatedLimitsIntroView: View {
     let page: OnboardingPage
     let onContinue: () -> Void
 
-    // Sequenced flags so parts accumulate within a block
-    @State private var showIntro = true
-    @State private var showBlockA = false
-    @State private var showA1 = false
-    @State private var showA2 = false
-    @State private var showA3 = false
-    @State private var showBlockB = false
-    @State private var showB1 = false
-    @State private var showB2 = false
-    @State private var showFinal = false
-    @State private var showingButton = false
-
     @State private var showPicker = false
     @State private var localSelection = FamilyActivitySelection()
     @State private var showSelectedList = false
-    @State private var appTimeLimits: [String: Int] = [:]
     @ObservedObject private var screenTimeManager = ScreenTimeManager.shared
 
     private let iconSize: CGFloat = 56
 
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
-            Spacer()
+            Spacer().frame(height: DesignSystem.Spacing.sm)
 
-            // Intro
-            if showIntro {
-                VStack(spacing: DesignSystem.Spacing.md) {
-                    Text("You pick your limits for each app")
-                        .font(DesignSystem.Typography.title3)
-                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                        .multilineTextAlignment(.center)
-                }
-                .transition(.opacity.combined(with: .move(edge: .bottom)))
-            }
-
-            // Block A text parts stacked: A1, IG lock (A2), A3 — appear sequentially and remain
-            if showBlockA {
-                VStack(spacing: DesignSystem.Spacing.xl) {
-                    if showA1 {
-                        Text("Once you reach your limit, that app will be locked for the rest of the day.")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .multilineTextAlignment(.center)
-                            .transition(.opacity)
-                    }
-                    if showA2 {
-                        ZStack {
-                            loadIcon("instagram")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: iconSize, height: iconSize)
-                                .grayscale(1.0)
-                                .opacity(0.85)
-                            Image(systemName: "lock.fill")
-                                .font(.system(size: 28, weight: .semibold))
-                                .foregroundColor(DesignSystem.Colors.success)
-                                .offset(y: -iconSize * 0.9)
-                                .shadow(color: DesignSystem.Colors.success.opacity(0.4), radius: 8)
-                        }
-                        .padding(.top, DesignSystem.Spacing.xxl)
-                        .transition(.opacity.combined(with: .scale))
-                    }
-                    if showA3 {
-                        Text("You can always adjust your limits, but changes will take place the following day.")
-                            .font(DesignSystem.Typography.callout)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                            .multilineTextAlignment(.center)
-                            .transition(.opacity)
-                    }
-                }
-            }
-
-            // Block B stacked parts
-            if showBlockB {
-                VStack(spacing: DesignSystem.Spacing.xl) {
-                    if showB1 {
-                        Text("Really feeling the itch on a certain day?")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .multilineTextAlignment(.center)
-                            .transition(.opacity)
-                    }
-                    if showB2 {
-                        Text("Stick with the mindful wait, or upgrade to MindLock+ and let your streaks fund your cause.")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .multilineTextAlignment(.center)
-                            .transition(.opacity)
-                    }
-                }
-                .frame(maxWidth: .infinity)
-                .frame(maxHeight: .infinity)
-            }
-
-            if showFinal {
-                Text("MindLock+ turns your discipline into impact every month—up to 20% donated, and you pick the cause.🕊️")
-                    .font(DesignSystem.Typography.title3)
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                Text("Choose your block list.")
+                    .font(DesignSystem.Typography.title2)
+                    .fontWeight(.semibold)
                     .foregroundColor(DesignSystem.Colors.textPrimary)
                     .multilineTextAlignment(.center)
-                    .transition(.opacity)
-            }
 
-            Spacer()
-
-            // (Top-right Add App chip removed; we will show a bottom overlay button like Setup)
-
-            // Animation area
-            ZStack {
-                if showIntro {
-                    HStack(spacing: DesignSystem.Spacing.xl) {
-                        appIconWithLimit(name: "facebook", label: "30m")
-                        appIconWithLimit(name: "instagram", label: "20m")
-                        appIconWithLimit(name: "tik tok", label: "1h")
-                    }
-                    .transition(.opacity.combined(with: .scale))
-                } else {
-                    if showSelectedList {
-                        ZStack {
-                            ScrollView {
-                                VStack(spacing: DesignSystem.Spacing.sm) {
-                                    ForEach(Array(localSelection.applicationTokens).sorted { $0.identifier < $1.identifier }, id: \.identifier) { token in
-                                        RealAppLimitCard(
-                                            applicationToken: token,
-                                            timeLimit: Binding(
-                                                get: { appTimeLimits[token.identifier] ?? 20 },
-                                                set: { appTimeLimits[token.identifier] = $0 }
-                                            )
-                                        )
-                                    }
-                                    // dead space so the overlay button never hides the last row
-                                    Color.clear.frame(height: 140)
-                                }
-                            }
-                            .mask(
-                                LinearGradient(
-                                    gradient: Gradient(stops: [
-                                        .init(color: Color.black, location: 0.0),
-                                        .init(color: Color.black, location: 0.82),
-                                        .init(color: Color.clear, location: 1.0)
-                                    ]),
-                                    startPoint: .top, endPoint: .bottom
-                                )
-                            )
-                        }
-                        .transition(.opacity)
-                    } else {
-                        EmptyView().transition(.opacity)
-                    }
-                }
-            }
-            .frame(height: (showIntro || showSelectedList) ? 320 : 0)
-
-            Spacer()
-
-            if showingButton && !showSelectedList {
-                Button("Select apps to limit  +") { showPicker = true }
-                .mindLockButton(style: .primary)
-                .transition(.opacity)
-                .padding(.horizontal, DesignSystem.Spacing.lg)
-                .padding(.bottom, DesignSystem.Spacing.xl)
-            }
-
-            if showSelectedList {
-                // Add App (text-only) above Continue — icon = white filled circle + black plus
-                Button(action: { showPicker = true }) {
-                    HStack(spacing: 8) {
-                        ZStack {
-                            Circle()
-                                .fill(Color.white)
-                                .frame(width: 18, height: 18)
-                            Image(systemName: "plus")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(.black)
-                        }
-                        Text("Add App").fontWeight(.semibold)
-                    }
+                Text("These are the apps MindLock will pause whenever you run a Time Block.")
                     .font(DesignSystem.Typography.callout)
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, DesignSystem.Spacing.sm)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(PlainButtonStyle())
-                .padding(.horizontal, DesignSystem.Spacing.lg)
-                .transition(.opacity)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.xl)
 
-                Button("Continue") {
-                    screenTimeManager.updateSelectedApps(localSelection)
-                    let limitsManager = DailyLimitsManager.shared
-                    for token in localSelection.applicationTokens {
-                        let minutes = appTimeLimits[token.identifier] ?? 20
-                        limitsManager.setLimitImmediate(for: token, limit: TimeInterval(minutes * 60))
+            ZStack {
+                if showSelectedList {
+                    ScrollView {
+                        VStack(spacing: DesignSystem.Spacing.sm) {
+                            ForEach(Array(localSelection.applicationTokens).sorted { $0.identifier < $1.identifier }, id: \.identifier) { token in
+                                BlockListAppRow(applicationToken: token)
+                            }
+                            Color.clear.frame(height: 140)
+                        }
                     }
-                    onContinue()
+                    .mask(
+                        LinearGradient(
+                            gradient: Gradient(stops: [
+                                .init(color: Color.black, location: 0.0),
+                                .init(color: Color.black, location: 0.82),
+                                .init(color: Color.clear, location: 1.0)
+                            ]),
+                            startPoint: .top, endPoint: .bottom
+                        )
+                    )
+                } else {
+                    VStack(spacing: DesignSystem.Spacing.lg) {
+                        Text("Need ideas?")
+                            .font(DesignSystem.Typography.callout)
+                            .foregroundColor(DesignSystem.Colors.textSecondary)
+
+                        HStack(spacing: DesignSystem.Spacing.xl) {
+                            appIconWithLimit(name: "facebook", label: "30m")
+                            appIconWithLimit(name: "instagram", label: "20m")
+                            appIconWithLimit(name: "tik tok", label: "1h")
+                        }
+
+                        Text("Start with the apps that drain your focus the most.")
+                            .font(DesignSystem.Typography.caption)
+                            .foregroundColor(DesignSystem.Colors.textTertiary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, DesignSystem.Spacing.lg)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 260)
+                    .background(DesignSystem.Colors.surface)
+                    .cornerRadius(DesignSystem.CornerRadius.lg)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg)
+                            .stroke(DesignSystem.Colors.surface.opacity(0.4), lineWidth: 1)
+                    )
+                }
+            }
+            .frame(height: 320)
+
+            Spacer()
+
+            VStack(spacing: DesignSystem.Spacing.md) {
+                Button(showSelectedList ? "Add another app" : "Select apps to block  +") {
+                    showPicker = true
                 }
                 .mindLockButton(style: .primary)
                 .padding(.horizontal, DesignSystem.Spacing.lg)
-                .padding(.bottom, DesignSystem.Spacing.xl)
-                .transition(.opacity)
+
+                if showSelectedList {
+                    Button("Continue") {
+                        screenTimeManager.updateSelectedApps(localSelection, reason: "onboarding block list")
+                        onContinue()
+                    }
+                    .mindLockButton(style: .secondary)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                }
             }
+            .padding(.bottom, DesignSystem.Spacing.xl)
         }
         .padding(.horizontal, DesignSystem.Spacing.lg)
-        .onAppear {
-            runSequence()
-        }
         .familyActivityPicker(isPresented: $showPicker, selection: $localSelection)
         .onChange(of: localSelection.applicationTokens) { _, newValue in
-            if !newValue.isEmpty {
-                for t in newValue { if appTimeLimits[t.identifier] == nil { appTimeLimits[t.identifier] = 20 } }
-                withAnimation(.easeInOut(duration: 0.4)) { showSelectedList = true }
+            withAnimation(.easeInOut(duration: 0.3)) {
+                showSelectedList = !newValue.isEmpty
             }
+        }
+        .onAppear {
+            localSelection = screenTimeManager.selectedApps
+            showSelectedList = !localSelection.applicationTokens.isEmpty
         }
     }
 
@@ -1797,7 +1797,6 @@ struct AnimatedLimitsIntroView: View {
             Text(label)
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
-                .transition(.opacity)
             loadIcon(name)
                 .resizable()
                 .scaledToFit()
@@ -1811,53 +1810,6 @@ struct AnimatedLimitsIntroView: View {
         if let ui = UIImage(named: name) { return Image(uiImage: ui) }
         if name == "tik tok", let ui = UIImage(named: "tiktok") { return Image(uiImage: ui) }
         return Image(systemName: "app")
-    }
-
-    private func runSequence() {
-        // Intro visible
-        withAnimation(.easeInOut(duration: 0.5)) { showIntro = true }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            withAnimation(.easeInOut(duration: 0.4)) { showIntro = false }
-            // Block A starts
-            withAnimation(.easeInOut(duration: 0.5)) { showBlockA = true }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                withAnimation(.easeInOut(duration: 0.5)) { showA1 = true }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
-                    withAnimation(.easeInOut(duration: 0.5)) { showA2 = true }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
-                        withAnimation(.easeInOut(duration: 0.5)) { showA3 = true }
-                        // Beat to read
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
-                            withAnimation(.easeInOut(duration: 0.4)) {
-                                showBlockA = false; showA1 = false; showA2 = false; showA3 = false
-                            }
-                            // Block B starts
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                withAnimation(.easeInOut(duration: 0.5)) { showBlockB = true }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                                    withAnimation(.easeInOut(duration: 0.5)) { showB1 = true }
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
-                                        withAnimation(.easeInOut(duration: 0.6)) { showB2 = true }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.2) {
-                                            withAnimation(.easeInOut(duration: 0.4)) {
-                                                showBlockB = false; showB1 = false; showB2 = false
-                                            }
-                                            // Final message and CTA
-                                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                                                withAnimation(.easeInOut(duration: 0.5)) { showFinal = true }
-                                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                                                    withAnimation(.easeInOut(duration: 0.6)) { showingButton = true }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
@@ -2071,7 +2023,7 @@ struct OnboardingPage {
         ),
         OnboardingPage(
             title: "How Limits Work",
-            description: "A quick explainer before you pick apps to limit.",
+            description: "Pick the apps MindLock controls during Time Blocks. You’ll set schedules and limits next.",
             iconName: "apps.iphone",
             accentColor: DesignSystem.Colors.primary,
             isPermissionPage: false,
@@ -2084,12 +2036,11 @@ struct OnboardingPage {
             isConceptPage: false,
             isAnimatedLimitsIntroPage: true
         ),
-        // Defunct page removed: app selection happens inline in the animated intro
         OnboardingPage(
-            title: "Turn Slips Into Impact",
-            description: "Wait 30 seconds for a mindful break, or join MindLock+ to unlock advanced tools and boost donations to the cause you choose.",
+            title: "Use Your Saved Time",
+            description: "MindLock+ turns your daily focus into monthly donations for the charity you choose.",
             iconName: "hands.and.sparkles.fill",
-            accentColor: DesignSystem.Colors.warning,
+            accentColor: DesignSystem.Colors.success,
             isPermissionPage: false,
             isUsageQuestionPage: false,
             isAgeQuestionPage: false,

@@ -28,6 +28,12 @@ struct DesignSystem {
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
+
+        static let impactGradient = LinearGradient(
+            colors: [primary, success],
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
+        )
         
         static let accentGradient = LinearGradient(
             colors: [accent, Color(red: 0.90, green: 0.20, blue: 0.15)],
@@ -171,6 +177,9 @@ extension DesignSystem {
             case .primary:
                 DesignSystem.Colors.primaryGradient
                     .brightness(pressed ? -0.05 : 0)
+            case .impact:
+                DesignSystem.Colors.impactGradient
+                    .brightness(pressed ? -0.05 : 0)
             case .secondary:
                 DesignSystem.Colors.surface
                     .opacity(pressed ? 0.9 : 1.0)
@@ -196,11 +205,14 @@ enum MindLockButtonStyle {
     case secondary
     case destructive
     case ghost
+    case impact
     
     var backgroundColor: some View {
         switch self {
         case .primary:
             return AnyView(DesignSystem.Colors.primaryGradient)
+        case .impact:
+            return AnyView(DesignSystem.Colors.impactGradient)
         case .secondary:
             return AnyView(DesignSystem.Colors.surface)
         case .destructive:
@@ -212,7 +224,7 @@ enum MindLockButtonStyle {
     
     var foregroundColor: Color {
         switch self {
-        case .primary, .destructive:
+        case .primary, .destructive, .impact:
             return .white
         case .secondary:
             return DesignSystem.Colors.textPrimary
@@ -225,6 +237,8 @@ enum MindLockButtonStyle {
         switch self {
         case .primary:
             return DesignSystem.Colors.primary.opacity(0.3)
+        case .impact:
+            return DesignSystem.Colors.primary.opacity(0.35)
         case .destructive:
             return DesignSystem.Colors.accent.opacity(0.3)
         case .secondary, .ghost:

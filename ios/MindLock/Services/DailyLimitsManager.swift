@@ -287,6 +287,7 @@ class DailyLimitsManager: ObservableObject {
             store.clearAllSettings()
             isBlocking = false
             recentlyBlockedTokens = []
+            SharedSettings.clearLimitShieldTokens()
             SharedSettings.setBlockingState(false)
             print("🔓 Cleared blocking after limit change (no apps exceeded)")
             return
@@ -295,6 +296,7 @@ class DailyLimitsManager: ObservableObject {
         store.shield.applications = blockedSet
         isBlocking = true
         recentlyBlockedTokens = Array(blockedSet)
+        SharedSettings.setLimitShieldTokens(blockedSet)
         SharedSettings.setBlockingState(true)
         print("🔒 Applied per-app blocking to \(blockedSet.count) app(s)")
     }
@@ -392,7 +394,6 @@ class DailyLimitsManager: ObservableObject {
     /// Update local state based on the event data received from the extension.
     func handleLimitEvent(tokens: [ApplicationToken], eventName: String) {
         // Update usage to end-of-limit and recompute shields
-        recentlyBlockedTokens = tokens
         for token in tokens {
             if let limit = getCurrentLimit(for: token) {
                 let remaining = max(0, limit - todayUsage.usageForApp(token))
@@ -477,7 +478,6 @@ extension DailyLimitsManager {
         savePendingLimits()
         saveTodayUsage()
         recomputeBlockingAfterLimitChange()
-        recentlyBlockedTokens = Array(tokens)
         print("🛠️ DEBUG: Forced block for \(tokens.count) app(s)")
     }
 }

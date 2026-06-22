@@ -46,6 +46,20 @@ enum SharedSettings {
         case free(minutes: Double)
     }
 
+    struct ShieldSnapshot {
+        let limitTokens: Set<ApplicationToken>
+        let blockTokens: [String: Set<ApplicationToken>]
+        let temporaryUnlocks: [String: Date]
+
+        var allTokens: Set<ApplicationToken> {
+            var combined = limitTokens
+            for tokens in blockTokens.values {
+                combined.formUnion(tokens)
+            }
+            return combined
+        }
+    }
+
     // MARK: - Subscription Helpers
 
     static func updateSubscriptionStatus(activeUntil date: Date?, isNonExpiring: Bool = false) {
@@ -143,6 +157,10 @@ enum SharedSettings {
         static let subscriptionExpiration = "profile.subscription.expiration"
         static let subscriptionTier = "profile.subscription.tier"
         static let installationDate = "profile.installation.date"
+    }
+
+    private enum ShieldKeys {
+        static let limitTokenIDs = "shield.limit.tokens"
     }
     
     static var sharedDefaults: UserDefaults? {
@@ -731,6 +749,15 @@ enum SharedSettings {
             let end = endHour * 60 + endMinute
             return TimeInterval(max(0, end - start) * 60)
         }
+
+        func remainingSeconds(from date: Date = Date()) -> TimeInterval {
+            var components = Calendar.current.dateComponents([.year, .month, .day], from: date)
+            components.hour = endHour
+            components.minute = endMinute
+            guard let endDate = Calendar.current.date(from: components) else { return 0 }
+            return max(0, endDate.timeIntervalSince(date))
+        }
+
         func isSameDayValid() -> Bool {
             endHour > startHour || (endHour == startHour && endMinute > startMinute)
         }
@@ -830,6 +857,64 @@ enum SharedSettings {
         return activeTimeBlockStates()
             .filter { $0.endsAt > now }
             .min(by: { $0.endsAt < $1.endsAt })
+    }
+
+    static func currentShieldSnapshot() -> ShieldSnapshot {
+        let limitTokens = currentLimitShieldTokens()
+        var blockDict: [String: Set<ApplicationToken>] = [:]
+        for state in activeTimeBlockStates() {
+            blockDict[state.id] = Set(activeTokens(forBlockId: state.id))
+        }
+        return ShieldSnapshot(
+            limitTokens: limitTokens,
+            blockTokens: blockDict,
+            temporaryUnlocks: activeTemporaryUnlocks()
+        )
+    }
+
+    static func currentLimitShieldTokens() -> Set<ApplicationToken> {
+        let ids = currentLimitTokenIdentifiers()
+        return Set(ids.compactMap { ApplicationToken(identifier: $0) })
+    }
+
+    static func setLimitShieldTokens(_ tokens: Set<ApplicationToken>) {
+        let ids = Set(tokens.map { tokenKey($0) })
+        storeLimitTokenIdentifiers(ids)
+    }
+
+    static func addLimitShieldTokens(_ tokens: Set<ApplicationToken>) {
+        guard !tokens.isEmpty else { return }
+        var ids = Set(currentLimitTokenIdentifiers())
+        for token in tokens {
+            ids.insert(tokenKey(token))
+        }
+        storeLimitTokenIdentifiers(ids)
+    }
+
+    static func removeLimitShieldTokens(_ tokens: Set<ApplicationToken>) {
+        guard !tokens.isEmpty else { return }
+        var ids = Set(currentLimitTokenIdentifiers())
+        for token in tokens {
+            ids.remove(tokenKey(token))
+        }
+        storeLimitTokenIdentifiers(ids)
+    }
+
+    static func clearLimitShieldTokens() {
+        sharedDefaults?.removeObject(forKey: ShieldKeys.limitTokenIDs)
+    }
+
+    private static func currentLimitTokenIdentifiers() -> [String] {
+        guard let data = sharedDefaults?.data(forKey: ShieldKeys.limitTokenIDs),
+              let ids = try? JSONDecoder().decode([String].self, from: data) else {
+            return []
+        }
+        return ids
+    }
+
+    private static func storeLimitTokenIdentifiers(_ ids: Set<String>) {
+        guard let data = try? JSONEncoder().encode(Array(ids)) else { return }
+        sharedDefaults?.set(data, forKey: ShieldKeys.limitTokenIDs)
     }
 }
 

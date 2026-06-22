@@ -38,11 +38,31 @@ targets:
           - UIInterfaceOrientationLandscapeRight
     dependencies:
       - target: MindLockMonitor
+        embed: true
       - target: MindLockShieldUI
+        embed: true
+      - target: MindLockUsageReport
+        embed: false
       - sdk: FamilyControls.framework
       - sdk: ManagedSettings.framework
       - sdk: DeviceActivity.framework
       - sdk: _DeviceActivity_SwiftUI.framework
+    postBuildScripts:
+      - name: EmbedUsageReportExtension
+        basedOnDependencyAnalysis: false
+        script: |
+          set -euo pipefail
+          APP_BUNDLE="$TARGET_BUILD_DIR/$FULL_PRODUCT_NAME"
+          EXT_DIR="$APP_BUNDLE/Extensions"
+          SOURCE_APPEX="$BUILT_PRODUCTS_DIR/MindLockUsageReport.appex"
+          DEST_APPEX="$EXT_DIR/MindLockUsageReport.appex"
+          if [ -d "$SOURCE_APPEX" ]; then
+            mkdir -p "$EXT_DIR"
+            rm -rf "$DEST_APPEX"
+            rsync -a "$SOURCE_APPEX/" "$DEST_APPEX/"
+          else
+            echo "warning: MindLockUsageReport.appex not found at $SOURCE_APPEX"
+          fi
 
   MindLockMonitor:
     type: app-extension
@@ -111,6 +131,8 @@ targets:
         CODE_SIGN_STYLE: Automatic
         INFOPLIST_FILE: MindLockUsageReport/Info.plist
         CODE_SIGN_ENTITLEMENTS: MindLockUsageReport/MindLockUsageReport.entitlements
+        APPEX_EMBEDDED_SUBPATH: Extensions
+        APPEX_SUBPATH: Extensions
     info:
       path: MindLockUsageReport/Info.plist
       properties:
