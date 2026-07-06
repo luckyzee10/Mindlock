@@ -9,13 +9,14 @@ struct ProfileView: View {
                 VStack(spacing: DesignSystem.Spacing.xl) {
                     heroCard
                     StreakCard(days: viewModel.perfectDays)
+                    exerciseStatsCard
                     unlockCard
                 }
                 .padding(.top, DesignSystem.Spacing.lg)
                 .padding(.horizontal, DesignSystem.Spacing.lg)
                 .padding(.bottom, DesignSystem.Spacing.xxl)
             }
-            .background(DesignSystem.Colors.background.ignoresSafeArea())
+            .background(DesignSystem.AppBackground())
             .navigationTitle("Profile")
         }
         .onAppear { viewModel.refresh() }
@@ -28,13 +29,13 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Impact Points")
+                    Text("Pushups This Week")
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(.white.opacity(0.8))
-                    Text("\(viewModel.impactPoints)")
+                    Text("\(viewModel.pushupsThisWeek)")
                         .font(.system(size: 40, weight: .bold))
                         .foregroundColor(.white)
-                    Text("Earn points by finishing the day without unlocking early.")
+                    Text("Earn extra time with movement.")
                         .font(DesignSystem.Typography.callout)
                         .foregroundColor(.white.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
@@ -49,11 +50,8 @@ struct ProfileView: View {
             Divider().background(Color.white.opacity(0.25))
 
             HStack(spacing: DesignSystem.Spacing.xl) {
-                impactMetric(title: "Perfect days", value: "\(viewModel.perfectDays)")
-                impactMetric(
-                    title: "Multiplier",
-                    value: "×\(SharedSettings.impactMultiplier(forStreak: viewModel.perfectDays))"
-                )
+                profileMetric(title: "Perfect days", value: "\(viewModel.perfectDays)")
+                profileMetric(title: "Calories burned", value: "\(viewModel.caloriesBurned)")
             }
         }
         .padding()
@@ -68,7 +66,7 @@ struct ProfileView: View {
         .shadow(color: DesignSystem.Colors.primary.opacity(0.35), radius: 20, x: 0, y: 10)
     }
 
-    private func impactMetric(title: String, value: String) -> some View {
+    private func profileMetric(title: String, value: String) -> some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title.uppercased())
                 .font(DesignSystem.Typography.caption)
@@ -76,6 +74,26 @@ struct ProfileView: View {
             Text(value)
                 .font(DesignSystem.Typography.title3.weight(.semibold))
                 .foregroundColor(.white)
+        }
+    }
+
+    private var exerciseStatsCard: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            MetricCard(
+                title: "Pushups",
+                value: "\(viewModel.pushupsThisWeek)",
+                subtitle: "This week",
+                icon: "figure.strengthtraining.traditional",
+                tint: DesignSystem.Colors.primary
+            )
+
+            MetricCard(
+                title: "Calories",
+                value: "\(viewModel.caloriesBurned)",
+                subtitle: "Estimated",
+                icon: "flame.fill",
+                tint: DesignSystem.Colors.warning
+            )
         }
     }
     
@@ -103,7 +121,7 @@ struct ProfileView: View {
             }
         }
         .padding()
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl)
         .cornerRadius(DesignSystem.CornerRadius.xl)
     }
     
@@ -182,13 +200,14 @@ private struct MetricCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity, minHeight: 140, alignment: .leading)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
         .cornerRadius(DesignSystem.CornerRadius.lg)
     }
 }
 
 private final class ProfileViewModel: ObservableObject {
-    @Published var impactPoints: Int = 0
+    @Published var pushupsThisWeek: Int = 0
+    @Published var caloriesBurned: Int = 0
     @Published var perfectDays: Int = 0
     @Published var mindfulUnlocks: Int = 0
     @Published var unlockDelta: Double?
@@ -196,6 +215,12 @@ private final class ProfileViewModel: ObservableObject {
 
     func refresh() {
         loadUnlockStats()
+        loadExerciseStats()
+    }
+
+    private func loadExerciseStats() {
+        pushupsThisWeek = SharedSettings.pushupsCompletedThisWeek()
+        caloriesBurned = SharedSettings.estimatedExerciseCaloriesBurned()
     }
 
     private func loadUnlockStats() {
@@ -223,7 +248,6 @@ private final class ProfileViewModel: ObservableObject {
         }
 
         perfectDays = SharedSettings.consecutiveUnlockFreeDays()
-        impactPoints = SharedSettings.impactPoints()
     }
 }
 

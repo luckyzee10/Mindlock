@@ -16,35 +16,45 @@ private struct IdentifiedApplicationToken: Identifiable, Equatable {
 struct SetupView: View {
     @ObservedObject private var screenTimeManager = ScreenTimeManager.shared
     @ObservedObject private var limitsManager = DailyLimitsManager.shared
-    @State private var selectedCharity: Charity?
     @State private var showingAppPicker = false
     @State private var showingAppLimits = false
-    @State private var showingCharitySelection = false
     @State private var appTimeLimits: [String: Int] = [:]
     @State private var tokenPendingWait: IdentifiedApplicationToken?
     @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
+    @State private var preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
     @State private var showingMindLockPlusPaywall = false
+    @State private var showingUnlockMechanismSettings = false
     @AppStorage("setup.walkthrough.completed") private var setupWalkthroughCompleted = false
     @State private var walkthroughStep: SetupWalkthroughStep?
 
     var body: some View {
         NavigationView {
             ZStack {
-                DesignSystem.Colors.background.ignoresSafeArea()
+                DesignSystem.AppBackground()
 
                 ScrollView {
                     VStack(spacing: DesignSystem.Spacing.xl) {
                         // Header
-                        VStack(spacing: DesignSystem.Spacing.md) {
-                            Text("MindLock")
-                                .font(DesignSystem.Typography.largeTitle)
-                                .fontWeight(.bold)
-                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                        ZStack(alignment: .topTrailing) {
+                            VStack(spacing: DesignSystem.Spacing.md) {
+                                Text("MindLock")
+                                    .font(DesignSystem.Typography.largeTitle)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                            }
+                            .frame(maxWidth: .infinity)
 
-                            Text("Fine-tune your limits, charities, and unlock options")
-                                .font(DesignSystem.Typography.body)
-                                .foregroundColor(DesignSystem.Colors.textSecondary)
-                                .multilineTextAlignment(.center)
+                            Button {
+                                showingUnlockMechanismSettings = true
+                            } label: {
+                                Image(systemName: "gearshape.fill")
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                                    .frame(width: 42, height: 42)
+                                    .glossySurface(cornerRadius: 21, opacity: 0.8)
+                                    .clipShape(Circle())
+                            }
+                            .accessibilityLabel("Unlock settings")
                         }
                         .padding(.top, DesignSystem.Spacing.lg)
 
@@ -58,20 +68,19 @@ struct SetupView: View {
                         .environmentObject(screenTimeManager)
                         .padding(.top, DesignSystem.Spacing.lg)
 
-                        MindLockImpactSection(
-                            selectedCharity: selectedCharity,
-                            subscriptionActive: subscriptionActive,
-                            onSelectCharity: { showingCharitySelection = true },
-                            onSubscribe: { showingMindLockPlusPaywall = true }
-                        )
-
-                        if !subscriptionActive && !reachedLimitTokens.isEmpty {
+                        if !reachedLimitTokens.isEmpty {
                             LimitReachedGlobalCard(
                                 tokens: reachedLimitTokens,
-                                waitAction: { if let token = representativeToken { tokenPendingWait = IdentifiedApplicationToken(token: token) } },
-                                mindLockPlusAction: { showingMindLockPlusPaywall = true }
+                                waitAction: { if let token = representativeToken { tokenPendingWait = IdentifiedApplicationToken(token: token) } }
                             )
                         }
+
+                        ExerciseUnlockSection(
+                            subscriptionActive: subscriptionActive,
+                            preferredUnlockMechanism: preferredUnlockMechanism,
+                            onOpenSettings: { showingUnlockMechanismSettings = true },
+                            onSubscribe: { showingMindLockPlusPaywall = true }
+                        )
 
 #if DEBUG
                         SetupDebugActions(screenTimeManager: screenTimeManager, limitsManager: limitsManager, showPaywall: {
@@ -85,6 +94,9 @@ struct SetupView: View {
                 .sheet(isPresented: $showingMindLockPlusPaywall) {
                     UnlockPromptView()
                 }
+                .sheet(isPresented: $showingUnlockMechanismSettings, onDismiss: loadUserPreferences) {
+                    UnlockMechanismSettingsView()
+                }
                 .sheet(item: $tokenPendingWait) { wrapper in
                     WaitUnlockView(appToken: wrapper.token)
                         .environmentObject(limitsManager)
@@ -94,9 +106,6 @@ struct SetupView: View {
         }
         .sheet(isPresented: $showingAppLimits) {
             AppLimitsSetupView(isPresented: $showingAppLimits)
-        }
-        .sheet(isPresented: $showingCharitySelection) {
-            SetupCharitySelectionView()
         }
         .familyActivityPicker(isPresented: $showingAppPicker, selection: $screenTimeManager.selectedApps)
         .onAppear {
@@ -111,33 +120,17 @@ struct SetupView: View {
             // Refresh data when app comes to foreground
             loadUserPreferences()
         }
-        .onChange(of: showingCharitySelection) { _, isShowing in
-            if !isShowing {
-                // Reload charity selection when sheet closes
-                loadUserPreferences()
-                print("💝 Charity selection sheet closed, reloading preferences")
-            }
-        }
         .onReceive(NotificationCenter.default.publisher(for: SharedSettings.subscriptionStatusChangedNotification)) { _ in
             subscriptionActive = SharedSettings.isSubscriptionActive()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: SharedSettings.unlockMechanismChangedNotification)) { _ in
+            preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
         }
     }
 
     private func loadUserPreferences() {
-        // Load selected charity – prefer id, fallback to legacy JSON blob
-        if let charityId = UserDefaults.standard.string(forKey: "selectedCharityId"),
-           let charity = Charity.popularCharities.first(where: { $0.id == charityId }) {
-            selectedCharity = charity
-        } else if let charityData = UserDefaults.standard.data(forKey: "selectedCharity"),
-                  let charity = try? JSONDecoder().decode(Charity.self, from: charityData) {
-            selectedCharity = charity
-            // Normalize to id storage for future reads
-            UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
-        } else {
-            selectedCharity = nil
-        }
-
-        print("📱 Loaded user preferences - Charity: \(selectedCharity?.name ?? "None")")
+        subscriptionActive = SharedSettings.isSubscriptionActive()
+        preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
     }
 
     // Tokens that have reached today's limit (union of computed + recent blocks)
@@ -151,7 +144,9 @@ struct SetupView: View {
     private var reachedLimitTokens: [ApplicationToken] {
         // Depend on recentlyBlockedTokens for SwiftUI updates, but read canonical snapshot for accuracy.
         _ = limitsManager.recentlyBlockedTokens
-        return Array(SharedSettings.currentShieldSnapshot().allTokens)
+        var tokens = SharedSettings.currentShieldSnapshot().allTokens
+        tokens.formUnion(ManagedSettingsStore().shield.applications ?? [])
+        return Array(tokens)
     }
 
     private var representativeToken: ApplicationToken? {
@@ -216,11 +211,6 @@ struct AppLimitsSectionCard: View {
                         .foregroundColor(DesignSystem.Colors.textPrimary)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Text("Set daily time limits for your apps")
-                        .font(DesignSystem.Typography.callout)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
                     if limitedTokens.isEmpty {
                         Text("Not configured")
                             .font(DesignSystem.Typography.caption)
@@ -249,7 +239,7 @@ struct AppLimitsSectionCard: View {
                     .foregroundColor(DesignSystem.Colors.textTertiary)
             }
             .padding(DesignSystem.Spacing.lg)
-            .background(DesignSystem.Colors.surface)
+            .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
             .cornerRadius(DesignSystem.CornerRadius.lg)
         }
         .buttonStyle(PlainButtonStyle())
@@ -280,7 +270,7 @@ private struct SetupDebugActions: View {
                     Spacer()
                 }
                 .padding()
-                .background(DesignSystem.Colors.surfaceSecondary)
+                .glossySurface(base: DesignSystem.Colors.surfaceSecondary, cornerRadius: DesignSystem.CornerRadius.md)
                 .cornerRadius(DesignSystem.CornerRadius.md)
             }
             .buttonStyle(.plain)
@@ -293,7 +283,7 @@ private struct SetupDebugActions: View {
                     Spacer()
                 }
                 .padding()
-                .background(DesignSystem.Colors.surfaceSecondary)
+                .glossySurface(base: DesignSystem.Colors.surfaceSecondary, cornerRadius: DesignSystem.CornerRadius.md)
                 .cornerRadius(DesignSystem.CornerRadius.md)
             }
             .buttonStyle(.plain)
@@ -307,13 +297,13 @@ private struct SetupDebugActions: View {
                     Spacer()
                 }
                 .padding()
-                .background(DesignSystem.Colors.surfaceSecondary)
+                .glossySurface(base: DesignSystem.Colors.surfaceSecondary, cornerRadius: DesignSystem.CornerRadius.md)
                 .cornerRadius(DesignSystem.CornerRadius.md)
             }
             .buttonStyle(.plain)
         }
         .padding()
-        .background(DesignSystem.Colors.surface.opacity(0.5))
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg, opacity: 0.5)
         .cornerRadius(DesignSystem.CornerRadius.lg)
     }
 }
@@ -323,7 +313,6 @@ private struct SetupDebugActions: View {
 private struct LimitReachedGlobalCard: View {
     let tokens: [ApplicationToken]
     let waitAction: () -> Void
-    let mindLockPlusAction: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
@@ -351,32 +340,19 @@ private struct LimitReachedGlobalCard: View {
                 }
             }
 
-            VStack(spacing: DesignSystem.Spacing.sm) {
-                Button(action: waitAction) {
-                    Label {
-                        Text("Take a break")
-                            .fontWeight(.semibold)
-                    } icon: {
-                        Image(systemName: "clock.arrow.circlepath")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
+            Button(action: waitAction) {
+                Label {
+                    Text("Unlock more time")
+                        .fontWeight(.semibold)
+                } icon: {
+                    Image(systemName: "clock.arrow.circlepath")
                 }
-                .mindLockButton(style: .secondary)
-
-                Button(action: mindLockPlusAction) {
-                    Label {
-                        Text("Unlock impact")
-                            .fontWeight(.semibold)
-                    } icon: {
-                        Image(systemName: "sparkles")
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .mindLockButton(style: .primary)
+                .frame(maxWidth: .infinity, alignment: .center)
             }
+            .mindLockButton(style: .primary)
         }
         .padding(DesignSystem.Spacing.lg)
-        .background(DesignSystem.Colors.surface.opacity(0.5))
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl, opacity: 0.5)
         .cornerRadius(DesignSystem.CornerRadius.xl)
     }
 
@@ -386,86 +362,118 @@ private struct LimitReachedGlobalCard: View {
 
     private var limitTitle: String {
         let count = tokens.count
-        if count == 1 { return "1 App Limited" }
-        return "\(count) Apps Limited"
+        if count == 1 { return "1 app locked" }
+        return "\(count) apps locked"
     }
 
     private var detailLine: String {
         let count = tokens.count
         if count == 1 {
-            return "1 app is being limited by MindLock."
+            return "1 app is currently locked."
         } else {
-            return "\(count) apps are being limited by MindLock."
+            return "\(count) apps are currently locked."
         }
     }
 }
 
-private struct MindLockImpactSection: View {
-    let selectedCharity: Charity?
+private struct UnlockMechanismSettingsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var selection = SharedSettings.preferredUnlockMechanism()
+
+    private let options: [(SharedSettings.UnlockMechanism, String, String)] = [
+        (.mindfulWait, "clock.arrow.circlepath", "Mindful wait"),
+        (.pushups, "figure.strengthtraining.traditional", "5 pushups"),
+        (.squats, "figure.strengthtraining.traditional", "10 squats")
+    ]
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: DesignSystem.Spacing.lg) {
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    Text("Choose your unlock method")
+                        .font(DesignSystem.Typography.title1)
+                        .fontWeight(.bold)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                }
+                .padding(.top, DesignSystem.Spacing.xl)
+
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    ForEach(options, id: \.0.rawValue) { option in
+                        Button {
+                            selection = option.0
+                            SharedSettings.setPreferredUnlockMechanism(option.0)
+                        } label: {
+                            HStack(spacing: DesignSystem.Spacing.md) {
+                                Image(systemName: option.1)
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(selection == option.0 ? .white : DesignSystem.Colors.primary)
+                                    .frame(width: 42, height: 42)
+                                    .background(selection == option.0 ? DesignSystem.Colors.primary : DesignSystem.Colors.primary.opacity(0.1))
+                                    .clipShape(Circle())
+
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(option.2)
+                                        .font(DesignSystem.Typography.body.weight(.semibold))
+                                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: selection == option.0 ? "checkmark.circle.fill" : "circle")
+                                    .foregroundColor(selection == option.0 ? DesignSystem.Colors.primary : DesignSystem.Colors.textTertiary)
+                            }
+                            .padding(DesignSystem.Spacing.md)
+                            .background(selection == option.0 ? DesignSystem.Colors.primary.opacity(0.12) : DesignSystem.Colors.surface)
+                            .cornerRadius(DesignSystem.CornerRadius.lg)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+
+                Spacer()
+
+                Button("Done") { dismiss() }
+                    .mindLockButton(style: .primary)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.bottom, DesignSystem.Spacing.xl)
+            .background(DesignSystem.AppBackground())
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+private struct ExerciseUnlockSection: View {
     let subscriptionActive: Bool
-    let onSelectCharity: () -> Void
+    let preferredUnlockMechanism: SharedSettings.UnlockMechanism
+    let onOpenSettings: () -> Void
     let onSubscribe: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
-            Text("MindLock Impact")
-                .font(DesignSystem.Typography.headline)
-                .foregroundColor(DesignSystem.Colors.textPrimary)
-
-            Text(description)
-                .font(DesignSystem.Typography.callout)
-                .foregroundColor(DesignSystem.Colors.textSecondary)
-
-            VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                HStack {
-                    Text("Your charity")
-                        .font(DesignSystem.Typography.subheadline)
+            HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+                    Text("Unlock method")
+                        .font(DesignSystem.Typography.headline)
                         .foregroundColor(DesignSystem.Colors.textPrimary)
-                    Spacer()
-                    Button(selectedCharity == nil ? "Choose" : "Change") {
-                        onSelectCharity()
-                    }
-                    .font(DesignSystem.Typography.footnote.bold())
                 }
 
-                if let charity = selectedCharity {
-                    HStack(spacing: DesignSystem.Spacing.md) {
-                        if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 36, height: 36)
-                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                        } else {
-                            Text(charity.emoji)
-                                .font(.system(size: 28))
-                                .frame(width: 36, height: 36)
-                        }
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(charity.name)
-                                .font(DesignSystem.Typography.body.weight(.semibold))
-                                .foregroundColor(DesignSystem.Colors.textPrimary)
-                            Text(charity.description)
-                                .font(DesignSystem.Typography.caption)
-                                .foregroundColor(DesignSystem.Colors.textSecondary)
-                                .lineLimit(2)
-                        }
-                    }
-                } else {
-                    Text("Select a charity to direct MindLock+ donations.")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                Spacer()
+
+                Button(action: onOpenSettings) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .frame(width: 36, height: 36)
+                        .glossySurface(cornerRadius: 18, opacity: 0.8)
+                        .clipShape(Circle())
                 }
+                .accessibilityLabel("Unlock method settings")
             }
-            .padding()
-            .background(DesignSystem.Colors.surface.opacity(0.6))
-            .cornerRadius(DesignSystem.CornerRadius.lg)
 
-            if subscriptionActive {
-                Text("MindLock+ is active. Your focus streaks power monthly donations.")
-                    .font(DesignSystem.Typography.footnote)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-            } else {
+            currentMethodCard
+
+            if !subscriptionActive {
                 Button(action: onSubscribe) {
                     Label {
                         Text("Join MindLock+")
@@ -479,20 +487,40 @@ private struct MindLockImpactSection: View {
             }
         }
         .padding(DesignSystem.Spacing.lg)
-        .background(DesignSystem.Colors.surface.opacity(0.5))
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl, opacity: 0.5)
         .cornerRadius(DesignSystem.CornerRadius.xl)
     }
 
-    private var description: String {
-        if let charity = selectedCharity {
-            return """
-Turn your saved time into real-world impact: earn streaks, accumulate impact points, and unlock donations to \(charity.name).
-"""
+    private var currentMethodCard: some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            Image(systemName: iconName)
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundColor(DesignSystem.Colors.primary)
+                .frame(width: 46, height: 46)
+                .background(DesignSystem.Colors.primary.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(preferredUnlockMechanism.displayName)
+                    .font(DesignSystem.Typography.body.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+            }
         }
-        return """
-Turn your saved time into real-world impact: earn streaks, accumulate impact points, and unlock donations to your chosen charity.
-"""
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg, opacity: 0.6)
+        .cornerRadius(DesignSystem.CornerRadius.lg)
     }
+
+    private var iconName: String {
+        switch preferredUnlockMechanism {
+        case .mindfulWait:
+            return "clock.arrow.circlepath"
+        case .pushups, .squats:
+            return "figure.strengthtraining.traditional"
+        }
+    }
+
 }
 
 // Testing components removed from production build
@@ -686,7 +714,7 @@ struct AppLimitsSetupView: View {
                         .foregroundColor(DesignSystem.Colors.textSecondary)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(DesignSystem.Colors.surfaceSecondary)
+                        .glossySurface(base: DesignSystem.Colors.surfaceSecondary)
                         .cornerRadius(10)
                 }
                 if persistedPendingItems.count > 0 {
@@ -732,7 +760,7 @@ struct AppLimitsSetupView: View {
                         }
                     }
                     .padding(DesignSystem.Spacing.md)
-                    .background(DesignSystem.Colors.surfaceSecondary)
+                    .glossySurface(base: DesignSystem.Colors.surfaceSecondary, cornerRadius: DesignSystem.CornerRadius.md)
                     .cornerRadius(DesignSystem.CornerRadius.md)
                 }
             }
@@ -1079,7 +1107,7 @@ private struct InstantChangePaywallView: View {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .background(DesignSystem.Colors.surface)
+            .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl)
             .cornerRadius(DesignSystem.CornerRadius.xl)
             .padding(.horizontal, DesignSystem.Spacing.lg)
 
@@ -1114,7 +1142,7 @@ private struct InstantChangePaywallView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(DesignSystem.Colors.background.ignoresSafeArea())
+        .background(DesignSystem.AppBackground())
         .onAppear(perform: beginCountdown)
         .onDisappear(perform: invalidate)
     }

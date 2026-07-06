@@ -6,7 +6,7 @@ struct DesignSystem {
     // MARK: - Colors (Dark theme like Opal)
     struct Colors {
         // Dark backgrounds
-        static let background = Color(red: 0.06, green: 0.06, blue: 0.08) // Very dark blue-black
+        static let background = Color.black
         static let surface = Color(red: 0.11, green: 0.11, blue: 0.13) // Dark card background
         static let surfaceSecondary = Color(red: 0.15, green: 0.15, blue: 0.17) // Slightly lighter
         
@@ -43,8 +43,8 @@ struct DesignSystem {
         
         static let backgroundGradient = LinearGradient(
             colors: [
-                Color(red: 0.06, green: 0.06, blue: 0.08),
-                Color(red: 0.08, green: 0.08, blue: 0.10)
+                Color.black,
+                Color.black
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -114,6 +114,276 @@ struct DesignSystem {
         let x: CGFloat
         let y: CGFloat
     }
+
+    // MARK: - App Background
+    struct AppBackground: View {
+        var body: some View {
+            ParticleBackground()
+                .ignoresSafeArea()
+        }
+    }
+
+    struct ParticleBackground: View {
+        @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+        private let particleCount = 86
+
+        var body: some View {
+            TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: reduceMotion)) { timeline in
+                Canvas { context, size in
+                    let rect = CGRect(origin: .zero, size: size)
+                    context.fill(Path(rect), with: .color(Colors.background))
+
+                    let time = reduceMotion ? 0 : timeline.date.timeIntervalSinceReferenceDate
+
+                    for index in 0..<particleCount {
+                        drawParticle(index: index, time: time, size: size, context: &context)
+                    }
+                }
+            }
+            .background(Colors.background)
+        }
+
+        private func drawParticle(
+            index: Int,
+            time: TimeInterval,
+            size: CGSize,
+            context: inout GraphicsContext
+        ) {
+            let baseX = seededValue(index, salt: 1)
+            let baseY = seededValue(index, salt: 2)
+            let sizeSeed = seededValue(index, salt: 3)
+            let speedSeed = seededValue(index, salt: 4)
+            let phase = seededValue(index, salt: 5) * .pi * 2
+
+            let drift = sin(time * (0.08 + speedSeed * 0.08) + phase) * (8 + speedSeed * 16)
+            let speed = 2.5 + speedSeed * 7
+            let yRange = Double(size.height + 48)
+            let y = (baseY * yRange + time * speed).truncatingRemainder(dividingBy: yRange) - 24
+            let x = baseX * Double(size.width) + drift
+
+            let radius = 0.35 + sizeSeed * 0.55
+            let primaryFlicker = (sin(time * (0.8 + speedSeed * 1.6) + phase) + 1) / 2
+            let secondaryFlicker = (sin(time * (1.7 + speedSeed * 2.4) + phase * 1.7) + 1) / 2
+            let sparkle = pow((primaryFlicker * 0.75) + (secondaryFlicker * 0.25), 2.2)
+            let opacity = 0.10 + sparkle * (0.50 + sizeSeed * 0.26)
+            let whiteness = 0.62 + sparkle * 0.38
+
+            let particleRect = CGRect(
+                x: x - radius,
+                y: y - radius,
+                width: radius * 2,
+                height: radius * 2
+            )
+
+            let glowRadius = radius * 2.2
+            let glowRect = CGRect(
+                x: x - glowRadius,
+                y: y - glowRadius,
+                width: glowRadius * 2,
+                height: glowRadius * 2
+            )
+
+            context.fill(
+                Path(ellipseIn: glowRect),
+                with: .color(Color.white.opacity(opacity * 0.035))
+            )
+            context.fill(
+                Path(ellipseIn: particleRect),
+                with: .color(Color.white.opacity(opacity * whiteness))
+            )
+        }
+
+        private func seededValue(_ index: Int, salt: Double) -> Double {
+            let raw = sin(Double(index + 1) * 12.9898 + salt * 78.233) * 43758.5453
+            return raw - floor(raw)
+        }
+    }
+
+    // MARK: - Liquid Glass
+    struct GlossySurface: View {
+        let base: Color
+        let cornerRadius: CGFloat
+        let opacity: Double
+
+        init(
+            base: Color = Colors.surface,
+            cornerRadius: CGFloat = CornerRadius.md,
+            opacity: Double = 0.92
+        ) {
+            self.base = base
+            self.cornerRadius = cornerRadius
+            self.opacity = opacity
+        }
+
+        var body: some View {
+            if #available(iOS 26.0, *) {
+                nativeLiquidGlass
+            } else {
+                fallbackGlass
+            }
+        }
+
+        @available(iOS 26.0, *)
+        private var nativeLiquidGlass: some View {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(base.opacity(0.18))
+                .glassEffect(
+                    .regular.tint(base.opacity(opacity)).interactive(),
+                    in: RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                )
+                .shadow(color: Color.black.opacity(0.28), radius: 14, x: 0, y: 8)
+        }
+
+        private var fallbackGlass: some View {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(base.opacity(opacity))
+                .overlay(glossOverlay)
+                .overlay(borderOverlay)
+                .shadow(color: Color.black.opacity(0.35), radius: 12, x: 0, y: 6)
+        }
+
+        private var glossOverlay: some View {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.22),
+                            Color.white.opacity(0.07),
+                            Color.black.opacity(0.16)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        }
+
+        private var borderOverlay: some View {
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            Color.white.opacity(0.30),
+                            Color.white.opacity(0.07),
+                            Color.black.opacity(0.24)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    ),
+                    lineWidth: 1
+                )
+        }
+    }
+
+    struct GlossyButtonBackground: View {
+        let style: MindLockButtonStyle
+        let pressed: Bool
+        let cornerRadius: CGFloat
+
+        init(
+            style: MindLockButtonStyle,
+            pressed: Bool = false,
+            cornerRadius: CGFloat = CornerRadius.md
+        ) {
+            self.style = style
+            self.pressed = pressed
+            self.cornerRadius = cornerRadius
+        }
+
+        var body: some View {
+            if #available(iOS 26.0, *) {
+                nativeLiquidGlass
+            } else {
+                fallbackGlass
+            }
+        }
+
+        @available(iOS 26.0, *)
+        private var nativeLiquidGlass: some View {
+            let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+
+            return shape
+                .fill(Color.white.opacity(style == .ghost ? 0 : 0.035))
+                .glassEffect(
+                    glassMaterial,
+                    in: shape
+                )
+                .overlay(
+                    shape.stroke(borderColor, lineWidth: style == .ghost ? 0 : 1)
+                )
+                .brightness(pressed ? -0.05 : 0)
+        }
+
+        private var fallbackGlass: some View {
+            let shape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+
+            return ZStack {
+                shape
+                    .fill(Color.white.opacity(style == .ghost ? 0 : 0.075))
+                shape
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(style == .ghost ? 0 : 0.12),
+                                Color.white.opacity(style == .ghost ? 0 : 0.035),
+                                tintColor.opacity(style == .ghost ? 0 : 0.08),
+                                Color.black.opacity(style == .ghost ? 0 : 0.10)
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                shape.stroke(borderColor, lineWidth: style == .ghost ? 0 : 1)
+            }
+            .brightness(pressed ? -0.05 : 0)
+        }
+
+        @available(iOS 26.0, *)
+        private var glassMaterial: Glass {
+            .regular.tint(glassTintColor).interactive()
+        }
+
+        private var tintColor: Color {
+            switch style {
+            case .primary:
+                return Colors.primary
+            case .impact:
+                return Colors.success
+            case .secondary:
+                return Color.white
+            case .destructive:
+                return Colors.accent
+            case .ghost:
+                return Color.clear
+            }
+        }
+
+        private var glassTintColor: Color {
+            switch style {
+            case .ghost:
+                return Color.clear
+            case .secondary:
+                return Color.black.opacity(0.28)
+            default:
+                return Color.black.opacity(0.24)
+            }
+        }
+
+        private var borderColor: Color {
+            switch style {
+            case .primary:
+                return Colors.primary.opacity(0.26)
+            case .impact:
+                return Colors.success.opacity(0.28)
+            case .secondary:
+                return Color.white.opacity(0.13)
+            case .destructive:
+                return Colors.accent.opacity(0.30)
+            case .ghost:
+                return Color.clear
+            }
+        }
+    }
     
     // MARK: - Animation (Smooth and subtle)
     struct Animation {
@@ -129,8 +399,7 @@ extension View {
     
     func mindLockCard() -> some View {
         self
-            .background(DesignSystem.Colors.surface)
-            .cornerRadius(DesignSystem.CornerRadius.md)
+            .glossySurface()
             .shadow(
                 color: DesignSystem.Shadows.medium.color,
                 radius: DesignSystem.Shadows.medium.radius,
@@ -144,9 +413,8 @@ extension View {
             .frame(maxWidth: .infinity)
             .frame(height: 50)
             .contentShape(Rectangle())
-            .background(style.backgroundColor)
+            .background(DesignSystem.GlossyButtonBackground(style: style))
             .foregroundColor(style.foregroundColor)
-            .cornerRadius(DesignSystem.CornerRadius.md)
             .shadow(
                 color: style.shadowColor,
                 radius: 4,
@@ -165,30 +433,9 @@ extension DesignSystem {
                 .frame(maxWidth: .infinity)
                 .frame(height: 50)
                 .contentShape(Rectangle())
-                .background(background(for: configuration.isPressed))
+                .background(DesignSystem.GlossyButtonBackground(style: style, pressed: configuration.isPressed))
                 .foregroundColor(style.foregroundColor)
-                .cornerRadius(DesignSystem.CornerRadius.md)
                 .shadow(color: style.shadowColor, radius: 4, x: 0, y: 2)
-        }
-
-        @ViewBuilder
-        private func background(for pressed: Bool) -> some View {
-            switch style {
-            case .primary:
-                DesignSystem.Colors.primaryGradient
-                    .brightness(pressed ? -0.05 : 0)
-            case .impact:
-                DesignSystem.Colors.impactGradient
-                    .brightness(pressed ? -0.05 : 0)
-            case .secondary:
-                DesignSystem.Colors.surface
-                    .opacity(pressed ? 0.9 : 1.0)
-            case .destructive:
-                DesignSystem.Colors.accentGradient
-                    .brightness(pressed ? -0.05 : 0)
-            case .ghost:
-                Color.clear
-            }
         }
     }
 }
@@ -200,7 +447,7 @@ extension Button {
     }
 }
 
-enum MindLockButtonStyle {
+enum MindLockButtonStyle: Equatable {
     case primary
     case secondary
     case destructive
@@ -208,18 +455,7 @@ enum MindLockButtonStyle {
     case impact
     
     var backgroundColor: some View {
-        switch self {
-        case .primary:
-            return AnyView(DesignSystem.Colors.primaryGradient)
-        case .impact:
-            return AnyView(DesignSystem.Colors.impactGradient)
-        case .secondary:
-            return AnyView(DesignSystem.Colors.surface)
-        case .destructive:
-            return AnyView(DesignSystem.Colors.accentGradient)
-        case .ghost:
-            return AnyView(Color.clear)
-        }
+        AnyView(DesignSystem.GlossyButtonBackground(style: self))
     }
     
     var foregroundColor: Color {
@@ -246,3 +482,19 @@ enum MindLockButtonStyle {
         }
     }
 } 
+
+extension View {
+    func glossySurface(
+        base: Color = DesignSystem.Colors.surface,
+        cornerRadius: CGFloat = DesignSystem.CornerRadius.md,
+        opacity: Double = 0.92
+    ) -> some View {
+        self.background(
+            DesignSystem.GlossySurface(
+                base: base,
+                cornerRadius: cornerRadius,
+                opacity: opacity
+            )
+        )
+    }
+}

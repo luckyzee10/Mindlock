@@ -42,7 +42,7 @@ struct AppSelectionView: View {
                 }
                 .padding(.horizontal, DesignSystem.Spacing.lg)
             }
-            .background(DesignSystem.Colors.backgroundGradient.ignoresSafeArea())
+            .background(DesignSystem.AppBackground())
             .navigationTitle("Select Apps")
             .navigationBarTitleDisplayMode(.large)
             .toolbar {

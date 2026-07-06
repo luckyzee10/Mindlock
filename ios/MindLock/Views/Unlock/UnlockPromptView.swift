@@ -1,53 +1,41 @@
 import SwiftUI
 import StoreKit
-import UIKit
 
 struct UnlockPromptView: View {
     @Environment(\.dismiss) private var dismiss
 
     @StateObject private var paymentManager = PaymentManager()
-    @State private var selectedCharity: Charity?
-    @State private var showingCharityPicker = false
     @State private var purchaseErrorMessage: String?
     @State private var showingPurchaseError = false
     @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
-    @State private var impactPoints = SharedSettings.impactPoints()
 
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(spacing: DesignSystem.Spacing.xl) {
-                    heroSection
-                    impactSummary
-                    Text("Stack up impact points to transform up to 20% of your plan into donations for the causes you choose.")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, DesignSystem.Spacing.md)
-                    selectedCharitySection
-                    quickCharityList
-                    subscriptionCTA
-                    Button("Not now") { dismiss() }
-                        .font(DesignSystem.Typography.body.weight(.semibold))
-                        .foregroundColor(DesignSystem.Colors.primary)
+            ZStack {
+                DesignSystem.AppBackground()
+
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: DesignSystem.Spacing.xl) {
+                        comparisonCard
+                        heroSection
+                        benefitsList
+                        socialProof
+                        subscriptionCTA
+
+                        Button("Not now") { dismiss() }
+                            .font(DesignSystem.Typography.body.weight(.semibold))
+                            .foregroundColor(DesignSystem.Colors.primary)
+                            .padding(.top, DesignSystem.Spacing.xs)
+                    }
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.top, DesignSystem.Spacing.xl)
+                    .padding(.bottom, DesignSystem.Spacing.xxl)
                 }
-                .padding(.horizontal, DesignSystem.Spacing.lg)
-                .padding(.top, DesignSystem.Spacing.xl)
-                .padding(.bottom, DesignSystem.Spacing.xxl)
             }
-            .background(DesignSystem.Colors.background.ignoresSafeArea())
             .navigationBarHidden(true)
         }
-        .sheet(isPresented: $showingCharityPicker, onDismiss: loadSelectedCharity) {
-            SetupCharitySelectionView()
-        }
         .onAppear {
-            loadSelectedCharity()
-            refreshImpactMetrics()
             Task { await paymentManager.loadProductsIfNeeded() }
-        }
-        .onReceive(NotificationCenter.default.publisher(for: SharedSettings.analyticsUpdatedNotification)) { _ in
-            refreshImpactMetrics()
         }
         .onReceive(NotificationCenter.default.publisher(for: SharedSettings.subscriptionStatusChangedNotification)) { _ in
             subscriptionActive = SharedSettings.isSubscriptionActive()
@@ -59,164 +47,151 @@ struct UnlockPromptView: View {
         })
     }
 
+    private var comparisonCard: some View {
+        HStack(spacing: 0) {
+            comparisonColumn(
+                title: "Before",
+                value: "6h 32m",
+                bars: [0.58, 0.78, 0.72, 0.52],
+                emphasized: false
+            )
+            Rectangle()
+                .fill(Color.white.opacity(0.10))
+                .frame(width: 1)
+                .padding(.vertical, DesignSystem.Spacing.md)
+            comparisonColumn(
+                title: "After",
+                value: "1h 49m",
+                bars: [0.24, 0.32, 0.28, 0.22],
+                emphasized: true
+            )
+        }
+        .padding(DesignSystem.Spacing.lg)
+        .frame(height: 220)
+        .background(
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            DesignSystem.Colors.primary.opacity(0.30),
+                            DesignSystem.Colors.success.opacity(0.15),
+                            Color.black.opacity(0.55)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 28, style: .continuous)
+                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+        )
+        .shadow(color: DesignSystem.Colors.primary.opacity(0.22), radius: 28, x: 0, y: 14)
+    }
+
+    private func comparisonColumn(title: String, value: String, bars: [CGFloat], emphasized: Bool) -> some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(.white.opacity(0.84))
+                Text(value)
+                    .font(.system(size: 29, weight: .bold))
+                    .foregroundColor(.white)
+            }
+
+            HStack(alignment: .bottom, spacing: 9) {
+                ForEach(Array(bars.enumerated()), id: \.offset) { index, height in
+                    RoundedRectangle(cornerRadius: 5, style: .continuous)
+                        .fill(emphasized ? DesignSystem.Colors.success : DesignSystem.Colors.primary)
+                        .frame(width: 18, height: 82 * height)
+                        .overlay(alignment: .top) {
+                            RoundedRectangle(cornerRadius: 5, style: .continuous)
+                                .fill(Color.white.opacity(0.28))
+                                .frame(height: 8)
+                        }
+                }
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
     private var heroSection: some View {
-        VStack(spacing: DesignSystem.Spacing.sm) {
-            Text(subscriptionActive ? "MindLock+ active" : "You Focus, We Donate")
-                .font(.system(size: 30, weight: .heavy))
+        VStack(spacing: DesignSystem.Spacing.md) {
+            Text(subscriptionActive ? "MindLock+ is active" : "Earn more time back")
+                .font(.system(size: 34, weight: .heavy))
                 .foregroundColor(DesignSystem.Colors.textPrimary)
                 .multilineTextAlignment(.center)
-            Text(subscriptionActive ? "Your subscription delivers enhanced analytics, unlimited time blocks, and transparent giving."
-                 : "Join MindLock+ to use your focus to create change. The more you focus, the more we donate.")
-                .font(DesignSystem.Typography.callout)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Text(subscriptionActive
+                 ? "Your subscription includes exercise unlocks, enhanced analytics, and expanded blocking controls."
+                 : "Turn blocked moments into better habits with deeper analytics, stronger schedules, and exercise unlocks.")
+                .font(DesignSystem.Typography.body)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
                 .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.horizontal, DesignSystem.Spacing.lg)
-        .padding(.vertical, DesignSystem.Spacing.xl)
+        .padding(.horizontal, DesignSystem.Spacing.sm)
     }
 
-    private var impactSummary: some View {
-        VStack(spacing: DesignSystem.Spacing.md) {
-            HStack {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("Impact points")
-                        .font(DesignSystem.Typography.caption)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                    Text("\(impactPoints)")
-                        .font(.system(size: 34, weight: .bold))
-                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                    Text("Multiplier ×\(SharedSettings.impactMultiplier(forStreak: impactPoints))")
-                        .font(DesignSystem.Typography.callout)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                }
-                Spacer()
-                Image(systemName: "hand.raised.fill")
-                    .font(.system(size: 36))
-                    .foregroundColor(DesignSystem.Colors.primary)
-            }
-
-            if let days = SharedSettings.daysUntilNextImpactBoost(from: impactPoints) {
-                Text("Stay focused \(days == 0 ? "today" : "for \(days) more day\(days == 1 ? "" : "s")") to reach the next donation boost.")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            } else {
-                Text("You’ve maxed out the current multiplier. Amazing work.")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
+    private var benefitsList: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
+            benefitRow(
+                icon: "lock.fill",
+                title: "Focus, uninterrupted.",
+                detail: "Create stronger blocks around the apps that pull you back."
+            )
+            benefitRow(
+                icon: "chart.bar.fill",
+                title: "Understand your habits.",
+                detail: "See real Screen Time usage directly in the Usage tab."
+            )
+            benefitRow(
+                icon: "figure.strengthtraining.traditional",
+                title: "Earn extra time with movement.",
+                detail: "Unlock more app time through quick verified exercise challenges."
+            )
         }
-        .padding()
-        .background(DesignSystem.Colors.surface.opacity(0.7))
-        .cornerRadius(DesignSystem.CornerRadius.xl)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal, DesignSystem.Spacing.sm)
     }
 
-    private var selectedCharitySection: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-            Text("Your selected charity")
-                .font(DesignSystem.Typography.headline)
-                .foregroundColor(DesignSystem.Colors.textPrimary)
-            if let charity = selectedCharity {
-                HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
-                    if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 36, height: 36)
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                    } else {
-                        Text(charity.emoji)
-                            .font(.system(size: 36))
-                    }
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(charity.name)
-                            .font(DesignSystem.Typography.body)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                        Text(charity.description)
-                            .font(DesignSystem.Typography.caption)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                    }
-                    Spacer()
-                }
-                .padding()
-                .background(DesignSystem.Colors.surface.opacity(0.9))
-                .cornerRadius(DesignSystem.CornerRadius.lg)
-            } else {
-                VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
-                    Text("No charity selected yet.")
-                        .font(DesignSystem.Typography.body)
-                        .foregroundColor(DesignSystem.Colors.textSecondary)
-                    Button("Choose a charity") { showingCharityPicker = true }
-                        .mindLockButton(style: .secondary)
-                }
-                .padding()
-                .background(DesignSystem.Colors.surface.opacity(0.9))
-                .cornerRadius(DesignSystem.CornerRadius.lg)
-            }
-        }
-    }
+    private func benefitRow(icon: String, title: String, detail: String) -> some View {
+        HStack(alignment: .top, spacing: DesignSystem.Spacing.lg) {
+            Image(systemName: icon)
+                .font(.system(size: 22, weight: .semibold))
+                .foregroundColor(DesignSystem.Colors.primary)
+                .frame(width: 34, height: 34)
 
-    private var quickCharityList: some View {
-        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            HStack {
-                Text("Change your charity")
+            VStack(alignment: .leading, spacing: 3) {
+                (Text(title).bold() + Text(" \(detail)"))
                     .font(DesignSystem.Typography.callout)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                Spacer()
-                Button("See all") { showingCharityPicker = true }
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.primary)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            VStack(spacing: DesignSystem.Spacing.sm) {
-                ForEach(Charity.popularCharities) { charity in
-                    Button {
-                        selectedCharity = charity
-                        UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
-                    } label: {
-                        HStack(spacing: DesignSystem.Spacing.md) {
-                            if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 26, height: 26)
-                                    .clipShape(RoundedRectangle(cornerRadius: 5))
-                            } else {
-                                Text(charity.emoji)
-                                    .font(.system(size: 26))
-                            }
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(charity.name)
-                                    .font(DesignSystem.Typography.body)
-                                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                                Text(charity.description)
-                                    .font(DesignSystem.Typography.caption)
-                                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                                    .lineLimit(2)
-                            }
-                            Spacer()
-                            if selectedCharity?.id == charity.id {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(DesignSystem.Colors.primary)
-                            }
-                        }
-                        .padding()
-                        .background(DesignSystem.Colors.surface.opacity(selectedCharity?.id == charity.id ? 0.8 : 0.5))
-                        .cornerRadius(DesignSystem.CornerRadius.lg)
-                    }
+        }
+    }
+
+    private var socialProof: some View {
+        VStack(spacing: DesignSystem.Spacing.xs) {
+            HStack(spacing: 4) {
+                ForEach(0..<5, id: \.self) { _ in
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.yellow)
                 }
             }
+            Text("Built for people who want their phone to work for them.")
+                .font(DesignSystem.Typography.caption)
+                .foregroundColor(DesignSystem.Colors.textSecondary)
+                .multilineTextAlignment(.center)
         }
     }
 
     private var subscriptionCTA: some View {
         VStack(spacing: DesignSystem.Spacing.md) {
-            Text("Save Your Time, Save the World")
-                .font(DesignSystem.Typography.caption)
-                .foregroundColor(DesignSystem.Colors.primary)
-                .multilineTextAlignment(.center)
-                .frame(maxWidth: .infinity)
             Button(action: subscribeTapped) {
                 if paymentManager.isProcessing {
                     ProgressView()
@@ -229,7 +204,7 @@ struct UnlockPromptView: View {
                         .frame(maxWidth: .infinity)
                 }
             }
-            .mindLockButton(style: .primary)
+            .premiumPaywallButton()
             .disabled(subscriptionActive || paymentManager.isProcessing || paymentManager.primaryProduct == nil)
 
             if let failureMessage = failureMessage {
@@ -237,31 +212,23 @@ struct UnlockPromptView: View {
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
-            }
+                }
         }
-        .padding(DesignSystem.Spacing.lg)
         .frame(maxWidth: .infinity)
-        .background(DesignSystem.Colors.surface.opacity(0.35))
-        .cornerRadius(32)
     }
 
     private func subscribeTapped() {
         guard !subscriptionActive else { return }
-        guard selectedCharity != nil else {
-            showingCharityPicker = true
-            return
-        }
         Task {
             await executePurchase()
         }
     }
 
     private func executePurchase() async {
-        guard let charity = selectedCharity else { return }
         do {
-            try await paymentManager.purchaseSubscription(for: charity)
+            try await paymentManager.purchaseSubscription()
             await MainActor.run {
-                subscriptionActive = true
+                subscriptionActive = SharedSettings.isSubscriptionActive()
                 dismiss()
             }
         } catch PaymentError.userCancelled {
@@ -272,24 +239,11 @@ struct UnlockPromptView: View {
         }
     }
 
-    private func loadSelectedCharity() {
-        if let charityId = UserDefaults.standard.string(forKey: "selectedCharityId"),
-           let charity = Charity.popularCharities.first(where: { $0.id == charityId }) {
-            selectedCharity = charity
-        } else {
-            selectedCharity = nil
-        }
-    }
-
     private var buttonTitle: String {
         if let price = paymentManager.primaryProduct?.displayPrice {
             return "Join MindLock+ • \(price)"
         }
         return "Join MindLock+"
-    }
-
-    private func refreshImpactMetrics() {
-        impactPoints = SharedSettings.impactPoints()
     }
 
     private var failureMessage: String? {
@@ -300,5 +254,27 @@ struct UnlockPromptView: View {
             return "Your purchase is pending approval. You’ll be able to complete checkout once Apple finishes processing."
         }
         return nil
+    }
+}
+
+private extension View {
+    func premiumPaywallButton() -> some View {
+        self
+            .font(DesignSystem.Typography.headline)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 62)
+            .background(
+                LinearGradient(
+                    colors: [
+                        DesignSystem.Colors.primary,
+                        Color(red: 0.08, green: 0.48, blue: 1.0)
+                    ],
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+            )
+            .clipShape(Capsule())
+            .shadow(color: DesignSystem.Colors.primary.opacity(0.42), radius: 18, x: 0, y: 10)
     }
 }

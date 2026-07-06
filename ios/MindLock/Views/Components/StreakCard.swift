@@ -57,7 +57,7 @@ struct StreakCard: View {
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(DesignSystem.Colors.textSecondary)
 
-                Text("Impact multiplier ×\(SharedSettings.impactMultiplier(forStreak: days))")
+                Text("Perfect-day streak")
                     .font(DesignSystem.Typography.caption)
                     .foregroundColor(DesignSystem.Colors.textSecondary)
 
@@ -70,12 +70,12 @@ struct StreakCard: View {
         }
         .padding(DesignSystem.Spacing.lg)
         .frame(maxWidth: .infinity)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl)
         .cornerRadius(DesignSystem.CornerRadius.xl)
     }
 
     private var subtitle: String {
-        days == 0 ? "Start your streak" : "Keep going to amplify donations"
+        days == 0 ? "Start your streak" : "Keep going with unlock-free days"
     }
 
     private var fireColor: Color {

@@ -14,7 +14,7 @@ struct BlockListAppRow: View {
                 .opacity(0.6)
         }
         .padding(DesignSystem.Spacing.md)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.md)
         .cornerRadius(DesignSystem.CornerRadius.md)
     }
 }

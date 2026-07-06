@@ -13,130 +13,36 @@ struct OnboardingView: View {
     // User survey data
     @State private var dailyUsageHours: Double = 0
     @State private var userAge: Int = 0
-    @State private var selectedCharity: Charity?
     @State private var dailyGoalHours: Double = 2
+    @State private var selectedGoal: OnboardingGoal?
+    @State private var onboardingSelection = FamilyActivitySelection()
+    @State private var onboardingLimitMinutesByToken: [String: Int] = [:]
+    @State private var onboardingBlockStart = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
+    @State private var onboardingBlockEnd = Calendar.current.date(bySettingHour: 17, minute: 0, second: 0, of: Date()) ?? Date()
+    @State private var onboardingBlockDays: Set<Int> = Set([2, 3, 4, 5, 6])
+    @State private var setupError: String?
     
-    private let pages = OnboardingPage.allPages
+    private var pages: [OnboardingPage] {
+        OnboardingPage.pages(for: selectedGoal?.setupPath)
+    }
     
     var body: some View {
         ZStack {
-            DesignSystem.Colors.backgroundGradient.ignoresSafeArea()
+            DesignSystem.AppBackground()
             
             VStack(spacing: 0) {
                 // Pages
-                TabView(selection: $currentPage) {
-                    ForEach(0..<pages.count, id: \.self) { index in
-                        if pages[index].isPermissionPage {
-                            ScreenTimePermissionView(
-                                page: pages[index],
-                                screenTimeManager: screenTimeManager,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isUsageQuestionPage {
-                            UsageQuestionView(
-                                page: pages[index],
-                                selectedHours: $dailyUsageHours,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isAgeQuestionPage {
-                            AgeQuestionView(
-                                page: pages[index],
-                                selectedAge: $userAge,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isImpactPage {
-                            LifetimeImpactView(
-                                page: pages[index],
-                                dailyUsageHours: dailyUsageHours,
-                                userAge: userAge,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isCharityPage {
-                            CharitySelectionView(
-                                page: pages[index],
-                                selectedCharity: $selectedCharity,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isConceptPage {
-                            ConceptExplanationView(
-                                page: pages[index],
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isGoalSettingPage {
-                            GoalSettingView(
-                                page: pages[index],
-                                dailyUsageHours: dailyUsageHours,
-                                dailyGoalHours: $dailyGoalHours,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isAnimatedLimitsIntroPage {
-                            AnimatedLimitsIntroView(
-                                page: pages[index],
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        currentPage += 1
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else if pages[index].isTimeLimitPage {
-                            // No longer used: app selection now lives inside AnimatedLimitsIntroView
-                            EmptyView().tag(index)
-                        } else if pages[index].title == "Stay Mindful" {
-                            FinalInspireView(
-                                page: pages[index],
-                                dailyUsageHours: dailyUsageHours,
-                                dailyGoalHours: dailyGoalHours,
-                                onContinue: {
-                                    withAnimation(DesignSystem.Animation.gentle) {
-                                        saveUserPreferences()
-                                        onComplete()
-                                    }
-                                }
-                            )
-                            .tag(index)
-                        } else {
-                            staticOnboardingView(for: pages[index])
-                                .tag(index)
-                        }
-                    }
+                ZStack {
+                    onboardingPageView(for: pages[currentPage])
+                        .id(currentPage)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .bottom).combined(with: .opacity),
+                            removal: .move(edge: .top).combined(with: .opacity)
+                        ))
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
                 
                 // Navigation dots removed per design
                 
@@ -179,18 +85,195 @@ struct OnboardingView: View {
             }
         }
     }
+
+    @ViewBuilder
+    private func onboardingPageView(for page: OnboardingPage) -> some View {
+        if page.isPermissionPage {
+            ScreenTimePermissionView(
+                page: page,
+                screenTimeManager: screenTimeManager,
+                onContinue: advancePage
+            )
+        } else if page.isUsageQuestionPage {
+            UsageQuestionView(
+                page: page,
+                selectedHours: $dailyUsageHours,
+                onContinue: advancePage
+            )
+        } else if page.isAgeQuestionPage {
+            AgeQuestionView(
+                page: page,
+                selectedAge: $userAge,
+                onContinue: advancePage
+            )
+        } else if page.isImpactPage {
+            LifetimeImpactView(
+                page: page,
+                dailyUsageHours: dailyUsageHours,
+                userAge: userAge,
+                onContinue: advancePage
+            )
+        } else if page.isConceptPage {
+            ConceptExplanationView(
+                page: page,
+                onContinue: advancePage
+            )
+        } else if page.isGoalChoicePage {
+            OnboardingGoalChoiceView(
+                page: page,
+                selectedGoal: $selectedGoal,
+                onContinue: advancePage
+            )
+        } else if page.isGoalSettingPage {
+            GoalSettingView(
+                page: page,
+                dailyUsageHours: dailyUsageHours,
+                dailyGoalHours: $dailyGoalHours,
+                onContinue: advancePage
+            )
+        } else if let setupStep = page.setupStep {
+            setupStepView(for: page, setupStep: setupStep)
+        } else if page.isAnimatedLimitsIntroPage {
+            AnimatedLimitsIntroView(
+                page: page,
+                onContinue: advancePage
+            )
+        } else if page.isTimeLimitPage {
+            // No longer used: app selection now lives inside AnimatedLimitsIntroView
+            EmptyView()
+        } else if page.title == "Stay Mindful" {
+            FinalInspireView(
+                page: page,
+                dailyUsageHours: dailyUsageHours,
+                dailyGoalHours: dailyGoalHours,
+                onContinue: {
+                    withAnimation(DesignSystem.Animation.gentle) {
+                        saveUserPreferences()
+                        onComplete()
+                    }
+                }
+            )
+        } else {
+            staticOnboardingView(for: page)
+        }
+    }
     
     private func saveUserPreferences() {
         // Save user selections to UserDefaults or Core Data
         UserDefaults.standard.set(dailyUsageHours, forKey: "dailyUsageHours")
         UserDefaults.standard.set(userAge, forKey: "userAge")
-        if let charity = selectedCharity {
-            UserDefaults.standard.set(charity.id, forKey: "selectedCharityId")
-        }
         UserDefaults.standard.set(dailyGoalHours, forKey: "dailyGoalHours")
         UserDefaults.standard.set(dailyGoalHours * 7, forKey: "weeklyGoalHours")
+        if let selectedGoal {
+            UserDefaults.standard.set(selectedGoal.rawValue, forKey: "onboardingMainGoal")
+            UserDefaults.standard.set(selectedGoal.setupPath.rawValue, forKey: "onboardingSetupPath")
+        }
         // Update ScreenTimeManager with selected apps (already handled by the manager)
-        print("💾 Saved user preferences: Charity \(selectedCharity?.name ?? "none")")
+        print("💾 Saved user preferences")
+    }
+
+    @ViewBuilder
+    private func setupStepView(for page: OnboardingPage, setupStep: OnboardingSetupStep) -> some View {
+        switch setupStep {
+        case .simpleLimitApps:
+            OnboardingAppSelectionStepView(
+                page: page,
+                selection: $onboardingSelection,
+                mode: .simpleLimits,
+                onContinue: advancePage
+            )
+        case .simpleLimitSettings:
+            OnboardingLimitSettingsStepView(
+                page: page,
+                selection: onboardingSelection,
+                limitMinutesByToken: $onboardingLimitMinutesByToken,
+                error: $setupError,
+                onContinue: saveSimpleLimits
+            )
+        case .timeBlockApps:
+            OnboardingAppSelectionStepView(
+                page: page,
+                selection: $onboardingSelection,
+                mode: .timeBlock,
+                onContinue: advancePage
+            )
+        case .timeBlockSchedule:
+            OnboardingTimeBlockScheduleStepView(
+                page: page,
+                selection: onboardingSelection,
+                start: $onboardingBlockStart,
+                end: $onboardingBlockEnd,
+                selectedDays: $onboardingBlockDays,
+                error: $setupError,
+                onContinue: saveTimeBlock
+            )
+        }
+    }
+
+    private func advancePage() {
+        setupError = nil
+        withAnimation(DesignSystem.Animation.gentle) {
+            currentPage += 1
+        }
+    }
+
+    private func saveSimpleLimits() {
+        setupError = nil
+        let tokens = onboardingSelection.applicationTokens
+        guard !tokens.isEmpty else {
+            setupError = "Select at least one app to continue."
+            return
+        }
+
+        screenTimeManager.updateSelectedApps(onboardingSelection, reason: "onboarding simple limits")
+        for token in tokens {
+            let minutes = onboardingLimitMinutesByToken[token.identifier] ?? 30
+            DailyLimitsManager.shared.setLimitImmediate(for: token, limit: TimeInterval(minutes * 60))
+        }
+        advancePage()
+    }
+
+    private func saveTimeBlock() {
+        setupError = nil
+        guard !onboardingSelection.applicationTokens.isEmpty else {
+            setupError = "Select at least one app to continue."
+            return
+        }
+
+        let calendar = Calendar.current
+        let sh = calendar.component(.hour, from: onboardingBlockStart)
+        let sm = calendar.component(.minute, from: onboardingBlockStart)
+        let eh = calendar.component(.hour, from: onboardingBlockEnd)
+        let em = calendar.component(.minute, from: onboardingBlockEnd)
+        let minutes = (eh * 60 + em) - (sh * 60 + sm)
+
+        guard minutes >= 60 else {
+            setupError = "Time blocks must be at least 1 hour."
+            return
+        }
+
+        guard !onboardingBlockDays.isEmpty else {
+            setupError = "Select at least one day."
+            return
+        }
+
+        screenTimeManager.updateSelectedApps(onboardingSelection, reason: "onboarding time block")
+        let block = SharedSettings.TimeBlock(
+            id: UUID().uuidString,
+            name: "Focus Time",
+            startHour: sh,
+            startMinute: sm,
+            endHour: eh,
+            endMinute: em,
+            daysOfWeek: onboardingBlockDays,
+            enabled: true
+        )
+        var blocks = SharedSettings.loadTimeBlocks()
+        blocks.append(block)
+        SharedSettings.saveTimeBlocks(blocks)
+        screenTimeManager.refreshMonitoringSchedule(reason: "onboarding time block")
+        screenTimeManager.enforceActiveTimeBlocksNow()
+        advancePage()
     }
     
     private func staticOnboardingView(for page: OnboardingPage) -> some View {
@@ -372,15 +455,7 @@ struct AgeQuestionView: View {
     @State private var iconScale: CGFloat = 0.8
     @State private var textOpacity: Double = 0.0
     
-    // Use the earliest age in each range to maximize remaining lifetime in the stats screen.
-    private let ageRanges = [
-        (age: 13, label: "13-18", subtitle: "Teen"),
-        (age: 19, label: "19-25", subtitle: "Young adult"),
-        (age: 26, label: "26-35", subtitle: "Adult"),
-        (age: 36, label: "36-45", subtitle: "Mid-life"),
-        (age: 46, label: "46-55", subtitle: "Mature"),
-        (age: 56, label: "56+", subtitle: "Senior")
-    ]
+    private let ageRange = Array(13...80)
     
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
@@ -431,58 +506,34 @@ struct AgeQuestionView: View {
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
             
-            // Age options
-            LazyVGrid(columns: [
-                GridItem(.flexible()),
-                GridItem(.flexible())
-            ], spacing: DesignSystem.Spacing.sm) {
-                ForEach(Array(ageRanges.enumerated()), id: \.offset) { index, ageRange in
-                    Button(action: {
-                        selectedAge = ageRange.age
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            onContinue()
-                        }
-                    }) {
-                        VStack(spacing: 8) {
-                            Text(ageRange.label)
-                                .font(DesignSystem.Typography.body)
-                                .fontWeight(.medium)
-                                .foregroundColor(DesignSystem.Colors.textPrimary)
-                            
-                            if selectedAge == ageRange.age {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(DesignSystem.Colors.primary)
-                                    .font(.system(size: 16))
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.horizontal, DesignSystem.Spacing.md)
-                        .padding(.vertical, DesignSystem.Spacing.lg)
-                        .background(
-                            selectedAge == ageRange.age 
-                                ? DesignSystem.Colors.primary.opacity(0.1)
-                                : DesignSystem.Colors.surface
-                        )
-                        .cornerRadius(DesignSystem.CornerRadius.md)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md)
-                                .stroke(
-                                    selectedAge == ageRange.age 
-                                        ? DesignSystem.Colors.primary 
-                                        : Color.clear, 
-                                    lineWidth: 2
-                                )
-                        )
+            VStack(spacing: DesignSystem.Spacing.lg) {
+                Picker("Age", selection: $selectedAge) {
+                    ForEach(ageRange, id: \.self) { age in
+                        Text("\(age)")
+                            .font(.system(size: 30, weight: .semibold))
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                            .tag(age)
                     }
-                    .buttonStyle(PlainButtonStyle())
-                    .contentShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md))
-                    .animation(DesignSystem.Animation.gentle, value: selectedAge)
                 }
+                .pickerStyle(.wheel)
+                .frame(maxWidth: .infinity)
+                .frame(height: 190)
+                .clipped()
+                .labelsHidden()
+
+                Button("Continue") {
+                    onContinue()
+                }
+                .mindLockButton(style: .primary)
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
+
             Spacer()
         }
         .onAppear {
+            if selectedAge == 0 {
+                selectedAge = 25
+            }
             withAnimation {
                 iconScale = 1.0
                 textOpacity = 1.0
@@ -697,7 +748,7 @@ struct LifetimeImpactView: View {
 
 struct ScreenTimePermissionView: View {
     let page: OnboardingPage
-    let screenTimeManager: ScreenTimeManager
+    @ObservedObject var screenTimeManager: ScreenTimeManager
     let onContinue: () -> Void
     
     @State private var iconScale: CGFloat = 0.8
@@ -754,8 +805,6 @@ struct ScreenTimePermissionView: View {
                     .offset(y: textOpacity == 1.0 ? 0 : 20)
                     .animation(DesignSystem.Animation.gentle.delay(0.8), value: textOpacity)
                 
-                // Permission status
-                permissionStatusView
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
             
@@ -766,6 +815,11 @@ struct ScreenTimePermissionView: View {
                 if screenTimeManager.authorizationStatus == .approved {
                     Button("Continue") {
                         onContinue()
+                    }
+                    .mindLockButton(style: .primary)
+                } else if screenTimeManager.authorizationStatus == .denied {
+                    Button("Open Settings") {
+                        openSettings()
                     }
                     .mindLockButton(style: .primary)
                 } else {
@@ -825,71 +879,6 @@ struct ScreenTimePermissionView: View {
         }
     }
     
-    private var debugStatusText: String {
-        switch screenTimeManager.authorizationStatus {
-        case .approved: return "Approved"
-        case .denied: return "Denied"
-        case .notDetermined: return "Not Determined"
-        @unknown default: return "Unknown"
-        }
-    }
-    
-    private var permissionStatusView: some View {
-        HStack {
-            Image(systemName: statusIcon)
-                .foregroundColor(statusColor)
-                .font(.system(size: 16, weight: .medium))
-            
-            Text(statusText)
-                .font(DesignSystem.Typography.callout)
-                .foregroundColor(statusColor)
-            
-            Spacer()
-        }
-        .padding(DesignSystem.Spacing.md)
-        .background(statusColor.opacity(0.1))
-        .cornerRadius(DesignSystem.CornerRadius.md)
-    }
-    
-    private var statusIcon: String {
-        switch screenTimeManager.authorizationStatus {
-        case .approved:
-            return "checkmark.circle.fill"
-        case .denied:
-            return "xmark.circle.fill"
-        case .notDetermined:
-            return "questionmark.circle.fill"
-        @unknown default:
-            return "exclamationmark.circle.fill"
-        }
-    }
-    
-    private var statusColor: Color {
-        switch screenTimeManager.authorizationStatus {
-        case .approved:
-            return DesignSystem.Colors.success
-        case .denied:
-            return DesignSystem.Colors.error
-        case .notDetermined:
-            return DesignSystem.Colors.warning
-        @unknown default:
-            return DesignSystem.Colors.error
-        }
-    }
-    
-    private var statusText: String {
-        switch screenTimeManager.authorizationStatus {
-        case .approved:
-            return "Screen Time access granted ✅"
-        case .denied:
-            return "Screen Time access denied"
-        case .notDetermined:
-            return "Screen Time permission needed"
-        @unknown default:
-            return "Screen Time status unknown"
-        }
-    }
-    
     private func requestPermission() {
         print("🔐 User tapped Enable Screen Time button")
         print("🔐 Current status: \(screenTimeManager.authorizationStatus)")
@@ -905,6 +894,9 @@ struct ScreenTimePermissionView: View {
                     isRequestingPermission = false
                     print("🔐 Authorization completed successfully")
                     print("🔐 New status: \(screenTimeManager.authorizationStatus)")
+                    if screenTimeManager.authorizationStatus == .approved {
+                        onContinue()
+                    }
                 }
             } catch {
                 await MainActor.run {
@@ -924,151 +916,6 @@ struct ScreenTimePermissionView: View {
     }
 }
 
-// MARK: - Real App Limit Card (App Store Compliant)
-struct CharitySelectionView: View {
-    let page: OnboardingPage
-    @Binding var selectedCharity: Charity?
-    let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
-    @State private var textOpacity: Double = 0.0
-    
-    var body: some View {
-        VStack(spacing: DesignSystem.Spacing.xl) {
-            Spacer()
-            
-            // Illustration
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                page.accentColor.opacity(0.2),
-                                page.accentColor.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 50,
-                            endRadius: 150
-                        )
-                    )
-                    .frame(width: 200, height: 200)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 60, weight: .medium))
-                    .foregroundColor(page.accentColor)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            
-            // Content
-            VStack(spacing: DesignSystem.Spacing.lg) {
-                Text(page.title)
-                    .font(DesignSystem.Typography.title1)
-                    .fontWeight(.bold)
-                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                    .multilineTextAlignment(.center)
-                    .opacity(textOpacity)
-                    .offset(y: textOpacity == 1.0 ? 0 : 20)
-                    .animation(DesignSystem.Animation.gentle.delay(0.6), value: textOpacity)
-                
-                Text(page.description)
-                    .font(DesignSystem.Typography.body)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .opacity(textOpacity)
-                    .offset(y: textOpacity == 1.0 ? 0 : 20)
-                    .animation(DesignSystem.Animation.gentle.delay(0.8), value: textOpacity)
-            }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            
-            // Charity options
-            VStack(spacing: DesignSystem.Spacing.sm) {
-                ForEach(Charity.popularCharities) { charity in
-                    Button(action: {
-                        selectedCharity = charity
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                            onContinue()
-                        }
-                    }) {
-                        HStack(spacing: DesignSystem.Spacing.md) {
-                            // Charity icon (prefer logo without background)
-                            if let name = charity.logoAssetName, let uiImage = UIImage(named: name) {
-                                Image(uiImage: uiImage)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 36, height: 36)
-                                    .clipShape(RoundedRectangle(cornerRadius: 6))
-                            } else {
-                                Text(charity.emoji)
-                                    .font(.system(size: 32))
-                                    .frame(width: 44, height: 44)
-                                    .background(charity.color.opacity(0.1))
-                                    .cornerRadius(DesignSystem.CornerRadius.sm)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(charity.name)
-                                    .font(DesignSystem.Typography.body)
-                                    .fontWeight(.medium)
-                                    .foregroundColor(DesignSystem.Colors.textPrimary)
-                                
-                                Text(charity.description)
-                                    .font(DesignSystem.Typography.caption)
-                                    .foregroundColor(DesignSystem.Colors.textSecondary)
-                                    .lineLimit(2)
-                            }
-                            
-                            Spacer()
-                            
-                            if selectedCharity?.id == charity.id {
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(DesignSystem.Colors.primary)
-                                    .font(.system(size: 20))
-                            } else {
-                                Circle()
-                                    .stroke(DesignSystem.Colors.textTertiary, lineWidth: 2)
-                                    .frame(width: 20, height: 20)
-                            }
-                        }
-                        .padding(DesignSystem.Spacing.md)
-                        .background(
-                            selectedCharity?.id == charity.id 
-                                ? DesignSystem.Colors.primary.opacity(0.1)
-                                : DesignSystem.Colors.surface
-                        )
-                        .cornerRadius(DesignSystem.CornerRadius.md)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md)
-                                .stroke(
-                                    selectedCharity?.id == charity.id 
-                                        ? DesignSystem.Colors.primary 
-                                        : Color.clear, 
-                                    lineWidth: 2
-                                )
-                        )
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .animation(DesignSystem.Animation.gentle, value: selectedCharity?.id)
-                }
-            }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            
-            Spacer()
-        }
-        .onAppear {
-            withAnimation {
-                iconScale = 1.0
-                textOpacity = 1.0
-            }
-        }
-        .onDisappear {
-            iconScale = 0.8
-            textOpacity = 0.0
-        }
-    }
-}
-
 // MARK: - Weekly Goal Setting View
 struct GoalSettingView: View {
     let page: OnboardingPage
@@ -1081,15 +928,7 @@ struct GoalSettingView: View {
     
     private let minimumGoal: Double = 0.5
     private let stepAmount: Double = 0.25
-    private var maximumGoal: Double {
-        let cap: Double = 8.5
-        // Ensure the slider range has positive width; avoid min == max which can crash Slider.
-        let lowerBound = minimumGoal
-        let safeLower = lowerBound
-        let baseline = max(dailyUsageHours, safeLower + stepAmount)
-        let candidate = min(max(baseline, safeLower + stepAmount), cap)
-        return max(candidate, safeLower + stepAmount)
-    }
+    private let maximumGoal: Double = 8.0
     
     private var dailyUsageDisplay: String {
         formatHours(dailyUsageHours)
@@ -1277,31 +1116,33 @@ struct ConceptExplanationView: View {
     @State private var pulse = false
     @State private var visibleStepCount = 0
     @State private var visibleExampleCount = 0
-    @State private var showFirstBlockContainer = true
-    @State private var showSecondBlockContainer = false
+    @State private var conceptStage: ConceptStage = .overview
     @State private var showTxt1 = false
     @State private var showCircle = false
     @State private var showTxt2 = false
+    @State private var showPaywall = false
+    @State private var shouldContinueAfterPaywall = false
+    @State private var selectedUnlockMechanism = SharedSettings.preferredUnlockMechanism()
 
-    private let subheadText = "MindLock+ turns your daily focus into donations for the charity you choose."
+    private let subheadText = "MindLock turns your daily focus into healthier unlock habits."
     private let explainerText = "How it works is simple."
+    private enum ConceptStage { case overview, examples }
 
     private let steps: [(String, String, String)] = [
-        ("Choose your charity", "You decide who receives the impact.", "heart.fill"),
-        ("Rack up impact points", "Every unlock-free day grows your streak.", "bolt.heart.fill"),
-        ("More focus = more donations", "Max out at 60 points each month for the full budget.", "hands.sparkles.fill")
+        ("Set your limits", "Choose the apps and times MindLock should protect.", "lock.fill"),
+        ("Stay accountable", "When an app is shielded, MindLock makes you pause before unlocking.", "clock.arrow.circlepath"),
+        ("Earn breaks with movement", "Complete quick exercises to unlock more time when you need it.", "figure.strengthtraining.traditional")
     ]
 
-    private let examples: [(String, String)] = [
-        ("🍽️", "2–5 meals for people in need"),
-        ("💧", "One week of clean drinking water for a family"),
-        ("📚", "Essential school supplies for a child"),
-        ("🌱", "Planting 5 trees in reforestation programs")
+    private let unlockOptions: [(SharedSettings.UnlockMechanism, String, String, String)] = [
+        (.mindfulWait, "30s", "Mindful wait", "Pause, breathe, then unlock more time."),
+        (.pushups, "5", "Pushups", "Earn your unlock with 5 pushups."),
+        (.squats, "10", "Squats", "Earn your unlock with 10 squats.")
     ]
 
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.lg) {
-            if showFirstBlockContainer {
+            if conceptStage == .overview {
                 ScrollView {
                     VStack(spacing: DesignSystem.Spacing.xl) {
                         VStack(spacing: DesignSystem.Spacing.md) {
@@ -1341,10 +1182,10 @@ struct ConceptExplanationView: View {
                                 )
 
                             VStack(spacing: DesignSystem.Spacing.md) {
-                                Image(systemName: "hands.sparkles.fill")
+                                Image(systemName: "figure.strengthtraining.traditional")
                                     .font(.system(size: 42, weight: .medium))
                                     .foregroundColor(DesignSystem.Colors.success)
-                                Text("Impact points → donations")
+                                Text("Movement -> mindful unlocks")
                                     .font(DesignSystem.Typography.body)
                                     .foregroundColor(DesignSystem.Colors.textPrimary)
                             }
@@ -1353,7 +1194,7 @@ struct ConceptExplanationView: View {
                         .opacity(showCircle ? 1 : 0)
 
                         VStack(spacing: DesignSystem.Spacing.md) {
-                            ForEach(Array(steps.enumerated()), id: \ .offset) { index, step in
+                            ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
                                 if index < visibleStepCount {
                                     ImpactStepRow(iconName: step.2, title: step.0, detail: step.1)
                                         .transition(.opacity.combined(with: .move(edge: .bottom)))
@@ -1364,35 +1205,49 @@ struct ConceptExplanationView: View {
                     .padding(.horizontal, DesignSystem.Spacing.lg)
                     .padding(.vertical, DesignSystem.Spacing.lg)
                 }
-            }
-
-            if showSecondBlockContainer {
-                ScrollView {
-                    VStack(spacing: DesignSystem.Spacing.lg) {
-                        Text("Maxing out your monthly impact could mean:")
+            } else {
+                VStack(spacing: DesignSystem.Spacing.lg) {
+                    VStack(spacing: DesignSystem.Spacing.md) {
+                        Text("Choose your unlock method")
                             .font(DesignSystem.Typography.title2)
                             .fontWeight(.semibold)
                             .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .multilineTextAlignment(.leading)
+                            .multilineTextAlignment(.center)
                             .opacity(showTxt2 ? 1 : 0)
 
+                        UnlockMechanismVisual(mechanism: selectedUnlockMechanism)
+                            .frame(height: 240)
+                            .opacity(showTxt2 ? 1 : 0)
+                    }
+                    .padding(.top, DesignSystem.Spacing.lg)
+
+                    Spacer(minLength: DesignSystem.Spacing.md)
+
+                    VStack(spacing: DesignSystem.Spacing.sm) {
                         VStack(spacing: DesignSystem.Spacing.sm) {
-                            ForEach(Array(examples.enumerated()), id: \ .offset) { index, example in
+                            ForEach(Array(unlockOptions.enumerated()), id: \.offset) { index, option in
                                 if index < visibleExampleCount {
-                                    ImpactExampleRow(emoji: example.0, text: example.1)
+                                    UnlockMechanismOptionRow(
+                                        marker: option.1,
+                                        title: option.2,
+                                        detail: option.3,
+                                        isSelected: selectedUnlockMechanism == option.0
+                                    ) {
+                                        selectedUnlockMechanism = option.0
+                                    }
                                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                                 }
                             }
                         }
                     }
-                    .padding(.horizontal, DesignSystem.Spacing.lg)
-                    .padding(.vertical, DesignSystem.Spacing.lg)
                 }
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.vertical, DesignSystem.Spacing.lg)
             }
 
             if showButton {
-                Button("Choose your charity") {
-                    onContinue()
+                Button("Continue") {
+                    continueTapped()
                 }
                 .mindLockButton(style: .primary)
                 .padding(.horizontal, DesignSystem.Spacing.lg)
@@ -1402,6 +1257,14 @@ struct ConceptExplanationView: View {
         }
         .onAppear { startSequence() }
         .onDisappear { resetSequence() }
+        .sheet(isPresented: $showPaywall, onDismiss: {
+            if shouldContinueAfterPaywall {
+                shouldContinueAfterPaywall = false
+                onContinue()
+            }
+        }) {
+            UnlockPromptView()
+        }
     }
 
     private func startSequence() {
@@ -1412,7 +1275,6 @@ struct ConceptExplanationView: View {
         let circleAnimationDuration: Double = 0.3
         let circleHold: Double = 1.0
         let listOneDuration: Double = 0.7
-        let listTwoDuration: Double = 0.7
 
         schedule(after: 0.0) {
             withAnimation(.easeIn(duration: textIntroDuration)) {
@@ -1433,33 +1295,7 @@ struct ConceptExplanationView: View {
             visibleStepCount = newCount
         }
 
-        let fadeStart = listOneStart + listOneDuration + 3.0
-        schedule(after: fadeStart) {
-            withAnimation(.easeInOut(duration: 0.5)) {
-                showTxt1 = false
-                showCircle = false
-                visibleStepCount = 0
-            }
-            pulse = false
-            schedule(after: 0.5) {
-                showFirstBlockContainer = false
-            }
-        }
-
-        let textTwoStart = fadeStart + 0.5
-        schedule(after: textTwoStart) {
-            showSecondBlockContainer = true
-            withAnimation(.easeIn(duration: 0.5)) {
-                showTxt2 = true
-            }
-        }
-
-        let listTwoStart = textTwoStart + 1.0
-        animateList(count: examples.count, startDelay: listTwoStart, totalDuration: listTwoDuration) { newCount in
-            visibleExampleCount = newCount
-        }
-
-        let buttonTime = listTwoStart + listTwoDuration + 2.0
+        let buttonTime = listOneStart + listOneDuration + 0.5
         schedule(after: buttonTime) {
             withAnimation(.easeIn(duration: 0.4)) {
                 showButton = true
@@ -1471,12 +1307,46 @@ struct ConceptExplanationView: View {
         showTxt1 = false
         showCircle = false
         showTxt2 = false
-        showFirstBlockContainer = true
-        showSecondBlockContainer = false
         showButton = false
         pulse = false
         visibleStepCount = 0
         visibleExampleCount = 0
+        conceptStage = .overview
+        shouldContinueAfterPaywall = false
+        selectedUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+    }
+
+    private func continueTapped() {
+        switch conceptStage {
+        case .overview:
+            showButton = false
+            pulse = false
+            withAnimation(.easeInOut(duration: 0.25)) {
+                showTxt1 = false
+                showCircle = false
+                visibleStepCount = 0
+            }
+            schedule(after: 0.25) {
+                conceptStage = .examples
+                showTxt2 = false
+                visibleExampleCount = 0
+                withAnimation(.easeIn(duration: 0.35)) {
+                    showTxt2 = true
+                }
+                animateList(count: unlockOptions.count, startDelay: 0.35, totalDuration: 0.7) { newCount in
+                    visibleExampleCount = newCount
+                }
+                schedule(after: 1.2) {
+                    withAnimation(.easeIn(duration: 0.3)) {
+                        showButton = true
+                    }
+                }
+            }
+        case .examples:
+            SharedSettings.setPreferredUnlockMechanism(selectedUnlockMechanism)
+            shouldContinueAfterPaywall = true
+            showPaywall = true
+        }
     }
 
     private func schedule(after delay: Double, perform: @escaping () -> Void) {
@@ -1655,7 +1525,7 @@ private struct ImpactStepRow: View {
             Spacer()
         }
         .padding(DesignSystem.Spacing.md)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.md)
         .cornerRadius(DesignSystem.CornerRadius.md)
     }
 }
@@ -1675,8 +1545,88 @@ private struct ImpactExampleRow: View {
         }
         .padding(.horizontal, DesignSystem.Spacing.md)
         .padding(.vertical, DesignSystem.Spacing.sm)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.md)
         .cornerRadius(DesignSystem.CornerRadius.md)
+    }
+}
+
+private struct UnlockMechanismVisual: View {
+    let mechanism: SharedSettings.UnlockMechanism
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .fill(
+                    LinearGradient(
+                        colors: [DesignSystem.Colors.primary.opacity(0.20), DesignSystem.Colors.success.opacity(0.16)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .frame(width: 210, height: 210)
+
+            Circle()
+                .stroke(DesignSystem.Colors.primary.opacity(0.18), lineWidth: 2)
+                .frame(width: 184, height: 184)
+
+            switch mechanism {
+            case .mindfulWait:
+                Image(systemName: "clock.arrow.circlepath")
+                    .font(.system(size: 72, weight: .semibold))
+                    .foregroundColor(DesignSystem.Colors.primary)
+            case .pushups, .squats:
+                Image(systemName: "figure.strengthtraining.traditional")
+                    .font(.system(size: 72, weight: .semibold))
+                    .foregroundColor(DesignSystem.Colors.primary)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .animation(.spring(response: 0.35, dampingFraction: 0.82), value: mechanism)
+    }
+}
+
+private struct UnlockMechanismOptionRow: View {
+    let marker: String
+    let title: String
+    let detail: String
+    let isSelected: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: DesignSystem.Spacing.md) {
+                Text(marker)
+                    .font(.system(size: 24, weight: .bold))
+                    .foregroundColor(isSelected ? .white : DesignSystem.Colors.textPrimary)
+                    .frame(width: 48, height: 48)
+                    .background(isSelected ? DesignSystem.Colors.primary : DesignSystem.Colors.background.opacity(0.65))
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(DesignSystem.Typography.body.weight(.semibold))
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                    Text(detail)
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+
+                Spacer()
+
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.system(size: 22, weight: .semibold))
+                    .foregroundColor(isSelected ? DesignSystem.Colors.primary : DesignSystem.Colors.textTertiary)
+            }
+            .padding(DesignSystem.Spacing.md)
+            .background(isSelected ? DesignSystem.Colors.primary.opacity(0.14) : DesignSystem.Colors.surface)
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg)
+                    .stroke(isSelected ? DesignSystem.Colors.primary.opacity(0.8) : Color.clear, lineWidth: 1.5)
+            )
+            .cornerRadius(DesignSystem.CornerRadius.lg)
+        }
+        .buttonStyle(.plain)
     }
 }
 // MARK: - Animated Limits Intro View (Block List Selection)
@@ -1749,7 +1699,7 @@ struct AnimatedLimitsIntroView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .frame(height: 260)
-                    .background(DesignSystem.Colors.surface)
+                    .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
                     .cornerRadius(DesignSystem.CornerRadius.lg)
                     .overlay(
                         RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg)
@@ -1773,7 +1723,7 @@ struct AnimatedLimitsIntroView: View {
                         screenTimeManager.updateSelectedApps(localSelection, reason: "onboarding block list")
                         onContinue()
                     }
-                    .mindLockButton(style: .secondary)
+                    .mindLockButton(style: .primary)
                     .padding(.horizontal, DesignSystem.Spacing.lg)
                 }
             }
@@ -1813,6 +1763,436 @@ struct AnimatedLimitsIntroView: View {
     }
 }
 
+struct OnboardingGoalChoiceView: View {
+    let page: OnboardingPage
+    @Binding var selectedGoal: OnboardingGoal?
+    let onContinue: () -> Void
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: DesignSystem.Spacing.xl) {
+                Spacer().frame(height: DesignSystem.Spacing.lg)
+
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    Text(page.title)
+                        .font(DesignSystem.Typography.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .multilineTextAlignment(.center)
+
+                    Text(page.description)
+                        .font(DesignSystem.Typography.body)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    ForEach(OnboardingGoal.allCases) { goal in
+                        Button {
+                            selectedGoal = goal
+                            UserDefaults.standard.set(goal.rawValue, forKey: "onboardingMainGoal")
+                            UserDefaults.standard.set(goal.setupPath.rawValue, forKey: "onboardingSetupPath")
+                            onContinue()
+                        } label: {
+                            HStack(spacing: DesignSystem.Spacing.md) {
+                                Image(systemName: goal.iconName)
+                                    .font(.system(size: 18, weight: .semibold))
+                                    .foregroundColor(goal.setupPath == .timeBlock ? DesignSystem.Colors.warning : DesignSystem.Colors.primary)
+                                    .frame(width: 28)
+
+                                Text(goal.title)
+                                    .font(DesignSystem.Typography.body.weight(.semibold))
+                                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                                    .multilineTextAlignment(.leading)
+
+                                Spacer()
+
+                                Image(systemName: "chevron.right")
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(DesignSystem.Colors.textTertiary)
+                            }
+                            .padding(DesignSystem.Spacing.md)
+                            .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
+                            .cornerRadius(DesignSystem.CornerRadius.lg)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+            }
+            .padding(.bottom, DesignSystem.Spacing.xl)
+        }
+    }
+}
+
+enum OnboardingAppSelectionMode {
+    case simpleLimits
+    case timeBlock
+}
+
+struct OnboardingAppSelectionStepView: View {
+    let page: OnboardingPage
+    @Binding var selection: FamilyActivitySelection
+    let mode: OnboardingAppSelectionMode
+    let onContinue: () -> Void
+
+    @State private var showPicker = false
+    private var selectedCount: Int { selection.applicationTokens.count }
+
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.lg) {
+            Spacer().frame(height: DesignSystem.Spacing.sm)
+
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                Text(page.title)
+                    .font(DesignSystem.Typography.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text(page.description)
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+
+            selectionPreview
+
+            Spacer()
+
+            VStack(spacing: DesignSystem.Spacing.md) {
+                Button(selectedCount == 0 ? "Select apps" : "Add or remove apps") {
+                    showPicker = true
+                }
+                .mindLockButton(style: .primary)
+
+                Button("Continue") { onContinue() }
+                .mindLockButton(style: .primary)
+                .disabled(selectedCount == 0)
+                .opacity(selectedCount == 0 ? 0.45 : 1)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.bottom, DesignSystem.Spacing.xl)
+        }
+        .padding(.top, DesignSystem.Spacing.lg)
+        .familyActivityPicker(isPresented: $showPicker, selection: $selection)
+    }
+
+    private var selectionPreview: some View {
+        VStack(spacing: DesignSystem.Spacing.md) {
+            if selectedCount == 0 {
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    Image(systemName: mode == .simpleLimits ? "timer" : "rectangle.stack.badge.person.crop")
+                        .font(.system(size: 38, weight: .semibold))
+                        .foregroundColor(DesignSystem.Colors.primary)
+
+                    Text(mode == .simpleLimits
+                         ? "Start with the apps you open on autopilot."
+                         : "Build the list MindLock will shield during your focus window.")
+                        .font(DesignSystem.Typography.callout)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 180)
+                .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
+                .cornerRadius(DesignSystem.CornerRadius.lg)
+            } else {
+                ScrollView {
+                    VStack(spacing: DesignSystem.Spacing.sm) {
+                        ForEach(Array(selection.applicationTokens).sorted { $0.identifier < $1.identifier }, id: \.identifier) { token in
+                            BlockListAppRow(applicationToken: token)
+                        }
+                    }
+                }
+                .frame(height: 330)
+                .mask(
+                    LinearGradient(
+                        gradient: Gradient(stops: [
+                            .init(color: Color.black, location: 0.0),
+                            .init(color: Color.black, location: 0.94),
+                            .init(color: Color.clear, location: 1.0)
+                        ]),
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                )
+            }
+        }
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+    }
+}
+
+struct OnboardingLimitSettingsStepView: View {
+    let page: OnboardingPage
+    let selection: FamilyActivitySelection
+    @Binding var limitMinutesByToken: [String: Int]
+    @Binding var error: String?
+    let onContinue: () -> Void
+
+    private let minuteOptions = [15, 30, 45, 60, 90, 120]
+    private var tokens: [ApplicationToken] {
+        Array(selection.applicationTokens).sorted { $0.identifier < $1.identifier }
+    }
+
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.lg) {
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                Text(page.title)
+                    .font(DesignSystem.Typography.title1)
+                    .fontWeight(.bold)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text(page.description)
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+
+            appLimitList
+
+            if let error {
+                Text(error)
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+            }
+
+            Spacer()
+
+            Button("Save limits") { onContinue() }
+                .mindLockButton(style: .primary)
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.bottom, DesignSystem.Spacing.xl)
+        }
+        .padding(.top, DesignSystem.Spacing.xl)
+        .onAppear {
+            for token in tokens where limitMinutesByToken[token.identifier] == nil {
+                limitMinutesByToken[token.identifier] = 30
+            }
+        }
+    }
+
+    private var appLimitList: some View {
+        ScrollView {
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                ForEach(tokens, id: \.identifier) { token in
+                    HStack(spacing: DesignSystem.Spacing.md) {
+                        Label(token)
+                            .labelStyle(.titleAndIcon)
+                            .font(DesignSystem.Typography.body.weight(.semibold))
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                            .lineLimit(1)
+
+                        Spacer()
+
+                        Menu {
+                            ForEach(minuteOptions, id: \.self) { minutes in
+                                Button("\(minutes) minutes") {
+                                    limitMinutesByToken[token.identifier] = minutes
+                                }
+                            }
+                        } label: {
+                            HStack(spacing: 6) {
+                                Text("\(limitMinutes(for: token))m")
+                                    .font(DesignSystem.Typography.callout.weight(.bold))
+                                Image(systemName: "chevron.down")
+                                    .font(.system(size: 11, weight: .bold))
+                            }
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(DesignSystem.Colors.primary)
+                            .cornerRadius(14)
+                        }
+                    }
+                    .padding(DesignSystem.Spacing.md)
+                    .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
+                    .cornerRadius(DesignSystem.CornerRadius.lg)
+                }
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.bottom, 80)
+        }
+        .mask(
+            LinearGradient(
+                gradient: Gradient(stops: [
+                    .init(color: Color.black, location: 0.0),
+                    .init(color: Color.black, location: 0.9),
+                    .init(color: Color.clear, location: 1.0)
+                ]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+    }
+
+    private func limitMinutes(for token: ApplicationToken) -> Int {
+        limitMinutesByToken[token.identifier] ?? 30
+    }
+}
+
+struct OnboardingTimeBlockScheduleStepView: View {
+    let page: OnboardingPage
+    let selection: FamilyActivitySelection
+    @Binding var start: Date
+    @Binding var end: Date
+    @Binding var selectedDays: Set<Int>
+    @Binding var error: String?
+    let onContinue: () -> Void
+
+    private var selectedCount: Int { selection.applicationTokens.count }
+    private let dayOptions = [(1, "S"), (2, "M"), (3, "T"), (4, "W"), (5, "T"), (6, "F"), (7, "S")]
+
+    var body: some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                Text(page.title)
+                    .font(DesignSystem.Typography.title1)
+                    .fontWeight(.bold)
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text(page.description)
+                    .font(DesignSystem.Typography.callout)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                    .multilineTextAlignment(.center)
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+
+            scheduleCard
+            selectedSummary
+
+            if let error {
+                Text(error)
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(.red)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+            }
+
+            Spacer()
+
+            Button("Create time block") { onContinue() }
+                .mindLockButton(style: .primary)
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.bottom, DesignSystem.Spacing.xl)
+        }
+        .padding(.top, DesignSystem.Spacing.xl)
+    }
+
+    private var scheduleCard: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text("Focus window")
+                .font(DesignSystem.Typography.callout.weight(.semibold))
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+
+            HStack(spacing: DesignSystem.Spacing.md) {
+                DatePicker("Start", selection: $start, displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .padding(DesignSystem.Spacing.sm)
+                    .frame(maxWidth: .infinity)
+                    .background(DesignSystem.Colors.background.opacity(0.55))
+                    .cornerRadius(DesignSystem.CornerRadius.md)
+
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+
+                DatePicker("End", selection: $end, displayedComponents: .hourAndMinute)
+                    .labelsHidden()
+                    .padding(DesignSystem.Spacing.sm)
+                    .frame(maxWidth: .infinity)
+                    .background(DesignSystem.Colors.background.opacity(0.55))
+                    .cornerRadius(DesignSystem.CornerRadius.md)
+            }
+
+            HStack(spacing: DesignSystem.Spacing.sm) {
+                ForEach(dayOptions, id: \.0) { day, label in
+                    Button {
+                        toggleDay(day)
+                    } label: {
+                        Text(label)
+                            .font(DesignSystem.Typography.caption.weight(.bold))
+                            .foregroundColor(selectedDays.contains(day) ? .white : DesignSystem.Colors.textSecondary)
+                            .frame(width: 32, height: 32)
+                            .background(selectedDays.contains(day) ? DesignSystem.Colors.primary : DesignSystem.Colors.background.opacity(0.75))
+                            .clipShape(Circle())
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                }
+
+                Text(daysSummary)
+                    .font(DesignSystem.Typography.caption)
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+                Spacer()
+            }
+        }
+        .padding(DesignSystem.Spacing.md)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg, opacity: 0.55)
+        .cornerRadius(DesignSystem.CornerRadius.lg)
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+    }
+
+    private var daysSummary: String {
+        if selectedDays == Set(1...7) { return "Every day" }
+        if selectedDays == Set([2, 3, 4, 5, 6]) { return "Weekdays" }
+        if selectedDays == Set([1, 7]) { return "Weekends" }
+        return "\(selectedDays.count) day\(selectedDays.count == 1 ? "" : "s")"
+    }
+
+    private func toggleDay(_ day: Int) {
+        if selectedDays.contains(day) {
+            selectedDays.remove(day)
+        } else {
+            selectedDays.insert(day)
+        }
+        error = nil
+    }
+
+    private var selectedSummary: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+            HStack {
+                Text("Block list")
+                    .font(DesignSystem.Typography.callout.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                Spacer()
+                Text("\(selectedCount) apps")
+                    .font(DesignSystem.Typography.caption.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.textSecondary)
+            }
+
+            HStack(spacing: -8) {
+                ForEach(Array(selection.applicationTokens).sorted { $0.identifier < $1.identifier }.prefix(3), id: \.identifier) { token in
+                    Label(token)
+                        .labelStyle(.iconOnly)
+                        .frame(width: 34, height: 34)
+                        .background(DesignSystem.Colors.background)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                if selectedCount > 3 {
+                    Text("+\(selectedCount - 3)")
+                        .font(DesignSystem.Typography.caption.weight(.bold))
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .frame(width: 34, height: 34)
+                        .background(DesignSystem.Colors.background)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+                Spacer()
+            }
+        }
+        .padding(DesignSystem.Spacing.md)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg, opacity: 0.55)
+        .cornerRadius(DesignSystem.CornerRadius.lg)
+        .padding(.horizontal, DesignSystem.Spacing.lg)
+    }
+}
+
 struct ConceptCard: View {
     let icon: String
     let title: String
@@ -1839,93 +2219,78 @@ struct ConceptCard: View {
             Spacer()
         }
         .padding(DesignSystem.Spacing.md)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.md)
         .cornerRadius(DesignSystem.CornerRadius.md)
     }
 }
 
-// MARK: - Charity Data Model
-struct Charity: Identifiable, Equatable, Codable {
-    let id: String
-    let name: String
-    let description: String
-    let emoji: String
-    let colorName: String // Store color as string for Codable
-    
-    var shortName: String {
-        let words = name.split(separator: " ")
-        guard words.count > 1 else { return name }
-        return words.prefix(2).joined(separator: " ")
-    }
-    
-    var color: Color {
-        switch colorName {
-        case "red": return .red
-        case "primary": return DesignSystem.Colors.primary
-        case "success": return DesignSystem.Colors.success
-        case "warning": return DesignSystem.Colors.warning
-        case "accent": return DesignSystem.Colors.accent
-        default: return DesignSystem.Colors.primary
-        }
-    }
-    // Asset name mapping for charity logos in Assets.xcassets
-    var logoAssetName: String? {
-        switch id {
-        case "red-cross":
-            return "americanredcross"
-        case "doctors-without-borders":
-            return "doctorswithoutborders"
-        case "world-wildlife-fund":
-            return "wwf"
-        case "feeding-america":
-            return "feedingamerica"
-        case "unicef":
-            return "unicef"
-        default:
-            return nil
-        }
-    }
-
-    static let popularCharities = [
-        Charity(
-            id: "red-cross",
-            name: "American Red Cross",
-            description: "Disaster relief and emergency assistance",
-            emoji: "🏥",
-            colorName: "red"
-        ),
-        Charity(
-            id: "doctors-without-borders",
-            name: "Doctors Without Borders",
-            description: "Medical aid in conflict zones worldwide",
-            emoji: "🩺",
-            colorName: "primary"
-        ),
-        Charity(
-            id: "world-wildlife-fund",
-            name: "World Wildlife Fund",
-            description: "Conservation and environmental protection",
-            emoji: "🐼",
-            colorName: "success"
-        ),
-        Charity(
-            id: "feeding-america",
-            name: "Feeding America",
-            description: "Fighting hunger across the United States",
-            emoji: "🍎",
-            colorName: "warning"
-        ),
-        Charity(
-            id: "unicef",
-            name: "UNICEF",
-            description: "Children's rights and emergency relief",
-            emoji: "👶",
-            colorName: "accent"
-        )
-    ]
+// MARK: - Data Model
+enum OnboardingSetupPath: String {
+    case simpleLimits
+    case timeBlock
 }
 
-// MARK: - Data Model
+enum OnboardingSetupStep {
+    case simpleLimitApps
+    case simpleLimitSettings
+    case timeBlockApps
+    case timeBlockSchedule
+}
+
+enum OnboardingGoal: String, CaseIterable, Identifiable {
+    case present
+    case productiveHours
+    case lightExercise
+    case overallPhoneUsage
+    case work
+    case socialMedia
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .present:
+            return "Be more present throughout the day?"
+        case .productiveHours:
+            return "Limit distracting app use during productive hours?"
+        case .lightExercise:
+            return "Integrate light exercise into your daily habits?"
+        case .overallPhoneUsage:
+            return "Limit overall phone usage?"
+        case .work:
+            return "Use your phone less during work?"
+        case .socialMedia:
+            return "Reduce time on social media?"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .present:
+            return "person.2.fill"
+        case .productiveHours:
+            return "briefcase.fill"
+        case .lightExercise:
+            return "figure.strengthtraining.traditional"
+        case .overallPhoneUsage:
+            return "iphone.slash"
+        case .work:
+            return "laptopcomputer"
+        case .socialMedia:
+            return "bubble.left.and.bubble.right.fill"
+        }
+    }
+
+    var setupPath: OnboardingSetupPath {
+        switch self {
+        case .productiveHours, .work:
+            return .timeBlock
+        case .present, .lightExercise, .overallPhoneUsage, .socialMedia:
+            return .simpleLimits
+        }
+    }
+}
+
 struct OnboardingPage {
     let title: String
     let description: String
@@ -1936,75 +2301,77 @@ struct OnboardingPage {
     let isAgeQuestionPage: Bool
     let isImpactPage: Bool
     let isTimeLimitPage: Bool
-    let isCharityPage: Bool
     let isGoalSettingPage: Bool
     let isConceptPage: Bool
     let isAnimatedLimitsIntroPage: Bool
-    
-    var isInteractivePage: Bool {
-        return isPermissionPage || isUsageQuestionPage || isAgeQuestionPage || isImpactPage || isTimeLimitPage || isCharityPage || isGoalSettingPage || isConceptPage || isAnimatedLimitsIntroPage
+    let isGoalChoicePage: Bool
+    let setupStep: OnboardingSetupStep?
+
+    init(
+        title: String,
+        description: String,
+        iconName: String,
+        accentColor: Color,
+        isPermissionPage: Bool = false,
+        isUsageQuestionPage: Bool = false,
+        isAgeQuestionPage: Bool = false,
+        isImpactPage: Bool = false,
+        isTimeLimitPage: Bool = false,
+        isGoalSettingPage: Bool = false,
+        isConceptPage: Bool = false,
+        isAnimatedLimitsIntroPage: Bool = false,
+        isGoalChoicePage: Bool = false,
+        setupStep: OnboardingSetupStep? = nil
+    ) {
+        self.title = title
+        self.description = description
+        self.iconName = iconName
+        self.accentColor = accentColor
+        self.isPermissionPage = isPermissionPage
+        self.isUsageQuestionPage = isUsageQuestionPage
+        self.isAgeQuestionPage = isAgeQuestionPage
+        self.isImpactPage = isImpactPage
+        self.isTimeLimitPage = isTimeLimitPage
+        self.isGoalSettingPage = isGoalSettingPage
+        self.isConceptPage = isConceptPage
+        self.isAnimatedLimitsIntroPage = isAnimatedLimitsIntroPage
+        self.isGoalChoicePage = isGoalChoicePage
+        self.setupStep = setupStep
     }
     
-    static let allPages = [
+    var isInteractivePage: Bool {
+        return isPermissionPage || isUsageQuestionPage || isAgeQuestionPage || isImpactPage || isTimeLimitPage || isGoalSettingPage || isConceptPage || isAnimatedLimitsIntroPage || isGoalChoicePage || setupStep != nil
+    }
+    
+    static func pages(for setupPath: OnboardingSetupPath?) -> [OnboardingPage] {
+        let selectedSetupPath = setupPath ?? .simpleLimits
+        return [
         OnboardingPage(
             title: "Welcome to MindLock",
-            description: "Transform your relationship with technology by setting mindful limits and supporting great causes.",
+            description: "Turn better habits into more app time with limits, movement, and mindful unlocks.",
             iconName: "lock.fill",
-            accentColor: DesignSystem.Colors.primary,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
+            accentColor: DesignSystem.Colors.primary
         ),
         OnboardingPage(
             title: "How much time do you spend on your phone daily?",
-            description: "Be honest - this helps us understand your current habits.",
+            description: "This helps us understand your current habits.",
             iconName: "iphone",
             accentColor: DesignSystem.Colors.primary,
-            isPermissionPage: false,
             isUsageQuestionPage: true,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
         ),
         OnboardingPage(
             title: "What's your age range?",
             description: "This helps us calculate your lifetime digital usage.",
             iconName: "person.fill",
             accentColor: DesignSystem.Colors.primary,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
             isAgeQuestionPage: true,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
         ),
         OnboardingPage(
             title: "Your Digital Future",
             description: "Here's what your current usage means for your lifetime.",
             iconName: "exclamationmark.triangle.fill",
             accentColor: DesignSystem.Colors.warning,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
             isImpactPage: true,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
         ),
         OnboardingPage(
             title: "Enable Screen Time",
@@ -2012,91 +2379,62 @@ struct OnboardingPage {
             iconName: "iphone.and.arrow.forward",
             accentColor: DesignSystem.Colors.primary,
             isPermissionPage: true,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
         ),
         OnboardingPage(
-            title: "How Limits Work",
-            description: "Pick the apps MindLock controls during Time Blocks. You’ll set schedules and limits next.",
-            iconName: "apps.iphone",
+            title: "What is your main goal?",
+            description: "This will help us tailor your experience.",
+            iconName: "target",
             accentColor: DesignSystem.Colors.primary,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: true
+            isGoalChoicePage: true
         ),
+        setupAppSelectionPage(for: selectedSetupPath),
+        setupDetailPage(for: selectedSetupPath),
         OnboardingPage(
-            title: "Use Your Saved Time",
-            description: "MindLock+ turns your daily focus into monthly donations for the charity you choose.",
-            iconName: "hands.and.sparkles.fill",
+            title: "Earn Your Breaks",
+            description: "Choose how you want to unlock extra time.",
+            iconName: "figure.strengthtraining.traditional",
             accentColor: DesignSystem.Colors.success,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
             isConceptPage: true,
-            isAnimatedLimitsIntroPage: false
-        ),
-        OnboardingPage(
-            title: "Choose Your Charity",
-            description: "Select an organization to receive monthly MindLock+ donations. Every focused streak grows their impact.",
-            iconName: "heart.fill",
-            accentColor: DesignSystem.Colors.success,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: true,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
         ),
         OnboardingPage(
             title: "Set Your Daily Goal",
             description: "Choose a target that keeps you honest. You can always adjust this later.",
             iconName: "target",
             accentColor: DesignSystem.Colors.primary,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
             isGoalSettingPage: true,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
         ),
         OnboardingPage(
             title: "Stay Mindful",
             description: "Get insights into your usage patterns and make intentional choices about your digital time.",
             iconName: "chart.line.uptrend.xyaxis",
-            accentColor: DesignSystem.Colors.accent,
-            isPermissionPage: false,
-            isUsageQuestionPage: false,
-            isAgeQuestionPage: false,
-            isImpactPage: false,
-            isTimeLimitPage: false,
-            isCharityPage: false,
-            isGoalSettingPage: false,
-            isConceptPage: false,
-            isAnimatedLimitsIntroPage: false
+            accentColor: DesignSystem.Colors.accent
         )
     ]
+    }
+
+    private static func setupAppSelectionPage(for setupPath: OnboardingSetupPath) -> OnboardingPage {
+        OnboardingPage(
+            title: setupPath == .simpleLimits ? "Choose apps to limit" : "Choose your block list",
+            description: setupPath == .simpleLimits
+                ? "Pick the apps where you want a daily guardrail."
+                : "Pick the apps MindLock should shield during your focus window.",
+            iconName: setupPath == .simpleLimits ? "apps.iphone" : "rectangle.stack.badge.person.crop",
+            accentColor: DesignSystem.Colors.primary,
+            setupStep: setupPath == .simpleLimits ? .simpleLimitApps : .timeBlockApps
+        )
+    }
+
+    private static func setupDetailPage(for setupPath: OnboardingSetupPath) -> OnboardingPage {
+        OnboardingPage(
+            title: setupPath == .simpleLimits ? "Set your app limits" : "Create your schedule",
+            description: setupPath == .simpleLimits
+                ? "Review each app and adjust how much time feels right."
+                : "Choose when MindLock should protect your block list.",
+            iconName: setupPath == .simpleLimits ? "slider.horizontal.3" : "calendar.badge.clock",
+            accentColor: DesignSystem.Colors.primary,
+            setupStep: setupPath == .simpleLimits ? .simpleLimitSettings : .timeBlockSchedule
+        )
+    }
 }
 
 private extension Color {

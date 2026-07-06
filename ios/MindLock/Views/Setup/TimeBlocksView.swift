@@ -58,36 +58,36 @@ struct TimeBlocksView: View {
 
             blockListSummary
 
-            if blocks.isEmpty {
-                Text("Block selected apps during specific hours. Free breaks still apply.")
-                    .font(DesignSystem.Typography.caption)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-            } else {
+            if !blocks.isEmpty {
                 ForEach(blocks) { block in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(block.name)
-                            .font(DesignSystem.Typography.body.weight(.semibold))
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                        Text("\(twoDigits(block.startHour)):\(twoDigits(block.startMinute)) – \(twoDigits(block.endHour)):\(twoDigits(block.endMinute)) • \(daysLabel(block))")
-                            .font(DesignSystem.Typography.callout)
-                            .foregroundColor(DesignSystem.Colors.textSecondary)
-                            .fixedSize(horizontal: false, vertical: true)
+                    Button {
+                        presentingEditor = block
+                    } label: {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(block.name)
+                                .font(DesignSystem.Typography.body.weight(.semibold))
+                                .foregroundColor(DesignSystem.Colors.textPrimary)
+                            Text("\(twoDigits(block.startHour)):\(twoDigits(block.startMinute)) – \(twoDigits(block.endHour)):\(twoDigits(block.endMinute)) • \(daysLabel(block))")
+                                .font(DesignSystem.Typography.callout)
+                                .foregroundColor(DesignSystem.Colors.textSecondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .contentShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md, style: .continuous))
+                        .glossySurface(cornerRadius: DesignSystem.CornerRadius.md, opacity: 0.6)
+                        .cornerRadius(DesignSystem.CornerRadius.md)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md)
+                                .stroke(block.enabled ? Color.green.opacity(0.7) : Color.red.opacity(0.7), lineWidth: 2)
+                        )
                     }
-                    .contentShape(Rectangle())
-                    .onTapGesture { presentingEditor = block }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(DesignSystem.Colors.surface.opacity(0.6))
-                    .cornerRadius(DesignSystem.CornerRadius.md)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md)
-                            .stroke(block.enabled ? Color.green.opacity(0.7) : Color.red.opacity(0.7), lineWidth: 2)
-                    )
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
         .padding(DesignSystem.Spacing.lg)
-        .background(DesignSystem.Colors.surfaceSecondary.opacity(0.5))
+        .glossySurface(base: DesignSystem.Colors.surfaceSecondary, cornerRadius: DesignSystem.CornerRadius.xl, opacity: 0.5)
         .cornerRadius(DesignSystem.CornerRadius.xl)
         .overlay(alignment: .topTrailing) {
             if showFirstBlockPrompt {
@@ -172,12 +172,8 @@ struct TimeBlocksView: View {
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(DesignSystem.Colors.textTertiary)
                 }
-                Text("These apps pause whenever a Time Block runs.")
-                    .font(DesignSystem.Typography.footnote)
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
-
                 if screenTimeManager.selectedApps.applicationTokens.isEmpty {
-                    Text("No apps yet. Add apps so Time Blocks know what to lock.")
+                    Text("No apps yet")
                         .font(DesignSystem.Typography.footnote)
                         .foregroundColor(DesignSystem.Colors.textTertiary)
                 } else {
@@ -201,7 +197,7 @@ struct TimeBlocksView: View {
             }
             .padding(DesignSystem.Spacing.md)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(DesignSystem.Colors.surface.opacity(0.7))
+            .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg, opacity: 0.7)
             .cornerRadius(DesignSystem.CornerRadius.lg)
         }
         .buttonStyle(PlainButtonStyle())
@@ -258,15 +254,20 @@ private struct TimeBlockEditor: View {
                         ForEach(1...7, id: \.self) { d in
                             let map = [1:"S",2:"M",3:"T",4:"W",5:"T",6:"F",7:"S"]
                             let selected = block.daysOfWeek.contains(d)
-                            Text(map[d]!)
-                                .font(.system(size: 14, weight: .semibold))
-                                .frame(width: 32, height: 32)
-                                .background(selected ? DesignSystem.Colors.primary : DesignSystem.Colors.surface)
-                                .foregroundColor(selected ? .white : DesignSystem.Colors.textSecondary)
-                                .clipShape(Circle())
-                                .onTapGesture {
+                            Button {
+                                withAnimation(DesignSystem.Animation.quick) {
                                     if selected { block.daysOfWeek.remove(d) } else { block.daysOfWeek.insert(d) }
                                 }
+                            } label: {
+                                Text(map[d]!)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .frame(width: 34, height: 34)
+                                    .background(selected ? DesignSystem.Colors.primary : DesignSystem.Colors.surface)
+                                    .foregroundColor(selected ? .white : DesignSystem.Colors.textSecondary)
+                                    .clipShape(Circle())
+                                    .contentShape(Circle())
+                            }
+                            .buttonStyle(PlainButtonStyle())
                         }
                     }
                 }

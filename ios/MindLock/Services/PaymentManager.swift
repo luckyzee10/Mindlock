@@ -72,27 +72,39 @@ final class PaymentManager: ObservableObject {
         }
     }
 
-    func purchaseSubscription(for charity: Charity) async throws {
+    func purchaseSubscription() async throws {
         guard let product = primaryProduct else {
             throw PaymentError.productUnavailable
         }
 
         purchaseState = .purchasing
-        logger.info("🛒 Attempting MindLock+ purchase for charity \(charity.id, privacy: .public)")
+        logger.info("🛒 Attempting MindLock+ purchase")
         let result = try await product.purchase()
 
         switch result {
         case .success(let verificationResult):
             logger.info("✅ Purchase succeeded, verifying transaction…")
             let transaction = try checkVerified(verificationResult)
+            guard let expiration = activeExpiration(for: transaction) else {
+                await transaction.finish()
+                SharedSettings.updateSubscriptionStatus(activeUntil: nil)
+                SharedSettings.updateSubscriptionTier(productId: nil)
+                subscriptionStatus = .notSubscribed
+                purchaseState = .failed(PaymentError.noActiveEntitlement.userFacingMessage)
+                throw PaymentError.noActiveEntitlement
+            }
+
+            SharedSettings.updateSubscriptionStatus(activeUntil: expiration)
+            SharedSettings.updateSubscriptionTier(productId: transaction.productID)
+            subscriptionStatus = .subscribed(expiration: expiration)
             purchaseState = .validating
             let receiptData = loadReceiptDataIfAvailable()
             let transactionJWS = verificationResult.jwsRepresentation
             let submission = PurchaseSubmissionRequest(
                 userId: userIdentity.userId,
                 userEmail: userIdentity.email,
-                charityId: charity.id,
-                charityName: charity.name,
+                charityId: "exercise-unlocks",
+                charityName: "Exercise Unlocks",
                 productId: transaction.productID,
                 transactionId: String(transaction.id),
                 transactionJWS: transactionJWS,
@@ -102,16 +114,14 @@ final class PaymentManager: ObservableObject {
             do {
                 logger.info("📨 Submitting receipt to backend for transaction \(transaction.id, privacy: .public)")
                 _ = try await apiClient.submitPurchase(submission)
-                await transaction.finish()
-                SharedSettings.updateSubscriptionTier(productId: transaction.productID)
-                await refreshSubscriptionStatus()
-                logger.info("🏁 Purchase flow completed successfully")
-                purchaseState = .idle
+                logger.info("✅ Backend receipt submission completed")
             } catch {
-                logger.error("❌ Backend validation failed: \(error.localizedDescription, privacy: .public)")
-                purchaseState = .failed(error.userFacingMessage)
-                throw error
+                logger.error("⚠️ Backend receipt submission failed after Apple purchase: \(error.localizedDescription, privacy: .public)")
             }
+            await transaction.finish()
+            await refreshSubscriptionStatus()
+            logger.info("🏁 Purchase flow completed successfully")
+            purchaseState = .idle
 
         case .pending:
             logger.info("⌛️ Purchase pending user action")
@@ -133,34 +143,27 @@ final class PaymentManager: ObservableObject {
     func refreshSubscriptionStatus() async {
         var latestExpiration: Date?
         var latestProductId: String?
-        var hasNonExpiringEntitlement = false
+        let now = Date()
 
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result else { continue }
             guard subscriptionProductIds.contains(transaction.productID) else { continue }
             guard transaction.revocationDate == nil else { continue }
-            if latestProductId == nil || (transaction.expirationDate ?? .distantFuture) > (latestExpiration ?? .distantPast) {
-                latestProductId = transaction.productID
-            }
-            if let expiration = transaction.expirationDate {
-                if let latest = latestExpiration {
-                    if expiration > latest {
-                        latestExpiration = expiration
-                    }
-                } else {
+            guard let expiration = activeExpiration(for: transaction, referenceDate: now) else { continue }
+
+            if let latest = latestExpiration {
+                if expiration > latest {
                     latestExpiration = expiration
+                    latestProductId = transaction.productID
                 }
             } else {
-                hasNonExpiringEntitlement = true
+                latestExpiration = expiration
+                latestProductId = transaction.productID
             }
         }
 
         await MainActor.run {
-            if hasNonExpiringEntitlement {
-                subscriptionStatus = .subscribed(expiration: nil)
-                SharedSettings.updateSubscriptionStatus(activeUntil: nil, isNonExpiring: true)
-                SharedSettings.updateSubscriptionTier(productId: latestProductId)
-            } else if let latestExpiration {
+            if let latestExpiration {
                 subscriptionStatus = .subscribed(expiration: latestExpiration)
                 SharedSettings.updateSubscriptionStatus(activeUntil: latestExpiration)
                 SharedSettings.updateSubscriptionTier(productId: latestProductId)
@@ -170,6 +173,12 @@ final class PaymentManager: ObservableObject {
                 SharedSettings.updateSubscriptionTier(productId: nil)
             }
         }
+    }
+
+    private func activeExpiration(for transaction: Transaction, referenceDate: Date = Date()) -> Date? {
+        guard transaction.revocationDate == nil else { return nil }
+        guard let expiration = transaction.expirationDate else { return nil }
+        return expiration > referenceDate ? expiration : nil
     }
 
     private func checkVerified(_ result: VerificationResult<Transaction>) throws -> Transaction {
@@ -217,6 +226,7 @@ enum PaymentError: LocalizedError {
     case pending
     case failedVerification(String)
     case missingReceipt
+    case noActiveEntitlement
     case unknown
 
     var errorDescription: String? {
@@ -231,6 +241,8 @@ enum PaymentError: LocalizedError {
             return "Apple couldn’t verify this purchase: \(reason)"
         case .missingReceipt:
             return "We couldn’t read the App Store receipt. Make sure you’re signed in to the App Store and try again."
+        case .noActiveEntitlement:
+            return "Apple did not return an active MindLock+ subscription entitlement. Please try again or restore purchases."
         case .unknown:
             return "Something unexpected happened with your purchase."
         }

@@ -6,6 +6,7 @@ import UIKit
 struct MindLockApp: App {
     @StateObject private var screenTimeManager = ScreenTimeManager.shared
     @StateObject private var limitsManager = DailyLimitsManager.shared
+    @StateObject private var paymentManager = PaymentManager()
     @State private var showScreenTimePrompt = false
     @State private var authPromptPrimed = false // avoid early flashes before initial check completes
     @State private var authorizationCheckTask: Task<Void, Never>?
@@ -16,11 +17,12 @@ struct MindLockApp: App {
             ContentView()
                 .environmentObject(screenTimeManager)
                 .environmentObject(limitsManager)
+                .environmentObject(paymentManager)
                 .onAppear {
                     NotificationManager.shared.configure()
                     setupNotificationHandling()
                     reevaluateScreenTimePrompt()
-                    ImpactTracker.shared.refreshImpactReport(reason: "appLaunch")
+                    Task { await paymentManager.refreshSubscriptionStatus() }
                 }
                 .onOpenURL { _ in
                     // Ensure we present the unlock flow if launched from shield
@@ -29,10 +31,7 @@ struct MindLockApp: App {
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     // Re-check on every foreground entry
                     reevaluateScreenTimePrompt()
-                    ImpactTracker.shared.refreshImpactReport(reason: "foreground")
-                }
-                .onReceive(NotificationCenter.default.publisher(for: SharedSettings.analyticsUpdatedNotification)) { _ in
-                    ImpactTracker.shared.refreshImpactReport(reason: "analytics")
+                    Task { await paymentManager.refreshSubscriptionStatus() }
                 }
                 .sheet(isPresented: $showScreenTimePrompt) {
                     ScreenTimeEnablePrompt(onEnable: {
@@ -140,7 +139,7 @@ private struct ScreenTimeEnablePrompt: View {
     let onNotNow: () -> Void
     var body: some View {
         ZStack {
-            DesignSystem.Colors.background.ignoresSafeArea()
+            DesignSystem.AppBackground()
             VStack(spacing: DesignSystem.Spacing.xl) {
                 VStack(spacing: DesignSystem.Spacing.md) {
                     Image(systemName: "clock.badge.exclamationmark")

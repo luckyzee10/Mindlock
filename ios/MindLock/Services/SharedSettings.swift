@@ -33,6 +33,20 @@ struct AnalyticsDaySummary: Codable {
 
 /// Shared constants and helpers for communicating between the main app and the extension.
 enum SharedSettings {
+    enum UnlockMechanism: String, Codable, CaseIterable {
+        case mindfulWait
+        case pushups
+        case squats
+
+        var displayName: String {
+            switch self {
+            case .mindfulWait: return "Mindful wait"
+            case .pushups: return "5 pushups"
+            case .squats: return "10 squats"
+            }
+        }
+    }
+
     struct UnlockStatsRecord: Codable, Identifiable {
         let id: String
         var freeUnlocks: Int
@@ -62,11 +76,9 @@ enum SharedSettings {
 
     // MARK: - Subscription Helpers
 
-    static func updateSubscriptionStatus(activeUntil date: Date?, isNonExpiring: Bool = false) {
+    static func updateSubscriptionStatus(activeUntil date: Date?) {
         if let date {
             sharedDefaults?.set(date.timeIntervalSince1970, forKey: Keys.subscriptionExpiration)
-        } else if isNonExpiring {
-            sharedDefaults?.set(0, forKey: Keys.subscriptionExpiration)
         } else {
             sharedDefaults?.removeObject(forKey: Keys.subscriptionExpiration)
         }
@@ -77,7 +89,6 @@ enum SharedSettings {
         guard let defaults = sharedDefaults else { return false }
         guard defaults.object(forKey: Keys.subscriptionExpiration) != nil else { return false }
         let timestamp = defaults.double(forKey: Keys.subscriptionExpiration)
-        if timestamp == 0 { return true }
         return timestamp > date.timeIntervalSince1970
     }
 
@@ -94,28 +105,20 @@ enum SharedSettings {
         sharedDefaults?.string(forKey: Keys.subscriptionTier)
     }
 
-    // MARK: - Impact & Streak Helpers
-
-    static func impactPoints(reference date: Date = Date()) -> Int {
-        consecutiveUnlockFreeDays(reference: date)
-    }
-
-    static func impactMultiplier(forStreak streak: Int) -> Int {
-        switch streak {
-        case 0..<7: return 1
-        case 7..<14: return 2
-        case 14..<21: return 3
-        case 21..<28: return 4
-        default:
-            return streak == 0 ? 1 : 5
+    static func preferredUnlockMechanism() -> UnlockMechanism {
+        guard let rawValue = sharedDefaults?.string(forKey: Keys.preferredUnlockMechanism),
+              let mechanism = UnlockMechanism(rawValue: rawValue) else {
+            return .mindfulWait
         }
+        return mechanism
     }
 
-    static func daysUntilNextImpactBoost(from streak: Int) -> Int? {
-        let thresholds = [7, 14, 21, 28]
-        guard let next = thresholds.first(where: { streak < $0 }) else { return nil }
-        return max(0, next - streak)
+    static func setPreferredUnlockMechanism(_ mechanism: UnlockMechanism) {
+        sharedDefaults?.set(mechanism.rawValue, forKey: Keys.preferredUnlockMechanism)
+        NotificationCenter.default.post(name: unlockMechanismChangedNotification, object: nil)
     }
+
+    // MARK: - Streak Helpers
 
     static func consecutiveUnlockFreeDays(reference date: Date = Date()) -> Int {
         let calendar = Calendar.current
@@ -134,11 +137,53 @@ enum SharedSettings {
         return streak
     }
 
+    // MARK: - Exercise Helpers
+
+    static func recordPushupsCompleted(_ count: Int, reference date: Date = Date()) {
+        guard count > 0 else { return }
+        let key = exercisePushupsKey(for: date)
+        let current = sharedDefaults?.integer(forKey: key) ?? 0
+        sharedDefaults?.set(current + count, forKey: key)
+        NotificationCenter.default.post(name: analyticsUpdatedNotification, object: nil)
+    }
+
+    static func recordSquatsCompleted(_ count: Int, reference date: Date = Date()) {
+        guard count > 0 else { return }
+        let key = exerciseSquatsKey(for: date)
+        let current = sharedDefaults?.integer(forKey: key) ?? 0
+        sharedDefaults?.set(current + count, forKey: key)
+        NotificationCenter.default.post(name: analyticsUpdatedNotification, object: nil)
+    }
+
+    static func pushupsCompletedThisWeek(reference date: Date = Date()) -> Int {
+        let calendar = Calendar.current
+        let startOfToday = calendar.startOfDay(for: date)
+        let weekday = calendar.component(.weekday, from: startOfToday)
+        let daysFromMonday = (weekday + 5) % 7
+        guard let weekStart = calendar.date(byAdding: .day, value: -daysFromMonday, to: startOfToday) else {
+            return 0
+        }
+
+        return (0..<7).reduce(0) { total, offset in
+            guard let day = calendar.date(byAdding: .day, value: offset, to: weekStart),
+                  day <= startOfToday else {
+                return total
+            }
+            return total + (sharedDefaults?.integer(forKey: exercisePushupsKey(for: day)) ?? 0)
+        }
+    }
+
+    static func estimatedExerciseCaloriesBurned(reference date: Date = Date()) -> Int {
+        let pushups = pushupsCompletedThisWeek(reference: date)
+        return Int((Double(pushups) * 0.35).rounded())
+    }
+
     static let appGroupIdentifier = "group.com.YLUUT5U99U.mindlock"
     static let extensionBundleIdentifierKey = "MindLockMonitorBundleIdentifier"
     static let limitEventNotificationName = "com.YLUUT5U99U.mindlock.limitEvent"
     static let analyticsUpdatedNotification = Notification.Name("MindLockAnalyticsUpdated")
     static let subscriptionStatusChangedNotification = Notification.Name("MindLockSubscriptionStatusChanged")
+    static let unlockMechanismChangedNotification = Notification.Name("MindLockUnlockMechanismChanged")
     
     private enum Keys {
         static let selectionData = "shared.selectionData"
@@ -156,7 +201,10 @@ enum SharedSettings {
         static let profileUnlockStats = "profile.unlock.stats"
         static let subscriptionExpiration = "profile.subscription.expiration"
         static let subscriptionTier = "profile.subscription.tier"
+        static let preferredUnlockMechanism = "unlock.preferredMechanism"
         static let installationDate = "profile.installation.date"
+        static func exercisePushupsKey(_ day: String) -> String { "exercise.pushups.\(day)" }
+        static func exerciseSquatsKey(_ day: String) -> String { "exercise.squats.\(day)" }
     }
 
     private enum ShieldKeys {
@@ -165,6 +213,14 @@ enum SharedSettings {
     
     static var sharedDefaults: UserDefaults? {
         UserDefaults(suiteName: appGroupIdentifier)
+    }
+
+    private static func exercisePushupsKey(for date: Date) -> String {
+        Keys.exercisePushupsKey(dayString(for: date))
+    }
+
+    private static func exerciseSquatsKey(for date: Date) -> String {
+        Keys.exerciseSquatsKey(dayString(for: date))
     }
 
     // MARK: - Shared Daily Limits Storage
@@ -402,52 +458,6 @@ enum SharedSettings {
     }
 
     // MARK: - Profile Metrics Aggregation
-
-    @discardableResult
-    static func installationDate() -> Date {
-        guard let defaults = sharedDefaults else { return Date() }
-        let timestamp = defaults.double(forKey: Keys.installationDate)
-        if timestamp > 0 {
-            return Date(timeIntervalSince1970: timestamp)
-        }
-        let now = Date()
-        defaults.set(now.timeIntervalSince1970, forKey: Keys.installationDate)
-        return now
-    }
-
-    static func monthIdentifier(for date: Date = Date()) -> String {
-        let components = Calendar.current.dateComponents([.year, .month], from: date)
-        let year = components.year ?? 0
-        let month = components.month ?? 1
-        return String(format: "%04d-%02d", year, month)
-    }
-
-    static func monthlyImpactPoints(reference date: Date = Date(), includeToday: Bool = false) -> Int {
-        let calendar = Calendar.current
-        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: date)) else {
-            return 0
-        }
-        let installStart = calendar.startOfDay(for: installationDate())
-        var cursor = max(startOfMonth, installStart)
-        var boundary = calendar.startOfDay(for: date)
-        if includeToday {
-            boundary = calendar.date(byAdding: .day, value: 1, to: boundary) ?? boundary
-        }
-        guard cursor < boundary else { return 0 }
-        var points = 0
-        while cursor < boundary {
-            if let stats = unlockStats(for: cursor) {
-                if stats.totalUnlocks == 0 {
-                    points += 1
-                }
-            } else if cursor >= installStart {
-                points += 1
-            }
-            guard let next = calendar.date(byAdding: .day, value: 1, to: cursor) else { break }
-            cursor = next
-        }
-        return points
-    }
 
     static func unlockHistory() -> [UnlockStatsRecord] {
         let stats = loadUnlockStatsDictionary()

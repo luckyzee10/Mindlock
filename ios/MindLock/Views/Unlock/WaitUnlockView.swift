@@ -15,6 +15,9 @@ struct WaitUnlockView: View {
     @State private var readyToConfirm = false
     @State private var timeBlockContext: SharedSettings.ActiveTimeBlockState?
     @State private var showingBreakPicker = false
+    @State private var showingExerciseChallenge = false
+    @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
+    @State private var preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
     @State private var selectedBreakMinutes: Int = 10
     private let breakOptions: [Int] = Array(1...15) + [24 * 60]
     
@@ -23,13 +26,49 @@ struct WaitUnlockView: View {
     private var progress: Double { Double(30 - remaining) / 30 }
 
     var body: some View {
+        Group {
+            switch preferredUnlockMechanism {
+            case .mindfulWait:
+                mindfulWaitBody
+            case .pushups, .squats:
+                if subscriptionActive {
+                    exerciseDurationBody
+                } else {
+                    UnlockPromptView()
+                }
+            }
+        }
+        .onAppear {
+            subscriptionActive = SharedSettings.isSubscriptionActive()
+            preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+            if preferredUnlockMechanism == .mindfulWait {
+                beginCountdown()
+                timeBlockContext = SharedSettings.currentTimeBlockContext()
+            }
+        }
+        .onDisappear { invalidate() }
+        .onReceive(NotificationCenter.default.publisher(for: SharedSettings.subscriptionStatusChangedNotification)) { _ in
+            subscriptionActive = SharedSettings.isSubscriptionActive()
+        }
+        .onChange(of: scenePhase) { _, phase in
+            guard preferredUnlockMechanism == .mindfulWait else { return }
+            phase == .active ? resume() : pause()
+        }
+        .sheet(isPresented: $showingExerciseChallenge) {
+            ExerciseChallengeView(mechanism: preferredUnlockMechanism, unlockMinutes: selectedBreakMinutes) { mechanism, reps, minutes in
+                completeExerciseChallenge(mechanism: mechanism, reps: reps, minutes: minutes)
+            }
+        }
+    }
+
+    private var mindfulWaitBody: some View {
         NavigationView {
             VStack(spacing: DesignSystem.Spacing.xl) {
                 header
                 countdownCard
                 supportCopy
                 VStack(spacing: DesignSystem.Spacing.md) {
-                    Button("Take a break") {
+                    Button("Unlock more time") {
                         withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                             showingBreakPicker.toggle()
                         }
@@ -47,7 +86,7 @@ struct WaitUnlockView: View {
             .padding(.horizontal, DesignSystem.Spacing.lg)
             .padding(.top, DesignSystem.Spacing.xl)
             .padding(.bottom, DesignSystem.Spacing.xxl)
-            .background(DesignSystem.Colors.background.ignoresSafeArea())
+            .background(DesignSystem.AppBackground())
             .navigationBarHidden(true)
             .overlay(alignment: .bottom) {
                 if showingBreakPicker {
@@ -58,15 +97,49 @@ struct WaitUnlockView: View {
                 }
             }
         }
-        .onAppear {
-            beginCountdown()
-            timeBlockContext = SharedSettings.currentTimeBlockContext()
-        }
-        .onDisappear { invalidate() }
-        .onChange(of: scenePhase) { _, phase in
-            phase == .active ? resume() : pause()
-        }
         .animation(.spring(response: 0.35, dampingFraction: 0.9), value: showingBreakPicker)
+    }
+
+    private var exerciseDurationBody: some View {
+        NavigationView {
+            VStack(spacing: DesignSystem.Spacing.xl) {
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    Text(preferredUnlockMechanism.displayName)
+                        .font(DesignSystem.Typography.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+
+                    Text("Choose how much time you want to unlock, then complete the challenge.")
+                        .font(DesignSystem.Typography.callout)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+
+                breakLengthPicker
+
+                VStack(spacing: DesignSystem.Spacing.md) {
+                    Button {
+                        showingExerciseChallenge = true
+                    } label: {
+                        Label("Start challenge", systemImage: "figure.strengthtraining.traditional")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .mindLockButton(style: .primary)
+
+                    Button("Not now") {
+                        dismiss()
+                    }
+                    .mindLockButton(style: .ghost)
+                }
+
+                Spacer()
+            }
+            .padding(.horizontal, DesignSystem.Spacing.lg)
+            .padding(.top, DesignSystem.Spacing.xl)
+            .padding(.bottom, DesignSystem.Spacing.xxl)
+            .background(DesignSystem.AppBackground())
+            .navigationBarHidden(true)
+        }
     }
 
     private var header: some View {
@@ -106,7 +179,7 @@ struct WaitUnlockView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl)
         .cornerRadius(DesignSystem.CornerRadius.xl)
     }
 
@@ -121,7 +194,7 @@ struct WaitUnlockView: View {
                 .multilineTextAlignment(.center)
         }
         .padding()
-        .background(DesignSystem.Colors.surface.opacity(0.8))
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg, opacity: 0.8)
         .cornerRadius(DesignSystem.CornerRadius.lg)
     }
 
@@ -179,6 +252,18 @@ struct WaitUnlockView: View {
         dismiss()
     }
 
+    private func completeExerciseChallenge(mechanism: SharedSettings.UnlockMechanism, reps: Int, minutes: Int) {
+        switch mechanism {
+        case .pushups:
+            SharedSettings.recordPushupsCompleted(reps)
+        case .squats:
+            SharedSettings.recordSquatsCompleted(reps)
+        case .mindfulWait:
+            break
+        }
+        confirmUnlock(minutes: minutes)
+    }
+
     private var appName: String {
         Application(token: appToken).localizedDisplayName ?? "this app"
     }
@@ -201,27 +286,12 @@ struct WaitUnlockView: View {
     private var breakPickerCard: some View {
         VStack(spacing: DesignSystem.Spacing.lg) {
             VStack(spacing: DesignSystem.Spacing.xs) {
-                Text("Choose break length")
+                Text("Choose unlock length")
                     .font(DesignSystem.Typography.headline)
                     .foregroundColor(DesignSystem.Colors.textPrimary)
             }
 
-            Picker("Minutes", selection: $selectedBreakMinutes) {
-                ForEach(breakOptions, id: \.self) { minute in
-                    if minute == 24 * 60 {
-                        Text("Full day")
-                            .font(DesignSystem.Typography.body)
-                    } else {
-                        Text("\(minute) minute\(minute == 1 ? "" : "s")")
-                            .font(DesignSystem.Typography.body)
-                    }
-                }
-            }
-            .pickerStyle(.wheel)
-            .frame(maxWidth: .infinity)
-            .frame(height: 150)
-            .clipped()
-            .labelsHidden()
+            breakLengthPicker
 
             HStack(spacing: DesignSystem.Spacing.md) {
                 Button("Cancel") {
@@ -231,16 +301,35 @@ struct WaitUnlockView: View {
                 }
                 .mindLockButton(style: .ghost)
 
-                Button("Start break") {
+                Button("Unlock time") {
                     startBreak()
                 }
                 .mindLockButton(style: .primary)
             }
         }
         .padding(DesignSystem.Spacing.lg)
-        .background(DesignSystem.Colors.surface)
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl)
         .cornerRadius(DesignSystem.CornerRadius.xl)
         .shadow(color: Color.black.opacity(0.15), radius: 20, x: 0, y: 10)
+    }
+
+    private var breakLengthPicker: some View {
+        Picker("Minutes", selection: $selectedBreakMinutes) {
+            ForEach(breakOptions, id: \.self) { minute in
+                if minute == 24 * 60 {
+                    Text("Full day")
+                        .font(DesignSystem.Typography.body)
+                } else {
+                    Text("\(minute) minute\(minute == 1 ? "" : "s")")
+                        .font(DesignSystem.Typography.body)
+                }
+            }
+        }
+        .pickerStyle(.wheel)
+        .frame(maxWidth: .infinity)
+        .frame(height: 150)
+        .clipped()
+        .labelsHidden()
     }
     
     private var logoProgressView: some View {

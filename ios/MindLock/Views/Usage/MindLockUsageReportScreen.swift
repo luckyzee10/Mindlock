@@ -18,7 +18,7 @@ struct MindLockUsageReportScreen: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 24)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background(DesignSystem.Colors.background.ignoresSafeArea())
+        .background(DesignSystem.AppBackground())
     }
 
     @ViewBuilder
@@ -52,7 +52,7 @@ private struct UnsupportedUsageReportView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(24)
-        .background(DesignSystem.Colors.surfaceSecondary)
+        .glossySurface(base: DesignSystem.Colors.surfaceSecondary)
         .cornerRadius(20)
     }
 }
