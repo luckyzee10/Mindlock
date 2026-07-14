@@ -160,9 +160,7 @@ struct UsageSummaryProcessor {
             distractingSeconds: totalDistracting,
             hourly: hourlyBuckets,
             perApp: perAppEntries,
-            totalDonated: existing?.totalDonated,
-            blockCount: existing?.blockCount,
-            charityBreakdown: existing?.charityBreakdown
+            blockCount: existing?.blockCount
         )
 
         let roundedTotal = Int(summary.totalScreenTime.rounded())

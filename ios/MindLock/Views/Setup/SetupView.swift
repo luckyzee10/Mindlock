@@ -75,7 +75,7 @@ struct SetupView: View {
                             )
                         }
 
-                        ExerciseUnlockSection(
+                        LanguageUnlockSection(
                             subscriptionActive: subscriptionActive,
                             preferredUnlockMechanism: preferredUnlockMechanism,
                             onOpenSettings: { showingUnlockMechanismSettings = true },
@@ -382,8 +382,7 @@ private struct UnlockMechanismSettingsView: View {
 
     private let options: [(SharedSettings.UnlockMechanism, String, String)] = [
         (.mindfulWait, "clock.arrow.circlepath", "Mindful wait"),
-        (.pushups, "figure.strengthtraining.traditional", "5 pushups"),
-        (.squats, "figure.strengthtraining.traditional", "10 squats")
+        (.languagePractice, "text.book.closed.fill", "Language practice")
     ]
 
     var body: some View {
@@ -443,7 +442,7 @@ private struct UnlockMechanismSettingsView: View {
     }
 }
 
-private struct ExerciseUnlockSection: View {
+private struct LanguageUnlockSection: View {
     let subscriptionActive: Bool
     let preferredUnlockMechanism: SharedSettings.UnlockMechanism
     let onOpenSettings: () -> Void
@@ -516,8 +515,8 @@ private struct ExerciseUnlockSection: View {
         switch preferredUnlockMechanism {
         case .mindfulWait:
             return "clock.arrow.circlepath"
-        case .pushups, .squats:
-            return "figure.strengthtraining.traditional"
+        case .languagePractice:
+            return "text.book.closed.fill"
         }
     }
 

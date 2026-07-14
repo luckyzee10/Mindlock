@@ -23,27 +23,17 @@ struct AnalyticsSnapshot: Identifiable {
     let totalScreenTime: TimeInterval
     let timeOffScreen: TimeInterval
     let dailyGoal: TimeInterval
-    let totalDonated: Double
     let blocks: Int
     let goalProgress: Double
     let appUsage: [AppUsageData]
     let hourlyBreakdown: [UsagePoint]
     let productivityScore: Double
-    let charityBreakdown: [CharityShare]
 }
 
 struct UsagePoint: Identifiable {
     let id = UUID()
     let hourLabel: String
     let usage: TimeInterval
-}
-
-struct CharityShare: Identifiable {
-    let id = UUID()
-    let charityName: String
-    let amount: Double
-    /// Value between 0 and 1 representing the percent of total donations.
-    let percentage: Double
 }
 
 struct AppUsageData: Identifiable {

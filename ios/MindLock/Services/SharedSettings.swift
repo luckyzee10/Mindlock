@@ -11,9 +11,7 @@ struct AnalyticsDaySummary: Codable {
     var distractingSeconds: TimeInterval
     var hourly: [HourlyBucket] // 24 buckets
     var perApp: [PerAppUsage]
-    var totalDonated: Double?
     var blockCount: Int?
-    var charityBreakdown: [CharityContribution]?
 
     struct HourlyBucket: Codable { var hour: Int; var productive: TimeInterval; var distracting: TimeInterval }
     struct PerAppUsage: Codable {
@@ -24,27 +22,89 @@ struct AnalyticsDaySummary: Codable {
         var hasToken: Bool?
         var isDistracting: Bool?
     }
-    struct CharityContribution: Codable {
-        var charityId: String
-        var displayName: String?
-        var amount: Double
-    }
 }
 
 /// Shared constants and helpers for communicating between the main app and the extension.
 enum SharedSettings {
     enum UnlockMechanism: String, Codable, CaseIterable {
         case mindfulWait
-        case pushups
-        case squats
+        case languagePractice
 
         var displayName: String {
             switch self {
             case .mindfulWait: return "Mindful wait"
-            case .pushups: return "5 pushups"
-            case .squats: return "10 squats"
+            case .languagePractice: return "Language practice"
             }
         }
+    }
+
+    enum LearningLanguage: String, Codable, CaseIterable, Identifiable {
+        case spanish
+        case french
+        case japanese
+        case italian
+        case german
+        case korean
+
+        var id: String { rawValue }
+
+        var displayName: String {
+            switch self {
+            case .spanish: return "Spanish"
+            case .french: return "French"
+            case .japanese: return "Japanese"
+            case .italian: return "Italian"
+            case .german: return "German"
+            case .korean: return "Korean"
+            }
+        }
+
+        var introWord: String {
+            switch self {
+            case .spanish: return "Gracias"
+            case .french: return "Merci"
+            case .japanese: return "Arigatou"
+            case .italian: return "Grazie"
+            case .german: return "Danke"
+            case .korean: return "Gamsahamnida"
+            }
+        }
+    }
+
+    enum LanguageSkill: String, Codable, CaseIterable, Identifiable {
+        case vocabulary
+        case sentenceBuilding
+        case grammar
+        case recall
+
+        var id: String { rawValue }
+
+        var displayName: String {
+            switch self {
+            case .vocabulary: return "Vocabulary"
+            case .sentenceBuilding: return "Sentences"
+            case .grammar: return "Grammar"
+            case .recall: return "Recall"
+            }
+        }
+    }
+
+    struct LanguageProgressSummary {
+        var totalXP: Int
+        var weeklyXP: Int
+        var practicedThisWeek: Int
+        var correctThisWeek: Int
+        var skillXP: [LanguageSkill: Int]
+
+        var level: Int {
+            max(1, (totalXP / 120) + 1)
+        }
+
+        var currentLevelXP: Int {
+            totalXP % 120
+        }
+
+        var nextLevelXP: Int { 120 }
     }
 
     struct UnlockStatsRecord: Codable, Identifiable {
@@ -108,7 +168,7 @@ enum SharedSettings {
     static func preferredUnlockMechanism() -> UnlockMechanism {
         guard let rawValue = sharedDefaults?.string(forKey: Keys.preferredUnlockMechanism),
               let mechanism = UnlockMechanism(rawValue: rawValue) else {
-            return .mindfulWait
+            return .languagePractice
         }
         return mechanism
     }
@@ -116,6 +176,18 @@ enum SharedSettings {
     static func setPreferredUnlockMechanism(_ mechanism: UnlockMechanism) {
         sharedDefaults?.set(mechanism.rawValue, forKey: Keys.preferredUnlockMechanism)
         NotificationCenter.default.post(name: unlockMechanismChangedNotification, object: nil)
+    }
+
+    static func preferredLearningLanguage() -> LearningLanguage {
+        guard let rawValue = sharedDefaults?.string(forKey: Keys.preferredLearningLanguage),
+              let language = LearningLanguage(rawValue: rawValue) else {
+            return .spanish
+        }
+        return language
+    }
+
+    static func setPreferredLearningLanguage(_ language: LearningLanguage) {
+        sharedDefaults?.set(language.rawValue, forKey: Keys.preferredLearningLanguage)
     }
 
     // MARK: - Streak Helpers
@@ -137,25 +209,69 @@ enum SharedSettings {
         return streak
     }
 
-    // MARK: - Exercise Helpers
+    // MARK: - Unlock Practice Helpers
 
-    static func recordPushupsCompleted(_ count: Int, reference date: Date = Date()) {
-        guard count > 0 else { return }
-        let key = exercisePushupsKey(for: date)
-        let current = sharedDefaults?.integer(forKey: key) ?? 0
-        sharedDefaults?.set(current + count, forKey: key)
+    static func recordLanguagePractice(
+        questionCount: Int,
+        correctCount: Int,
+        xpEarned: Int = 0,
+        skillXP: [LanguageSkill: Int] = [:],
+        reference date: Date = Date()
+    ) {
+        guard questionCount > 0 else { return }
+        let practicedKey = languagePracticedKey(for: date)
+        let correctKey = languageCorrectKey(for: date)
+        let xpKey = languageXPKey(for: date)
+        let currentPracticed = sharedDefaults?.integer(forKey: practicedKey) ?? 0
+        let currentCorrect = sharedDefaults?.integer(forKey: correctKey) ?? 0
+        let currentDayXP = sharedDefaults?.integer(forKey: xpKey) ?? 0
+        let currentTotalXP = sharedDefaults?.integer(forKey: Keys.languageTotalXP) ?? 0
+        sharedDefaults?.set(currentPracticed + questionCount, forKey: practicedKey)
+        sharedDefaults?.set(currentCorrect + max(0, correctCount), forKey: correctKey)
+        sharedDefaults?.set(currentDayXP + max(0, xpEarned), forKey: xpKey)
+        sharedDefaults?.set(currentTotalXP + max(0, xpEarned), forKey: Keys.languageTotalXP)
+        for (skill, xp) in skillXP {
+            let key = Keys.languageSkillXPKey(skill.rawValue)
+            let current = sharedDefaults?.integer(forKey: key) ?? 0
+            sharedDefaults?.set(current + max(0, xp), forKey: key)
+        }
         NotificationCenter.default.post(name: analyticsUpdatedNotification, object: nil)
     }
 
-    static func recordSquatsCompleted(_ count: Int, reference date: Date = Date()) {
-        guard count > 0 else { return }
-        let key = exerciseSquatsKey(for: date)
-        let current = sharedDefaults?.integer(forKey: key) ?? 0
-        sharedDefaults?.set(current + count, forKey: key)
-        NotificationCenter.default.post(name: analyticsUpdatedNotification, object: nil)
+    static func languageQuestionsPracticedThisWeek(reference date: Date = Date()) -> Int {
+        weeklyTotal(reference: date) { day in
+            sharedDefaults?.integer(forKey: languagePracticedKey(for: day)) ?? 0
+        }
     }
 
-    static func pushupsCompletedThisWeek(reference date: Date = Date()) -> Int {
+    static func languageCorrectThisWeek(reference date: Date = Date()) -> Int {
+        weeklyTotal(reference: date) { day in
+            sharedDefaults?.integer(forKey: languageCorrectKey(for: day)) ?? 0
+        }
+    }
+
+    static func languageXPThisWeek(reference date: Date = Date()) -> Int {
+        weeklyTotal(reference: date) { day in
+            sharedDefaults?.integer(forKey: languageXPKey(for: day)) ?? 0
+        }
+    }
+
+    static func languageProgressSummary(reference date: Date = Date()) -> LanguageProgressSummary {
+        var skillTotals: [LanguageSkill: Int] = [:]
+        for skill in LanguageSkill.allCases {
+            skillTotals[skill] = sharedDefaults?.integer(forKey: Keys.languageSkillXPKey(skill.rawValue)) ?? 0
+        }
+
+        return LanguageProgressSummary(
+            totalXP: sharedDefaults?.integer(forKey: Keys.languageTotalXP) ?? 0,
+            weeklyXP: languageXPThisWeek(reference: date),
+            practicedThisWeek: languageQuestionsPracticedThisWeek(reference: date),
+            correctThisWeek: languageCorrectThisWeek(reference: date),
+            skillXP: skillTotals
+        )
+    }
+
+    private static func weeklyTotal(reference date: Date = Date(), value: (Date) -> Int) -> Int {
         let calendar = Calendar.current
         let startOfToday = calendar.startOfDay(for: date)
         let weekday = calendar.component(.weekday, from: startOfToday)
@@ -169,13 +285,8 @@ enum SharedSettings {
                   day <= startOfToday else {
                 return total
             }
-            return total + (sharedDefaults?.integer(forKey: exercisePushupsKey(for: day)) ?? 0)
+            return total + value(day)
         }
-    }
-
-    static func estimatedExerciseCaloriesBurned(reference date: Date = Date()) -> Int {
-        let pushups = pushupsCompletedThisWeek(reference: date)
-        return Int((Double(pushups) * 0.35).rounded())
     }
 
     static let appGroupIdentifier = "group.com.YLUUT5U99U.mindlock"
@@ -202,9 +313,13 @@ enum SharedSettings {
         static let subscriptionExpiration = "profile.subscription.expiration"
         static let subscriptionTier = "profile.subscription.tier"
         static let preferredUnlockMechanism = "unlock.preferredMechanism"
+        static let preferredLearningLanguage = "unlock.preferredLearningLanguage"
         static let installationDate = "profile.installation.date"
-        static func exercisePushupsKey(_ day: String) -> String { "exercise.pushups.\(day)" }
-        static func exerciseSquatsKey(_ day: String) -> String { "exercise.squats.\(day)" }
+        static let languageTotalXP = "language.totalXP"
+        static func languagePracticedKey(_ day: String) -> String { "language.practiced.\(day)" }
+        static func languageCorrectKey(_ day: String) -> String { "language.correct.\(day)" }
+        static func languageXPKey(_ day: String) -> String { "language.xp.\(day)" }
+        static func languageSkillXPKey(_ skill: String) -> String { "language.skillXP.\(skill)" }
     }
 
     private enum ShieldKeys {
@@ -215,12 +330,16 @@ enum SharedSettings {
         UserDefaults(suiteName: appGroupIdentifier)
     }
 
-    private static func exercisePushupsKey(for date: Date) -> String {
-        Keys.exercisePushupsKey(dayString(for: date))
+    private static func languagePracticedKey(for date: Date) -> String {
+        Keys.languagePracticedKey(dayString(for: date))
     }
 
-    private static func exerciseSquatsKey(for date: Date) -> String {
-        Keys.exerciseSquatsKey(dayString(for: date))
+    private static func languageCorrectKey(for date: Date) -> String {
+        Keys.languageCorrectKey(dayString(for: date))
+    }
+
+    private static func languageXPKey(for date: Date) -> String {
+        Keys.languageXPKey(dayString(for: date))
     }
 
     // MARK: - Shared Daily Limits Storage
@@ -526,9 +645,7 @@ enum SharedSettings {
             distractingSeconds: 0,
             hourly: (0..<24).map { AnalyticsDaySummary.HourlyBucket(hour: $0, productive: 0, distracting: 0) },
             perApp: [],
-            totalDonated: 0,
-            blockCount: 0,
-            charityBreakdown: []
+            blockCount: 0
         )
         mutate(&summary)
         writeAnalyticsDaySummary(summary)

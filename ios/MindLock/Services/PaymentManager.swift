@@ -14,6 +14,7 @@ final class PaymentManager: ObservableObject {
         case idle
         case loadingProducts
         case purchasing
+        case restoring
         case validating
         case pending
         case failed(String)
@@ -42,7 +43,7 @@ final class PaymentManager: ObservableObject {
 
     var isProcessing: Bool {
         switch purchaseState {
-        case .purchasing, .validating:
+        case .purchasing, .restoring, .validating:
             return true
         default:
             return false
@@ -51,6 +52,14 @@ final class PaymentManager: ObservableObject {
 
     var primaryProduct: Product? {
         availableProducts.sorted(by: { $0.price < $1.price }).first
+    }
+
+    var annualProduct: Product? {
+        availableProducts.first { $0.id == "mindlock.plus.annual" }
+    }
+
+    var monthlyProduct: Product? {
+        availableProducts.first { $0.id == "mindlock.plus.monthly" }
     }
 
     func loadProductsIfNeeded() async {
@@ -76,8 +85,16 @@ final class PaymentManager: ObservableObject {
         guard let product = primaryProduct else {
             throw PaymentError.productUnavailable
         }
+        try await purchaseSubscription(product: product)
+    }
+
+    func purchaseSubscription(product: Product) async throws {
 
         purchaseState = .purchasing
+        AnalyticsService.shared.track(.purchaseStarted, properties: [
+            "product_id": .string(product.id),
+            "display_price": .string(product.displayPrice)
+        ])
         logger.info("🛒 Attempting MindLock+ purchase")
         let result = try await product.purchase()
 
@@ -96,6 +113,10 @@ final class PaymentManager: ObservableObject {
 
             SharedSettings.updateSubscriptionStatus(activeUntil: expiration)
             SharedSettings.updateSubscriptionTier(productId: transaction.productID)
+            AnalyticsService.shared.track(.purchaseCompleted, properties: [
+                "product_id": .string(transaction.productID),
+                "expiration": .string(ISO8601DateFormatter().string(from: expiration))
+            ])
             subscriptionStatus = .subscribed(expiration: expiration)
             purchaseState = .validating
             let receiptData = loadReceiptDataIfAvailable()
@@ -103,8 +124,8 @@ final class PaymentManager: ObservableObject {
             let submission = PurchaseSubmissionRequest(
                 userId: userIdentity.userId,
                 userEmail: userIdentity.email,
-                charityId: "exercise-unlocks",
-                charityName: "Exercise Unlocks",
+                unlockProgramId: "language-unlocks",
+                unlockProgramName: "Language Unlocks",
                 productId: transaction.productID,
                 transactionId: String(transaction.id),
                 transactionJWS: transactionJWS,
@@ -126,17 +147,58 @@ final class PaymentManager: ObservableObject {
         case .pending:
             logger.info("⌛️ Purchase pending user action")
             purchaseState = .pending
+            AnalyticsService.shared.track(.purchasePending, properties: [
+                "product_id": .string(product.id)
+            ])
             throw PaymentError.pending
 
         case .userCancelled:
             logger.info("🙅‍♂️ User cancelled purchase")
             purchaseState = .idle
+            AnalyticsService.shared.track(.purchaseCancelled, properties: [
+                "product_id": .string(product.id)
+            ])
             throw PaymentError.userCancelled
 
         @unknown default:
             logger.error("❌ Purchase hit unknown StoreKit result")
             purchaseState = .failed(PaymentError.unknown.userFacingMessage)
+            AnalyticsService.shared.track(.purchaseFailed, properties: [
+                "product_id": .string(product.id),
+                "reason": .string("unknown_storekit_result")
+            ])
             throw PaymentError.unknown
+        }
+    }
+
+    func restorePurchases() async throws {
+        purchaseState = .restoring
+        logger.info("🔄 User requested purchase restore")
+        do {
+            try await AppStore.sync()
+            await refreshSubscriptionStatus()
+            switch subscriptionStatus {
+            case .subscribed:
+                logger.info("✅ Restore found active MindLock+ entitlement")
+                AnalyticsService.shared.track(.restoreCompleted, properties: [
+                    "subscription_active": .bool(true)
+                ])
+                purchaseState = .idle
+            case .unknown, .notSubscribed:
+                logger.info("ℹ️ Restore completed with no active entitlement")
+                purchaseState = .failed(PaymentError.noActiveEntitlement.userFacingMessage)
+                AnalyticsService.shared.track(.restoreFailed, properties: [
+                    "reason": .string("no_active_entitlement")
+                ])
+                throw PaymentError.noActiveEntitlement
+            }
+        } catch {
+            logger.error("❌ Restore failed: \(error.localizedDescription, privacy: .public)")
+            purchaseState = .failed(error.userFacingMessage)
+            AnalyticsService.shared.track(.restoreFailed, properties: [
+                "reason": .string(error.localizedDescription)
+            ])
+            throw error
         }
     }
 

@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, observerOptions);
 
     // Observe elements for animation
-    const animateElements = document.querySelectorAll('.feature-card, .step, .charity-card');
+    const animateElements = document.querySelectorAll('.feature-card, .step, .learning-card');
     
     animateElements.forEach(el => {
         el.style.opacity = '0';
@@ -87,19 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
             phoneMockup.style.transform = 'translateX(0)';
         }, 500);
     }
-
-    // Waitlist button functionality
-    const waitlistButtons = document.querySelectorAll('.btn-primary');
-    
-    waitlistButtons.forEach(button => {
-        if (button.textContent.includes('Waitlist')) {
-            button.addEventListener('click', function() {
-                // For now, just show an alert
-                // In production, this would open a form or modal
-                alert('Thank you for your interest! We\'ll notify you when MindLock launches.');
-            });
-        }
-    });
 
     // Mobile menu toggle (if needed in the future)
     function setupMobileMenu() {
@@ -157,6 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Console welcome message
     console.log('🔒 Welcome to MindLock!');
-    console.log('Building healthier digital habits through charitable impact.');
+    console.log('Building healthier digital habits through language learning.');
     console.log('Website loaded successfully.');
 });

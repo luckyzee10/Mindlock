@@ -9,7 +9,8 @@ struct ProfileView: View {
                 VStack(spacing: DesignSystem.Spacing.xl) {
                     heroCard
                     StreakCard(days: viewModel.perfectDays)
-                    exerciseStatsCard
+                    skillProgressCard
+                    learningStatsCard
                     unlockCard
                 }
                 .padding(.top, DesignSystem.Spacing.lg)
@@ -29,19 +30,19 @@ struct ProfileView: View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.lg) {
             HStack {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("Pushups This Week")
+                    Text(viewModel.learningLanguage.displayName)
                         .font(DesignSystem.Typography.caption)
                         .foregroundColor(.white.opacity(0.8))
-                    Text("\(viewModel.pushupsThisWeek)")
+                    Text("Level \(viewModel.languageLevel)")
                         .font(.system(size: 40, weight: .bold))
                         .foregroundColor(.white)
-                    Text("Earn extra time with movement.")
+                    Text("\(viewModel.weeklyXP) XP this week")
                         .font(DesignSystem.Typography.callout)
                         .foregroundColor(.white.opacity(0.85))
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer()
-                Image(systemName: "flame")
+                Image(systemName: "text.book.closed.fill")
                     .font(.system(size: 40, weight: .regular))
                     .foregroundColor(.white)
                     .shadow(radius: 12)
@@ -51,7 +52,7 @@ struct ProfileView: View {
 
             HStack(spacing: DesignSystem.Spacing.xl) {
                 profileMetric(title: "Perfect days", value: "\(viewModel.perfectDays)")
-                profileMetric(title: "Calories burned", value: "\(viewModel.caloriesBurned)")
+                profileMetric(title: "Level progress", value: "\(viewModel.currentLevelXP)/\(viewModel.nextLevelXP)")
             }
         }
         .padding()
@@ -77,29 +78,82 @@ struct ProfileView: View {
         }
     }
 
-    private var exerciseStatsCard: some View {
+    private var learningStatsCard: some View {
         HStack(spacing: DesignSystem.Spacing.md) {
             MetricCard(
-                title: "Pushups",
-                value: "\(viewModel.pushupsThisWeek)",
+                title: "Practiced",
+                value: "\(viewModel.languageQuestionsThisWeek)",
                 subtitle: "This week",
-                icon: "figure.strengthtraining.traditional",
+                icon: "text.book.closed.fill",
                 tint: DesignSystem.Colors.primary
             )
 
             MetricCard(
-                title: "Calories",
-                value: "\(viewModel.caloriesBurned)",
-                subtitle: "Estimated",
-                icon: "flame.fill",
-                tint: DesignSystem.Colors.warning
+                title: "Remembered",
+                value: "\(viewModel.languageCorrectThisWeek)",
+                subtitle: "Correct answers",
+                icon: "checkmark.circle.fill",
+                tint: DesignSystem.Colors.success
             )
+        }
+    }
+
+    private var skillProgressCard: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text("Skill Progress")
+                .font(DesignSystem.Typography.headline)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+
+            ForEach(SharedSettings.LanguageSkill.allCases) { skill in
+                skillProgressRow(skill)
+            }
+        }
+        .padding()
+        .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl)
+        .cornerRadius(DesignSystem.CornerRadius.xl)
+    }
+
+    private func skillProgressRow(_ skill: SharedSettings.LanguageSkill) -> some View {
+        let xp = viewModel.skillXP[skill] ?? 0
+        let level = max(1, (xp / 80) + 1)
+        let progress = CGFloat((xp % 80)) / 80.0
+
+        return VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
+            HStack {
+                Text(skill.displayName)
+                    .font(DesignSystem.Typography.callout.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                Spacer()
+                Text("Lv \(level)")
+                    .font(DesignSystem.Typography.caption.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.primary)
+            }
+
+            GeometryReader { proxy in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.white.opacity(0.10))
+                    Capsule()
+                        .fill(skillTint(skill))
+                        .frame(width: proxy.size.width * progress)
+                }
+            }
+            .frame(height: 8)
+        }
+    }
+
+    private func skillTint(_ skill: SharedSettings.LanguageSkill) -> Color {
+        switch skill {
+        case .vocabulary: return DesignSystem.Colors.primary
+        case .sentenceBuilding: return DesignSystem.Colors.accent
+        case .grammar: return DesignSystem.Colors.warning
+        case .recall: return DesignSystem.Colors.success
         }
     }
     
     private var unlockCard: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            Text("Mindful unlocks today")
+            Text("Language unlocks today")
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
             HStack(alignment: .firstTextBaseline, spacing: DesignSystem.Spacing.lg) {
@@ -206,8 +260,14 @@ private struct MetricCard: View {
 }
 
 private final class ProfileViewModel: ObservableObject {
-    @Published var pushupsThisWeek: Int = 0
-    @Published var caloriesBurned: Int = 0
+    @Published var learningLanguage: SharedSettings.LearningLanguage = SharedSettings.preferredLearningLanguage()
+    @Published var languageLevel: Int = 1
+    @Published var weeklyXP: Int = 0
+    @Published var currentLevelXP: Int = 0
+    @Published var nextLevelXP: Int = 120
+    @Published var skillXP: [SharedSettings.LanguageSkill: Int] = [:]
+    @Published var languageQuestionsThisWeek: Int = 0
+    @Published var languageCorrectThisWeek: Int = 0
     @Published var perfectDays: Int = 0
     @Published var mindfulUnlocks: Int = 0
     @Published var unlockDelta: Double?
@@ -215,12 +275,19 @@ private final class ProfileViewModel: ObservableObject {
 
     func refresh() {
         loadUnlockStats()
-        loadExerciseStats()
+        loadLanguageStats()
     }
 
-    private func loadExerciseStats() {
-        pushupsThisWeek = SharedSettings.pushupsCompletedThisWeek()
-        caloriesBurned = SharedSettings.estimatedExerciseCaloriesBurned()
+    private func loadLanguageStats() {
+        let summary = SharedSettings.languageProgressSummary()
+        learningLanguage = SharedSettings.preferredLearningLanguage()
+        languageLevel = summary.level
+        weeklyXP = summary.weeklyXP
+        currentLevelXP = summary.currentLevelXP
+        nextLevelXP = summary.nextLevelXP
+        skillXP = summary.skillXP
+        languageQuestionsThisWeek = summary.practicedThisWeek
+        languageCorrectThisWeek = summary.correctThisWeek
     }
 
     private func loadUnlockStats() {

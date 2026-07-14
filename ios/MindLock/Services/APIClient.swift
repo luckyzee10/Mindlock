@@ -3,43 +3,30 @@ import Foundation
 struct PurchaseSubmissionRequest: Encodable {
     let userId: String
     let userEmail: String?
-    let charityId: String
-    let charityName: String
+    let unlockProgramId: String
+    let unlockProgramName: String
     let productId: String
     let transactionId: String
     let transactionJWS: String
     let receiptData: String?
     let subscriptionTier: String?
+
+    enum CodingKeys: String, CodingKey {
+        case userId
+        case userEmail
+        case unlockProgramId = "charityId"
+        case unlockProgramName = "charityName"
+        case productId
+        case transactionId
+        case transactionJWS
+        case receiptData
+        case subscriptionTier
+    }
 }
 
 struct PurchaseSubmissionResponse: Decodable {
     let purchaseId: String
     let status: String
-}
-
-struct ImpactSummaryResponse: Decodable {
-    struct Charity: Decodable, Identifiable {
-        let charityId: String
-        let charityName: String
-        let donationCents: Int
-
-        var id: String { charityId }
-    }
-
-    let totalDonationCents: Int
-    let monthDonationCents: Int
-    let totalDonations: Int
-    let charities: [Charity]
-}
-
-struct ImpactReportRequest: Encodable {
-    let userId: String
-    let userEmail: String?
-    let subscriptionTier: String
-    let month: String
-    let impactPoints: Int
-    let streakDays: Int
-    let multiplier: Int
 }
 
 enum APIError: LocalizedError {
@@ -89,51 +76,6 @@ final class APIClient {
             throw APIError.server(status: httpResponse.statusCode, message: message)
         }
         return try JSONDecoder().decode(PurchaseSubmissionResponse.self, from: data)
-    }
-
-    func fetchImpactSummary(userId: String) async throws -> ImpactSummaryResponse {
-        let baseURL = try AppConfiguration.apiBaseURL()
-        let appKey = try AppConfiguration.appAPIKey()
-        var components = URLComponents(
-            url: baseURL.appendingPathComponent("v1/impact/summary"),
-            resolvingAgainstBaseURL: false
-        )
-        components?.queryItems = [URLQueryItem(name: "userId", value: userId)]
-        guard let url = components?.url else {
-            throw APIError.invalidResponse
-        }
-
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.addValue(appKey, forHTTPHeaderField: "X-App-Key")
-
-        let (data, response) = try await session.data(for: request)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.invalidResponse
-        }
-        guard 200 ..< 300 ~= httpResponse.statusCode else {
-            let message = decodeErrorMessage(from: data)
-            throw APIError.server(status: httpResponse.statusCode, message: message)
-        }
-        return try JSONDecoder().decode(ImpactSummaryResponse.self, from: data)
-    }
-
-    func submitImpactReport(_ requestBody: ImpactReportRequest) async throws {
-        let baseURL = try AppConfiguration.apiBaseURL()
-        let appKey = try AppConfiguration.appAPIKey()
-        let endpoint = baseURL.appendingPathComponent("v1/impact/report")
-        var urlRequest = URLRequest(url: endpoint)
-        urlRequest.httpMethod = "POST"
-        urlRequest.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        urlRequest.addValue(appKey, forHTTPHeaderField: "X-App-Key")
-        urlRequest.httpBody = try JSONEncoder().encode(requestBody)
-        let (_, response) = try await session.data(for: urlRequest)
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw APIError.invalidResponse
-        }
-        guard 200 ..< 300 ~= httpResponse.statusCode else {
-            throw APIError.server(status: httpResponse.statusCode, message: nil)
-        }
     }
 
     private func decodeErrorMessage(from data: Data) -> String? {

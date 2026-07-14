@@ -33,7 +33,6 @@ targets:
       properties:
         UILaunchScreen: {}
         UIRequiresFullScreen: true
-        NSCameraUsageDescription: MindLock uses the camera to verify exercise challenges on device. Video is not uploaded or stored.
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
     dependencies:
@@ -47,8 +46,6 @@ targets:
       - sdk: ManagedSettings.framework
       - sdk: DeviceActivity.framework
       - sdk: _DeviceActivity_SwiftUI.framework
-      - sdk: AVFoundation.framework
-      - sdk: Vision.framework
     postBuildScripts:
       - name: EmbedUsageReportExtension
         basedOnDependencyAnalysis: false

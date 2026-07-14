@@ -15,7 +15,7 @@ struct WaitUnlockView: View {
     @State private var readyToConfirm = false
     @State private var timeBlockContext: SharedSettings.ActiveTimeBlockState?
     @State private var showingBreakPicker = false
-    @State private var showingExerciseChallenge = false
+    @State private var showingLanguageChallenge = false
     @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
     @State private var preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
     @State private var selectedBreakMinutes: Int = 10
@@ -30,15 +30,19 @@ struct WaitUnlockView: View {
             switch preferredUnlockMechanism {
             case .mindfulWait:
                 mindfulWaitBody
-            case .pushups, .squats:
+            case .languagePractice:
                 if subscriptionActive {
-                    exerciseDurationBody
+                    challengeDurationBody
                 } else {
                     UnlockPromptView()
                 }
             }
         }
         .onAppear {
+            AnalyticsService.shared.track(.unlockFlowStarted, properties: [
+                "unlock_method": .string(preferredUnlockMechanism.rawValue),
+                "subscription_active": .bool(subscriptionActive)
+            ])
             subscriptionActive = SharedSettings.isSubscriptionActive()
             preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
             if preferredUnlockMechanism == .mindfulWait {
@@ -54,9 +58,9 @@ struct WaitUnlockView: View {
             guard preferredUnlockMechanism == .mindfulWait else { return }
             phase == .active ? resume() : pause()
         }
-        .sheet(isPresented: $showingExerciseChallenge) {
-            ExerciseChallengeView(mechanism: preferredUnlockMechanism, unlockMinutes: selectedBreakMinutes) { mechanism, reps, minutes in
-                completeExerciseChallenge(mechanism: mechanism, reps: reps, minutes: minutes)
+        .sheet(isPresented: $showingLanguageChallenge) {
+            LanguageChallengeView(unlockMinutes: selectedBreakMinutes) { practiced, correct, minutes in
+                completeLanguageChallenge(practiced: practiced, correct: correct, minutes: minutes)
             }
         }
     }
@@ -100,7 +104,7 @@ struct WaitUnlockView: View {
         .animation(.spring(response: 0.35, dampingFraction: 0.9), value: showingBreakPicker)
     }
 
-    private var exerciseDurationBody: some View {
+    private var challengeDurationBody: some View {
         NavigationView {
             VStack(spacing: DesignSystem.Spacing.xl) {
                 VStack(spacing: DesignSystem.Spacing.sm) {
@@ -109,7 +113,7 @@ struct WaitUnlockView: View {
                         .fontWeight(.bold)
                         .foregroundColor(DesignSystem.Colors.textPrimary)
 
-                    Text("Choose how much time you want to unlock, then complete the challenge.")
+                    Text(challengeIntroCopy)
                         .font(DesignSystem.Typography.callout)
                         .foregroundColor(DesignSystem.Colors.textSecondary)
                         .multilineTextAlignment(.center)
@@ -119,9 +123,9 @@ struct WaitUnlockView: View {
 
                 VStack(spacing: DesignSystem.Spacing.md) {
                     Button {
-                        showingExerciseChallenge = true
+                        startSelectedChallenge()
                     } label: {
-                        Label("Start challenge", systemImage: "figure.strengthtraining.traditional")
+                        Label("Start challenge", systemImage: challengeIconName)
                             .frame(maxWidth: .infinity)
                     }
                     .mindLockButton(style: .primary)
@@ -247,21 +251,44 @@ struct WaitUnlockView: View {
     }
 
     private func confirmUnlock(minutes: Int) {
+        AnalyticsService.shared.track(.unlockMinutesGranted, properties: [
+            "minutes": .int(minutes),
+            "unlock_method": .string(preferredUnlockMechanism.rawValue)
+        ])
         limitsManager.grantFreeUnlock(minutes: minutes)
         NotificationManager.shared.postFreeUnlockNotification(minutes: minutes)
         dismiss()
     }
 
-    private func completeExerciseChallenge(mechanism: SharedSettings.UnlockMechanism, reps: Int, minutes: Int) {
-        switch mechanism {
-        case .pushups:
-            SharedSettings.recordPushupsCompleted(reps)
-        case .squats:
-            SharedSettings.recordSquatsCompleted(reps)
+    private func completeLanguageChallenge(practiced: Int, correct: Int, minutes: Int) {
+        confirmUnlock(minutes: minutes)
+    }
+
+    private func startSelectedChallenge() {
+        switch preferredUnlockMechanism {
+        case .languagePractice:
+            showingLanguageChallenge = true
         case .mindfulWait:
             break
         }
-        confirmUnlock(minutes: minutes)
+    }
+
+    private var challengeIntroCopy: String {
+        switch preferredUnlockMechanism {
+        case .languagePractice:
+            return "Choose how much time you want to unlock, then practice a few \(SharedSettings.preferredLearningLanguage().displayName) questions."
+        case .mindfulWait:
+            return ""
+        }
+    }
+
+    private var challengeIconName: String {
+        switch preferredUnlockMechanism {
+        case .languagePractice:
+            return "text.book.closed.fill"
+        case .mindfulWait:
+            return "clock.arrow.circlepath"
+        }
     }
 
     private var appName: String {

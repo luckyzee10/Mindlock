@@ -13,10 +13,10 @@
 
 This website serves as the official landing page for MindLock, explaining the app's concept and value proposition. It's designed to:
 
-1. **Explain the concept** - Turn screen time slips into charitable impact
-2. **Show how it works** - Next-day accountability with charitable donations
+1. **Explain the concept** - Turn distracting app unlocks into language practice
+2. **Show how it works** - Screen Time blocking with language-learning unlocks
 3. **Build credibility** - Professional presentation for Apple Developer approval
-4. **Collect interest** - Waitlist signup for launch
+4. **Support App Store review** - Provide accurate product, privacy, and terms information
 
 ## Design
 

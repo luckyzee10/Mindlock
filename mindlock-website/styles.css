@@ -220,21 +220,53 @@ body {
     opacity: 0.9;
 }
 
-.charity-options {
+.language-options {
     display: flex;
     gap: 12px;
     justify-content: center;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
-.charity-option {
+.language-option {
     background: rgba(255, 255, 255, 0.2);
     padding: 12px 16px;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
     font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.eyebrow {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+
+.lesson-card {
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+    padding: 16px;
+    text-align: left;
+}
+
+.lesson-card strong {
+    font-size: 1.7rem;
+    line-height: 1;
+}
+
+.lesson-tag {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
 }
 
 .unlock-btn {
@@ -348,8 +380,8 @@ body {
     line-height: 1.6;
 }
 
-/* Charities Section */
-.charities {
+/* Learning Section */
+.learning {
     padding: 80px 0;
     background: white;
 }
@@ -361,13 +393,13 @@ body {
     margin-bottom: 60px;
 }
 
-.charities-grid {
+.learning-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 40px;
 }
 
-.charity-card {
+.learning-card {
     text-align: center;
     padding: 40px 20px;
     border-radius: 16px;
@@ -375,24 +407,24 @@ body {
     transition: transform 0.3s ease;
 }
 
-.charity-card:hover {
+.learning-card:hover {
     transform: translateY(-5px);
 }
 
-.charity-logo {
+.learning-logo {
     font-size: 3rem;
     margin-bottom: 20px;
     display: block;
 }
 
-.charity-card h3 {
+.learning-card h3 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 16px;
     color: #1a1a1a;
 }
 
-.charity-card p {
+.learning-card p {
     color: #666;
     line-height: 1.6;
 }
@@ -481,7 +513,7 @@ body {
     }
     
     .features-grid,
-    .charities-grid {
+    .learning-grid {
         grid-template-columns: 1fr;
     }
     

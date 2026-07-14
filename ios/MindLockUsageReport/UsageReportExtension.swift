@@ -161,7 +161,7 @@ private struct QuickStatsCard: View {
             HStack(spacing: 12) {
                 StatTile(title: "Apps tracked", value: "\(summary.perApp.count)")
                 StatTile(title: "Blocks today", value: "\(summary.blockCount ?? 0)")
-                StatTile(title: "Donated", value: MindLockUsageReportView.formatCurrency(summary.totalDonated ?? 0))
+                StatTile(title: "Language", value: SharedSettings.preferredLearningLanguage().displayName)
             }
         }
         .padding()

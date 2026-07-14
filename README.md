@@ -1,10 +1,10 @@
 # MindLock 🔒
 
-> Productivity app that uses Screen Time API + payments to reduce social media addiction while supporting charities
+> Productivity app that uses Screen Time API + short language-learning unlocks to reduce distracting app use
 
 ## Overview
 
-MindLock is a comprehensive iOS productivity app featuring a 4-section architecture: Setup, Analytics, Social, and Profile. Users set per-app daily limits using Apple's Screen Time API. When they exceed limits, they can unlock more time by paying a small fee (based on their chosen difficulty level). A percentage goes to their selected charity, creating positive impact even during moments of weakness.
+MindLock is an iOS productivity app that helps users limit distracting apps and turn blocked moments into short language-learning practice. Users choose apps to limit, set daily app limits or scheduled focus blocks, pick a learning language, and unlock extra app time by completing a quick beginner language challenge.
 
 ## Quick Start
 

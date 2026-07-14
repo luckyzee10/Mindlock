@@ -1,21 +1,21 @@
 import SwiftUI
 
-// MARK: - Design System inspired by Opal's dark, sleek aesthetic
+// MARK: - Design System inspired by a focused, educational dark aesthetic
 struct DesignSystem {
     
-    // MARK: - Colors (Dark theme like Opal)
+    // MARK: - Colors (Dark learning theme)
     struct Colors {
         // Dark backgrounds
         static let background = Color.black
-        static let surface = Color(red: 0.11, green: 0.11, blue: 0.13) // Dark card background
-        static let surfaceSecondary = Color(red: 0.15, green: 0.15, blue: 0.17) // Slightly lighter
+        static let surface = Color(red: 0.08, green: 0.10, blue: 0.14)
+        static let surfaceSecondary = Color(red: 0.12, green: 0.15, blue: 0.20)
         
         // Accent colors
-        static let primary = Color(red: 0.45, green: 0.55, blue: 1.0) // Bright blue
-        static let accent = Color(red: 1.0, green: 0.27, blue: 0.23) // Red for warnings/blocks
-        static let success = Color(red: 0.20, green: 0.78, blue: 0.35) // Green
-        static let warning = Color(red: 1.0, green: 0.58, blue: 0.0) // Orange
-        static let error = Color(red: 1.0, green: 0.27, blue: 0.23) // Red
+        static let primary = Color(red: 0.22, green: 0.58, blue: 0.95)
+        static let accent = Color(red: 0.58, green: 0.44, blue: 0.96)
+        static let success = Color(red: 0.18, green: 0.78, blue: 0.62)
+        static let warning = Color(red: 0.95, green: 0.68, blue: 0.24)
+        static let error = Color(red: 0.95, green: 0.28, blue: 0.32)
         
         // Text colors (for dark theme)
         static let textPrimary = Color.white
@@ -24,7 +24,7 @@ struct DesignSystem {
         
         // Gradients
         static let primaryGradient = LinearGradient(
-            colors: [primary, Color(red: 0.35, green: 0.45, blue: 0.90)],
+            colors: [primary, accent],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
@@ -36,7 +36,7 @@ struct DesignSystem {
         )
         
         static let accentGradient = LinearGradient(
-            colors: [accent, Color(red: 0.90, green: 0.20, blue: 0.15)],
+            colors: [accent, Color(red: 0.40, green: 0.33, blue: 0.82)],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )

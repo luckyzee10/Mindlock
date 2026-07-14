@@ -15,6 +15,7 @@ struct OnboardingView: View {
     @State private var userAge: Int = 0
     @State private var dailyGoalHours: Double = 2
     @State private var selectedGoal: OnboardingGoal?
+    @State private var selectedLearningLanguage = SharedSettings.preferredLearningLanguage()
     @State private var onboardingSelection = FamilyActivitySelection()
     @State private var onboardingLimitMinutesByToken: [String: Int] = [:]
     @State private var onboardingBlockStart = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: Date()) ?? Date()
@@ -84,6 +85,13 @@ struct OnboardingView: View {
                 }
             }
         }
+        .onAppear {
+            AnalyticsService.shared.track(.onboardingStarted)
+            trackCurrentPageViewed()
+        }
+        .onChange(of: currentPage) { _, _ in
+            trackCurrentPageViewed()
+        }
     }
 
     @ViewBuilder
@@ -122,6 +130,12 @@ struct OnboardingView: View {
             OnboardingGoalChoiceView(
                 page: page,
                 selectedGoal: $selectedGoal,
+                onContinue: advancePage
+            )
+        } else if page.isLanguageSelectionPage {
+            OnboardingLanguageSelectionView(
+                page: page,
+                selectedLanguage: $selectedLearningLanguage,
                 onContinue: advancePage
             )
         } else if page.isGoalSettingPage {
@@ -168,8 +182,28 @@ struct OnboardingView: View {
             UserDefaults.standard.set(selectedGoal.rawValue, forKey: "onboardingMainGoal")
             UserDefaults.standard.set(selectedGoal.setupPath.rawValue, forKey: "onboardingSetupPath")
         }
+        SharedSettings.setPreferredLearningLanguage(selectedLearningLanguage)
+        var completedProperties: [String: AnalyticsValue] = [
+            "daily_usage_hours": .double(dailyUsageHours),
+            "daily_goal_hours": .double(dailyGoalHours),
+            "age": .int(userAge),
+            "language": .string(selectedLearningLanguage.rawValue)
+        ]
+        if let selectedGoal {
+            completedProperties["goal"] = .string(selectedGoal.rawValue)
+            completedProperties["setup_path"] = .string(selectedGoal.setupPath.rawValue)
+        }
+        AnalyticsService.shared.track(.onboardingCompleted, properties: completedProperties)
         // Update ScreenTimeManager with selected apps (already handled by the manager)
         print("💾 Saved user preferences")
+    }
+
+    private func trackCurrentPageViewed() {
+        guard pages.indices.contains(currentPage) else { return }
+        AnalyticsService.shared.track(.onboardingPageViewed, properties: [
+            "page_index": .int(currentPage),
+            "page_title": .string(pages[currentPage].title)
+        ])
     }
 
     @ViewBuilder
@@ -226,10 +260,18 @@ struct OnboardingView: View {
         }
 
         screenTimeManager.updateSelectedApps(onboardingSelection, reason: "onboarding simple limits")
+        AnalyticsService.shared.track(.appsSelected, properties: [
+            "source": .string("onboarding_simple_limits"),
+            "app_count": .int(tokens.count)
+        ])
         for token in tokens {
             let minutes = onboardingLimitMinutesByToken[token.identifier] ?? 30
             DailyLimitsManager.shared.setLimitImmediate(for: token, limit: TimeInterval(minutes * 60))
         }
+        AnalyticsService.shared.track(.limitCreated, properties: [
+            "source": .string("onboarding"),
+            "app_count": .int(tokens.count)
+        ])
         advancePage()
     }
 
@@ -258,6 +300,10 @@ struct OnboardingView: View {
         }
 
         screenTimeManager.updateSelectedApps(onboardingSelection, reason: "onboarding time block")
+        AnalyticsService.shared.track(.appsSelected, properties: [
+            "source": .string("onboarding_time_block"),
+            "app_count": .int(onboardingSelection.applicationTokens.count)
+        ])
         let block = SharedSettings.TimeBlock(
             id: UUID().uuidString,
             name: "Focus Time",
@@ -273,23 +319,19 @@ struct OnboardingView: View {
         SharedSettings.saveTimeBlocks(blocks)
         screenTimeManager.refreshMonitoringSchedule(reason: "onboarding time block")
         screenTimeManager.enforceActiveTimeBlocksNow()
+        AnalyticsService.shared.track(.timeBlockCreated, properties: [
+            "source": .string("onboarding"),
+            "app_count": .int(onboardingSelection.applicationTokens.count),
+            "day_count": .int(onboardingBlockDays.count),
+            "duration_minutes": .int(minutes)
+        ])
         advancePage()
     }
     
     private func staticOnboardingView(for page: OnboardingPage) -> some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             Spacer()
-            
-            Image(systemName: page.iconName)
-                .font(.system(size: 80, weight: .semibold))
-                .foregroundColor(page.accentColor)
-                .padding()
-                .background(
-                    Circle()
-                        .fill(page.accentColor.opacity(0.12))
-                        .frame(width: 180, height: 180)
-                )
-            
+
             VStack(spacing: DesignSystem.Spacing.md) {
                 Text(page.title)
                     .font(DesignSystem.Typography.largeTitle)
@@ -314,8 +356,7 @@ struct UsageQuestionView: View {
     let page: OnboardingPage
     @Binding var selectedHours: Double
     let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
+
     @State private var textOpacity: Double = 0.0
     
     // Use the maximum value in each range to maximize impact in the later stats screen.
@@ -330,31 +371,7 @@ struct UsageQuestionView: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            
-            // Illustration - Smaller to save space
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                page.accentColor.opacity(0.2),
-                                page.accentColor.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 50,
-                            endRadius: 120
-                        )
-                    )
-                    .frame(width: 140, height: 140)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 45, weight: .medium))
-                    .foregroundColor(page.accentColor)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            .padding(.bottom, DesignSystem.Spacing.md)
-            
+
             // Content - Compact spacing
             VStack(spacing: DesignSystem.Spacing.sm) {
                 Text(page.title)
@@ -382,6 +399,10 @@ struct UsageQuestionView: View {
                 ForEach(Array(usageOptions.enumerated()), id: \.offset) { index, option in
                     Button(action: {
                         selectedHours = option.hours
+                        AnalyticsService.shared.track(.onboardingUsageSelected, properties: [
+                            "hours": .double(option.hours),
+                            "label": .string(option.label)
+                        ])
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             onContinue()
                         }
@@ -436,12 +457,10 @@ struct UsageQuestionView: View {
         .padding(.top, 10)
         .onAppear {
             withAnimation {
-                iconScale = 1.0
                 textOpacity = 1.0
             }
         }
         .onDisappear {
-            iconScale = 0.8
             textOpacity = 0.0
         }
     }
@@ -451,8 +470,7 @@ struct AgeQuestionView: View {
     let page: OnboardingPage
     @Binding var selectedAge: Int
     let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
+
     @State private var textOpacity: Double = 0.0
     
     private let ageRange = Array(13...80)
@@ -460,30 +478,7 @@ struct AgeQuestionView: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             Spacer()
-            
-            // Illustration
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                page.accentColor.opacity(0.2),
-                                page.accentColor.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 50,
-                            endRadius: 150
-                        )
-                    )
-                    .frame(width: 200, height: 200)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 60, weight: .medium))
-                    .foregroundColor(page.accentColor)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            
+
             // Content
             VStack(spacing: DesignSystem.Spacing.lg) {
                 Text(page.title)
@@ -522,6 +517,9 @@ struct AgeQuestionView: View {
                 .labelsHidden()
 
                 Button("Continue") {
+                    AnalyticsService.shared.track(.onboardingAgeSelected, properties: [
+                        "age": .int(selectedAge)
+                    ])
                     onContinue()
                 }
                 .mindLockButton(style: .primary)
@@ -535,12 +533,10 @@ struct AgeQuestionView: View {
                 selectedAge = 25
             }
             withAnimation {
-                iconScale = 1.0
                 textOpacity = 1.0
             }
         }
         .onDisappear {
-            iconScale = 0.8
             textOpacity = 0.0
         }
     }
@@ -551,8 +547,7 @@ struct LifetimeImpactView: View {
     let dailyUsageHours: Double
     let userAge: Int
     let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
+
     @State private var textOpacity: Double = 0.0
     @State private var statsOpacity: Double = 0.0
     @State private var ctaOpacity: Double = 0.0
@@ -574,31 +569,7 @@ struct LifetimeImpactView: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            
-            // Warning illustration
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                DesignSystem.Colors.warning.opacity(0.2),
-                                DesignSystem.Colors.warning.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 50,
-                            endRadius: 150
-                        )
-                    )
-                    .frame(width: 160, height: 160)
-                
-                Image(systemName: "exclamationmark.triangle.fill")
-                    .font(.system(size: 50, weight: .medium))
-                    .foregroundColor(DesignSystem.Colors.warning)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            .padding(.bottom, DesignSystem.Spacing.xl)
-            
+
             // Header text
             VStack(spacing: DesignSystem.Spacing.md) {
                 Text("At your current pace, you'll spend")
@@ -719,7 +690,6 @@ struct LifetimeImpactView: View {
         }
         .onAppear {
             withAnimation {
-                iconScale = 1.0
                 textOpacity = 1.0
             }
             
@@ -736,7 +706,6 @@ struct LifetimeImpactView: View {
             }
         }
         .onDisappear {
-            iconScale = 0.8
             textOpacity = 0.0
             statsOpacity = 0.0
             ctaOpacity = 0.0
@@ -750,8 +719,7 @@ struct ScreenTimePermissionView: View {
     let page: OnboardingPage
     @ObservedObject var screenTimeManager: ScreenTimeManager
     let onContinue: () -> Void
-    
-    @State private var iconScale: CGFloat = 0.8
+
     @State private var textOpacity: Double = 0.0
     @State private var isRequestingPermission = false
     @State private var showingError = false
@@ -761,30 +729,7 @@ struct ScreenTimePermissionView: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             Spacer()
-            
-            // Illustration
-            ZStack {
-                Circle()
-                    .fill(
-                        RadialGradient(
-                            colors: [
-                                page.accentColor.opacity(0.2),
-                                page.accentColor.opacity(0.05)
-                            ],
-                            center: .center,
-                            startRadius: 50,
-                            endRadius: 150
-                        )
-                    )
-                    .frame(width: 200, height: 200)
-                
-                Image(systemName: page.iconName)
-                    .font(.system(size: 60, weight: .medium))
-                    .foregroundColor(page.accentColor)
-                    .scaleEffect(iconScale)
-                    .animation(DesignSystem.Animation.spring, value: iconScale)
-            }
-            
+
             // Content
             VStack(spacing: DesignSystem.Spacing.lg) {
                 Text(page.title)
@@ -848,12 +793,10 @@ struct ScreenTimePermissionView: View {
             screenTimeManager.checkAuthorizationStatus()
             
             withAnimation {
-                iconScale = 1.0
                 textOpacity = 1.0
             }
         }
         .onDisappear {
-            iconScale = 0.8
             textOpacity = 0.0
         }
         .alert("Screen Time Required", isPresented: $showingSkipWarning) {
@@ -884,6 +827,10 @@ struct ScreenTimePermissionView: View {
         print("🔐 Current status: \(screenTimeManager.authorizationStatus)")
         
         isRequestingPermission = true
+        AnalyticsService.shared.track(.screenTimePermissionRequested, properties: [
+            "source": .string("onboarding"),
+            "current_status": .string(String(describing: screenTimeManager.authorizationStatus))
+        ])
         
         Task {
             do {
@@ -895,6 +842,9 @@ struct ScreenTimePermissionView: View {
                     print("🔐 Authorization completed successfully")
                     print("🔐 New status: \(screenTimeManager.authorizationStatus)")
                     if screenTimeManager.authorizationStatus == .approved {
+                        AnalyticsService.shared.track(.screenTimePermissionGranted, properties: [
+                            "source": .string("onboarding")
+                        ])
                         onContinue()
                     }
                 }
@@ -903,6 +853,10 @@ struct ScreenTimePermissionView: View {
                     isRequestingPermission = false
                     errorMessage = error.localizedDescription
                     showingError = true
+                    AnalyticsService.shared.track(.screenTimePermissionFailed, properties: [
+                        "source": .string("onboarding"),
+                        "reason": .string(error.localizedDescription)
+                    ])
                     print("🔐 Authorization failed: \(error.localizedDescription)")
                 }
             }
@@ -922,7 +876,7 @@ struct GoalSettingView: View {
     let dailyUsageHours: Double
     @Binding var dailyGoalHours: Double
     let onContinue: () -> Void
-    
+
     @State private var iconScale: CGFloat = 0.8
     @State private var textOpacity: Double = 0.0
     
@@ -972,7 +926,7 @@ struct GoalSettingView: View {
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
             Spacer()
-            
+
             ZStack {
                 Circle()
                     .fill(
@@ -987,14 +941,14 @@ struct GoalSettingView: View {
                         )
                     )
                     .frame(width: 200, height: 200)
-                
+
                 Image(systemName: "target")
                     .font(.system(size: 60, weight: .medium))
                     .foregroundColor(page.accentColor)
                     .scaleEffect(iconScale)
                     .animation(DesignSystem.Animation.spring, value: iconScale)
             }
-            
+
             VStack(spacing: DesignSystem.Spacing.lg) {
                 Text(page.title)
                     .font(DesignSystem.Typography.title1)
@@ -1051,9 +1005,6 @@ struct GoalSettingView: View {
                                 .stroke(DesignSystem.Colors.success.opacity(0.35), lineWidth: 1)
                         )
                     HStack(spacing: DesignSystem.Spacing.md) {
-                        Image(systemName: "sparkles")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundColor(DesignSystem.Colors.success)
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Stay on goal, gain back time")
                                 .font(DesignSystem.Typography.callout)
@@ -1122,22 +1073,21 @@ struct ConceptExplanationView: View {
     @State private var showTxt2 = false
     @State private var showPaywall = false
     @State private var shouldContinueAfterPaywall = false
-    @State private var selectedUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+    @State private var selectedUnlockMechanism: SharedSettings.UnlockMechanism = .languagePractice
 
-    private let subheadText = "MindLock turns your daily focus into healthier unlock habits."
+    private let subheadText = "MindLock turns blocked moments into quick learning sessions."
     private let explainerText = "How it works is simple."
     private enum ConceptStage { case overview, examples }
 
     private let steps: [(String, String, String)] = [
         ("Set your limits", "Choose the apps and times MindLock should protect.", "lock.fill"),
         ("Stay accountable", "When an app is shielded, MindLock makes you pause before unlocking.", "clock.arrow.circlepath"),
-        ("Earn breaks with movement", "Complete quick exercises to unlock more time when you need it.", "figure.strengthtraining.traditional")
+        ("Learn to unlock", "Answer quick language questions to unlock more time when you need it.", "text.book.closed.fill")
     ]
 
     private let unlockOptions: [(SharedSettings.UnlockMechanism, String, String, String)] = [
-        (.mindfulWait, "30s", "Mindful wait", "Pause, breathe, then unlock more time."),
-        (.pushups, "5", "Pushups", "Earn your unlock with 5 pushups."),
-        (.squats, "10", "Squats", "Earn your unlock with 10 squats.")
+        (.languagePractice, "3", "Language practice", "Answer 3 quick questions to unlock more time."),
+        (.mindfulWait, "30s", "Mindful wait", "Pause, breathe, then unlock more time.")
     ]
 
     var body: some View {
@@ -1182,10 +1132,7 @@ struct ConceptExplanationView: View {
                                 )
 
                             VStack(spacing: DesignSystem.Spacing.md) {
-                                Image(systemName: "figure.strengthtraining.traditional")
-                                    .font(.system(size: 42, weight: .medium))
-                                    .foregroundColor(DesignSystem.Colors.success)
-                                Text("Movement -> mindful unlocks")
+                                Text("Learning -> mindful unlocks")
                                     .font(DesignSystem.Typography.body)
                                     .foregroundColor(DesignSystem.Colors.textPrimary)
                             }
@@ -1214,10 +1161,6 @@ struct ConceptExplanationView: View {
                             .foregroundColor(DesignSystem.Colors.textPrimary)
                             .multilineTextAlignment(.center)
                             .opacity(showTxt2 ? 1 : 0)
-
-                        UnlockMechanismVisual(mechanism: selectedUnlockMechanism)
-                            .frame(height: 240)
-                            .opacity(showTxt2 ? 1 : 0)
                     }
                     .padding(.top, DesignSystem.Spacing.lg)
 
@@ -1234,6 +1177,9 @@ struct ConceptExplanationView: View {
                                         isSelected: selectedUnlockMechanism == option.0
                                     ) {
                                         selectedUnlockMechanism = option.0
+                                        AnalyticsService.shared.track(.onboardingUnlockMethodSelected, properties: [
+                                            "unlock_method": .string(option.0.rawValue)
+                                        ])
                                     }
                                         .transition(.opacity.combined(with: .move(edge: .bottom)))
                                 }
@@ -1313,7 +1259,7 @@ struct ConceptExplanationView: View {
         visibleExampleCount = 0
         conceptStage = .overview
         shouldContinueAfterPaywall = false
-        selectedUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+        selectedUnlockMechanism = .languagePractice
     }
 
     private func continueTapped() {
@@ -1344,6 +1290,10 @@ struct ConceptExplanationView: View {
             }
         case .examples:
             SharedSettings.setPreferredUnlockMechanism(selectedUnlockMechanism)
+            AnalyticsService.shared.track(.onboardingUnlockMethodSelected, properties: [
+                "unlock_method": .string(selectedUnlockMechanism.rawValue),
+                "confirmed": .bool(true)
+            ])
             shouldContinueAfterPaywall = true
             showPaywall = true
         }
@@ -1412,30 +1362,21 @@ struct FinalInspireView: View {
                     .multilineTextAlignment(.center)
 
                 VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
-                    HStack(alignment: .center, spacing: DesignSystem.Spacing.md) {
-                        Image(systemName: "target").foregroundColor(DesignSystem.Colors.success)
-                        Text("💪 You’ll reduce screen time by \(formatHours(dailyReduction)) each day.")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .opacity(bullet1Opacity)
-                            .offset(y: bullet1Opacity == 1 ? 0 : 8)
-                    }
-                    HStack(alignment: .center, spacing: DesignSystem.Spacing.md) {
-                        Image(systemName: "target").foregroundColor(DesignSystem.Colors.success)
-                        Text("🕚 Gain back \(formatHours(weeklyGain)) each week")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .opacity(bullet2Opacity)
-                            .offset(y: bullet2Opacity == 1 ? 0 : 8)
-                    }
-                    HStack(alignment: .center, spacing: DesignSystem.Spacing.md) {
-                        Image(systemName: "target").foregroundColor(DesignSystem.Colors.success)
-                        Text("📈 That’s \(formatHours(yearlyGain)) a year!")
-                            .font(DesignSystem.Typography.title3)
-                            .foregroundColor(DesignSystem.Colors.textPrimary)
-                            .opacity(bullet3Opacity)
-                            .offset(y: bullet3Opacity == 1 ? 0 : 8)
-                    }
+                    Text("You’ll reduce screen time by \(formatHours(dailyReduction)) each day.")
+                        .font(DesignSystem.Typography.title3)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .opacity(bullet1Opacity)
+                        .offset(y: bullet1Opacity == 1 ? 0 : 8)
+                    Text("Gain back \(formatHours(weeklyGain)) each week.")
+                        .font(DesignSystem.Typography.title3)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .opacity(bullet2Opacity)
+                        .offset(y: bullet2Opacity == 1 ? 0 : 8)
+                    Text("That’s \(formatHours(yearlyGain)) a year.")
+                        .font(DesignSystem.Typography.title3)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .opacity(bullet3Opacity)
+                        .offset(y: bullet3Opacity == 1 ? 0 : 8)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, DesignSystem.Spacing.lg)
@@ -1452,7 +1393,6 @@ struct FinalInspireView: View {
 
             Spacer()
 
-            // Pulsing lock inside a green circle
             ZStack {
                 Circle()
                     .stroke(DesignSystem.Colors.success.opacity(0.35), lineWidth: 10)
@@ -1503,15 +1443,6 @@ private struct ImpactStepRow: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: DesignSystem.Spacing.md) {
-            ZStack {
-                Circle()
-                    .fill(DesignSystem.Colors.success.opacity(0.15))
-                    .frame(width: 36, height: 36)
-                Image(systemName: iconName)
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(DesignSystem.Colors.success)
-            }
-
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
                     .font(DesignSystem.Typography.body)
@@ -1527,61 +1458,6 @@ private struct ImpactStepRow: View {
         .padding(DesignSystem.Spacing.md)
         .glossySurface(cornerRadius: DesignSystem.CornerRadius.md)
         .cornerRadius(DesignSystem.CornerRadius.md)
-    }
-}
-
-private struct ImpactExampleRow: View {
-    let emoji: String
-    let text: String
-
-    var body: some View {
-        HStack(spacing: DesignSystem.Spacing.md) {
-            Text(emoji)
-                .font(.system(size: 20))
-            Text(text)
-                .font(DesignSystem.Typography.body)
-                .foregroundColor(DesignSystem.Colors.textPrimary)
-            Spacer()
-        }
-        .padding(.horizontal, DesignSystem.Spacing.md)
-        .padding(.vertical, DesignSystem.Spacing.sm)
-        .glossySurface(cornerRadius: DesignSystem.CornerRadius.md)
-        .cornerRadius(DesignSystem.CornerRadius.md)
-    }
-}
-
-private struct UnlockMechanismVisual: View {
-    let mechanism: SharedSettings.UnlockMechanism
-
-    var body: some View {
-        ZStack {
-            Circle()
-                .fill(
-                    LinearGradient(
-                        colors: [DesignSystem.Colors.primary.opacity(0.20), DesignSystem.Colors.success.opacity(0.16)],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .frame(width: 210, height: 210)
-
-            Circle()
-                .stroke(DesignSystem.Colors.primary.opacity(0.18), lineWidth: 2)
-                .frame(width: 184, height: 184)
-
-            switch mechanism {
-            case .mindfulWait:
-                Image(systemName: "clock.arrow.circlepath")
-                    .font(.system(size: 72, weight: .semibold))
-                    .foregroundColor(DesignSystem.Colors.primary)
-            case .pushups, .squats:
-                Image(systemName: "figure.strengthtraining.traditional")
-                    .font(.system(size: 72, weight: .semibold))
-                    .foregroundColor(DesignSystem.Colors.primary)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .animation(.spring(response: 0.35, dampingFraction: 0.82), value: mechanism)
     }
 }
 
@@ -1793,6 +1669,10 @@ struct OnboardingGoalChoiceView: View {
                             selectedGoal = goal
                             UserDefaults.standard.set(goal.rawValue, forKey: "onboardingMainGoal")
                             UserDefaults.standard.set(goal.setupPath.rawValue, forKey: "onboardingSetupPath")
+                            AnalyticsService.shared.track(.onboardingGoalSelected, properties: [
+                                "goal": .string(goal.rawValue),
+                                "setup_path": .string(goal.setupPath.rawValue)
+                            ])
                             onContinue()
                         } label: {
                             HStack(spacing: DesignSystem.Spacing.md) {
@@ -1814,6 +1694,81 @@ struct OnboardingGoalChoiceView: View {
                             }
                             .padding(DesignSystem.Spacing.md)
                             .glossySurface(cornerRadius: DesignSystem.CornerRadius.lg)
+                            .cornerRadius(DesignSystem.CornerRadius.lg)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+            }
+            .padding(.bottom, DesignSystem.Spacing.xl)
+        }
+    }
+}
+
+struct OnboardingLanguageSelectionView: View {
+    let page: OnboardingPage
+    @Binding var selectedLanguage: SharedSettings.LearningLanguage
+    let onContinue: () -> Void
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: DesignSystem.Spacing.xl) {
+                Spacer().frame(height: DesignSystem.Spacing.lg)
+
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    Text(page.title)
+                        .font(DesignSystem.Typography.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .multilineTextAlignment(.center)
+
+                    Text(page.description)
+                        .font(DesignSystem.Typography.body)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    ForEach(SharedSettings.LearningLanguage.allCases) { language in
+                        Button {
+                            selectedLanguage = language
+                            SharedSettings.setPreferredLearningLanguage(language)
+                            AnalyticsService.shared.track(.onboardingLanguageSelected, properties: [
+                                "language": .string(language.rawValue)
+                            ])
+                            onContinue()
+                        } label: {
+                            HStack(spacing: DesignSystem.Spacing.md) {
+                                Text(language.introWord)
+                                    .font(DesignSystem.Typography.callout.weight(.semibold))
+                                    .foregroundColor(DesignSystem.Colors.primary)
+                                    .frame(width: 118, alignment: .leading)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.75)
+
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(language.displayName)
+                                        .font(DesignSystem.Typography.body.weight(.semibold))
+                                        .foregroundColor(DesignSystem.Colors.textPrimary)
+                                    Text("Practice beginner words during unlocks")
+                                        .font(DesignSystem.Typography.caption)
+                                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                                }
+
+                                Spacer()
+
+                                Image(systemName: selectedLanguage == language ? "checkmark.circle.fill" : "chevron.right")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundColor(selectedLanguage == language ? DesignSystem.Colors.primary : DesignSystem.Colors.textTertiary)
+                            }
+                            .padding(DesignSystem.Spacing.md)
+                            .background(selectedLanguage == language ? DesignSystem.Colors.primary.opacity(0.12) : DesignSystem.Colors.surface)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg)
+                                    .stroke(selectedLanguage == language ? DesignSystem.Colors.primary.opacity(0.7) : Color.clear, lineWidth: 1.2)
+                            )
                             .cornerRadius(DesignSystem.CornerRadius.lg)
                         }
                         .buttonStyle(.plain)
@@ -2240,7 +2195,7 @@ enum OnboardingSetupStep {
 enum OnboardingGoal: String, CaseIterable, Identifiable {
     case present
     case productiveHours
-    case lightExercise
+    case languageLearning
     case overallPhoneUsage
     case work
     case socialMedia
@@ -2253,8 +2208,8 @@ enum OnboardingGoal: String, CaseIterable, Identifiable {
             return "Be more present throughout the day?"
         case .productiveHours:
             return "Limit distracting app use during productive hours?"
-        case .lightExercise:
-            return "Integrate light exercise into your daily habits?"
+        case .languageLearning:
+            return "Build a language habit during unlocks?"
         case .overallPhoneUsage:
             return "Limit overall phone usage?"
         case .work:
@@ -2270,8 +2225,8 @@ enum OnboardingGoal: String, CaseIterable, Identifiable {
             return "person.2.fill"
         case .productiveHours:
             return "briefcase.fill"
-        case .lightExercise:
-            return "figure.strengthtraining.traditional"
+        case .languageLearning:
+            return "text.book.closed.fill"
         case .overallPhoneUsage:
             return "iphone.slash"
         case .work:
@@ -2285,7 +2240,7 @@ enum OnboardingGoal: String, CaseIterable, Identifiable {
         switch self {
         case .productiveHours, .work:
             return .timeBlock
-        case .present, .lightExercise, .overallPhoneUsage, .socialMedia:
+        case .present, .languageLearning, .overallPhoneUsage, .socialMedia:
             return .simpleLimits
         }
     }
@@ -2305,6 +2260,7 @@ struct OnboardingPage {
     let isConceptPage: Bool
     let isAnimatedLimitsIntroPage: Bool
     let isGoalChoicePage: Bool
+    let isLanguageSelectionPage: Bool
     let setupStep: OnboardingSetupStep?
 
     init(
@@ -2321,6 +2277,7 @@ struct OnboardingPage {
         isConceptPage: Bool = false,
         isAnimatedLimitsIntroPage: Bool = false,
         isGoalChoicePage: Bool = false,
+        isLanguageSelectionPage: Bool = false,
         setupStep: OnboardingSetupStep? = nil
     ) {
         self.title = title
@@ -2336,11 +2293,12 @@ struct OnboardingPage {
         self.isConceptPage = isConceptPage
         self.isAnimatedLimitsIntroPage = isAnimatedLimitsIntroPage
         self.isGoalChoicePage = isGoalChoicePage
+        self.isLanguageSelectionPage = isLanguageSelectionPage
         self.setupStep = setupStep
     }
     
     var isInteractivePage: Bool {
-        return isPermissionPage || isUsageQuestionPage || isAgeQuestionPage || isImpactPage || isTimeLimitPage || isGoalSettingPage || isConceptPage || isAnimatedLimitsIntroPage || isGoalChoicePage || setupStep != nil
+        return isPermissionPage || isUsageQuestionPage || isAgeQuestionPage || isImpactPage || isTimeLimitPage || isGoalSettingPage || isConceptPage || isAnimatedLimitsIntroPage || isGoalChoicePage || isLanguageSelectionPage || setupStep != nil
     }
     
     static func pages(for setupPath: OnboardingSetupPath?) -> [OnboardingPage] {
@@ -2348,7 +2306,7 @@ struct OnboardingPage {
         return [
         OnboardingPage(
             title: "Welcome to MindLock",
-            description: "Turn better habits into more app time with limits, movement, and mindful unlocks.",
+            description: "Turn better habits into more app time with limits, learning, and mindful unlocks.",
             iconName: "lock.fill",
             accentColor: DesignSystem.Colors.primary
         ),
@@ -2387,12 +2345,19 @@ struct OnboardingPage {
             accentColor: DesignSystem.Colors.primary,
             isGoalChoicePage: true
         ),
+        OnboardingPage(
+            title: "Choose your learning language",
+            description: "This is the language you will practice when unlocking extra time.",
+            iconName: "text.book.closed.fill",
+            accentColor: DesignSystem.Colors.primary,
+            isLanguageSelectionPage: true
+        ),
         setupAppSelectionPage(for: selectedSetupPath),
         setupDetailPage(for: selectedSetupPath),
         OnboardingPage(
-            title: "Earn Your Breaks",
+            title: "Learn Your Way Back",
             description: "Choose how you want to unlock extra time.",
-            iconName: "figure.strengthtraining.traditional",
+            iconName: "text.book.closed.fill",
             accentColor: DesignSystem.Colors.success,
             isConceptPage: true,
         ),

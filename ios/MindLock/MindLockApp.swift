@@ -19,6 +19,8 @@ struct MindLockApp: App {
                 .environmentObject(limitsManager)
                 .environmentObject(paymentManager)
                 .onAppear {
+                    AnalyticsService.shared.track(.appOpened)
+                    AnalyticsService.shared.identifyCurrentUser()
                     NotificationManager.shared.configure()
                     setupNotificationHandling()
                     reevaluateScreenTimePrompt()
@@ -29,6 +31,7 @@ struct MindLockApp: App {
                     processSharedLimitEvents()
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+                    AnalyticsService.shared.track(.appForegrounded)
                     // Re-check on every foreground entry
                     reevaluateScreenTimePrompt()
                     Task { await paymentManager.refreshSubscriptionStatus() }

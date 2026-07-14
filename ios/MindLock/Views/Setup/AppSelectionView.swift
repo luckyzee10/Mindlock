@@ -174,7 +174,7 @@ struct AppSelectionView: View {
             return "xmark.circle.fill"
         case .notDetermined:
             return "questionmark.circle.fill"
-        @unknown default:
+        default:
             return "exclamationmark.circle.fill"
         }
     }
@@ -187,7 +187,7 @@ struct AppSelectionView: View {
             return DesignSystem.Colors.error
         case .notDetermined:
             return DesignSystem.Colors.warning
-        @unknown default:
+        default:
             return DesignSystem.Colors.error
         }
     }
@@ -200,7 +200,7 @@ struct AppSelectionView: View {
             return "Screen Time access denied"
         case .notDetermined:
             return "Screen Time permission needed"
-        @unknown default:
+        default:
             return "Screen Time status unknown"
         }
     }
