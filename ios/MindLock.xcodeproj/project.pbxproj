@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,6 +18,7 @@
 		0D5FEB583ACF20F31C998923 /* BlockListAppRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 935B3F29C90E34D37ED1533D /* BlockListAppRow.swift */; };
 		0F597D11FFA9CFC674BDAD78 /* MindLockShieldUI.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = BFFA91751040D1BA086B7753 /* MindLockShieldUI.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1A10A8E8AE19BB629AF88A31 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6D4FA3D88F1675AF30117D7 /* FamilyControls.framework */; };
+		27DA8785DCAB9F20CD012C97 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = 4EDCD27613388786159C9311 /* PostHog */; };
 		2CF5459C311B56719AC85433 /* ScreenTimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 362B889398A5B62F96F567D1 /* ScreenTimeManager.swift */; };
 		2F942AFC3E54893329F2C685 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB25021D34AF3E41B45546F /* ManagedSettings.framework */; };
 		30477922A4E0A43AF6FD7E15 /* FamilyControls.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6D4FA3D88F1675AF30117D7 /* FamilyControls.framework */; };
@@ -25,8 +26,11 @@
 		39E80BA1FED5CF2F2537020B /* UsageReportExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C5E3A6B632A4C2CFB2708 /* UsageReportExtension.swift */; };
 		42D4BB4CE74C83D873983507 /* UnlockPromptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0B53ACD3D8E3036B31B02F /* UnlockPromptView.swift */; };
 		45A5B837B6840E87739BFBC1 /* _DeviceActivity_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7FB1A45FF439280D266B46 /* _DeviceActivity_SwiftUI.framework */; };
+		4B26A5BBBA377DD69CD20045 /* italian_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 10B2F6E19509BEFEC7204221 /* italian_en.json */; };
+		508A816BDCA80EADD6A03CE9 /* LanguageLearningContentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2C35F325B8A209CC3B04F3 /* LanguageLearningContentTests.swift */; };
 		57585AFC04698B073D45D81B /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C277738FDAA43C5D42A553E2 /* DeviceActivity.framework */; };
 		5C4D9804BC0C112806AE6175 /* _DeviceActivity_SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE7FB1A45FF439280D266B46 /* _DeviceActivity_SwiftUI.framework */; };
+		5D9B4E01F1E78DADB7BDA3B5 /* german_en.json in Resources */ = {isa = PBXBuildFile; fileRef = AACB7805EC0D7BF61FDFC7B2 /* german_en.json */; };
 		5D9E774F39ED40F3B9A14C6A /* AppConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20F772545114345EEF177AF8 /* AppConfiguration.swift */; };
 		5EA83173095310DC6E84A54E /* TimeBlocksView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E0C8FAB6C69A296F340B78C /* TimeBlocksView.swift */; };
 		6B6501B4C6223864465DDD18 /* SetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1983CCFD291A21A2EA1D52D7 /* SetupView.swift */; };
@@ -36,6 +40,7 @@
 		7B99ED7C58AEDE6BBD9A6BFF /* UserIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4C292946070F6D8A469AFD9 /* UserIdentity.swift */; };
 		7E07334EA392945B5146494D /* WaitUnlockView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B748AA02BFC4F874E26CDE1 /* WaitUnlockView.swift */; };
 		8269A12B103172D5822CC056 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC0EAFF07C25ADBAC544671D /* MainTabView.swift */; };
+		8324C5AD5B4CC03817695DD9 /* JourneyTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771E5118DB6DD2304A2A924F /* JourneyTrackerView.swift */; };
 		85C863441B9572E4B2B46D2C /* StreakCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E317285764EB84C1EC2039F /* StreakCard.swift */; };
 		8C686971592C5AC6EE6F9BDA /* AnalyticsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E14C4226BCD4F96CB51915C /* AnalyticsModels.swift */; };
 		8CCB63988009360301BCBB9E /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 472E88CD60922D608AF209CE /* Media.xcassets */; };
@@ -49,15 +54,23 @@
 		AB54D33EC92B75C5D546749B /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C277738FDAA43C5D42A553E2 /* DeviceActivity.framework */; };
 		B14113DC163E0CE589284C4A /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B99857B4B1EE0A64773316D9 /* ManagedSettingsUI.framework */; };
 		B2AE55AD966E6C2217FCD9A0 /* MindLockActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6756A0EAF273F757FE522BBF /* MindLockActivityMonitor.swift */; };
+		B8BDA667B28723198D215408 /* japanese_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 077BE2A1BC5A2552023ECE65 /* japanese_en.json */; };
+		B9E7869C7147572010180CA8 /* spanish_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 17C54D35289B9DCA39833CC8 /* spanish_en.json */; };
 		C1E786EC0E23D009BCAB0139 /* DailyLimitsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95EA241E11446FD4DD9F4C3 /* DailyLimitsManager.swift */; };
 		C1FB26DE120E952614B469CD /* MindLockMonitor.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		C251509D2081F48CC8AB644F /* LanguageLessonFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECDD8776B8DCB2B57F7BD7FF /* LanguageLessonFeedback.swift */; };
+		CA853035E972FA26BB74FE14 /* TimeBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D642A375676CD1B4968F1B /* TimeBlockTests.swift */; };
 		CC3746AD35F752A89042CD76 /* ManagedSettings.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2DB25021D34AF3E41B45546F /* ManagedSettings.framework */; };
 		CE62A0D20A907E3FAC4751FF /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D05D3444448127118CE5A30 /* NotificationManager.swift */; };
+		CF46396F478EF6DE4851A9A4 /* korean_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 6EC97DF37545CB48AC905FCC /* korean_en.json */; };
 		CFEF3D4286183A0D11B2ACE4 /* BlockListEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1398D49A70781ADBE36E9ED /* BlockListEditorView.swift */; };
 		D2664E78A79E3329B2E57F11 /* AppSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B2CA0ACEDB7C329D4B0792 /* AppSelectionView.swift */; };
 		DC2568D545DF39AE7E89AC98 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D755021AAFC076E51737BD /* SharedSettings.swift */; };
 		DE56C489E6401F778934319C /* SetupTooltip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 387026F445D80936551472C4 /* SetupTooltip.swift */; };
 		E2B1200F7BF3D4BF5955C339 /* SharedSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39D755021AAFC076E51737BD /* SharedSettings.swift */; };
+		E90B01BBA6A24C246A6A7793 /* french_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 27EE48F4499D29B4BE3B6E0F /* french_en.json */; };
+		E9E1AB17E0778D184AF66888 /* LanguageLessonFeedbackTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A0EF4EFC5A2B8694C15E69 /* LanguageLessonFeedbackTests.swift */; };
+		F29C47F7014C7378A888F424 /* LanguageLearningContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F55F52BC4944F8E3A93E2AB8 /* LanguageLearningContent.swift */; };
 		F2B38510BE33FED11091138E /* ManagedSettingsUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B99857B4B1EE0A64773316D9 /* ManagedSettingsUI.framework */; };
 		F539F677FFB3F1D054963B51 /* DeviceActivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C277738FDAA43C5D42A553E2 /* DeviceActivity.framework */; };
 		FEDCEA7254C2C399A7D53DBB /* AnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9997FAB8C789AFFEE6FBB774 /* AnalyticsService.swift */; };
@@ -78,6 +91,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = FBB6A5C555180423C11ED9CF;
 			remoteInfo = MindLockShieldUI;
+		};
+		5328733AC10149A6F24315D4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B57B8975AF1A66D36B387E62 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D923FE296CB19FA6B897C39A;
+			remoteInfo = MindLock;
 		};
 		E062D5A8882C23C8198D3FCB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -105,11 +125,15 @@
 
 /* Begin PBXFileReference section */
 		029981B145CB3AB1C33F8924 /* DailyLimits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLimits.swift; sourceTree = "<group>"; };
+		077BE2A1BC5A2552023ECE65 /* japanese_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = japanese_en.json; sourceTree = "<group>"; };
+		10B2F6E19509BEFEC7204221 /* italian_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = italian_en.json; sourceTree = "<group>"; };
+		17C54D35289B9DCA39833CC8 /* spanish_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = spanish_en.json; sourceTree = "<group>"; };
 		1983CCFD291A21A2EA1D52D7 /* SetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupView.swift; sourceTree = "<group>"; };
 		1E0B53ACD3D8E3036B31B02F /* UnlockPromptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnlockPromptView.swift; sourceTree = "<group>"; };
 		1E317285764EB84C1EC2039F /* StreakCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakCard.swift; sourceTree = "<group>"; };
 		20F772545114345EEF177AF8 /* AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfiguration.swift; sourceTree = "<group>"; };
 		222E75652C4D6B3AC6D27C0E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		27EE48F4499D29B4BE3B6E0F /* french_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = french_en.json; sourceTree = "<group>"; };
 		2DB25021D34AF3E41B45546F /* ManagedSettings.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettings.framework; path = System/Library/Frameworks/ManagedSettings.framework; sourceTree = SDKROOT; };
 		2E0C8FAB6C69A296F340B78C /* TimeBlocksView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBlocksView.swift; sourceTree = "<group>"; };
 		2F8666403AC8D52810A3C4E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -121,17 +145,22 @@
 		40F14E38775941E22244E7F9 /* MindLockUsageReport.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindLockUsageReport.entitlements; sourceTree = "<group>"; };
 		4623952B7AFB948DC24966AB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		472E88CD60922D608AF209CE /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
+		49D642A375676CD1B4968F1B /* TimeBlockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeBlockTests.swift; sourceTree = "<group>"; };
 		4B748AA02BFC4F874E26CDE1 /* WaitUnlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaitUnlockView.swift; sourceTree = "<group>"; };
-		5782C79B18EC61F6AF794932 /* MindLockUsageReport.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MindLockUsageReport.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5782C79B18EC61F6AF794932 /* MindLockUsageReport.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MindLockUsageReport.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		59DB55E16423C6121F234447 /* BlockListManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListManager.swift; sourceTree = "<group>"; };
 		5A0E3848878EACCB6D7715EC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		5B2C35F325B8A209CC3B04F3 /* LanguageLearningContentTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageLearningContentTests.swift; sourceTree = "<group>"; };
 		5D644896FD5310C86BA66456 /* MindLock.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindLock.entitlements; sourceTree = "<group>"; };
-		62473B3DB95F5E90BE3EE08F /* MindLock.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MindLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		62473B3DB95F5E90BE3EE08F /* MindLock.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = MindLock.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		644440A7D2460E7538B46977 /* UsageSummaryProcessor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageSummaryProcessor.swift; sourceTree = "<group>"; };
 		6756A0EAF273F757FE522BBF /* MindLockActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockActivityMonitor.swift; sourceTree = "<group>"; };
-		6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MindLockMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MindLockMonitor.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6EC97DF37545CB48AC905FCC /* korean_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = korean_en.json; sourceTree = "<group>"; };
 		7662BF9E3F7187C88341E37D /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		771E5118DB6DD2304A2A924F /* JourneyTrackerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyTrackerView.swift; sourceTree = "<group>"; };
 		8098F56AB2E7C1320D1C769D /* MindLockShieldDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockShieldDataSource.swift; sourceTree = "<group>"; };
+		80DE8F6BFC581AA8D03188EF /* MindLockTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = MindLockTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86F029AA5A0F24E92E7D1B81 /* MindLockApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MindLockApp.swift; sourceTree = "<group>"; };
 		8D05D3444448127118CE5A30 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		9203AD2CE85E9FFFCC13CDFE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -139,11 +168,13 @@
 		9768ADF66B5543EB95071AD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9997FAB8C789AFFEE6FBB774 /* AnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsService.swift; sourceTree = "<group>"; };
 		9E14C4226BCD4F96CB51915C /* AnalyticsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsModels.swift; sourceTree = "<group>"; };
+		A0A0EF4EFC5A2B8694C15E69 /* LanguageLessonFeedbackTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageLessonFeedbackTests.swift; sourceTree = "<group>"; };
 		A6D4FA3D88F1675AF30117D7 /* FamilyControls.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FamilyControls.framework; path = System/Library/Frameworks/FamilyControls.framework; sourceTree = SDKROOT; };
+		AACB7805EC0D7BF61FDFC7B2 /* german_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = german_en.json; sourceTree = "<group>"; };
 		B46A0B129D4490B32B92032E /* MindLockShieldUI.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindLockShieldUI.entitlements; sourceTree = "<group>"; };
 		B6B2CA0ACEDB7C329D4B0792 /* AppSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSelectionView.swift; sourceTree = "<group>"; };
 		B99857B4B1EE0A64773316D9 /* ManagedSettingsUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ManagedSettingsUI.framework; path = System/Library/Frameworks/ManagedSettingsUI.framework; sourceTree = SDKROOT; };
-		BFFA91751040D1BA086B7753 /* MindLockShieldUI.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MindLockShieldUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFFA91751040D1BA086B7753 /* MindLockShieldUI.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = MindLockShieldUI.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0779C268B7DC94441B3E0D4 /* MindLockMonitor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MindLockMonitor.entitlements; sourceTree = "<group>"; };
 		C1398D49A70781ADBE36E9ED /* BlockListEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListEditorView.swift; sourceTree = "<group>"; };
 		C277738FDAA43C5D42A553E2 /* DeviceActivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = DeviceActivity.framework; path = System/Library/Frameworks/DeviceActivity.framework; sourceTree = SDKROOT; };
@@ -154,6 +185,8 @@
 		DC0EAFF07C25ADBAC544671D /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		E95EA241E11446FD4DD9F4C3 /* DailyLimitsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyLimitsManager.swift; sourceTree = "<group>"; };
 		EC6C5E3A6B632A4C2CFB2708 /* UsageReportExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageReportExtension.swift; sourceTree = "<group>"; };
+		ECDD8776B8DCB2B57F7BD7FF /* LanguageLessonFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageLessonFeedback.swift; sourceTree = "<group>"; };
+		F55F52BC4944F8E3A93E2AB8 /* LanguageLearningContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageLearningContent.swift; sourceTree = "<group>"; };
 		F7273BB7AAC2ACF01F9ADB6E /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		F73DBC310DB450FC6C56C232 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FA500904C81742FF34BB8946 /* PaymentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManager.swift; sourceTree = "<group>"; };
@@ -168,6 +201,7 @@
 				CC3746AD35F752A89042CD76 /* ManagedSettings.framework in Frameworks */,
 				AB54D33EC92B75C5D546749B /* DeviceActivity.framework in Frameworks */,
 				5C4D9804BC0C112806AE6175 /* _DeviceActivity_SwiftUI.framework in Frameworks */,
+				27DA8785DCAB9F20CD012C97 /* PostHog in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,6 +247,7 @@
 				9768ADF66B5543EB95071AD6 /* Info.plist */,
 				5D644896FD5310C86BA66456 /* MindLock.entitlements */,
 				86F029AA5A0F24E92E7D1B81 /* MindLockApp.swift */,
+				4A591A8CE7C639A892C8D84D /* Content */,
 				2C5CBF2475EE83D925BA935D /* Design */,
 				1000E70893B842AD7597ECC8 /* Models */,
 				2E1843520A3F8B79B2028BAB /* Preview Content */,
@@ -233,11 +268,26 @@
 			path = Setup;
 			sourceTree = "<group>";
 		};
+		0BC3E42A7EA5E02F159C8353 /* Courses */ = {
+			isa = PBXGroup;
+			children = (
+				27EE48F4499D29B4BE3B6E0F /* french_en.json */,
+				AACB7805EC0D7BF61FDFC7B2 /* german_en.json */,
+				10B2F6E19509BEFEC7204221 /* italian_en.json */,
+				077BE2A1BC5A2552023ECE65 /* japanese_en.json */,
+				6EC97DF37545CB48AC905FCC /* korean_en.json */,
+				17C54D35289B9DCA39833CC8 /* spanish_en.json */,
+			);
+			path = Courses;
+			sourceTree = "<group>";
+		};
 		1000E70893B842AD7597ECC8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				9E14C4226BCD4F96CB51915C /* AnalyticsModels.swift */,
 				029981B145CB3AB1C33F8924 /* DailyLimits.swift */,
+				F55F52BC4944F8E3A93E2AB8 /* LanguageLearningContent.swift */,
+				ECDD8776B8DCB2B57F7BD7FF /* LanguageLessonFeedback.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -251,6 +301,22 @@
 				B46A0B129D4490B32B92032E /* MindLockShieldUI.entitlements */,
 			);
 			path = MindLockShieldUI;
+			sourceTree = "<group>";
+		};
+		22DAEBEE18AAECDC1F6707D3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				49D642A375676CD1B4968F1B /* TimeBlockTests.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		25360DC9CE5D188244DFFECD /* Journey */ = {
+			isa = PBXGroup;
+			children = (
+				771E5118DB6DD2304A2A924F /* JourneyTrackerView.swift */,
+			);
+			path = Journey;
 			sourceTree = "<group>";
 		};
 		2C5CBF2475EE83D925BA935D /* Design */ = {
@@ -275,6 +341,7 @@
 				072A9A3310C6F82735331AF6 /* MindLock */,
 				D348E427A948AC24A3B71C70 /* MindLockMonitor */,
 				19D7136A7C8A2E88D8358488 /* MindLockShieldUI */,
+				FD6C0D078129BFCE7852C809 /* MindLockTests */,
 				3B8BB60DC0118D4143BD0360 /* MindLockUsageReport */,
 				39CE7271D18B11582564A6DB /* Frameworks */,
 				FE8E9B294E62F2F38256F970 /* Products */,
@@ -304,11 +371,20 @@
 			path = MindLockUsageReport;
 			sourceTree = "<group>";
 		};
+		4A591A8CE7C639A892C8D84D /* Content */ = {
+			isa = PBXGroup;
+			children = (
+				0BC3E42A7EA5E02F159C8353 /* Courses */,
+			);
+			path = Content;
+			sourceTree = "<group>";
+		};
 		64BFB5319A402F0DC3889C9B /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				DC0EAFF07C25ADBAC544671D /* MainTabView.swift */,
 				A5E9790878F12A6167F26EFD /* Components */,
+				25360DC9CE5D188244DFFECD /* Journey */,
 				A9EFACE751200239001CC011 /* Onboarding */,
 				A119AFF4FA6E6CD632C566E9 /* Profile */,
 				09B7A385A7829880633BEA7D /* Setup */,
@@ -352,6 +428,15 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
+		CDC9F5CCEA73BCC4F276D15A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5B2C35F325B8A209CC3B04F3 /* LanguageLearningContentTests.swift */,
+				A0A0EF4EFC5A2B8694C15E69 /* LanguageLessonFeedbackTests.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		D348E427A948AC24A3B71C70 /* MindLockMonitor */ = {
 			isa = PBXGroup;
 			children = (
@@ -389,12 +474,22 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		FD6C0D078129BFCE7852C809 /* MindLockTests */ = {
+			isa = PBXGroup;
+			children = (
+				CDC9F5CCEA73BCC4F276D15A /* Models */,
+				22DAEBEE18AAECDC1F6707D3 /* Services */,
+			);
+			path = MindLockTests;
+			sourceTree = "<group>";
+		};
 		FE8E9B294E62F2F38256F970 /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				62473B3DB95F5E90BE3EE08F /* MindLock.app */,
 				6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */,
 				BFFA91751040D1BA086B7753 /* MindLockShieldUI.appex */,
+				80DE8F6BFC581AA8D03188EF /* MindLockTests.xctest */,
 				5782C79B18EC61F6AF794932 /* MindLockUsageReport.appex */,
 			);
 			name = Products;
@@ -420,6 +515,24 @@
 			productName = MindLockMonitor;
 			productReference = 6C15B280AEEC5E7245B7DC45 /* MindLockMonitor.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		653C7F353E152A9084A36599 /* MindLockTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D0B7E5D7A7D48201746602F3 /* Build configuration list for PBXNativeTarget "MindLockTests" */;
+			buildPhases = (
+				594DE10383435E9895C227B5 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A925149110DDF4308615EF1 /* PBXTargetDependency */,
+			);
+			name = MindLockTests;
+			packageProductDependencies = (
+			);
+			productName = MindLockTests;
+			productReference = 80DE8F6BFC581AA8D03188EF /* MindLockTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		9F815B361470A0EF9880B43D /* MindLockUsageReport */ = {
 			isa = PBXNativeTarget;
@@ -458,6 +571,7 @@
 			);
 			name = MindLock;
 			packageProductDependencies = (
+				4EDCD27613388786159C9311 /* PostHog */,
 			);
 			productName = MindLock;
 			productReference = 62473B3DB95F5E90BE3EE08F /* MindLock.app */;
@@ -494,6 +608,9 @@
 					2B4DBADF7840FDA343328AF4 = {
 						ProvisioningStyle = Automatic;
 					};
+					653C7F353E152A9084A36599 = {
+						ProvisioningStyle = Automatic;
+					};
 					9F815B361470A0EF9880B43D = {
 						ProvisioningStyle = Automatic;
 					};
@@ -515,12 +632,17 @@
 			);
 			mainGroup = 35B2CCE463CE3EEDAAE3C89C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0EB65AA83CA1ED539274073A /* XCRemoteSwiftPackageReference "posthog-ios" */,
+			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				D923FE296CB19FA6B897C39A /* MindLock */,
 				2B4DBADF7840FDA343328AF4 /* MindLockMonitor */,
 				FBB6A5C555180423C11ED9CF /* MindLockShieldUI */,
+				653C7F353E152A9084A36599 /* MindLockTests */,
 				9F815B361470A0EF9880B43D /* MindLockUsageReport */,
 			);
 		};
@@ -541,6 +663,12 @@
 			files = (
 				93A74FE4343970BFD3DF11A4 /* Assets.xcassets in Resources */,
 				92D73E5239FE31E4C9FA4697 /* Preview Assets.xcassets in Resources */,
+				E90B01BBA6A24C246A6A7793 /* french_en.json in Resources */,
+				5D9B4E01F1E78DADB7BDA3B5 /* german_en.json in Resources */,
+				4B26A5BBBA377DD69CD20045 /* italian_en.json in Resources */,
+				B8BDA667B28723198D215408 /* japanese_en.json in Resources */,
+				CF46396F478EF6DE4851A9A4 /* korean_en.json in Resources */,
+				B9E7869C7147572010180CA8 /* spanish_en.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -587,6 +715,16 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		594DE10383435E9895C227B5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				508A816BDCA80EADD6A03CE9 /* LanguageLearningContentTests.swift in Sources */,
+				E9E1AB17E0778D184AF66888 /* LanguageLessonFeedbackTests.swift in Sources */,
+				CA853035E972FA26BB74FE14 /* TimeBlockTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6BE252CD19333336EA881E58 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -603,7 +741,10 @@
 				96E4A04D673828BA0B1AFE34 /* DailyLimits.swift in Sources */,
 				C1E786EC0E23D009BCAB0139 /* DailyLimitsManager.swift in Sources */,
 				092EB700AB874D7728EB7D47 /* DesignSystem.swift in Sources */,
+				8324C5AD5B4CC03817695DD9 /* JourneyTrackerView.swift in Sources */,
 				0C965DCA3952843806586435 /* LanguageChallengeView.swift in Sources */,
+				F29C47F7014C7378A888F424 /* LanguageLearningContent.swift in Sources */,
+				C251509D2081F48CC8AB644F /* LanguageLessonFeedback.swift in Sources */,
 				8269A12B103172D5822CC056 /* MainTabView.swift in Sources */,
 				0D3E095C215A2D8650B47AE2 /* MindLockApp.swift in Sources */,
 				A0995861B56F5A0E7FAFE475 /* MindLockUsageReportScreen.swift in Sources */,
@@ -636,6 +777,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5A925149110DDF4308615EF1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D923FE296CB19FA6B897C39A /* MindLock */;
+			targetProxy = 5328733AC10149A6F24315D4 /* PBXContainerItemProxy */;
+		};
 		BBD57510DFAD5A4BE5636FCF /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 9F815B361470A0EF9880B43D /* MindLockUsageReport */;
@@ -659,7 +805,6 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MindLockMonitor/MindLockMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLockMonitor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -676,8 +821,8 @@
 		0E0BDBB1CC5A866ECBF6D334 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MindLockShieldUI/MindLockShieldUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLockShieldUI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -694,8 +839,8 @@
 		56944DD7001F130CB4AD23E5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = MindLockShieldUI/MindLockShieldUI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLockShieldUI/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -716,7 +861,6 @@
 				APPEX_SUBPATH = Extensions;
 				CODE_SIGN_ENTITLEMENTS = MindLockUsageReport/MindLockUsageReport.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLockUsageReport/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -730,12 +874,29 @@
 			};
 			name = Release;
 		};
+		5EBC7E6381317E8A874E2CDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lucaszambranonavia.mindlock.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MindLock.app/MindLock";
+			};
+			name = Release;
+		};
 		727AE66BD62895E48466B807 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = MindLockMonitor/MindLockMonitor.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLockMonitor/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -818,13 +979,14 @@
 				CODE_SIGN_ENTITLEMENTS = MindLock/MindLock.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLock/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				POSTHOG_API_KEY = "";
+				POSTHOG_HOST = "https://us.i.posthog.com";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lucaszambranonavia.mindlock;
 				PRODUCT_NAME = MindLock;
 				SDKROOT = iphoneos;
@@ -840,7 +1002,6 @@
 				APPEX_SUBPATH = Extensions;
 				CODE_SIGN_ENTITLEMENTS = MindLockUsageReport/MindLockUsageReport.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLockUsageReport/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -854,6 +1015,24 @@
 			};
 			name = Debug;
 		};
+		E3CE17A3507707F0ECE0C0EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.lucaszambranonavia.mindlock.tests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MindLock.app/MindLock";
+			};
+			name = Debug;
+		};
 		EAD8AC4702D608831E7CC667 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -861,13 +1040,14 @@
 				CODE_SIGN_ENTITLEMENTS = MindLock/MindLock.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YLUUT5U99U;
 				INFOPLIST_FILE = MindLock/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				POSTHOG_API_KEY = "";
+				POSTHOG_HOST = "https://us.i.posthog.com";
 				PRODUCT_BUNDLE_IDENTIFIER = com.lucaszambranonavia.mindlock;
 				PRODUCT_NAME = MindLock;
 				SDKROOT = iphoneos;
@@ -970,6 +1150,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		D0B7E5D7A7D48201746602F3 /* Build configuration list for PBXNativeTarget "MindLockTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E3CE17A3507707F0ECE0C0EB /* Debug */,
+				5EBC7E6381317E8A874E2CDB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		ECC30ADF493B090A3EE4C907 /* Build configuration list for PBXNativeTarget "MindLockMonitor" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -980,6 +1169,25 @@
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0EB65AA83CA1ED539274073A /* XCRemoteSwiftPackageReference "posthog-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/PostHog/posthog-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4EDCD27613388786159C9311 /* PostHog */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0EB65AA83CA1ED539274073A /* XCRemoteSwiftPackageReference "posthog-ios" */;
+			productName = PostHog;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B57B8975AF1A66D36B387E62 /* Project object */;
 }

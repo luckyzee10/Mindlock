@@ -8,23 +8,26 @@ struct MainTabView: View {
             SetupView()
                 .tabItem {
                     Image(systemName: "lock.circle")
-                    Text("MindLock")
                 }
                 .tag(0)
 
-            MindLockUsageReportScreen()
+            JourneyTrackerView()
                 .tabItem {
-                    Image(systemName: "chart.bar")
-                    Text("Usage")
+                    Image(systemName: "map.fill")
                 }
                 .tag(1)
+
+            MindLockUsageReportScreen()
+                .tabItem {
+                    Image(systemName: "chart.bar.fill")
+                }
+                .tag(2)
 
             ProfileView()
                 .tabItem {
                     Image(systemName: "person.crop.circle")
-                    Text("Profile")
                 }
-                .tag(2)
+                .tag(3)
         }
         .preferredColorScheme(.dark)
         .accentColor(DesignSystem.Colors.primary)

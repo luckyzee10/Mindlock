@@ -69,6 +69,17 @@ enum SharedSettings {
             case .korean: return "Gamsahamnida"
             }
         }
+
+        var flag: String {
+            switch self {
+            case .spanish: return "🇪🇸"
+            case .french: return "🇫🇷"
+            case .japanese: return "🇯🇵"
+            case .italian: return "🇮🇹"
+            case .german: return "🇩🇪"
+            case .korean: return "🇰🇷"
+            }
+        }
     }
 
     enum LanguageSkill: String, Codable, CaseIterable, Identifiable {
@@ -132,7 +143,18 @@ enum SharedSettings {
             }
             return combined
         }
+
+        var activelyShieldedTokens: Set<ApplicationToken> {
+            let activeKeys = SharedSettings.activeShieldTokenKeys(
+                limitTokenKeys: Set(limitTokens.map { SharedSettings.tokenKey($0) }),
+                blockTokenKeys: blockTokens.mapValues { Set($0.map { SharedSettings.tokenKey($0) }) },
+                temporaryUnlockKeys: Set(temporaryUnlocks.keys)
+            )
+            return Set(allTokens.filter { activeKeys.contains(SharedSettings.tokenKey($0)) })
+        }
     }
+
+    static let temporaryUnlockExpiryActivityName = DeviceActivityName("temporary_unlock_expiry")
 
     // MARK: - Subscription Helpers
 
@@ -188,6 +210,7 @@ enum SharedSettings {
 
     static func setPreferredLearningLanguage(_ language: LearningLanguage) {
         sharedDefaults?.set(language.rawValue, forKey: Keys.preferredLearningLanguage)
+        NotificationCenter.default.post(name: learningLanguageChangedNotification, object: nil)
     }
 
     // MARK: - Streak Helpers
@@ -212,6 +235,7 @@ enum SharedSettings {
     // MARK: - Unlock Practice Helpers
 
     static func recordLanguagePractice(
+        lessonID: String? = nil,
         questionCount: Int,
         correctCount: Int,
         xpEarned: Int = 0,
@@ -230,12 +254,39 @@ enum SharedSettings {
         sharedDefaults?.set(currentCorrect + max(0, correctCount), forKey: correctKey)
         sharedDefaults?.set(currentDayXP + max(0, xpEarned), forKey: xpKey)
         sharedDefaults?.set(currentTotalXP + max(0, xpEarned), forKey: Keys.languageTotalXP)
+        if let lessonID {
+            var completedLessons = completedLanguageLessonIDs()
+            completedLessons.insert(lessonID)
+            sharedDefaults?.set(Array(completedLessons).sorted(), forKey: Keys.languageCompletedLessons)
+
+            let lessonKey = Keys.languageLessonCompletedAtKey(lessonID)
+            if sharedDefaults?.object(forKey: lessonKey) == nil {
+                sharedDefaults?.set(date.timeIntervalSince1970, forKey: lessonKey)
+            }
+        }
         for (skill, xp) in skillXP {
             let key = Keys.languageSkillXPKey(skill.rawValue)
             let current = sharedDefaults?.integer(forKey: key) ?? 0
             sharedDefaults?.set(current + max(0, xp), forKey: key)
         }
         NotificationCenter.default.post(name: analyticsUpdatedNotification, object: nil)
+    }
+
+    static func completedLanguageLessonIDs() -> Set<String> {
+        Set(sharedDefaults?.stringArray(forKey: Keys.languageCompletedLessons) ?? [])
+    }
+
+    static func languageLessonCompletedAt(_ lessonID: String) -> Date? {
+        let key = Keys.languageLessonCompletedAtKey(lessonID)
+        guard let defaults = sharedDefaults,
+              defaults.object(forKey: key) != nil else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: defaults.double(forKey: key))
+    }
+
+    static func completedLanguageLessonCount() -> Int {
+        completedLanguageLessonIDs().count
     }
 
     static func languageQuestionsPracticedThisWeek(reference date: Date = Date()) -> Int {
@@ -295,6 +346,7 @@ enum SharedSettings {
     static let analyticsUpdatedNotification = Notification.Name("MindLockAnalyticsUpdated")
     static let subscriptionStatusChangedNotification = Notification.Name("MindLockSubscriptionStatusChanged")
     static let unlockMechanismChangedNotification = Notification.Name("MindLockUnlockMechanismChanged")
+    static let learningLanguageChangedNotification = Notification.Name("MindLockLearningLanguageChanged")
     
     private enum Keys {
         static let selectionData = "shared.selectionData"
@@ -316,10 +368,12 @@ enum SharedSettings {
         static let preferredLearningLanguage = "unlock.preferredLearningLanguage"
         static let installationDate = "profile.installation.date"
         static let languageTotalXP = "language.totalXP"
+        static let languageCompletedLessons = "language.completedLessons"
         static func languagePracticedKey(_ day: String) -> String { "language.practiced.\(day)" }
         static func languageCorrectKey(_ day: String) -> String { "language.correct.\(day)" }
         static func languageXPKey(_ day: String) -> String { "language.xp.\(day)" }
         static func languageSkillXPKey(_ skill: String) -> String { "language.skillXP.\(skill)" }
+        static func languageLessonCompletedAtKey(_ lessonID: String) -> String { "language.lesson.completedAt.\(lessonID)" }
     }
 
     private enum ShieldKeys {
@@ -564,6 +618,18 @@ enum SharedSettings {
         return temporaryUnlockExpiry(for: token) != nil
     }
 
+    static func activeShieldTokenKeys(
+        limitTokenKeys: Set<String>,
+        blockTokenKeys: [String: Set<String>],
+        temporaryUnlockKeys: Set<String>
+    ) -> Set<String> {
+        var combined = limitTokenKeys
+        for keys in blockTokenKeys.values {
+            combined.formUnion(keys)
+        }
+        return combined.subtracting(temporaryUnlockKeys)
+    }
+
     static func temporaryUnlockExpiry(for token: ApplicationToken) -> Date? {
         var suppressions = loadTemporaryUnlocks()
         let now = Date().timeIntervalSince1970
@@ -574,6 +640,39 @@ enum SharedSettings {
         suppressions.removeValue(forKey: tokenKey(token))
         saveTemporaryUnlocks(suppressions)
         return nil
+    }
+
+    static func nextTemporaryUnlockExpiry(reference date: Date = Date()) -> Date? {
+        activeTemporaryUnlocks()
+            .values
+            .filter { $0 > date }
+            .min()
+    }
+
+    static func scheduleTemporaryUnlockExpiryMonitoring(reference date: Date = Date()) {
+        let center = DeviceActivityCenter()
+        center.stopMonitoring([temporaryUnlockExpiryActivityName])
+
+        guard let expiry = nextTemporaryUnlockExpiry(reference: date),
+              expiry.timeIntervalSince(date) > 1 else {
+            return
+        }
+
+        let calendar = Calendar.current
+        let start = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
+        let end = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second], from: expiry)
+        let schedule = DeviceActivitySchedule(
+            intervalStart: start,
+            intervalEnd: end,
+            repeats: false
+        )
+
+        do {
+            try center.startMonitoring(temporaryUnlockExpiryActivityName, during: schedule)
+            print("⏰ Scheduled temporary unlock expiry wakeup at \(expiry)")
+        } catch {
+            print("⚠️ Failed to schedule temporary unlock expiry wakeup: \(error)")
+        }
     }
 
     // MARK: - Profile Metrics Aggregation
@@ -889,8 +988,15 @@ enum SharedSettings {
             endHour > startHour || (endHour == startHour && endMinute > startMinute)
         }
         func isActive(on date: Date) -> Bool {
-            let weekday = Calendar.current.component(.weekday, from: date)
-            return enabled && daysOfWeek.contains(weekday)
+            let calendar = Calendar.current
+            let weekday = calendar.component(.weekday, from: date)
+            let currentMinute = calendar.component(.hour, from: date) * 60 + calendar.component(.minute, from: date)
+            let startMinuteOfDay = startHour * 60 + startMinute
+            let endMinuteOfDay = endHour * 60 + endMinute
+            return enabled
+                && daysOfWeek.contains(weekday)
+                && currentMinute >= startMinuteOfDay
+                && currentMinute < endMinuteOfDay
         }
     }
 
@@ -989,7 +1095,8 @@ enum SharedSettings {
     static func currentShieldSnapshot() -> ShieldSnapshot {
         let limitTokens = currentLimitShieldTokens()
         var blockDict: [String: Set<ApplicationToken>] = [:]
-        for state in activeTimeBlockStates() {
+        let now = Date().timeIntervalSince1970
+        for state in activeTimeBlockStates() where state.endsAt > now {
             blockDict[state.id] = Set(activeTokens(forBlockId: state.id))
         }
         return ShieldSnapshot(
@@ -997,6 +1104,22 @@ enum SharedSettings {
             blockTokens: blockDict,
             temporaryUnlocks: activeTemporaryUnlocks()
         )
+    }
+
+    static func currentTimeBlockShieldTokens() -> Set<ApplicationToken> {
+        currentShieldSnapshot().blockTokens.values.reduce(into: Set<ApplicationToken>()) { result, tokens in
+            result.formUnion(tokens)
+        }
+    }
+
+    @discardableResult
+    static func applyCurrentShieldState(reason: String) -> Set<ApplicationToken> {
+        let tokens = currentShieldSnapshot().activelyShieldedTokens
+        let store = ManagedSettingsStore()
+        store.shield.applications = tokens
+        setBlockingState(!tokens.isEmpty)
+        print("🛡️ Applied shield ledger (\(reason)): \(tokens.count) app(s)")
+        return tokens
     }
 
     static func currentLimitShieldTokens() -> Set<ApplicationToken> {

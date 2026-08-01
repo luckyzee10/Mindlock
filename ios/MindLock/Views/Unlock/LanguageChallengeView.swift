@@ -1,27 +1,38 @@
+import AudioToolbox
 import SwiftUI
-import UniformTypeIdentifiers
+import UIKit
 
 struct LanguageChallengeView: View {
     let unlockMinutes: Int
     let onComplete: (Int, Int, Int) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @State private var challenge = LanguageChallenge.sample(
+    @State private var challenge = LanguageLearningCatalog.nextChallenge(
         for: SharedSettings.preferredLearningLanguage(),
-        level: SharedSettings.languageProgressSummary().level
+        completedLessonIDs: SharedSettings.completedLanguageLessonIDs()
     )
     @State private var currentIndex = 0
     @State private var selectedAnswer: String?
     @State private var typedAnswer = ""
-    @State private var sentenceTokens: [String] = []
+    @State private var sentenceBankTokens: [SentenceToken] = []
+    @State private var sentenceAnswerTokens: [SentenceToken] = []
     @State private var pairMatches: [String: String] = [:]
     @State private var pairTargets: [String] = []
     @State private var activePairSource: String?
     @State private var correctCount = 0
     @State private var earnedXP = 0
     @State private var skillXP: [SharedSettings.LanguageSkill: Int] = [:]
-    @State private var answeredIDs = Set<UUID>()
+    @State private var answeredIDs = Set<String>()
     @State private var isCompleting = false
+    @State private var latestFeedback: LanguageAnswerFeedback?
+    @State private var showFloatingXP = false
+    @State private var progressPulse = false
+    @State private var cardShakeOffset: CGFloat = 0
+    @State private var showCompletionBrief = false
+    @State private var completionProgress: CGFloat = 0
+    @State private var completionMessageVisible = false
+    @State private var unlockGranted = false
+    @Namespace private var sentenceAnimation
 
     private var currentQuestion: LanguageQuestion {
         questions[currentIndex]
@@ -43,14 +54,23 @@ struct LanguageChallengeView: View {
         responseIsCorrect(for: currentQuestion)
     }
 
+    private var answeredProgress: Double {
+        min(max(Double(answeredIDs.count) / Double(questions.count), 0), 1)
+    }
+
     var body: some View {
         NavigationView {
-            VStack(spacing: DesignSystem.Spacing.xl) {
-                header
-                progressBar
-                questionCard
-                Spacer(minLength: DesignSystem.Spacing.lg)
-                actionButtons
+            ZStack {
+                if showCompletionBrief {
+                    completionBrief
+                        .transition(.scale(scale: 0.94).combined(with: .opacity))
+                } else {
+                    lessonBody
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .leading).combined(with: .opacity),
+                            removal: .move(edge: .leading).combined(with: .opacity)
+                        ))
+                }
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
             .padding(.top, DesignSystem.Spacing.xl)
@@ -68,6 +88,21 @@ struct LanguageChallengeView: View {
         }
     }
 
+    private var lessonBody: some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            header
+            progressBar
+            questionCard
+                .id(currentQuestion.id)
+                .transition(.asymmetric(
+                    insertion: .move(edge: .trailing).combined(with: .opacity),
+                    removal: .move(edge: .leading).combined(with: .opacity)
+                ))
+            Spacer(minLength: DesignSystem.Spacing.lg)
+            actionButtons
+        }
+    }
+
     private var header: some View {
         VStack(spacing: DesignSystem.Spacing.sm) {
             Text("Language unlock")
@@ -75,7 +110,7 @@ struct LanguageChallengeView: View {
                 .fontWeight(.bold)
                 .foregroundColor(DesignSystem.Colors.textPrimary)
 
-            Text("Complete a few \(challenge.languageName) questions to earn more app time. Correct answers earn more XP.")
+            Text("\(challenge.sectionTitle): \(challenge.lesson.title). Complete 4 \(challenge.languageName) questions to earn more app time.")
                 .font(DesignSystem.Typography.callout)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
                 .multilineTextAlignment(.center)
@@ -93,6 +128,7 @@ struct LanguageChallengeView: View {
                 Text("\(earnedXP) XP")
                     .font(DesignSystem.Typography.caption.weight(.semibold))
                     .foregroundColor(DesignSystem.Colors.primary)
+                    .contentTransition(.numericText())
             }
 
             GeometryReader { proxy in
@@ -100,9 +136,19 @@ struct LanguageChallengeView: View {
                     Capsule()
                         .fill(Color.white.opacity(0.12))
                     Capsule()
-                        .fill(DesignSystem.Colors.primary)
-                        .frame(width: proxy.size.width * Double(currentIndex + 1) / Double(questions.count))
+                        .fill(
+                            LinearGradient(
+                                colors: [DesignSystem.Colors.success, DesignSystem.Colors.primary],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: proxy.size.width * CGFloat(answeredProgress))
+                        .shadow(color: DesignSystem.Colors.success.opacity(progressPulse ? 0.65 : 0.25), radius: progressPulse ? 14 : 6)
+                        .animation(.spring(response: 0.48, dampingFraction: 0.78), value: answeredProgress)
                 }
+                .scaleEffect(y: progressPulse ? 1.35 : 1, anchor: .center)
+                .animation(.spring(response: 0.28, dampingFraction: 0.62), value: progressPulse)
             }
             .frame(height: 8)
         }
@@ -115,12 +161,101 @@ struct LanguageChallengeView: View {
 
             if hasAnswered {
                 feedbackCard
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
         .padding(DesignSystem.Spacing.lg)
         .frame(maxWidth: .infinity, alignment: .leading)
         .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl, opacity: 0.55)
         .cornerRadius(DesignSystem.CornerRadius.xl)
+        .overlay(alignment: .topTrailing) {
+            floatingXPBadge
+        }
+        .offset(x: cardShakeOffset)
+        .animation(.spring(response: 0.32, dampingFraction: 0.82), value: hasAnswered)
+    }
+
+    private var completionBrief: some View {
+        VStack(spacing: DesignSystem.Spacing.xl) {
+            Spacer(minLength: DesignSystem.Spacing.md)
+
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                Text("Lesson complete")
+                    .font(.system(size: 38, weight: .black))
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                    .multilineTextAlignment(.center)
+
+                Text("You unlocked \(unlockLengthText).")
+                    .font(DesignSystem.Typography.title3.weight(.bold))
+                    .foregroundColor(DesignSystem.Colors.success)
+                    .multilineTextAlignment(.center)
+                    .scaleEffect(completionMessageVisible ? 1 : 0.92)
+                    .opacity(completionMessageVisible ? 1 : 0)
+            }
+
+            VStack(spacing: DesignSystem.Spacing.lg) {
+                ZStack {
+                    Circle()
+                        .stroke(Color.white.opacity(0.10), lineWidth: 18)
+                    Circle()
+                        .trim(from: 0, to: completionProgress)
+                        .stroke(
+                            LinearGradient(
+                                colors: [DesignSystem.Colors.success, DesignSystem.Colors.primary],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            style: StrokeStyle(lineWidth: 18, lineCap: .round)
+                        )
+                        .rotationEffect(.degrees(-90))
+                        .shadow(color: DesignSystem.Colors.success.opacity(0.45), radius: 18)
+
+                    VStack(spacing: DesignSystem.Spacing.xs) {
+                        Text("+\(earnedXP)")
+                            .font(.system(size: 46, weight: .black))
+                            .foregroundColor(DesignSystem.Colors.textPrimary)
+                            .contentTransition(.numericText())
+                        Text("XP")
+                            .font(DesignSystem.Typography.caption.weight(.bold))
+                            .foregroundColor(DesignSystem.Colors.textSecondary)
+                    }
+                }
+                .frame(width: 190, height: 190)
+
+                VStack(spacing: DesignSystem.Spacing.sm) {
+                    completionStat(title: "Questions", value: "\(questions.count)")
+                    completionStat(title: "Remembered", value: "\(correctCount)/\(questions.count)")
+                    completionStat(title: "Break", value: unlockLengthText)
+                }
+                .padding(DesignSystem.Spacing.lg)
+                .frame(maxWidth: .infinity)
+                .glossySurface(cornerRadius: DesignSystem.CornerRadius.xl, opacity: 0.68)
+                .cornerRadius(DesignSystem.CornerRadius.xl)
+            }
+
+            Spacer()
+
+            Button("Start my break") {
+                finishUnlockFromBrief()
+            }
+            .mindLockButton(style: .primary)
+        }
+    }
+
+    private func completionStat(title: String, value: String) -> some View {
+        HStack {
+            Text(title)
+                .font(DesignSystem.Typography.callout)
+                .foregroundColor(DesignSystem.Colors.textSecondary)
+            Spacer()
+            Text(value)
+                .font(DesignSystem.Typography.callout.weight(.bold))
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+        }
+    }
+
+    private var unlockLengthText: String {
+        unlockMinutes >= 24 * 60 ? "the rest of today" : "\(unlockMinutes) min"
     }
 
     private var questionHeader: some View {
@@ -170,10 +305,12 @@ struct LanguageChallengeView: View {
     private func answerButton(_ choice: String) -> some View {
         let selected = selectedAnswer == choice
         let correct = currentQuestion.correctAnswer == choice
-        let showCorrect = hasAnswered && correct
+        let feedbackState = answerFeedbackState(selected: selected, correct: correct)
 
         return Button {
-            selectedAnswer = choice
+            withAnimation(.spring(response: 0.24, dampingFraction: 0.72)) {
+                selectedAnswer = choice
+            }
             submitCurrentAnswer()
         } label: {
             HStack {
@@ -182,15 +319,23 @@ struct LanguageChallengeView: View {
                     .foregroundColor(DesignSystem.Colors.textPrimary)
                     .multilineTextAlignment(.leading)
                 Spacer()
-                if selected || showCorrect {
-                    Image(systemName: correct ? "checkmark.circle.fill" : "xmark.circle.fill")
-                        .foregroundColor(correct ? DesignSystem.Colors.success : DesignSystem.Colors.warning)
+                if feedbackState != .idle {
+                    Image(systemName: feedbackState.iconName)
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(feedbackState.tint)
+                        .transition(.scale.combined(with: .opacity))
                 }
             }
             .padding(DesignSystem.Spacing.md)
             .frame(maxWidth: .infinity)
-            .background(answerBackground(selected: selected, correct: correct, showCorrect: showCorrect))
+            .background(answerBackground(feedbackState))
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous)
+                    .stroke(feedbackState.borderColor, lineWidth: feedbackState == .idle ? 0 : 1.6)
+            )
             .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous))
+            .scaleEffect(feedbackState.shouldPop ? 1.03 : 1)
+            .animation(.spring(response: 0.24, dampingFraction: 0.58), value: feedbackState)
         }
         .buttonStyle(.plain)
         .disabled(hasAnswered)
@@ -205,6 +350,10 @@ struct LanguageChallengeView: View {
                 .foregroundColor(DesignSystem.Colors.textPrimary)
                 .padding(DesignSystem.Spacing.md)
                 .background(Color.white.opacity(0.08))
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous)
+                        .stroke(typedAnswerBorderColor, lineWidth: hasAnswered ? 1.8 : 0)
+                )
                 .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous))
                 .disabled(hasAnswered)
 
@@ -219,35 +368,128 @@ struct LanguageChallengeView: View {
 
     private var sentenceOrderingInteraction: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
-            Text("Drag the words into order.")
+            Text("Tap the words into order.")
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
 
-            FlexibleTokenGrid(tokens: sentenceTokens) { token in
-                sentenceToken(token)
+            sentenceAnswerArea
+
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: 76), spacing: DesignSystem.Spacing.sm)],
+                alignment: .leading,
+                spacing: DesignSystem.Spacing.sm
+            ) {
+                ForEach(sentenceBankTokens) { token in
+                    sentenceToken(token, placement: .bank)
+                }
             }
 
             Button("Check sentence") {
                 submitCurrentAnswer()
             }
             .mindLockButton(style: .primary)
-            .disabled(hasAnswered)
+            .disabled(sentenceAnswerTokens.isEmpty || hasAnswered)
+            .opacity(sentenceAnswerTokens.isEmpty || hasAnswered ? 0.5 : 1)
         }
     }
 
-    private func sentenceToken(_ token: String) -> some View {
-        Text(token)
-            .font(DesignSystem.Typography.callout.weight(.semibold))
-            .foregroundColor(DesignSystem.Colors.textPrimary)
-            .padding(.horizontal, DesignSystem.Spacing.md)
-            .padding(.vertical, DesignSystem.Spacing.sm)
-            .background(Color.white.opacity(0.09))
-            .clipShape(Capsule())
-            .onDrag { NSItemProvider(object: token as NSString) }
-            .onDrop(of: [UTType.text], delegate: SentenceDropDelegate(
-                token: token,
-                tokens: $sentenceTokens
-            ))
+    private var sentenceAnswerArea: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.sm) {
+            FlexibleSentenceTokenGrid(tokens: sentenceAnswerTokens) { token in
+                sentenceToken(token, placement: .answer)
+            }
+            .frame(maxWidth: .infinity, minHeight: 76, alignment: .topLeading)
+            .padding(DesignSystem.Spacing.sm)
+            .background(Color.black.opacity(0.18))
+            .overlay(
+                RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous)
+                    .stroke(style: StrokeStyle(lineWidth: 1, dash: [7, 6]))
+                    .foregroundColor(Color.white.opacity(0.22))
+            )
+            .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous))
+            .overlay(alignment: .center) {
+                if sentenceAnswerTokens.isEmpty {
+                    Text("Build your sentence here")
+                        .font(DesignSystem.Typography.callout.weight(.semibold))
+                        .foregroundColor(DesignSystem.Colors.textTertiary)
+                }
+            }
+
+            if !sentenceAnswerTokens.isEmpty && !hasAnswered {
+                Button("Clear") {
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.86)) {
+                        sentenceBankTokens.append(contentsOf: sentenceAnswerTokens)
+                        sentenceAnswerTokens.removeAll()
+                    }
+                }
+                .font(DesignSystem.Typography.caption.weight(.semibold))
+                .foregroundColor(DesignSystem.Colors.primary)
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private func sentenceToken(_ token: SentenceToken, placement: SentenceTokenPlacement) -> some View {
+        Button {
+            moveSentenceToken(token, from: placement)
+        } label: {
+            Text(token.value)
+                .font(DesignSystem.Typography.callout.weight(.semibold))
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+                .padding(.horizontal, DesignSystem.Spacing.md)
+                .padding(.vertical, DesignSystem.Spacing.sm)
+                .background(sentenceTokenBackground(token, placement: placement))
+                .overlay(
+                    Capsule()
+                        .stroke(sentenceTokenBorder(token, placement: placement), lineWidth: hasAnswered && placement == .answer ? 1.4 : 0)
+                )
+                .clipShape(Capsule())
+                .matchedGeometryEffect(id: token.id, in: sentenceAnimation)
+                .scaleEffect(hasAnswered && placement == .answer ? 1.04 : 1)
+        }
+        .buttonStyle(.plain)
+        .disabled(hasAnswered)
+    }
+
+    private func sentenceTokenBackground(_ token: SentenceToken, placement: SentenceTokenPlacement) -> Color {
+        if hasAnswered && placement == .answer {
+            return sentenceTokenIsCorrect(token) ? DesignSystem.Colors.success.opacity(0.24) : DesignSystem.Colors.warning.opacity(0.22)
+        }
+        switch placement {
+        case .bank:
+            return Color.white.opacity(0.10)
+        case .answer:
+            return DesignSystem.Colors.primary.opacity(0.22)
+        }
+    }
+
+    private func sentenceTokenBorder(_ token: SentenceToken, placement: SentenceTokenPlacement) -> Color {
+        guard hasAnswered && placement == .answer else { return .clear }
+        return sentenceTokenIsCorrect(token) ? DesignSystem.Colors.success.opacity(0.8) : DesignSystem.Colors.warning.opacity(0.85)
+    }
+
+    private func sentenceTokenIsCorrect(_ token: SentenceToken) -> Bool {
+        guard let index = sentenceAnswerTokens.firstIndex(of: token),
+              currentQuestion.correctTokens.indices.contains(index) else {
+            return false
+        }
+        return currentQuestion.correctTokens[index] == token.value
+    }
+
+    private func moveSentenceToken(_ token: SentenceToken, from placement: SentenceTokenPlacement) {
+        guard !hasAnswered else { return }
+        withAnimation(.spring(response: 0.28, dampingFraction: 0.86)) {
+            switch placement {
+            case .bank:
+                guard let index = sentenceBankTokens.firstIndex(of: token) else { return }
+                sentenceBankTokens.remove(at: index)
+                sentenceAnswerTokens.append(token)
+            case .answer:
+                guard let index = sentenceAnswerTokens.firstIndex(of: token) else { return }
+                sentenceAnswerTokens.remove(at: index)
+                sentenceBankTokens.append(token)
+            }
+        }
     }
 
     private var connectPairsInteraction: some View {
@@ -279,6 +521,7 @@ struct LanguageChallengeView: View {
     private func pairButton(_ item: String, side: PairSide) -> some View {
         let selected = activePairSource == item
         let matched = side == .left ? pairMatches[item] != nil : pairMatches.values.contains(item)
+        let feedbackState = pairFeedbackState(item, side: side, selected: selected, matched: matched)
 
         return Button {
             handlePairTap(item, side: side)
@@ -291,30 +534,91 @@ struct LanguageChallengeView: View {
                 .padding(.horizontal, DesignSystem.Spacing.md)
                 .frame(height: 48)
                 .frame(maxWidth: .infinity)
-                .background(pairBackground(selected: selected, matched: matched))
+                .background(pairBackground(feedbackState))
+                .overlay(
+                    RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md, style: .continuous)
+                        .stroke(feedbackState.borderColor, lineWidth: feedbackState == .idle ? 0 : 1.4)
+                )
                 .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md, style: .continuous))
         }
         .buttonStyle(.plain)
         .disabled(hasAnswered)
     }
 
-    private func answerBackground(selected: Bool, correct: Bool, showCorrect: Bool) -> Color {
-        if showCorrect { return DesignSystem.Colors.success.opacity(0.18) }
-        if selected && !correct { return DesignSystem.Colors.warning.opacity(0.18) }
-        return Color.white.opacity(0.07)
+    private var typedAnswerBorderColor: Color {
+        guard hasAnswered else { return .clear }
+        return currentResponseIsCorrect ? DesignSystem.Colors.success.opacity(0.85) : DesignSystem.Colors.warning.opacity(0.85)
     }
 
-    private func pairBackground(selected: Bool, matched: Bool) -> Color {
-        if selected { return DesignSystem.Colors.primary.opacity(0.22) }
-        if matched { return DesignSystem.Colors.success.opacity(0.18) }
-        return Color.white.opacity(0.08)
+    private func answerBackground(_ state: LanguageOptionFeedbackState) -> Color {
+        switch state {
+        case .idle:
+            return Color.white.opacity(0.07)
+        case .selected:
+            return DesignSystem.Colors.primary.opacity(0.18)
+        case .correct:
+            return DesignSystem.Colors.success.opacity(0.22)
+        case .incorrect:
+            return DesignSystem.Colors.warning.opacity(0.20)
+        }
+    }
+
+    private func pairBackground(_ state: LanguageOptionFeedbackState) -> Color {
+        switch state {
+        case .idle:
+            return Color.white.opacity(0.08)
+        case .selected:
+            return DesignSystem.Colors.primary.opacity(0.22)
+        case .correct:
+            return DesignSystem.Colors.success.opacity(0.20)
+        case .incorrect:
+            return DesignSystem.Colors.warning.opacity(0.18)
+        }
+    }
+
+    private func answerFeedbackState(selected: Bool, correct: Bool) -> LanguageOptionFeedbackState {
+        if hasAnswered {
+            if correct { return .correct }
+            if selected { return .incorrect }
+            return .idle
+        }
+        return selected ? .selected : .idle
+    }
+
+    private func pairFeedbackState(_ item: String, side: PairSide, selected: Bool, matched: Bool) -> LanguageOptionFeedbackState {
+        if hasAnswered && matched {
+            switch side {
+            case .left:
+                return pairMatches[item] == currentQuestion.pairs[item] ? .correct : .incorrect
+            case .right:
+                let source = pairMatches.first { $0.value == item }?.key
+                return source.flatMap { currentQuestion.pairs[$0] } == item ? .correct : .incorrect
+            }
+        }
+        if selected { return .selected }
+        if matched { return .correct }
+        return .idle
     }
 
     private var feedbackCard: some View {
         VStack(alignment: .leading, spacing: DesignSystem.Spacing.xs) {
-            Text(currentResponseIsCorrect ? "Nice. You remembered it." : "Good practice. The answer is \(currentQuestion.correctAnswer).")
-                .font(DesignSystem.Typography.callout.weight(.semibold))
-                .foregroundColor(DesignSystem.Colors.textPrimary)
+            HStack(spacing: DesignSystem.Spacing.sm) {
+                Image(systemName: currentResponseIsCorrect ? "checkmark.circle.fill" : "sparkles")
+                    .foregroundColor(currentResponseIsCorrect ? DesignSystem.Colors.success : DesignSystem.Colors.primary)
+                Text(currentResponseIsCorrect ? "Nice. You remembered it." : "Good practice. The answer is \(currentQuestion.correctAnswer).")
+                    .font(DesignSystem.Typography.callout.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                Spacer()
+                if let latestFeedback, latestFeedback.questionID == currentQuestion.id {
+                    Text(latestFeedback.xpText)
+                        .font(DesignSystem.Typography.caption.weight(.bold))
+                        .foregroundColor(.black)
+                        .padding(.horizontal, DesignSystem.Spacing.sm)
+                        .padding(.vertical, 5)
+                        .background(DesignSystem.Colors.success)
+                        .clipShape(Capsule())
+                }
+            }
             Text(currentQuestion.learningNote)
                 .font(DesignSystem.Typography.caption)
                 .foregroundColor(DesignSystem.Colors.textSecondary)
@@ -324,6 +628,22 @@ struct LanguageChallengeView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.black.opacity(0.22))
         .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.lg, style: .continuous))
+    }
+
+    @ViewBuilder
+    private var floatingXPBadge: some View {
+        if let latestFeedback, latestFeedback.questionID == currentQuestion.id, showFloatingXP {
+            Text(latestFeedback.xpText)
+                .font(.system(size: 18, weight: .black))
+                .foregroundColor(.black)
+                .padding(.horizontal, DesignSystem.Spacing.md)
+                .padding(.vertical, DesignSystem.Spacing.sm)
+                .background(DesignSystem.Colors.success)
+                .clipShape(Capsule())
+                .shadow(color: DesignSystem.Colors.success.opacity(0.55), radius: 16)
+                .offset(x: -DesignSystem.Spacing.md, y: -18)
+                .transition(.asymmetric(insertion: .scale(scale: 0.7).combined(with: .opacity), removal: .move(edge: .top).combined(with: .opacity)))
+        }
     }
 
     private var actionButtons: some View {
@@ -348,22 +668,46 @@ struct LanguageChallengeView: View {
         typedAnswer = ""
         activePairSource = nil
         pairMatches = [:]
-        sentenceTokens = currentQuestion.tokens.shuffled()
+        latestFeedback = nil
+        showFloatingXP = false
+        progressPulse = false
+        cardShakeOffset = 0
+        sentenceAnswerTokens = []
+        sentenceBankTokens = currentQuestion.tokens.map { SentenceToken(value: $0) }.shuffled()
         pairTargets = Array(currentQuestion.pairs.values).shuffled()
     }
 
     private func submitCurrentAnswer() {
         guard !answeredIDs.contains(currentQuestion.id) else { return }
-        answeredIDs.insert(currentQuestion.id)
-
         let correct = responseIsCorrect(for: currentQuestion)
-        if correct {
-            correctCount += 1
+        let feedback = LanguageLessonFeedbackEngine.feedback(
+            for: currentQuestion,
+            isCorrect: correct,
+            totalAnswered: answeredIDs.count + 1,
+            totalQuestions: questions.count
+        )
+
+        withAnimation(.spring(response: 0.32, dampingFraction: 0.78)) {
+            answeredIDs.insert(currentQuestion.id)
+            latestFeedback = feedback
+            if correct {
+                correctCount += 1
+            }
+            earnedXP += feedback.xpEarned
+            skillXP[currentQuestion.skill, default: 0] += feedback.xpEarned
+            showFloatingXP = true
+            progressPulse = true
         }
 
-        let xp = currentQuestion.xp(correct: correct)
-        earnedXP += xp
-        skillXP[currentQuestion.skill, default: 0] += xp
+        playFeedback(correct: correct)
+        animateFeedback(correct: correct)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.9) {
+            withAnimation(.easeOut(duration: 0.24)) {
+                showFloatingXP = false
+                progressPulse = false
+            }
+        }
     }
 
     private func responseIsCorrect(for question: LanguageQuestion) -> Bool {
@@ -374,7 +718,7 @@ struct LanguageChallengeView: View {
             let normalized = normalize(typedAnswer)
             return question.acceptedAnswers.map(normalize).contains(normalized)
         case .sentenceOrdering:
-            return sentenceTokens == question.correctTokens
+            return sentenceAnswerTokens.map(\.value) == question.correctTokens
         case .connectPairs:
             return pairMatches == question.pairs
         }
@@ -395,8 +739,10 @@ struct LanguageChallengeView: View {
             activePairSource = item
         case .right:
             guard let source = activePairSource else { return }
-            pairMatches[source] = item
-            activePairSource = nil
+            withAnimation(.spring(response: 0.24, dampingFraction: 0.78)) {
+                pairMatches[source] = item
+                activePairSource = nil
+            }
             if pairMatches.count == currentQuestion.pairs.count {
                 submitCurrentAnswer()
             }
@@ -406,80 +752,80 @@ struct LanguageChallengeView: View {
     private func continueTapped() {
         guard hasAnswered else { return }
         if isLastQuestion {
-            isCompleting = true
-            SharedSettings.recordLanguagePractice(
-                questionCount: questions.count,
-                correctCount: correctCount,
-                xpEarned: earnedXP,
-                skillXP: skillXP
-            )
-            AnalyticsService.shared.track(.languageChallengeCompleted, properties: [
-                "language": .string(SharedSettings.preferredLearningLanguage().rawValue),
-                "question_count": .int(questions.count),
-                "correct_count": .int(correctCount),
-                "xp_earned": .int(earnedXP),
-                "unlock_minutes": .int(unlockMinutes)
-            ])
-            onComplete(questions.count, correctCount, unlockMinutes)
-            dismiss()
+            showLessonCompleteBrief()
         } else {
-            currentIndex += 1
-            prepareCurrentQuestion()
-        }
-    }
-}
-
-private enum LanguageQuestionType: String, CaseIterable {
-    case multipleChoice
-    case reverseTranslation
-    case fillBlank
-    case typedAnswer
-    case sentenceOrdering
-    case connectPairs
-
-    var displayName: String {
-        switch self {
-        case .multipleChoice: return "Meaning"
-        case .reverseTranslation: return "Recall"
-        case .fillBlank: return "Fill blank"
-        case .typedAnswer: return "Type"
-        case .sentenceOrdering: return "Build"
-        case .connectPairs: return "Match"
+            withAnimation(.spring(response: 0.34, dampingFraction: 0.88)) {
+                currentIndex += 1
+                prepareCurrentQuestion()
+            }
         }
     }
 
-    var baseXP: Int {
-        switch self {
-        case .multipleChoice: return 8
-        case .reverseTranslation: return 10
-        case .fillBlank: return 11
-        case .typedAnswer: return 14
-        case .sentenceOrdering: return 16
-        case .connectPairs: return 12
+    private func showLessonCompleteBrief() {
+        guard !isCompleting else { return }
+        isCompleting = true
+        SharedSettings.recordLanguagePractice(
+            lessonID: challenge.lesson.id,
+            questionCount: questions.count,
+            correctCount: correctCount,
+            xpEarned: earnedXP,
+            skillXP: skillXP
+        )
+        AnalyticsService.shared.track(.languageChallengeCompleted, properties: [
+            "language": .string(SharedSettings.preferredLearningLanguage().rawValue),
+            "question_count": .int(questions.count),
+            "correct_count": .int(correctCount),
+            "xp_earned": .int(earnedXP),
+            "unlock_minutes": .int(unlockMinutes)
+        ])
+
+        withAnimation(.spring(response: 0.48, dampingFraction: 0.82)) {
+            showCompletionBrief = true
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.18) {
+            withAnimation(.easeOut(duration: 0.95)) {
+                completionProgress = 1
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.38) {
+            let generator = UINotificationFeedbackGenerator()
+            generator.notificationOccurred(.success)
+            AudioServicesPlaySystemSound(1104)
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.62)) {
+                completionMessageVisible = true
+            }
         }
     }
 
-    var unlockLevel: Int {
-        switch self {
-        case .multipleChoice, .reverseTranslation, .fillBlank, .connectPairs: return 1
-        case .sentenceOrdering: return 2
-        case .typedAnswer: return 3
-        }
+    private func finishUnlockFromBrief() {
+        guard !unlockGranted else { return }
+        unlockGranted = true
+        onComplete(questions.count, correctCount, unlockMinutes)
+        dismiss()
     }
-}
 
-private enum LanguageDifficulty: String, CaseIterable {
-    case easy
-    case medium
-    case hard
+    private func playFeedback(correct: Bool) {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(correct ? .success : .warning)
+        AudioServicesPlaySystemSound(correct ? 1104 : 1053)
+    }
 
-    var displayName: String { rawValue }
-
-    var multiplier: Int {
-        switch self {
-        case .easy: return 1
-        case .medium: return 2
-        case .hard: return 3
+    private func animateFeedback(correct: Bool) {
+        guard !correct else { return }
+        withAnimation(.linear(duration: 0.06)) {
+            cardShakeOffset = -7
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.06) {
+            withAnimation(.linear(duration: 0.06)) {
+                cardShakeOffset = 7
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) {
+            withAnimation(.spring(response: 0.22, dampingFraction: 0.5)) {
+                cardShakeOffset = 0
+            }
         }
     }
 }
@@ -489,254 +835,64 @@ private enum PairSide {
     case right
 }
 
-private struct LanguageChallenge {
-    let languageName: String
-    let questions: [LanguageQuestion]
+private enum SentenceTokenPlacement {
+    case bank
+    case answer
+}
 
-    static func sample(for language: SharedSettings.LearningLanguage, level: Int) -> LanguageChallenge {
-        let deck = deck(for: language)
-        let availableQuestions = deck.questions.filter { $0.type.unlockLevel <= level }
-        let candidates = availableQuestions.isEmpty ? deck.questions : availableQuestions
-        return LanguageChallenge(
-            languageName: deck.name,
-            questions: Array(candidates.shuffled().prefix(3))
-        )
+private enum LanguageOptionFeedbackState: Equatable {
+    case idle
+    case selected
+    case correct
+    case incorrect
+
+    var tint: Color {
+        switch self {
+        case .idle:
+            return DesignSystem.Colors.textTertiary
+        case .selected:
+            return DesignSystem.Colors.primary
+        case .correct:
+            return DesignSystem.Colors.success
+        case .incorrect:
+            return DesignSystem.Colors.warning
+        }
     }
 
-    private static func deck(for language: SharedSettings.LearningLanguage) -> (name: String, questions: [LanguageQuestion]) {
-        switch language {
-        case .spanish:
-            return ("Spanish", LanguageDeck.spanish)
-        case .french:
-            return ("French", LanguageDeck.french)
-        case .japanese:
-            return ("Japanese", LanguageDeck.japanese)
-        case .italian:
-            return ("Italian", LanguageDeck.italian)
-        case .german:
-            return ("German", LanguageDeck.german)
-        case .korean:
-            return ("Korean", LanguageDeck.korean)
+    var borderColor: Color {
+        switch self {
+        case .idle:
+            return .clear
+        case .selected:
+            return DesignSystem.Colors.primary.opacity(0.8)
+        case .correct:
+            return DesignSystem.Colors.success.opacity(0.9)
+        case .incorrect:
+            return DesignSystem.Colors.warning.opacity(0.9)
         }
+    }
+
+    var iconName: String {
+        switch self {
+        case .idle:
+            return ""
+        case .selected:
+            return "circle.fill"
+        case .correct:
+            return "checkmark.circle.fill"
+        case .incorrect:
+            return "xmark.circle.fill"
+        }
+    }
+
+    var shouldPop: Bool {
+        self == .correct || self == .incorrect
     }
 }
 
-private struct LanguageQuestion: Identifiable {
+private struct SentenceToken: Identifiable, Equatable {
     let id = UUID()
-    let type: LanguageQuestionType
-    let skill: SharedSettings.LanguageSkill
-    let difficulty: LanguageDifficulty
-    let prompt: String
-    let context: String
-    let choices: [String]
-    let correctAnswer: String
-    let acceptedAnswers: [String]
-    let tokens: [String]
-    let correctTokens: [String]
-    let pairs: [String: String]
-    let learningNote: String
-
-    var pairSources: [String] {
-        Array(pairs.keys).sorted()
-    }
-
-    func xp(correct: Bool) -> Int {
-        let completionXP = max(4, type.baseXP / 2)
-        let accuracyXP = correct ? type.baseXP * difficulty.multiplier : 0
-        return completionXP + accuracyXP
-    }
-
-    static func choice(
-        _ type: LanguageQuestionType = .multipleChoice,
-        skill: SharedSettings.LanguageSkill = .vocabulary,
-        difficulty: LanguageDifficulty,
-        prompt: String,
-        context: String,
-        choices: [String],
-        answer: String,
-        note: String
-    ) -> LanguageQuestion {
-        LanguageQuestion(
-            type: type,
-            skill: skill,
-            difficulty: difficulty,
-            prompt: prompt,
-            context: context,
-            choices: choices,
-            correctAnswer: answer,
-            acceptedAnswers: [answer],
-            tokens: [],
-            correctTokens: [],
-            pairs: [:],
-            learningNote: note
-        )
-    }
-
-    static func typed(
-        skill: SharedSettings.LanguageSkill = .recall,
-        difficulty: LanguageDifficulty,
-        prompt: String,
-        context: String,
-        answers: [String],
-        note: String
-    ) -> LanguageQuestion {
-        LanguageQuestion(
-            type: .typedAnswer,
-            skill: skill,
-            difficulty: difficulty,
-            prompt: prompt,
-            context: context,
-            choices: [],
-            correctAnswer: answers.first ?? "",
-            acceptedAnswers: answers,
-            tokens: [],
-            correctTokens: [],
-            pairs: [:],
-            learningNote: note
-        )
-    }
-
-    static func sentence(
-        difficulty: LanguageDifficulty,
-        prompt: String,
-        context: String,
-        tokens: [String],
-        answer: String,
-        note: String
-    ) -> LanguageQuestion {
-        LanguageQuestion(
-            type: .sentenceOrdering,
-            skill: .sentenceBuilding,
-            difficulty: difficulty,
-            prompt: prompt,
-            context: context,
-            choices: [],
-            correctAnswer: answer,
-            acceptedAnswers: [answer],
-            tokens: tokens,
-            correctTokens: tokens,
-            pairs: [:],
-            learningNote: note
-        )
-    }
-
-    static func pairs(
-        difficulty: LanguageDifficulty,
-        prompt: String,
-        context: String,
-        pairs: [String: String],
-        note: String
-    ) -> LanguageQuestion {
-        LanguageQuestion(
-            type: .connectPairs,
-            skill: .vocabulary,
-            difficulty: difficulty,
-            prompt: prompt,
-            context: context,
-            choices: [],
-            correctAnswer: pairs.map { "\($0.key) = \($0.value)" }.sorted().joined(separator: ", "),
-            acceptedAnswers: [],
-            tokens: [],
-            correctTokens: [],
-            pairs: pairs,
-            learningNote: note
-        )
-    }
-}
-
-private enum LanguageDeck {
-    static let spanish: [LanguageQuestion] = [
-        .choice(difficulty: .easy, prompt: "Casa", context: "What does this Spanish word mean?", choices: ["House", "Street", "Friend"], answer: "House", note: "Casa means house or home."),
-        .choice(difficulty: .medium, prompt: "Cansado", context: "Choose the English meaning.", choices: ["Tired", "Careful", "Hungry"], answer: "Tired", note: "Cansado means tired. Cansada is the feminine form."),
-        .choice(difficulty: .hard, prompt: "Pastizal", context: "Choose the closest English meaning.", choices: ["Grassland", "Pastry", "Hallway"], answer: "Grassland", note: "Pastizal means grassland or pasture."),
-        .choice(.reverseTranslation, difficulty: .easy, prompt: "Thank you", context: "Choose the Spanish phrase.", choices: ["Gracias", "Agua", "Libro"], answer: "Gracias", note: "Gracias means thank you."),
-        .choice(.fillBlank, skill: .grammar, difficulty: .medium, prompt: "Yo ___ agua.", context: "Fill in: I drink water.", choices: ["bebo", "bebe", "beben"], answer: "bebo", note: "Yo bebo means I drink."),
-        .pairs(difficulty: .easy, prompt: "Connect the pairs.", context: "Match each Spanish word to English.", pairs: ["agua": "water", "libro": "book", "amigo": "friend"], note: "These are high-frequency beginner words."),
-        .sentence(difficulty: .easy, prompt: "Build the sentence.", context: "I drink water.", tokens: ["Yo", "bebo", "agua"], answer: "Yo bebo agua", note: "Spanish often keeps the same subject-verb-object order as English."),
-        .typed(difficulty: .medium, prompt: "Type the Spanish word for water.", context: "One word.", answers: ["agua"], note: "Agua means water.")
-    ]
-
-    static let french: [LanguageQuestion] = [
-        .choice(difficulty: .easy, prompt: "Maison", context: "What does this French word mean?", choices: ["House", "Book", "Music"], answer: "House", note: "Maison means house or home."),
-        .choice(difficulty: .medium, prompt: "Fatigué", context: "Choose the English meaning.", choices: ["Tired", "Fast", "Clean"], answer: "Tired", note: "Fatigué means tired."),
-        .choice(difficulty: .hard, prompt: "Prairie", context: "Choose the closest English meaning.", choices: ["Meadow", "Prayer", "Window"], answer: "Meadow", note: "Prairie can mean meadow or grassland."),
-        .choice(.reverseTranslation, difficulty: .easy, prompt: "Thank you", context: "Choose the French word.", choices: ["Merci", "Eau", "Livre"], answer: "Merci", note: "Merci means thank you."),
-        .choice(.fillBlank, skill: .grammar, difficulty: .medium, prompt: "Je ___ de l'eau.", context: "Fill in: I drink water.", choices: ["bois", "boit", "buvez"], answer: "bois", note: "Je bois means I drink."),
-        .pairs(difficulty: .easy, prompt: "Connect the pairs.", context: "Match each French word to English.", pairs: ["eau": "water", "livre": "book", "ami": "friend"], note: "Short words are a good way into French pronunciation."),
-        .sentence(difficulty: .easy, prompt: "Build the sentence.", context: "I drink water.", tokens: ["Je", "bois", "de", "l'eau"], answer: "Je bois de l'eau", note: "De l'eau means some water."),
-        .typed(difficulty: .medium, prompt: "Type the French word for thank you.", context: "One word.", answers: ["merci"], note: "Merci is the everyday way to say thanks.")
-    ]
-
-    static let japanese: [LanguageQuestion] = [
-        .choice(difficulty: .easy, prompt: "Mizu", context: "What does this Japanese word mean?", choices: ["Water", "Food", "House"], answer: "Water", note: "Mizu means water."),
-        .choice(difficulty: .medium, prompt: "Tsukareta", context: "Choose the English meaning.", choices: ["Tired", "Quiet", "Early"], answer: "Tired", note: "Tsukareta means tired."),
-        .choice(difficulty: .hard, prompt: "Sougen", context: "Choose the closest English meaning.", choices: ["Grassland", "Train", "Library"], answer: "Grassland", note: "Sougen means grassland or plain."),
-        .choice(.reverseTranslation, difficulty: .easy, prompt: "Thank you", context: "Choose the Japanese phrase.", choices: ["Arigatou", "Mizu", "Hon"], answer: "Arigatou", note: "Arigatou means thanks."),
-        .choice(.fillBlank, skill: .grammar, difficulty: .medium, prompt: "Mizu o ___ .", context: "Fill in: I drink water.", choices: ["nomu", "miru", "yomu"], answer: "nomu", note: "Nomu means drink."),
-        .pairs(difficulty: .easy, prompt: "Connect the pairs.", context: "Match each Japanese word to English.", pairs: ["mizu": "water", "hon": "book", "ie": "house"], note: "These are useful beginner nouns."),
-        .sentence(difficulty: .easy, prompt: "Build the sentence.", context: "I drink water.", tokens: ["Mizu", "o", "nomu"], answer: "Mizu o nomu", note: "O marks the object in many Japanese sentences."),
-        .typed(difficulty: .medium, prompt: "Type the Japanese word for book.", context: "Use romaji.", answers: ["hon"], note: "Hon means book.")
-    ]
-
-    static let italian: [LanguageQuestion] = [
-        .choice(difficulty: .easy, prompt: "Casa", context: "What does this Italian word mean?", choices: ["House", "Street", "Friend"], answer: "House", note: "Casa means house or home."),
-        .choice(difficulty: .medium, prompt: "Stanco", context: "Choose the English meaning.", choices: ["Tired", "Closed", "Sweet"], answer: "Tired", note: "Stanco means tired. Stanca is the feminine form."),
-        .choice(difficulty: .hard, prompt: "Prateria", context: "Choose the closest English meaning.", choices: ["Prairie", "Printer", "Plate"], answer: "Prairie", note: "Prateria means prairie or grassland."),
-        .choice(.reverseTranslation, difficulty: .easy, prompt: "Thank you", context: "Choose the Italian word.", choices: ["Grazie", "Acqua", "Libro"], answer: "Grazie", note: "Grazie means thank you."),
-        .choice(.fillBlank, skill: .grammar, difficulty: .medium, prompt: "Io ___ acqua.", context: "Fill in: I drink water.", choices: ["bevo", "beve", "bevono"], answer: "bevo", note: "Io bevo means I drink."),
-        .pairs(difficulty: .easy, prompt: "Connect the pairs.", context: "Match each Italian word to English.", pairs: ["acqua": "water", "libro": "book", "amico": "friend"], note: "Many Italian words are close to Latin roots."),
-        .sentence(difficulty: .easy, prompt: "Build the sentence.", context: "I drink water.", tokens: ["Io", "bevo", "acqua"], answer: "Io bevo acqua", note: "Italian can use subject-verb-object order like English."),
-        .typed(difficulty: .medium, prompt: "Type the Italian word for book.", context: "One word.", answers: ["libro"], note: "Libro means book.")
-    ]
-
-    static let german: [LanguageQuestion] = [
-        .choice(difficulty: .easy, prompt: "Haus", context: "What does this German word mean?", choices: ["House", "Friend", "Street"], answer: "House", note: "Haus means house."),
-        .choice(difficulty: .medium, prompt: "Müde", context: "Choose the English meaning.", choices: ["Tired", "Brave", "Small"], answer: "Tired", note: "Müde means tired."),
-        .choice(difficulty: .hard, prompt: "Weideland", context: "Choose the closest English meaning.", choices: ["Pasture", "Weather", "Workshop"], answer: "Pasture", note: "Weideland means pasture or grazing land."),
-        .choice(.reverseTranslation, difficulty: .easy, prompt: "Thank you", context: "Choose the German word.", choices: ["Danke", "Wasser", "Buch"], answer: "Danke", note: "Danke means thank you."),
-        .choice(.fillBlank, skill: .grammar, difficulty: .medium, prompt: "Ich ___ Wasser.", context: "Fill in: I drink water.", choices: ["trinke", "trinkt", "trinken"], answer: "trinke", note: "Ich trinke means I drink."),
-        .pairs(difficulty: .easy, prompt: "Connect the pairs.", context: "Match each German word to English.", pairs: ["wasser": "water", "buch": "book", "freund": "friend"], note: "German nouns are usually capitalized in standard writing."),
-        .sentence(difficulty: .easy, prompt: "Build the sentence.", context: "I drink water.", tokens: ["Ich", "trinke", "Wasser"], answer: "Ich trinke Wasser", note: "The verb usually sits in the second position in simple German sentences."),
-        .typed(difficulty: .medium, prompt: "Type the German word for water.", context: "One word.", answers: ["wasser"], note: "Wasser means water.")
-    ]
-
-    static let korean: [LanguageQuestion] = [
-        .choice(difficulty: .easy, prompt: "Mul", context: "What does this Korean word mean?", choices: ["Water", "House", "Book"], answer: "Water", note: "Mul means water."),
-        .choice(difficulty: .medium, prompt: "Pigonhae", context: "Choose the English meaning.", choices: ["Tired", "Bright", "Cold"], answer: "Tired", note: "Pigonhae means tired in casual speech."),
-        .choice(difficulty: .hard, prompt: "Chowon", context: "Choose the closest English meaning.", choices: ["Grassland", "Kitchen", "Question"], answer: "Grassland", note: "Chowon means grassland or meadow."),
-        .choice(.reverseTranslation, difficulty: .easy, prompt: "Thank you", context: "Choose the Korean phrase.", choices: ["Gamsahamnida", "Mul", "Chaek"], answer: "Gamsahamnida", note: "Gamsahamnida is a polite thank you."),
-        .choice(.fillBlank, skill: .grammar, difficulty: .medium, prompt: "Mul-eul ___ .", context: "Fill in: I drink water.", choices: ["masyeoyo", "bwayo", "ilg-eoyo"], answer: "masyeoyo", note: "Masyeoyo means drink in polite speech."),
-        .pairs(difficulty: .easy, prompt: "Connect the pairs.", context: "Match each Korean word to English.", pairs: ["mul": "water", "chaek": "book", "jip": "house"], note: "These are useful starter nouns."),
-        .sentence(difficulty: .easy, prompt: "Build the sentence.", context: "I drink water.", tokens: ["Mul-eul", "masyeoyo"], answer: "Mul-eul masyeoyo", note: "Eul marks the object in this romanized sentence."),
-        .typed(difficulty: .medium, prompt: "Type the Korean word for friend.", context: "Use romanization.", answers: ["chingu"], note: "Chingu means friend.")
-    ]
-}
-
-private struct SentenceDropDelegate: DropDelegate {
-    let token: String
-    @Binding var tokens: [String]
-
-    func performDrop(info: DropInfo) -> Bool {
-        true
-    }
-
-    func dropEntered(info: DropInfo) {
-        guard let provider = info.itemProviders(for: [UTType.text]).first else { return }
-        provider.loadObject(ofClass: NSString.self) { object, _ in
-            guard let dragged = object as? NSString else { return }
-            DispatchQueue.main.async {
-                let draggedToken = dragged as String
-                guard draggedToken != self.token,
-                      let from = self.tokens.firstIndex(of: draggedToken),
-                      let to = self.tokens.firstIndex(of: self.token) else {
-                    return
-                }
-                withAnimation(.spring(response: 0.25, dampingFraction: 0.85)) {
-                    self.tokens.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
-                }
-            }
-        }
-    }
+    let value: String
 }
 
 private struct PairLines: View {
@@ -768,9 +924,9 @@ private struct PairLines: View {
     }
 }
 
-private struct FlexibleTokenGrid<Content: View>: View {
-    let tokens: [String]
-    let content: (String) -> Content
+private struct FlexibleSentenceTokenGrid<Content: View>: View {
+    let tokens: [SentenceToken]
+    let content: (SentenceToken) -> Content
 
     var body: some View {
         LazyVGrid(
@@ -778,7 +934,7 @@ private struct FlexibleTokenGrid<Content: View>: View {
             alignment: .leading,
             spacing: DesignSystem.Spacing.sm
         ) {
-            ForEach(tokens, id: \.self) { token in
+            ForEach(tokens) { token in
                 content(token)
             }
         }

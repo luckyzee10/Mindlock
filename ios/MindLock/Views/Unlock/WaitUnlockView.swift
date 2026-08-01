@@ -250,18 +250,24 @@ struct WaitUnlockView: View {
         }
     }
 
-    private func confirmUnlock(minutes: Int) {
+    private func confirmUnlock(minutes: Int, dismissAfterGrant: Bool = true) {
         AnalyticsService.shared.track(.unlockMinutesGranted, properties: [
             "minutes": .int(minutes),
             "unlock_method": .string(preferredUnlockMechanism.rawValue)
         ])
         limitsManager.grantFreeUnlock(minutes: minutes)
         NotificationManager.shared.postFreeUnlockNotification(minutes: minutes)
-        dismiss()
+        if dismissAfterGrant {
+            dismiss()
+        }
     }
 
     private func completeLanguageChallenge(practiced: Int, correct: Int, minutes: Int) {
-        confirmUnlock(minutes: minutes)
+        confirmUnlock(minutes: minutes, dismissAfterGrant: false)
+        showingLanguageChallenge = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+            dismiss()
+        }
     }
 
     private func startSelectedChallenge() {
@@ -276,7 +282,7 @@ struct WaitUnlockView: View {
     private var challengeIntroCopy: String {
         switch preferredUnlockMechanism {
         case .languagePractice:
-            return "Choose how much time you want to unlock, then practice a few \(SharedSettings.preferredLearningLanguage().displayName) questions."
+            return "Choose how much time you want to unlock, then complete a 4-question \(SharedSettings.preferredLearningLanguage().displayName) lesson."
         case .mindfulWait:
             return ""
         }

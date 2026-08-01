@@ -1,0 +1,3727 @@
+{
+  "courseId": "spanish_en",
+  "version": 1,
+  "sourceLanguage": "en",
+  "targetLanguage": "spanish",
+  "displayName": "Spanish",
+  "sections": [
+    {
+      "id": "spanish-cafe",
+      "unitNumber": 1,
+      "title": "Order at a cafe",
+      "theme": "Cafe basics",
+      "iconName": "cup.and.saucer.fill",
+      "lessons": [
+        {
+          "id": "spanish-cafe-1",
+          "title": "Cafe words",
+          "subtitle": "Coffee, water, and bread",
+          "iconName": "cup.and.saucer.fill",
+          "questions": [
+            {
+              "id": "es-cafe-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "café",
+              "context": "What does this Spanish word mean?",
+              "choices": [
+                "coffee",
+                "tea",
+                "milk"
+              ],
+              "correctAnswer": "coffee",
+              "acceptedAnswers": [
+                "coffee"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "café is the core word for coffee."
+            },
+            {
+              "id": "es-cafe-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "water",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "agua",
+                "pan",
+                "mesa"
+              ],
+              "correctAnswer": "agua",
+              "acceptedAnswers": [
+                "agua"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "agua means water."
+            },
+            {
+              "id": "es-cafe-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the cafe words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "azúcar = sugar, leche = milk, pan = bread",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "pan": "bread",
+                "leche": "milk",
+                "azúcar": "sugar"
+              },
+              "learningNote": "These are practical cafe and breakfast words."
+            },
+            {
+              "id": "es-cafe-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Quiero ___ café.",
+              "context": "Fill in: I want a coffee.",
+              "choices": [
+                "un",
+                "una",
+                "unos"
+              ],
+              "correctAnswer": "un",
+              "acceptedAnswers": [
+                "un"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use un before masculine singular nouns like café."
+            }
+          ]
+        },
+        {
+          "id": "spanish-cafe-2",
+          "title": "Ask politely",
+          "subtitle": "Please and thank you",
+          "iconName": "hand.thumbsup.fill",
+          "questions": [
+            {
+              "id": "es-cafe-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "please",
+              "context": "Choose the Spanish phrase.",
+              "choices": [
+                "por favor",
+                "buenas noches",
+                "de nada"
+              ],
+              "correctAnswer": "por favor",
+              "acceptedAnswers": [
+                "por favor"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "por favor is the polite way to say please."
+            },
+            {
+              "id": "es-cafe-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Spanish for thank you.",
+              "context": "Use the common everyday phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "gracias",
+              "acceptedAnswers": [
+                "gracias"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "gracias means thank you."
+            },
+            {
+              "id": "es-cafe-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "A coffee, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Un café, por favor",
+              "acceptedAnswers": [
+                "Un café, por favor"
+              ],
+              "tokens": [
+                "Un",
+                "café,",
+                "por",
+                "favor"
+              ],
+              "correctTokens": [
+                "Un",
+                "café,",
+                "por",
+                "favor"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is enough to order politely."
+            },
+            {
+              "id": "es-cafe-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "de nada",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "you're welcome",
+                "good morning",
+                "excuse me"
+              ],
+              "correctAnswer": "you're welcome",
+              "acceptedAnswers": [
+                "you're welcome"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "de nada is a common reply to thank you."
+            }
+          ]
+        },
+        {
+          "id": "spanish-cafe-3",
+          "title": "Order food",
+          "subtitle": "I want and I have",
+          "iconName": "fork.knife",
+          "questions": [
+            {
+              "id": "es-cafe-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Yo ___ un sándwich.",
+              "context": "Fill in: I want a sandwich.",
+              "choices": [
+                "quiero",
+                "quiere",
+                "quieren"
+              ],
+              "correctAnswer": "quiero",
+              "acceptedAnswers": [
+                "quiero"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Quiero means I want."
+            },
+            {
+              "id": "es-cafe-3-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "tengo hambre",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am hungry",
+                "I am thirsty",
+                "I am tired"
+              ],
+              "correctAnswer": "I am hungry",
+              "acceptedAnswers": [
+                "I am hungry"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "tengo hambre means I am hungry."
+            },
+            {
+              "id": "es-cafe-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I want bread and water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Quiero pan y agua",
+              "acceptedAnswers": [
+                "Quiero pan y agua"
+              ],
+              "tokens": [
+                "Quiero",
+                "pan",
+                "y",
+                "agua"
+              ],
+              "correctTokens": [
+                "Quiero",
+                "pan",
+                "y",
+                "agua"
+              ],
+              "pairs": {
+              },
+              "learningNote": "y connects words like and in English."
+            },
+            {
+              "id": "es-cafe-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the order words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "hambre = hunger, quiero = I want, tengo = I have",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "quiero": "I want",
+                "tengo": "I have",
+                "hambre": "hunger"
+              },
+              "learningNote": "These phrases help users ask for food quickly."
+            }
+          ]
+        },
+        {
+          "id": "spanish-cafe-4",
+          "title": "Pay the bill",
+          "subtitle": "Numbers and checkout",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "es-cafe-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "la cuenta",
+              "context": "What do you ask for at the end of a meal?",
+              "choices": [
+                "the bill",
+                "the door",
+                "the table"
+              ],
+              "correctAnswer": "the bill",
+              "acceptedAnswers": [
+                "the bill"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "la cuenta is the check or bill."
+            },
+            {
+              "id": "es-cafe-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How much is it?",
+              "context": "Choose the Spanish phrase.",
+              "choices": [
+                "¿Cuánto cuesta?",
+                "¿Dónde está?",
+                "¿Cómo te llamas?"
+              ],
+              "correctAnswer": "¿Cuánto cuesta?",
+              "acceptedAnswers": [
+                "¿Cuánto cuesta?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "¿Cuánto cuesta? asks about price."
+            },
+            {
+              "id": "es-cafe-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Spanish for three.",
+              "context": "One word or numeral form.",
+              "choices": [
+
+              ],
+              "correctAnswer": "tres",
+              "acceptedAnswers": [
+                "tres",
+                "3"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "tres means three."
+            },
+            {
+              "id": "es-cafe-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "The bill, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "La cuenta, por favor",
+              "acceptedAnswers": [
+                "La cuenta, por favor"
+              ],
+              "tokens": [
+                "La",
+                "cuenta,",
+                "por",
+                "favor"
+              ],
+              "correctTokens": [
+                "La",
+                "cuenta,",
+                "por",
+                "favor"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the practical phrase to close a restaurant interaction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-meet",
+      "unitNumber": 2,
+      "title": "Meet someone new",
+      "theme": "Introductions",
+      "iconName": "person.2.fill",
+      "lessons": [
+        {
+          "id": "spanish-meet-1",
+          "title": "Say hello",
+          "subtitle": "Greetings",
+          "iconName": "hand.wave.fill",
+          "questions": [
+            {
+              "id": "es-meet-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hola",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hello",
+                "goodbye",
+                "thanks"
+              ],
+              "correctAnswer": "hello",
+              "acceptedAnswers": [
+                "hello"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "hola is a common greeting."
+            },
+            {
+              "id": "es-meet-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "good morning",
+              "context": "Choose the Spanish phrase.",
+              "choices": [
+                "buenos días",
+                "buenas noches",
+                "adiós"
+              ],
+              "correctAnswer": "buenos días",
+              "acceptedAnswers": [
+                "buenos días"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "buenos días is used early in the day."
+            },
+            {
+              "id": "es-meet-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match greetings.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "adiós = goodbye, gracias = thanks, hola = hello",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "hola": "hello",
+                "adiós": "goodbye",
+                "gracias": "thanks"
+              },
+              "learningNote": "These cover the start and end of simple conversations."
+            },
+            {
+              "id": "es-meet-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Spanish for hello.",
+              "context": "Use the common greeting.",
+              "choices": [
+
+              ],
+              "correctAnswer": "hola",
+              "acceptedAnswers": [
+                "hola"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "hola starts everyday conversations."
+            }
+          ]
+        },
+        {
+          "id": "spanish-meet-2",
+          "title": "Names",
+          "subtitle": "Ask and answer",
+          "iconName": "person.text.rectangle.fill",
+          "questions": [
+            {
+              "id": "es-meet-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "What is your name?",
+              "context": "Choose the Spanish question.",
+              "choices": [
+                "¿Cómo te llamas?",
+                "¿Dónde vives?",
+                "¿Qué quieres?"
+              ],
+              "correctAnswer": "¿Cómo te llamas?",
+              "acceptedAnswers": [
+                "¿Cómo te llamas?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "¿Cómo te llamas? asks for someone's name."
+            },
+            {
+              "id": "es-meet-2-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "My name is Ana.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Me llamo Ana",
+              "acceptedAnswers": [
+                "Me llamo Ana"
+              ],
+              "tokens": [
+                "Me",
+                "llamo",
+                "Ana"
+              ],
+              "correctTokens": [
+                "Me",
+                "llamo",
+                "Ana"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the simplest self-introduction pattern."
+            },
+            {
+              "id": "es-meet-2-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Me ___ Luis.",
+              "context": "Fill in: My name is Luis.",
+              "choices": [
+                "llamo",
+                "llamas",
+                "llama"
+              ],
+              "correctAnswer": "llamo",
+              "acceptedAnswers": [
+                "llamo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Me llamo means my name is."
+            },
+            {
+              "id": "es-meet-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Spanish for my name is.",
+              "context": "Use the common phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "me llamo",
+              "acceptedAnswers": [
+                "me llamo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use this before saying your name."
+            }
+          ]
+        },
+        {
+          "id": "spanish-meet-3",
+          "title": "Where from?",
+          "subtitle": "Countries and origin",
+          "iconName": "globe.americas.fill",
+          "questions": [
+            {
+              "id": "es-meet-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "soy de Colombia",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am from Colombia",
+                "I live in Colombia",
+                "I go to Colombia"
+              ],
+              "correctAnswer": "I am from Colombia",
+              "acceptedAnswers": [
+                "I am from Colombia"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "de means from."
+            },
+            {
+              "id": "es-meet-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Yo ___ de Estados Unidos.",
+              "context": "Fill in: I am from the United States.",
+              "choices": [
+                "soy",
+                "eres",
+                "es"
+              ],
+              "correctAnswer": "soy",
+              "acceptedAnswers": [
+                "soy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Soy is the yo form of ser."
+            },
+            {
+              "id": "es-meet-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where are you from?",
+              "choices": [
+
+              ],
+              "correctAnswer": "¿De dónde eres?",
+              "acceptedAnswers": [
+                "¿De dónde eres?"
+              ],
+              "tokens": [
+                "¿De",
+                "dónde",
+                "eres?"
+              ],
+              "correctTokens": [
+                "¿De",
+                "dónde",
+                "eres?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a natural first-conversation question."
+            },
+            {
+              "id": "es-meet-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match identity words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "de = from, eres = you are, soy = I am",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "soy": "I am",
+                "eres": "you are",
+                "de": "from"
+              },
+              "learningNote": "Identity and origin phrases show up constantly."
+            }
+          ]
+        },
+        {
+          "id": "spanish-meet-4",
+          "title": "Nice to meet you",
+          "subtitle": "Polite small talk",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "es-meet-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "mucho gusto",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "nice to meet you",
+                "very tired",
+                "many thanks"
+              ],
+              "correctAnswer": "nice to meet you",
+              "acceptedAnswers": [
+                "nice to meet you"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "mucho gusto is useful when meeting someone."
+            },
+            {
+              "id": "es-meet-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How are you?",
+              "context": "Choose the Spanish question.",
+              "choices": [
+                "¿Cómo estás?",
+                "¿Cuánto cuesta?",
+                "¿Dónde está?"
+              ],
+              "correctAnswer": "¿Cómo estás?",
+              "acceptedAnswers": [
+                "¿Cómo estás?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "¿Cómo estás? asks how someone is doing."
+            },
+            {
+              "id": "es-meet-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Spanish for good or well.",
+              "context": "Use the short conversational reply.",
+              "choices": [
+
+              ],
+              "correctAnswer": "bien",
+              "acceptedAnswers": [
+                "bien"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bien is a common short reply."
+            },
+            {
+              "id": "es-meet-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I am well, thank you.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Estoy bien, gracias",
+              "acceptedAnswers": [
+                "Estoy bien, gracias"
+              ],
+              "tokens": [
+                "Estoy",
+                "bien,",
+                "gracias"
+              ],
+              "correctTokens": [
+                "Estoy",
+                "bien,",
+                "gracias"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This keeps a greeting exchange polite and simple."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-city",
+      "unitNumber": 3,
+      "title": "Find your way around",
+      "theme": "City travel",
+      "iconName": "map.fill",
+      "lessons": [
+        {
+          "id": "spanish-city-1",
+          "title": "Places",
+          "subtitle": "Streets and stations",
+          "iconName": "building.2.fill",
+          "questions": [
+            {
+              "id": "es-city-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "calle",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "street",
+                "store",
+                "chair"
+              ],
+              "correctAnswer": "street",
+              "acceptedAnswers": [
+                "street"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "calle means street."
+            },
+            {
+              "id": "es-city-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "station",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "estación",
+                "escuela",
+                "esquina"
+              ],
+              "correctAnswer": "estación",
+              "acceptedAnswers": [
+                "estación"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "estación is useful for transit."
+            },
+            {
+              "id": "es-city-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match city places.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "banco = bank, parque = park, tienda = store",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "tienda": "store",
+                "banco": "bank",
+                "parque": "park"
+              },
+              "learningNote": "These are common landmarks."
+            },
+            {
+              "id": "es-city-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Spanish for park.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "parque",
+              "acceptedAnswers": [
+                "parque"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "parque means park."
+            }
+          ]
+        },
+        {
+          "id": "spanish-city-2",
+          "title": "Directions",
+          "subtitle": "Left, right, straight",
+          "iconName": "arrow.triangle.turn.up.right.circle.fill",
+          "questions": [
+            {
+              "id": "es-city-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "derecha",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "right",
+                "left",
+                "straight"
+              ],
+              "correctAnswer": "right",
+              "acceptedAnswers": [
+                "right"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "derecha means right as a direction."
+            },
+            {
+              "id": "es-city-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "izquierda",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "left",
+                "near",
+                "far"
+              ],
+              "correctAnswer": "left",
+              "acceptedAnswers": [
+                "left"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "izquierda means left."
+            },
+            {
+              "id": "es-city-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Go straight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Sigue derecho",
+              "acceptedAnswers": [
+                "Sigue derecho"
+              ],
+              "tokens": [
+                "Sigue",
+                "derecho"
+              ],
+              "correctTokens": [
+                "Sigue",
+                "derecho"
+              ],
+              "pairs": {
+              },
+              "learningNote": "A compact direction phrase is easier to use in the moment."
+            },
+            {
+              "id": "es-city-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Gira a la ___.",
+              "context": "Fill in: Turn right.",
+              "choices": [
+                "derecha",
+                "calle",
+                "lejos"
+              ],
+              "correctAnswer": "derecha",
+              "acceptedAnswers": [
+                "derecha"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Gira a la derecha means turn right."
+            }
+          ]
+        },
+        {
+          "id": "spanish-city-3",
+          "title": "Ask where",
+          "subtitle": "Find what you need",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "es-city-3-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Where is the bathroom?",
+              "context": "Choose the Spanish question.",
+              "choices": [
+                "¿Dónde está el baño?",
+                "¿Cuánto cuesta el baño?",
+                "¿Cómo está el baño?"
+              ],
+              "correctAnswer": "¿Dónde está el baño?",
+              "acceptedAnswers": [
+                "¿Dónde está el baño?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "¿Dónde está? starts where-is questions."
+            },
+            {
+              "id": "es-city-3-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where is the bank?",
+              "choices": [
+
+              ],
+              "correctAnswer": "¿Dónde está el banco?",
+              "acceptedAnswers": [
+                "¿Dónde está el banco?"
+              ],
+              "tokens": [
+                "¿Dónde",
+                "está",
+                "el",
+                "banco?"
+              ],
+              "correctTokens": [
+                "¿Dónde",
+                "está",
+                "el",
+                "banco?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Swap in different place words after the where-is pattern."
+            },
+            {
+              "id": "es-city-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Spanish for bathroom.",
+              "context": "Use the common travel word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "baño",
+              "acceptedAnswers": [
+                "baño",
+                "bano"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "baño means bathroom."
+            },
+            {
+              "id": "es-city-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match question words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "cuánto = how much, cómo = how, dónde = where",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "dónde": "where",
+                "cuánto": "how much",
+                "cómo": "how"
+              },
+              "learningNote": "Question words unlock more flexible conversation."
+            }
+          ]
+        },
+        {
+          "id": "spanish-city-4",
+          "title": "Transportation",
+          "subtitle": "Buses and trains",
+          "iconName": "bus.fill",
+          "questions": [
+            {
+              "id": "es-city-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "tren",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "train",
+                "bus",
+                "taxi"
+              ],
+              "correctAnswer": "train",
+              "acceptedAnswers": [
+                "train"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "tren means train."
+            },
+            {
+              "id": "es-city-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ticket",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "boleto",
+                "bolsa",
+                "botella"
+              ],
+              "correctAnswer": "boleto",
+              "acceptedAnswers": [
+                "boleto"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "boleto is the practical word for ticket."
+            },
+            {
+              "id": "es-city-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Necesito un ___.",
+              "context": "Fill in: I need a ticket.",
+              "choices": [
+                "boleto",
+                "tren",
+                "parque"
+              ],
+              "correctAnswer": "boleto",
+              "acceptedAnswers": [
+                "boleto"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "necesito means I need."
+            },
+            {
+              "id": "es-city-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need a ticket for the bus.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Necesito un boleto para el autobús",
+              "acceptedAnswers": [
+                "Necesito un boleto para el autobús"
+              ],
+              "tokens": [
+                "Necesito",
+                "un",
+                "boleto",
+                "para",
+                "el",
+                "autobús"
+              ],
+              "correctTokens": [
+                "Necesito",
+                "un",
+                "boleto",
+                "para",
+                "el",
+                "autobús"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This combines need, ticket, and bus into one usable phrase."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-routine",
+      "unitNumber": 4,
+      "title": "Talk about your day",
+      "theme": "Daily routine",
+      "iconName": "sun.max.fill",
+      "lessons": [
+        {
+          "id": "spanish-routine-1",
+          "title": "Home",
+          "subtitle": "Rooms and objects",
+          "iconName": "house.fill",
+          "questions": [
+            {
+              "id": "es-routine-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "casa",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "house",
+                "table",
+                "morning"
+              ],
+              "correctAnswer": "house",
+              "acceptedAnswers": [
+                "house"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "casa means house or home."
+            },
+            {
+              "id": "es-routine-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "kitchen",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "cocina",
+                "cuarto",
+                "comida"
+              ],
+              "correctAnswer": "cocina",
+              "acceptedAnswers": [
+                "cocina"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "cocina means kitchen."
+            },
+            {
+              "id": "es-routine-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match home words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "mesa = table, puerta = door, silla = chair",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "mesa": "table",
+                "silla": "chair",
+                "puerta": "door"
+              },
+              "learningNote": "These are everyday home nouns."
+            },
+            {
+              "id": "es-routine-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Spanish for door.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "puerta",
+              "acceptedAnswers": [
+                "puerta"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "puerta means door."
+            }
+          ]
+        },
+        {
+          "id": "spanish-routine-2",
+          "title": "Morning",
+          "subtitle": "Wake up and start",
+          "iconName": "sunrise.fill",
+          "questions": [
+            {
+              "id": "es-routine-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "mañana",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "morning",
+                "night",
+                "week"
+              ],
+              "correctAnswer": "morning",
+              "acceptedAnswers": [
+                "morning"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "mañana means morning."
+            },
+            {
+              "id": "es-routine-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Yo ___ temprano.",
+              "context": "Fill in: I wake up early.",
+              "choices": [
+                "me levanto",
+                "te levantas",
+                "se levanta"
+              ],
+              "correctAnswer": "me levanto",
+              "acceptedAnswers": [
+                "me levanto"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Me levanto means I get up."
+            },
+            {
+              "id": "es-routine-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I drink coffee in the morning.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Bebo café por la mañana",
+              "acceptedAnswers": [
+                "Bebo café por la mañana"
+              ],
+              "tokens": [
+                "Bebo",
+                "café",
+                "por",
+                "la",
+                "mañana"
+              ],
+              "correctTokens": [
+                "Bebo",
+                "café",
+                "por",
+                "la",
+                "mañana"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This connects a routine action with time of day."
+            },
+            {
+              "id": "es-routine-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Spanish for early.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "temprano",
+              "acceptedAnswers": [
+                "temprano"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "temprano means early."
+            }
+          ]
+        },
+        {
+          "id": "spanish-routine-3",
+          "title": "Work day",
+          "subtitle": "Tasks and time",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "es-routine-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "trabajo",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "work",
+                "walk",
+                "weather"
+              ],
+              "correctAnswer": "work",
+              "acceptedAnswers": [
+                "work"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "trabajo can mean work or job depending on context."
+            },
+            {
+              "id": "es-routine-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I study",
+              "context": "Choose the Spanish phrase.",
+              "choices": [
+                "estudio",
+                "trabajo",
+                "camino"
+              ],
+              "correctAnswer": "estudio",
+              "acceptedAnswers": [
+                "estudio"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "estudio means I study."
+            },
+            {
+              "id": "es-routine-3-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Yo ___ a las nueve.",
+              "context": "Fill in: I work at nine.",
+              "choices": [
+                "trabajo",
+                "trabajas",
+                "trabaja"
+              ],
+              "correctAnswer": "trabajo",
+              "acceptedAnswers": [
+                "trabajo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Trabajo means I work."
+            },
+            {
+              "id": "es-routine-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I study Spanish at night.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Estudio español por la noche",
+              "acceptedAnswers": [
+                "Estudio español por la noche"
+              ],
+              "tokens": [
+                "Estudio",
+                "español",
+                "por",
+                "la",
+                "noche"
+              ],
+              "correctTokens": [
+                "Estudio",
+                "español",
+                "por",
+                "la",
+                "noche"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a useful habit-building sentence."
+            }
+          ]
+        },
+        {
+          "id": "spanish-routine-4",
+          "title": "Evening",
+          "subtitle": "Plans and rest",
+          "iconName": "moon.stars.fill",
+          "questions": [
+            {
+              "id": "es-routine-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "estoy cansado",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am tired",
+                "I am busy",
+                "I am ready"
+              ],
+              "correctAnswer": "I am tired",
+              "acceptedAnswers": [
+                "I am tired"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "estoy cansado means I am tired."
+            },
+            {
+              "id": "es-routine-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am going home",
+              "context": "Choose the Spanish sentence.",
+              "choices": [
+                "Voy a casa",
+                "Tengo una casa",
+                "Estoy en casa"
+              ],
+              "correctAnswer": "Voy a casa",
+              "acceptedAnswers": [
+                "Voy a casa"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Voy a casa is a practical evening sentence."
+            },
+            {
+              "id": "es-routine-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Spanish for night.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "noche",
+              "acceptedAnswers": [
+                "noche"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "noche means night."
+            },
+            {
+              "id": "es-routine-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest tonight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Quiero descansar esta noche",
+              "acceptedAnswers": [
+                "Quiero descansar esta noche"
+              ],
+              "tokens": [
+                "Quiero",
+                "descansar",
+                "esta",
+                "noche"
+              ],
+              "correctTokens": [
+                "Quiero",
+                "descansar",
+                "esta",
+                "noche"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This turns a simple want phrase into a real sentence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-grocery",
+      "unitNumber": 5,
+      "title": "Shop for groceries",
+      "theme": "Food market basics",
+      "iconName": "cart.fill",
+      "lessons": [
+        {
+          "id": "spanish-grocery-1",
+          "title": "Fruit and basics",
+          "subtitle": "Apples, rice, and eggs",
+          "iconName": "apple.logo",
+          "questions": [
+            {
+              "id": "es-grocery-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "manzana",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "apple",
+                "banana",
+                "orange"
+              ],
+              "correctAnswer": "apple",
+              "acceptedAnswers": [
+                "apple"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Manzana means apple."
+            },
+            {
+              "id": "es-grocery-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "rice",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "arroz",
+                "huevo",
+                "queso"
+              ],
+              "correctAnswer": "arroz",
+              "acceptedAnswers": [
+                "arroz"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Arroz means rice."
+            },
+            {
+              "id": "es-grocery-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match food words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "huevo = egg, pollo = chicken, queso = cheese",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "huevo": "egg",
+                "queso": "cheese",
+                "pollo": "chicken"
+              },
+              "learningNote": "These are common grocery words."
+            },
+            {
+              "id": "es-grocery-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "leche",
+              "acceptedAnswers": [
+                "leche"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Leche means milk."
+            }
+          ]
+        },
+        {
+          "id": "spanish-grocery-2",
+          "title": "At the store",
+          "subtitle": "Buying what you need",
+          "iconName": "basket.fill",
+          "questions": [
+            {
+              "id": "es-grocery-2-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Necesito ___ manzanas.",
+              "context": "Fill in: I need two apples.",
+              "choices": [
+                "dos",
+                "tres",
+                "uno"
+              ],
+              "correctAnswer": "dos",
+              "acceptedAnswers": [
+                "dos"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Dos means two."
+            },
+            {
+              "id": "es-grocery-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "caro",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "expensive",
+                "cheap",
+                "small"
+              ],
+              "correctAnswer": "expensive",
+              "acceptedAnswers": [
+                "expensive"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Caro means expensive."
+            },
+            {
+              "id": "es-grocery-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I need bread and eggs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Necesito pan y huevos",
+              "acceptedAnswers": [
+                "Necesito pan y huevos"
+              ],
+              "tokens": [
+                "Necesito",
+                "pan",
+                "y",
+                "huevos"
+              ],
+              "correctTokens": [
+                "Necesito",
+                "pan",
+                "y",
+                "huevos"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Huevos is the plural of huevo."
+            },
+            {
+              "id": "es-grocery-2-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match shopping words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "barato = cheap, bolsa = bag, tienda = store",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "barato": "cheap",
+                "tienda": "store",
+                "bolsa": "bag"
+              },
+              "learningNote": "These help you shop and compare prices."
+            }
+          ]
+        },
+        {
+          "id": "spanish-grocery-3",
+          "title": "Quantities",
+          "subtitle": "More, less, enough",
+          "iconName": "number.circle.fill",
+          "questions": [
+            {
+              "id": "es-grocery-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "más",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "more",
+                "less",
+                "enough"
+              ],
+              "correctAnswer": "more",
+              "acceptedAnswers": [
+                "more"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Más means more."
+            },
+            {
+              "id": "es-grocery-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "less",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "menos",
+                "más",
+                "mucho"
+              ],
+              "correctAnswer": "menos",
+              "acceptedAnswers": [
+                "menos"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Menos means less."
+            },
+            {
+              "id": "es-grocery-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want more water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Quiero más agua",
+              "acceptedAnswers": [
+                "Quiero más agua"
+              ],
+              "tokens": [
+                "Quiero",
+                "más",
+                "agua"
+              ],
+              "correctTokens": [
+                "Quiero",
+                "más",
+                "agua"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Más goes before the noun here."
+            },
+            {
+              "id": "es-grocery-3-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "suficiente",
+              "acceptedAnswers": [
+                "suficiente"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Suficiente means enough."
+            }
+          ]
+        },
+        {
+          "id": "spanish-grocery-4",
+          "title": "Checkout",
+          "subtitle": "Pay and leave",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "es-grocery-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "recibo",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "receipt",
+                "ticket",
+                "door"
+              ],
+              "correctAnswer": "receipt",
+              "acceptedAnswers": [
+                "receipt"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recibo means receipt."
+            },
+            {
+              "id": "es-grocery-4-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Pago con ___.",
+              "context": "Fill in: I pay with card.",
+              "choices": [
+                "tarjeta",
+                "calle",
+                "mesa"
+              ],
+              "correctAnswer": "tarjeta",
+              "acceptedAnswers": [
+                "tarjeta"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tarjeta can mean card."
+            },
+            {
+              "id": "es-grocery-4-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "Can I have the receipt?",
+              "choices": [
+
+              ],
+              "correctAnswer": "¿Me da el recibo?",
+              "acceptedAnswers": [
+                "¿Me da el recibo?"
+              ],
+              "tokens": [
+                "¿Me",
+                "da",
+                "el",
+                "recibo?"
+              ],
+              "correctTokens": [
+                "¿Me",
+                "da",
+                "el",
+                "recibo?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Me da is a practical polite request."
+            },
+            {
+              "id": "es-grocery-4-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match checkout words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "dinero = money, recibo = receipt, tarjeta = card",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "dinero": "money",
+                "tarjeta": "card",
+                "recibo": "receipt"
+              },
+              "learningNote": "Checkout words repeat often in real life."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-work",
+      "unitNumber": 6,
+      "title": "Work and study",
+      "theme": "Office and study basics",
+      "iconName": "briefcase.fill",
+      "lessons": [
+        {
+          "id": "spanish-work-1",
+          "title": "Office words",
+          "subtitle": "Meetings and tasks",
+          "iconName": "desktopcomputer",
+          "questions": [
+            {
+              "id": "es-work-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "reunión",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "meeting",
+                "message",
+                "break"
+              ],
+              "correctAnswer": "meeting",
+              "acceptedAnswers": [
+                "meeting"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Reunión means meeting."
+            },
+            {
+              "id": "es-work-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "task",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "tarea",
+                "oficina",
+                "descanso"
+              ],
+              "correctAnswer": "tarea",
+              "acceptedAnswers": [
+                "tarea"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tarea means task."
+            },
+            {
+              "id": "es-work-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match work words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "equipo = team, jefe = boss, oficina = office",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "oficina": "office",
+                "jefe": "boss",
+                "equipo": "team"
+              },
+              "learningNote": "These words help in simple work conversations."
+            },
+            {
+              "id": "es-work-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "trabajo",
+              "acceptedAnswers": [
+                "trabajo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Trabajo can mean work or job."
+            }
+          ]
+        },
+        {
+          "id": "spanish-work-2",
+          "title": "Time at work",
+          "subtitle": "Today and tomorrow",
+          "iconName": "calendar",
+          "questions": [
+            {
+              "id": "es-work-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hoy",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "today",
+                "tomorrow",
+                "yesterday"
+              ],
+              "correctAnswer": "today",
+              "acceptedAnswers": [
+                "today"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Hoy means today."
+            },
+            {
+              "id": "es-work-2-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "tomorrow",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "mañana",
+                "ayer",
+                "ahora"
+              ],
+              "correctAnswer": "mañana",
+              "acceptedAnswers": [
+                "mañana"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Mañana can mean tomorrow or morning."
+            },
+            {
+              "id": "es-work-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I have a meeting today.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Tengo una reunión hoy",
+              "acceptedAnswers": [
+                "Tengo una reunión hoy"
+              ],
+              "tokens": [
+                "Tengo",
+                "una",
+                "reunión",
+                "hoy"
+              ],
+              "correctTokens": [
+                "Tengo",
+                "una",
+                "reunión",
+                "hoy"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tengo una reunión is a useful office phrase."
+            },
+            {
+              "id": "es-work-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Trabajo ___ la tarde.",
+              "context": "Fill in: I work in the afternoon.",
+              "choices": [
+                "por",
+                "con",
+                "para"
+              ],
+              "correctAnswer": "por",
+              "acceptedAnswers": [
+                "por"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Por la tarde means in the afternoon."
+            }
+          ]
+        },
+        {
+          "id": "spanish-work-3",
+          "title": "Focus phrases",
+          "subtitle": "Busy, ready, done",
+          "iconName": "target",
+          "questions": [
+            {
+              "id": "es-work-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "estoy ocupado",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am busy",
+                "I am ready",
+                "I am done"
+              ],
+              "correctAnswer": "I am busy",
+              "acceptedAnswers": [
+                "I am busy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ocupado/ocupada changes with the speaker."
+            },
+            {
+              "id": "es-work-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am ready",
+              "context": "Choose the Spanish sentence.",
+              "choices": [
+                "Estoy listo",
+                "Estoy cansado",
+                "Estoy tarde"
+              ],
+              "correctAnswer": "Estoy listo",
+              "acceptedAnswers": [
+                "Estoy listo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Listo/lista means ready."
+            },
+            {
+              "id": "es-work-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need ten minutes.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Necesito diez minutos",
+              "acceptedAnswers": [
+                "Necesito diez minutos"
+              ],
+              "tokens": [
+                "Necesito",
+                "diez",
+                "minutos"
+              ],
+              "correctTokens": [
+                "Necesito",
+                "diez",
+                "minutos"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is useful when asking for focus time."
+            },
+            {
+              "id": "es-work-3-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "listo",
+              "acceptedAnswers": [
+                "listo",
+                "terminado"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Terminado means finished; listo can mean ready or done."
+            }
+          ]
+        },
+        {
+          "id": "spanish-work-4",
+          "title": "Simple requests",
+          "subtitle": "Help and questions",
+          "iconName": "questionmark.bubble.fill",
+          "questions": [
+            {
+              "id": "es-work-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "ayuda",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "help",
+                "question",
+                "answer"
+              ],
+              "correctAnswer": "help",
+              "acceptedAnswers": [
+                "help"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ayuda means help."
+            },
+            {
+              "id": "es-work-4-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "¿Puedes ___?",
+              "context": "Fill in: Can you help?",
+              "choices": [
+                "ayudar",
+                "comer",
+                "dormir"
+              ],
+              "correctAnswer": "ayudar",
+              "acceptedAnswers": [
+                "ayudar"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ayudar means to help."
+            },
+            {
+              "id": "es-work-4-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I have a question.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Tengo una pregunta",
+              "acceptedAnswers": [
+                "Tengo una pregunta"
+              ],
+              "tokens": [
+                "Tengo",
+                "una",
+                "pregunta"
+              ],
+              "correctTokens": [
+                "Tengo",
+                "una",
+                "pregunta"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Pregunta means question."
+            },
+            {
+              "id": "es-work-4-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match request words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ayudar = to help, pregunta = question, respuesta = answer",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ayudar": "to help",
+                "pregunta": "question",
+                "respuesta": "answer"
+              },
+              "learningNote": "These make workplace conversations more flexible."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-travel",
+      "unitNumber": 7,
+      "title": "Travel basics",
+      "theme": "Hotels and plans",
+      "iconName": "airplane",
+      "lessons": [
+        {
+          "id": "spanish-travel-1",
+          "title": "Hotel words",
+          "subtitle": "Rooms and reservations",
+          "iconName": "bed.double.fill",
+          "questions": [
+            {
+              "id": "es-travel-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hotel",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hotel",
+                "airport",
+                "station"
+              ],
+              "correctAnswer": "hotel",
+              "acceptedAnswers": [
+                "hotel"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Hotel is similar in English and Spanish."
+            },
+            {
+              "id": "es-travel-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "room",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "habitación",
+                "boleto",
+                "calle"
+              ],
+              "correctAnswer": "habitación",
+              "acceptedAnswers": [
+                "habitación"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Habitación means room."
+            },
+            {
+              "id": "es-travel-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match hotel words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "cama = bed, llave = key, maleta = suitcase",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "llave": "key",
+                "cama": "bed",
+                "maleta": "suitcase"
+              },
+              "learningNote": "These are useful at a hotel desk."
+            },
+            {
+              "id": "es-travel-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "maleta",
+              "acceptedAnswers": [
+                "maleta"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Maleta means suitcase."
+            }
+          ]
+        },
+        {
+          "id": "spanish-travel-2",
+          "title": "Check in",
+          "subtitle": "Reservation phrases",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "es-travel-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "reserva",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "reservation",
+                "receipt",
+                "breakfast"
+              ],
+              "correctAnswer": "reservation",
+              "acceptedAnswers": [
+                "reservation"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Reserva means reservation."
+            },
+            {
+              "id": "es-travel-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Tengo una ___.",
+              "context": "Fill in: I have a reservation.",
+              "choices": [
+                "reserva",
+                "calle",
+                "cuenta"
+              ],
+              "correctAnswer": "reserva",
+              "acceptedAnswers": [
+                "reserva"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tengo una reserva is a standard hotel phrase."
+            },
+            {
+              "id": "es-travel-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I have a reservation.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Tengo una reserva",
+              "acceptedAnswers": [
+                "Tengo una reserva"
+              ],
+              "tokens": [
+                "Tengo",
+                "una",
+                "reserva"
+              ],
+              "correctTokens": [
+                "Tengo",
+                "una",
+                "reserva"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This phrase gets you started at check-in."
+            },
+            {
+              "id": "es-travel-2-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match check-in words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "nombre = name, pasaporte = passport, reserva = reservation",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "pasaporte": "passport",
+                "nombre": "name",
+                "reserva": "reservation"
+              },
+              "learningNote": "Hotels often ask for these."
+            }
+          ]
+        },
+        {
+          "id": "spanish-travel-3",
+          "title": "Airport basics",
+          "subtitle": "Flights and gates",
+          "iconName": "airplane.departure",
+          "questions": [
+            {
+              "id": "es-travel-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "vuelo",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "flight",
+                "train",
+                "room"
+              ],
+              "correctAnswer": "flight",
+              "acceptedAnswers": [
+                "flight"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Vuelo means flight."
+            },
+            {
+              "id": "es-travel-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "gate",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "puerta",
+                "boleto",
+                "maleta"
+              ],
+              "correctAnswer": "puerta",
+              "acceptedAnswers": [
+                "puerta"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Puerta can mean door or airport gate."
+            },
+            {
+              "id": "es-travel-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "Where is my gate?",
+              "choices": [
+
+              ],
+              "correctAnswer": "¿Dónde está mi puerta?",
+              "acceptedAnswers": [
+                "¿Dónde está mi puerta?"
+              ],
+              "tokens": [
+                "¿Dónde",
+                "está",
+                "mi",
+                "puerta?"
+              ],
+              "correctTokens": [
+                "¿Dónde",
+                "está",
+                "mi",
+                "puerta?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Mi means my."
+            },
+            {
+              "id": "es-travel-3-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "vuelo",
+              "acceptedAnswers": [
+                "vuelo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Vuelo is a core travel word."
+            }
+          ]
+        },
+        {
+          "id": "spanish-travel-4",
+          "title": "Plans",
+          "subtitle": "Today, tomorrow, later",
+          "iconName": "map.fill",
+          "questions": [
+            {
+              "id": "es-travel-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "después",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "later",
+                "before",
+                "now"
+              ],
+              "correctAnswer": "later",
+              "acceptedAnswers": [
+                "later"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Después means later or after."
+            },
+            {
+              "id": "es-travel-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "now",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "ahora",
+                "ayer",
+                "lejos"
+              ],
+              "correctAnswer": "ahora",
+              "acceptedAnswers": [
+                "ahora"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ahora means now."
+            },
+            {
+              "id": "es-travel-4-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I travel tomorrow.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Viajo mañana",
+              "acceptedAnswers": [
+                "Viajo mañana"
+              ],
+              "tokens": [
+                "Viajo",
+                "mañana"
+              ],
+              "correctTokens": [
+                "Viajo",
+                "mañana"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Viajo means I travel."
+            },
+            {
+              "id": "es-travel-4-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match time words.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ahora = now, ayer = yesterday, después = later",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ahora": "now",
+                "después": "later",
+                "ayer": "yesterday"
+              },
+              "learningNote": "Time words help build plans."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spanish-feelings",
+      "unitNumber": 8,
+      "title": "Feelings and plans",
+      "theme": "Real conversations",
+      "iconName": "heart.fill",
+      "lessons": [
+        {
+          "id": "spanish-feelings-1",
+          "title": "Feelings",
+          "subtitle": "Happy, tired, calm",
+          "iconName": "face.smiling.fill",
+          "questions": [
+            {
+              "id": "es-feelings-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "feliz",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "happy",
+                "sad",
+                "calm"
+              ],
+              "correctAnswer": "happy",
+              "acceptedAnswers": [
+                "happy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Feliz means happy."
+            },
+            {
+              "id": "es-feelings-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "calm",
+              "context": "Choose the Spanish word.",
+              "choices": [
+                "tranquilo",
+                "triste",
+                "ocupado"
+              ],
+              "correctAnswer": "tranquilo",
+              "acceptedAnswers": [
+                "tranquilo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tranquilo/tranquila means calm."
+            },
+            {
+              "id": "es-feelings-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match feelings.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "cansado = tired, feliz = happy, triste = sad",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "triste": "sad",
+                "cansado": "tired",
+                "feliz": "happy"
+              },
+              "learningNote": "Feelings use estar in many everyday contexts."
+            },
+            {
+              "id": "es-feelings-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "cansado",
+              "acceptedAnswers": [
+                "cansado",
+                "cansada"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use cansado or cansada depending on the speaker."
+            }
+          ]
+        },
+        {
+          "id": "spanish-feelings-2",
+          "title": "Say how you feel",
+          "subtitle": "Use estoy",
+          "iconName": "bubble.left.and.bubble.right.fill",
+          "questions": [
+            {
+              "id": "es-feelings-2-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Yo ___ feliz.",
+              "context": "Fill in: I am happy.",
+              "choices": [
+                "estoy",
+                "soy",
+                "tengo"
+              ],
+              "correctAnswer": "estoy",
+              "acceptedAnswers": [
+                "estoy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use estoy for temporary feelings."
+            },
+            {
+              "id": "es-feelings-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "estoy tranquilo",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am calm",
+                "I am hungry",
+                "I am late"
+              ],
+              "correctAnswer": "I am calm",
+              "acceptedAnswers": [
+                "I am calm"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tranquilo changes to tranquila for many feminine speakers."
+            },
+            {
+              "id": "es-feelings-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I am tired today.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Estoy cansado hoy",
+              "acceptedAnswers": [
+                "Estoy cansado hoy"
+              ],
+              "tokens": [
+                "Estoy",
+                "cansado",
+                "hoy"
+              ],
+              "correctTokens": [
+                "Estoy",
+                "cansado",
+                "hoy"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Hoy means today."
+            },
+            {
+              "id": "es-feelings-2-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match short replies.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "estoy bien = I am well, estoy listo = I am ready, estoy mal = I am not well",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "estoy bien": "I am well",
+                "estoy mal": "I am not well",
+                "estoy listo": "I am ready"
+              },
+              "learningNote": "These replies are useful in quick conversations."
+            }
+          ]
+        },
+        {
+          "id": "spanish-feelings-3",
+          "title": "Wants and plans",
+          "subtitle": "Want to go, want to rest",
+          "iconName": "figure.walk",
+          "questions": [
+            {
+              "id": "es-feelings-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "quiero ir",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I want to go",
+                "I need to work",
+                "I have to pay"
+              ],
+              "correctAnswer": "I want to go",
+              "acceptedAnswers": [
+                "I want to go"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ir means to go."
+            },
+            {
+              "id": "es-feelings-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Quiero ___ a casa.",
+              "context": "Fill in: I want to go home.",
+              "choices": [
+                "ir",
+                "soy",
+                "hay"
+              ],
+              "correctAnswer": "ir",
+              "acceptedAnswers": [
+                "ir"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Quiero ir means I want to go."
+            },
+            {
+              "id": "es-feelings-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest now.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Quiero descansar ahora",
+              "acceptedAnswers": [
+                "Quiero descansar ahora"
+              ],
+              "tokens": [
+                "Quiero",
+                "descansar",
+                "ahora"
+              ],
+              "correctTokens": [
+                "Quiero",
+                "descansar",
+                "ahora"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ahora means now."
+            },
+            {
+              "id": "es-feelings-3-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Spanish sentence.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ir",
+              "acceptedAnswers": [
+                "ir"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ir is an essential verb."
+            }
+          ]
+        },
+        {
+          "id": "spanish-feelings-4",
+          "title": "Keep it going",
+          "subtitle": "A short real exchange",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "es-feelings-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "¿Qué quieres hacer?",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "What do you want to do?",
+                "Where are you from?",
+                "How much is it?"
+              ],
+              "correctAnswer": "What do you want to do?",
+              "acceptedAnswers": [
+                "What do you want to do?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Hacer means to do or to make."
+            },
+            {
+              "id": "es-feelings-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I want to eat.",
+              "context": "Choose the Spanish sentence.",
+              "choices": [
+                "Quiero comer",
+                "Quiero dormir",
+                "Quiero pagar"
+              ],
+              "correctAnswer": "Quiero comer",
+              "acceptedAnswers": [
+                "Quiero comer"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Comer means to eat."
+            },
+            {
+              "id": "es-feelings-4-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to learn more.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Quiero aprender más",
+              "acceptedAnswers": [
+                "Quiero aprender más"
+              ],
+              "tokens": [
+                "Quiero",
+                "aprender",
+                "más"
+              ],
+              "correctTokens": [
+                "Quiero",
+                "aprender",
+                "más"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Aprender means to learn."
+            },
+            {
+              "id": "es-feelings-4-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match action verbs.",
+              "context": "Connect Spanish to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "aprender = to learn, comer = to eat, dormir = to sleep",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "comer": "to eat",
+                "dormir": "to sleep",
+                "aprender": "to learn"
+              },
+              "learningNote": "These verbs make your Spanish much more flexible."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

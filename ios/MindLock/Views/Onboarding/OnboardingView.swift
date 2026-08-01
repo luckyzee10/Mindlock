@@ -724,7 +724,6 @@ struct ScreenTimePermissionView: View {
     @State private var isRequestingPermission = false
     @State private var showingError = false
     @State private var errorMessage = ""
-    @State private var showingSkipWarning = false
     
     var body: some View {
         VStack(spacing: DesignSystem.Spacing.xl) {
@@ -768,18 +767,12 @@ struct ScreenTimePermissionView: View {
                     }
                     .mindLockButton(style: .primary)
                 } else {
-                    Button(isRequestingPermission ? "Requesting..." : "Enable Screen Time") {
+                    Button(isRequestingPermission ? "Continuing..." : "Continue") {
                         requestPermission()
                     }
                     .mindLockButton(style: .primary)
                     .disabled(isRequestingPermission)
                     .opacity(isRequestingPermission ? 0.6 : 1.0)
-                    
-                    Button("Skip for now") {
-                        showingSkipWarning = true
-                    }
-                    .buttonStyle(PlainButtonStyle())
-                    .foregroundColor(DesignSystem.Colors.textSecondary)
                 }
                 
                 // Debug info (remove in production)
@@ -799,18 +792,9 @@ struct ScreenTimePermissionView: View {
         .onDisappear {
             textOpacity = 0.0
         }
-        .alert("Screen Time Required", isPresented: $showingSkipWarning) {
-            Button("Enable Now") { requestPermission() }
-            Button("Continue Anyway", role: .destructive) { onContinue() }
-        } message: {
-            Text("MindLock relies on Screen Time to monitor usage and block distracting apps. Without it, core features won’t work. You can enable Screen Time anytime in Settings.")
-        }
         .alert("Permission Error", isPresented: $showingError) {
             Button("Try Again") {
                 requestPermission()
-            }
-            Button("Skip", role: .cancel) {
-                onContinue()
             }
             if screenTimeManager.authorizationStatus == .denied {
                 Button("Open Settings") {
@@ -823,7 +807,7 @@ struct ScreenTimePermissionView: View {
     }
     
     private func requestPermission() {
-        print("🔐 User tapped Enable Screen Time button")
+        print("🔐 User tapped Continue on Screen Time permission step")
         print("🔐 Current status: \(screenTimeManager.authorizationStatus)")
         
         isRequestingPermission = true
@@ -1086,7 +1070,7 @@ struct ConceptExplanationView: View {
     ]
 
     private let unlockOptions: [(SharedSettings.UnlockMechanism, String, String, String)] = [
-        (.languagePractice, "3", "Language practice", "Answer 3 quick questions to unlock more time."),
+        (.languagePractice, "4", "Language practice", "Complete a 4-question lesson to unlock more time."),
         (.mindfulWait, "30s", "Mindful wait", "Pause, breathe, then unlock more time.")
     ]
 
@@ -2332,7 +2316,7 @@ struct OnboardingPage {
             isImpactPage: true,
         ),
         OnboardingPage(
-            title: "Enable Screen Time",
+            title: "Screen Time Access",
             description: "MindLock needs Screen Time access to monitor your app usage and enforce healthy digital boundaries.",
             iconName: "iphone.and.arrow.forward",
             accentColor: DesignSystem.Colors.primary,

@@ -22,6 +22,7 @@ struct SetupView: View {
     @State private var tokenPendingWait: IdentifiedApplicationToken?
     @State private var subscriptionActive = SharedSettings.isSubscriptionActive()
     @State private var preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+    @State private var preferredLearningLanguage = SharedSettings.preferredLearningLanguage()
     @State private var showingMindLockPlusPaywall = false
     @State private var showingUnlockMechanismSettings = false
     @AppStorage("setup.walkthrough.completed") private var setupWalkthroughCompleted = false
@@ -78,6 +79,7 @@ struct SetupView: View {
                         LanguageUnlockSection(
                             subscriptionActive: subscriptionActive,
                             preferredUnlockMechanism: preferredUnlockMechanism,
+                            preferredLearningLanguage: preferredLearningLanguage,
                             onOpenSettings: { showingUnlockMechanismSettings = true },
                             onSubscribe: { showingMindLockPlusPaywall = true }
                         )
@@ -95,7 +97,7 @@ struct SetupView: View {
                     UnlockPromptView()
                 }
                 .sheet(isPresented: $showingUnlockMechanismSettings, onDismiss: loadUserPreferences) {
-                    UnlockMechanismSettingsView()
+                    UnlockSettingsView()
                 }
                 .sheet(item: $tokenPendingWait) { wrapper in
                     WaitUnlockView(appToken: wrapper.token)
@@ -126,11 +128,15 @@ struct SetupView: View {
         .onReceive(NotificationCenter.default.publisher(for: SharedSettings.unlockMechanismChangedNotification)) { _ in
             preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
         }
+        .onReceive(NotificationCenter.default.publisher(for: SharedSettings.learningLanguageChangedNotification)) { _ in
+            preferredLearningLanguage = SharedSettings.preferredLearningLanguage()
+        }
     }
 
     private func loadUserPreferences() {
         subscriptionActive = SharedSettings.isSubscriptionActive()
         preferredUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+        preferredLearningLanguage = SharedSettings.preferredLearningLanguage()
     }
 
     // Tokens that have reached today's limit (union of computed + recent blocks)
@@ -144,7 +150,7 @@ struct SetupView: View {
     private var reachedLimitTokens: [ApplicationToken] {
         // Depend on recentlyBlockedTokens for SwiftUI updates, but read canonical snapshot for accuracy.
         _ = limitsManager.recentlyBlockedTokens
-        var tokens = SharedSettings.currentShieldSnapshot().allTokens
+        var tokens = SharedSettings.currentShieldSnapshot().activelyShieldedTokens
         tokens.formUnion(ManagedSettingsStore().shield.applications ?? [])
         return Array(tokens)
     }
@@ -376,9 +382,10 @@ private struct LimitReachedGlobalCard: View {
     }
 }
 
-private struct UnlockMechanismSettingsView: View {
+private struct UnlockSettingsView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var selection = SharedSettings.preferredUnlockMechanism()
+    @State private var selectedUnlockMechanism = SharedSettings.preferredUnlockMechanism()
+    @State private var selectedLanguage = SharedSettings.preferredLearningLanguage()
 
     private let options: [(SharedSettings.UnlockMechanism, String, String)] = [
         (.mindfulWait, "clock.arrow.circlepath", "Mindful wait"),
@@ -387,64 +394,133 @@ private struct UnlockMechanismSettingsView: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: DesignSystem.Spacing.lg) {
-                VStack(spacing: DesignSystem.Spacing.sm) {
-                    Text("Choose your unlock method")
+            ScrollView {
+                VStack(alignment: .leading, spacing: DesignSystem.Spacing.xl) {
+                    Text("Settings")
                         .font(DesignSystem.Typography.title1)
                         .fontWeight(.bold)
                         .foregroundColor(DesignSystem.Colors.textPrimary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, DesignSystem.Spacing.xl)
+
+                    unlockMethodSection
+                    learningLanguageSection
                 }
-                .padding(.top, DesignSystem.Spacing.xl)
-
-                VStack(spacing: DesignSystem.Spacing.sm) {
-                    ForEach(options, id: \.0.rawValue) { option in
-                        Button {
-                            selection = option.0
-                            SharedSettings.setPreferredUnlockMechanism(option.0)
-                        } label: {
-                            HStack(spacing: DesignSystem.Spacing.md) {
-                                Image(systemName: option.1)
-                                    .font(.system(size: 18, weight: .semibold))
-                                    .foregroundColor(selection == option.0 ? .white : DesignSystem.Colors.primary)
-                                    .frame(width: 42, height: 42)
-                                    .background(selection == option.0 ? DesignSystem.Colors.primary : DesignSystem.Colors.primary.opacity(0.1))
-                                    .clipShape(Circle())
-
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(option.2)
-                                        .font(DesignSystem.Typography.body.weight(.semibold))
-                                        .foregroundColor(DesignSystem.Colors.textPrimary)
-                                }
-
-                                Spacer()
-
-                                Image(systemName: selection == option.0 ? "checkmark.circle.fill" : "circle")
-                                    .foregroundColor(selection == option.0 ? DesignSystem.Colors.primary : DesignSystem.Colors.textTertiary)
-                            }
-                            .padding(DesignSystem.Spacing.md)
-                            .background(selection == option.0 ? DesignSystem.Colors.primary.opacity(0.12) : DesignSystem.Colors.surface)
-                            .cornerRadius(DesignSystem.CornerRadius.lg)
-                        }
-                        .buttonStyle(.plain)
-                    }
-                }
-
-                Spacer()
-
+                .padding(.horizontal, DesignSystem.Spacing.lg)
+                .padding(.bottom, DesignSystem.Spacing.xl)
+            }
+            .background(DesignSystem.AppBackground())
+            .safeAreaInset(edge: .bottom) {
                 Button("Done") { dismiss() }
                     .mindLockButton(style: .primary)
+                    .padding(.horizontal, DesignSystem.Spacing.lg)
+                    .padding(.bottom, DesignSystem.Spacing.md)
+                    .background(DesignSystem.Colors.background.opacity(0.95))
             }
-            .padding(.horizontal, DesignSystem.Spacing.lg)
-            .padding(.bottom, DesignSystem.Spacing.xl)
-            .background(DesignSystem.AppBackground())
             .navigationBarHidden(true)
         }
+    }
+
+    private var unlockMethodSection: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text("Unlock method")
+                .font(DesignSystem.Typography.headline)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                ForEach(options, id: \.0.rawValue) { option in
+                    Button {
+                        selectedUnlockMechanism = option.0
+                        SharedSettings.setPreferredUnlockMechanism(option.0)
+                    } label: {
+                        settingsOptionRow(
+                            title: option.2,
+                            subtitle: nil,
+                            icon: option.1,
+                            selected: selectedUnlockMechanism == option.0
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private var learningLanguageSection: some View {
+        VStack(alignment: .leading, spacing: DesignSystem.Spacing.md) {
+            Text("Learning language")
+                .font(DesignSystem.Typography.headline)
+                .foregroundColor(DesignSystem.Colors.textPrimary)
+
+            VStack(spacing: DesignSystem.Spacing.sm) {
+                ForEach(SharedSettings.LearningLanguage.allCases) { language in
+                    Button {
+                        selectedLanguage = language
+                        SharedSettings.setPreferredLearningLanguage(language)
+                    } label: {
+                        settingsOptionRow(
+                            title: language.displayName,
+                            subtitle: nil,
+                            iconText: language.flag,
+                            selected: selectedLanguage == language
+                        )
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    private func settingsOptionRow(
+        title: String,
+        subtitle: String?,
+        icon: String? = nil,
+        iconText: String? = nil,
+        selected: Bool
+    ) -> some View {
+        HStack(spacing: DesignSystem.Spacing.md) {
+            Group {
+                if let icon {
+                    Image(systemName: icon)
+                        .font(.system(size: 18, weight: .semibold))
+                } else if let iconText {
+                    Text(iconText)
+                        .font(.system(size: 24, weight: .semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.68)
+                }
+            }
+            .foregroundColor(selected ? .white : DesignSystem.Colors.primary)
+            .frame(width: 48, height: 42)
+            .background(selected ? DesignSystem.Colors.primary : DesignSystem.Colors.primary.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: DesignSystem.CornerRadius.md, style: .continuous))
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(title)
+                    .font(DesignSystem.Typography.body.weight(.semibold))
+                    .foregroundColor(DesignSystem.Colors.textPrimary)
+                if let subtitle {
+                    Text(subtitle)
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                }
+            }
+
+            Spacer()
+
+            Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(selected ? DesignSystem.Colors.primary : DesignSystem.Colors.textTertiary)
+        }
+        .padding(DesignSystem.Spacing.md)
+        .background(selected ? DesignSystem.Colors.primary.opacity(0.12) : DesignSystem.Colors.surface)
+        .cornerRadius(DesignSystem.CornerRadius.lg)
     }
 }
 
 private struct LanguageUnlockSection: View {
     let subscriptionActive: Bool
     let preferredUnlockMechanism: SharedSettings.UnlockMechanism
+    let preferredLearningLanguage: SharedSettings.LearningLanguage
     let onOpenSettings: () -> Void
     let onSubscribe: () -> Void
 
@@ -503,6 +579,11 @@ private struct LanguageUnlockSection: View {
                 Text(preferredUnlockMechanism.displayName)
                     .font(DesignSystem.Typography.body.weight(.semibold))
                     .foregroundColor(DesignSystem.Colors.textPrimary)
+                if preferredUnlockMechanism == .languagePractice {
+                    Text(preferredLearningLanguage.displayName)
+                        .font(DesignSystem.Typography.caption)
+                        .foregroundColor(DesignSystem.Colors.textSecondary)
+                }
             }
         }
         .padding()

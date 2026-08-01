@@ -1,0 +1,3737 @@
+{
+  "courseId": "french_en",
+  "version": 1,
+  "sourceLanguage": "en",
+  "targetLanguage": "french",
+  "displayName": "French",
+  "sections": [
+    {
+      "id": "french-cafe",
+      "unitNumber": 1,
+      "title": "Order at a cafe",
+      "theme": "Cafe basics",
+      "iconName": "cup.and.saucer.fill",
+      "lessons": [
+        {
+          "id": "french-cafe-1",
+          "title": "Cafe words",
+          "subtitle": "Coffee, water, and bread",
+          "iconName": "cup.and.saucer.fill",
+          "questions": [
+            {
+              "id": "fr-cafe-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "café",
+              "context": "What does this French word mean?",
+              "choices": [
+                "coffee",
+                "tea",
+                "milk"
+              ],
+              "correctAnswer": "coffee",
+              "acceptedAnswers": [
+                "coffee"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "café is the core word for coffee."
+            },
+            {
+              "id": "fr-cafe-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "water",
+              "context": "Choose the French word.",
+              "choices": [
+                "eau",
+                "pain",
+                "table"
+              ],
+              "correctAnswer": "eau",
+              "acceptedAnswers": [
+                "eau"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "eau means water."
+            },
+            {
+              "id": "fr-cafe-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the cafe words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "lait = milk, pain = bread, sucre = sugar",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "pain": "bread",
+                "lait": "milk",
+                "sucre": "sugar"
+              },
+              "learningNote": "These are practical cafe and breakfast words."
+            },
+            {
+              "id": "fr-cafe-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Je veux ___ café.",
+              "context": "Fill in: I want a coffee.",
+              "choices": [
+                "un",
+                "une",
+                "des"
+              ],
+              "correctAnswer": "un",
+              "acceptedAnswers": [
+                "un"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use un before masculine singular nouns like café."
+            }
+          ]
+        },
+        {
+          "id": "french-cafe-2",
+          "title": "Ask politely",
+          "subtitle": "Please and thank you",
+          "iconName": "hand.thumbsup.fill",
+          "questions": [
+            {
+              "id": "fr-cafe-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "please",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "s'il vous plaît",
+                "bonne nuit",
+                "de rien"
+              ],
+              "correctAnswer": "s'il vous plaît",
+              "acceptedAnswers": [
+                "s'il vous plaît"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "s'il vous plaît is the polite way to say please."
+            },
+            {
+              "id": "fr-cafe-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type French for thank you.",
+              "context": "Use the common everyday phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "merci",
+              "acceptedAnswers": [
+                "merci"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "merci means thank you."
+            },
+            {
+              "id": "fr-cafe-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "A coffee, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Un café, s'il vous plaît",
+              "acceptedAnswers": [
+                "Un café, s'il vous plaît"
+              ],
+              "tokens": [
+                "Un",
+                "café,",
+                "s'il",
+                "vous",
+                "plaît"
+              ],
+              "correctTokens": [
+                "Un",
+                "café,",
+                "s'il",
+                "vous",
+                "plaît"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is enough to order politely."
+            },
+            {
+              "id": "fr-cafe-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "de rien",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "you're welcome",
+                "good morning",
+                "excuse me"
+              ],
+              "correctAnswer": "you're welcome",
+              "acceptedAnswers": [
+                "you're welcome"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "de rien is a common reply to thank you."
+            }
+          ]
+        },
+        {
+          "id": "french-cafe-3",
+          "title": "Order food",
+          "subtitle": "I want and I have",
+          "iconName": "fork.knife",
+          "questions": [
+            {
+              "id": "fr-cafe-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je ___ un sandwich.",
+              "context": "Fill in: I want a sandwich.",
+              "choices": [
+                "veux",
+                "veut",
+                "voulez"
+              ],
+              "correctAnswer": "veux",
+              "acceptedAnswers": [
+                "veux"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Je veux means I want."
+            },
+            {
+              "id": "fr-cafe-3-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "j'ai faim",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am hungry",
+                "I am thirsty",
+                "I am tired"
+              ],
+              "correctAnswer": "I am hungry",
+              "acceptedAnswers": [
+                "I am hungry"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "j'ai faim means I am hungry."
+            },
+            {
+              "id": "fr-cafe-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I want bread and water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je veux du pain et de l'eau",
+              "acceptedAnswers": [
+                "Je veux du pain et de l'eau"
+              ],
+              "tokens": [
+                "Je",
+                "veux",
+                "du",
+                "pain",
+                "et",
+                "de",
+                "l'eau"
+              ],
+              "correctTokens": [
+                "Je",
+                "veux",
+                "du",
+                "pain",
+                "et",
+                "de",
+                "l'eau"
+              ],
+              "pairs": {
+              },
+              "learningNote": "et connects words like and in English."
+            },
+            {
+              "id": "fr-cafe-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the order words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "faim = hunger, j'ai = I have, veux = I want",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "veux": "I want",
+                "j'ai": "I have",
+                "faim": "hunger"
+              },
+              "learningNote": "These phrases help users ask for food quickly."
+            }
+          ]
+        },
+        {
+          "id": "french-cafe-4",
+          "title": "Pay the bill",
+          "subtitle": "Numbers and checkout",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "fr-cafe-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "l'addition",
+              "context": "What do you ask for at the end of a meal?",
+              "choices": [
+                "the bill",
+                "the door",
+                "the table"
+              ],
+              "correctAnswer": "the bill",
+              "acceptedAnswers": [
+                "the bill"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "l'addition is the check or bill."
+            },
+            {
+              "id": "fr-cafe-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How much is it?",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "Combien ça coûte ?",
+                "Où est-ce ?",
+                "Comment tu t'appelles ?"
+              ],
+              "correctAnswer": "Combien ça coûte ?",
+              "acceptedAnswers": [
+                "Combien ça coûte ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Combien ça coûte ? asks about price."
+            },
+            {
+              "id": "fr-cafe-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type French for three.",
+              "context": "One word or numeral form.",
+              "choices": [
+
+              ],
+              "correctAnswer": "trois",
+              "acceptedAnswers": [
+                "trois",
+                "3"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "trois means three."
+            },
+            {
+              "id": "fr-cafe-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "The bill, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "L'addition, s'il vous plaît",
+              "acceptedAnswers": [
+                "L'addition, s'il vous plaît"
+              ],
+              "tokens": [
+                "L'addition,",
+                "s'il",
+                "vous",
+                "plaît"
+              ],
+              "correctTokens": [
+                "L'addition,",
+                "s'il",
+                "vous",
+                "plaît"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the practical phrase to close a restaurant interaction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-meet",
+      "unitNumber": 2,
+      "title": "Meet someone new",
+      "theme": "Introductions",
+      "iconName": "person.2.fill",
+      "lessons": [
+        {
+          "id": "french-meet-1",
+          "title": "Say hello",
+          "subtitle": "Greetings",
+          "iconName": "hand.wave.fill",
+          "questions": [
+            {
+              "id": "fr-meet-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "bonjour",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hello",
+                "goodbye",
+                "thanks"
+              ],
+              "correctAnswer": "hello",
+              "acceptedAnswers": [
+                "hello"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bonjour is a common greeting."
+            },
+            {
+              "id": "fr-meet-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "good morning",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "bonjour",
+                "bonne nuit",
+                "au revoir"
+              ],
+              "correctAnswer": "bonjour",
+              "acceptedAnswers": [
+                "bonjour"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bonjour is used early in the day."
+            },
+            {
+              "id": "fr-meet-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match greetings.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "au revoir = goodbye, bonjour = hello, merci = thanks",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "bonjour": "hello",
+                "au revoir": "goodbye",
+                "merci": "thanks"
+              },
+              "learningNote": "These cover the start and end of simple conversations."
+            },
+            {
+              "id": "fr-meet-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type French for hello.",
+              "context": "Use the common greeting.",
+              "choices": [
+
+              ],
+              "correctAnswer": "bonjour",
+              "acceptedAnswers": [
+                "bonjour",
+                "salut"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bonjour starts everyday conversations."
+            }
+          ]
+        },
+        {
+          "id": "french-meet-2",
+          "title": "Names",
+          "subtitle": "Ask and answer",
+          "iconName": "person.text.rectangle.fill",
+          "questions": [
+            {
+              "id": "fr-meet-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "What is your name?",
+              "context": "Choose the French question.",
+              "choices": [
+                "Comment tu t'appelles ?",
+                "Où habites-tu ?",
+                "Que veux-tu ?"
+              ],
+              "correctAnswer": "Comment tu t'appelles ?",
+              "acceptedAnswers": [
+                "Comment tu t'appelles ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Comment tu t'appelles ? asks for someone's name."
+            },
+            {
+              "id": "fr-meet-2-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "My name is Ana.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je m'appelle Ana",
+              "acceptedAnswers": [
+                "Je m'appelle Ana"
+              ],
+              "tokens": [
+                "Je",
+                "m'appelle",
+                "Ana"
+              ],
+              "correctTokens": [
+                "Je",
+                "m'appelle",
+                "Ana"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the simplest self-introduction pattern."
+            },
+            {
+              "id": "fr-meet-2-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je ___ Luis.",
+              "context": "Fill in: My name is Luis.",
+              "choices": [
+                "m'appelle",
+                "t'appelles",
+                "s'appelle"
+              ],
+              "correctAnswer": "m'appelle",
+              "acceptedAnswers": [
+                "m'appelle"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Je m'appelle means my name is."
+            },
+            {
+              "id": "fr-meet-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type French for my name is.",
+              "context": "Use the common phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "je m'appelle",
+              "acceptedAnswers": [
+                "je m'appelle",
+                "m'appelle"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use this before saying your name."
+            }
+          ]
+        },
+        {
+          "id": "french-meet-3",
+          "title": "Where from?",
+          "subtitle": "Countries and origin",
+          "iconName": "globe.americas.fill",
+          "questions": [
+            {
+              "id": "fr-meet-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "je viens de Colombie",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am from Colombia",
+                "I live in Colombia",
+                "I go to Colombia"
+              ],
+              "correctAnswer": "I am from Colombia",
+              "acceptedAnswers": [
+                "I am from Colombia"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "de means from."
+            },
+            {
+              "id": "fr-meet-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je ___ des États-Unis.",
+              "context": "Fill in: I am from the United States.",
+              "choices": [
+                "viens",
+                "viens-tu",
+                "vient"
+              ],
+              "correctAnswer": "viens",
+              "acceptedAnswers": [
+                "viens"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Je viens de means I come from."
+            },
+            {
+              "id": "fr-meet-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where are you from?",
+              "choices": [
+
+              ],
+              "correctAnswer": "D'où viens-tu ?",
+              "acceptedAnswers": [
+                "D'où viens-tu ?"
+              ],
+              "tokens": [
+                "D'où",
+                "viens-tu",
+                "?"
+              ],
+              "correctTokens": [
+                "D'où",
+                "viens-tu",
+                "?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a natural first-conversation question."
+            },
+            {
+              "id": "fr-meet-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match identity words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "de = from, je viens = I come, tu es = you are",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "je viens": "I come",
+                "tu es": "you are",
+                "de": "from"
+              },
+              "learningNote": "Identity and origin phrases show up constantly."
+            }
+          ]
+        },
+        {
+          "id": "french-meet-4",
+          "title": "Nice to meet you",
+          "subtitle": "Polite small talk",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "fr-meet-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "enchanté",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "nice to meet you",
+                "very tired",
+                "many thanks"
+              ],
+              "correctAnswer": "nice to meet you",
+              "acceptedAnswers": [
+                "nice to meet you"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "enchanté is useful when meeting someone."
+            },
+            {
+              "id": "fr-meet-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How are you?",
+              "context": "Choose the French question.",
+              "choices": [
+                "Comment ça va ?",
+                "Combien ça coûte ?",
+                "Où est-ce ?"
+              ],
+              "correctAnswer": "Comment ça va ?",
+              "acceptedAnswers": [
+                "Comment ça va ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Comment ça va ? asks how someone is doing."
+            },
+            {
+              "id": "fr-meet-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type French for good or well.",
+              "context": "Use the short conversational reply.",
+              "choices": [
+
+              ],
+              "correctAnswer": "bien",
+              "acceptedAnswers": [
+                "bien"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bien is a common short reply."
+            },
+            {
+              "id": "fr-meet-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I am well, thank you.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ça va bien, merci",
+              "acceptedAnswers": [
+                "Ça va bien, merci"
+              ],
+              "tokens": [
+                "Ça",
+                "va",
+                "bien,",
+                "merci"
+              ],
+              "correctTokens": [
+                "Ça",
+                "va",
+                "bien,",
+                "merci"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This keeps a greeting exchange polite and simple."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-city",
+      "unitNumber": 3,
+      "title": "Find your way around",
+      "theme": "City travel",
+      "iconName": "map.fill",
+      "lessons": [
+        {
+          "id": "french-city-1",
+          "title": "Places",
+          "subtitle": "Streets and stations",
+          "iconName": "building.2.fill",
+          "questions": [
+            {
+              "id": "fr-city-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "rue",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "street",
+                "store",
+                "chair"
+              ],
+              "correctAnswer": "street",
+              "acceptedAnswers": [
+                "street"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "rue means street."
+            },
+            {
+              "id": "fr-city-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "station",
+              "context": "Choose the French word.",
+              "choices": [
+                "gare",
+                "école",
+                "coin"
+              ],
+              "correctAnswer": "gare",
+              "acceptedAnswers": [
+                "gare"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "gare is useful for transit."
+            },
+            {
+              "id": "fr-city-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match city places.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "banque = bank, magasin = store, parc = park",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "magasin": "store",
+                "banque": "bank",
+                "parc": "park"
+              },
+              "learningNote": "These are common landmarks."
+            },
+            {
+              "id": "fr-city-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type French for park.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "parc",
+              "acceptedAnswers": [
+                "parc"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "parc means park."
+            }
+          ]
+        },
+        {
+          "id": "french-city-2",
+          "title": "Directions",
+          "subtitle": "Left, right, straight",
+          "iconName": "arrow.triangle.turn.up.right.circle.fill",
+          "questions": [
+            {
+              "id": "fr-city-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "droite",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "right",
+                "left",
+                "straight"
+              ],
+              "correctAnswer": "right",
+              "acceptedAnswers": [
+                "right"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "droite means right as a direction."
+            },
+            {
+              "id": "fr-city-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "gauche",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "left",
+                "near",
+                "far"
+              ],
+              "correctAnswer": "left",
+              "acceptedAnswers": [
+                "left"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "gauche means left."
+            },
+            {
+              "id": "fr-city-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Go straight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Allez tout droit",
+              "acceptedAnswers": [
+                "Allez tout droit"
+              ],
+              "tokens": [
+                "Allez",
+                "tout",
+                "droit"
+              ],
+              "correctTokens": [
+                "Allez",
+                "tout",
+                "droit"
+              ],
+              "pairs": {
+              },
+              "learningNote": "A compact direction phrase is easier to use in the moment."
+            },
+            {
+              "id": "fr-city-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Tournez à ___.",
+              "context": "Fill in: Turn right.",
+              "choices": [
+                "droite",
+                "gauche",
+                "loin"
+              ],
+              "correctAnswer": "droite",
+              "acceptedAnswers": [
+                "droite"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tournez à droite means turn right."
+            }
+          ]
+        },
+        {
+          "id": "french-city-3",
+          "title": "Ask where",
+          "subtitle": "Find what you need",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "fr-city-3-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Where is the bathroom?",
+              "context": "Choose the French question.",
+              "choices": [
+                "Où sont les toilettes ?",
+                "Combien coûtent les toilettes ?",
+                "Comment sont les toilettes ?"
+              ],
+              "correctAnswer": "Où sont les toilettes ?",
+              "acceptedAnswers": [
+                "Où sont les toilettes ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Où est-ce ? starts where-is questions."
+            },
+            {
+              "id": "fr-city-3-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where is the bank?",
+              "choices": [
+
+              ],
+              "correctAnswer": "Où est la banque ?",
+              "acceptedAnswers": [
+                "Où est la banque ?"
+              ],
+              "tokens": [
+                "Où",
+                "est",
+                "la",
+                "banque",
+                "?"
+              ],
+              "correctTokens": [
+                "Où",
+                "est",
+                "la",
+                "banque",
+                "?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Swap in different place words after the where-is pattern."
+            },
+            {
+              "id": "fr-city-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type French for bathroom.",
+              "context": "Use the common travel word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "toilettes",
+              "acceptedAnswers": [
+                "toilettes",
+                "les toilettes"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "toilettes means bathroom."
+            },
+            {
+              "id": "fr-city-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match question words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "combien = how much, comment = how, où = where",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "où": "where",
+                "combien": "how much",
+                "comment": "how"
+              },
+              "learningNote": "Question words unlock more flexible conversation."
+            }
+          ]
+        },
+        {
+          "id": "french-city-4",
+          "title": "Transportation",
+          "subtitle": "Buses and trains",
+          "iconName": "bus.fill",
+          "questions": [
+            {
+              "id": "fr-city-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "train",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "train",
+                "bus",
+                "taxi"
+              ],
+              "correctAnswer": "train",
+              "acceptedAnswers": [
+                "train"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "train means train."
+            },
+            {
+              "id": "fr-city-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ticket",
+              "context": "Choose the French word.",
+              "choices": [
+                "billet",
+                "sac",
+                "bouteille"
+              ],
+              "correctAnswer": "billet",
+              "acceptedAnswers": [
+                "billet"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "billet is the practical word for ticket."
+            },
+            {
+              "id": "fr-city-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "J'ai besoin d'un ___.",
+              "context": "Fill in: I need a ticket.",
+              "choices": [
+                "billet",
+                "train",
+                "parc"
+              ],
+              "correctAnswer": "billet",
+              "acceptedAnswers": [
+                "billet"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "j'ai besoin means I need."
+            },
+            {
+              "id": "fr-city-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need a ticket for the bus.",
+              "choices": [
+
+              ],
+              "correctAnswer": "J'ai besoin d'un billet pour le bus",
+              "acceptedAnswers": [
+                "J'ai besoin d'un billet pour le bus"
+              ],
+              "tokens": [
+                "J'ai",
+                "besoin",
+                "d'un",
+                "billet",
+                "pour",
+                "le",
+                "bus"
+              ],
+              "correctTokens": [
+                "J'ai",
+                "besoin",
+                "d'un",
+                "billet",
+                "pour",
+                "le",
+                "bus"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This combines need, ticket, and bus into one usable phrase."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-routine",
+      "unitNumber": 4,
+      "title": "Talk about your day",
+      "theme": "Daily routine",
+      "iconName": "sun.max.fill",
+      "lessons": [
+        {
+          "id": "french-routine-1",
+          "title": "Home",
+          "subtitle": "Rooms and objects",
+          "iconName": "house.fill",
+          "questions": [
+            {
+              "id": "fr-routine-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "maison",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "house",
+                "table",
+                "morning"
+              ],
+              "correctAnswer": "house",
+              "acceptedAnswers": [
+                "house"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "maison means house or home."
+            },
+            {
+              "id": "fr-routine-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "kitchen",
+              "context": "Choose the French word.",
+              "choices": [
+                "cuisine",
+                "chambre",
+                "nourriture"
+              ],
+              "correctAnswer": "cuisine",
+              "acceptedAnswers": [
+                "cuisine"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "cuisine means kitchen."
+            },
+            {
+              "id": "fr-routine-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match home words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "chaise = chair, porte = door, table = table",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "table": "table",
+                "chaise": "chair",
+                "porte": "door"
+              },
+              "learningNote": "These are everyday home nouns."
+            },
+            {
+              "id": "fr-routine-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type French for door.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "porte",
+              "acceptedAnswers": [
+                "porte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "porte means door."
+            }
+          ]
+        },
+        {
+          "id": "french-routine-2",
+          "title": "Morning",
+          "subtitle": "Wake up and start",
+          "iconName": "sunrise.fill",
+          "questions": [
+            {
+              "id": "fr-routine-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "matin",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "morning",
+                "night",
+                "week"
+              ],
+              "correctAnswer": "morning",
+              "acceptedAnswers": [
+                "morning"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "matin means morning."
+            },
+            {
+              "id": "fr-routine-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je me ___ tôt.",
+              "context": "Fill in: I wake up early.",
+              "choices": [
+                "lève",
+                "couche",
+                "repose"
+              ],
+              "correctAnswer": "lève",
+              "acceptedAnswers": [
+                "lève"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Je me lève means I get up."
+            },
+            {
+              "id": "fr-routine-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I drink coffee in the morning.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je bois du café le matin",
+              "acceptedAnswers": [
+                "Je bois du café le matin"
+              ],
+              "tokens": [
+                "Je",
+                "bois",
+                "du",
+                "café",
+                "le",
+                "matin"
+              ],
+              "correctTokens": [
+                "Je",
+                "bois",
+                "du",
+                "café",
+                "le",
+                "matin"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This connects a routine action with time of day."
+            },
+            {
+              "id": "fr-routine-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type French for early.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "tôt",
+              "acceptedAnswers": [
+                "tôt",
+                "tot"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "tôt means early."
+            }
+          ]
+        },
+        {
+          "id": "french-routine-3",
+          "title": "Work day",
+          "subtitle": "Tasks and time",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "fr-routine-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "travail",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "work",
+                "walk",
+                "weather"
+              ],
+              "correctAnswer": "work",
+              "acceptedAnswers": [
+                "work"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "travail can mean work or job depending on context."
+            },
+            {
+              "id": "fr-routine-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I study",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "j'étudie",
+                "je travaille",
+                "je marche"
+              ],
+              "correctAnswer": "j'étudie",
+              "acceptedAnswers": [
+                "j'étudie"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "j'étudie means I study."
+            },
+            {
+              "id": "fr-routine-3-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je ___ à neuf heures.",
+              "context": "Fill in: I work at nine.",
+              "choices": [
+                "travaille",
+                "travailles",
+                "travaille-tu"
+              ],
+              "correctAnswer": "travaille",
+              "acceptedAnswers": [
+                "travaille"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Je travaille means I work."
+            },
+            {
+              "id": "fr-routine-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I study French at night.",
+              "choices": [
+
+              ],
+              "correctAnswer": "J'étudie le français le soir",
+              "acceptedAnswers": [
+                "J'étudie le français le soir"
+              ],
+              "tokens": [
+                "J'étudie",
+                "le",
+                "français",
+                "le",
+                "soir"
+              ],
+              "correctTokens": [
+                "J'étudie",
+                "le",
+                "français",
+                "le",
+                "soir"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a useful habit-building sentence."
+            }
+          ]
+        },
+        {
+          "id": "french-routine-4",
+          "title": "Evening",
+          "subtitle": "Plans and rest",
+          "iconName": "moon.stars.fill",
+          "questions": [
+            {
+              "id": "fr-routine-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "je suis fatigué",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am tired",
+                "I am busy",
+                "I am ready"
+              ],
+              "correctAnswer": "I am tired",
+              "acceptedAnswers": [
+                "I am tired"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "je suis fatigué means I am tired."
+            },
+            {
+              "id": "fr-routine-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am going home",
+              "context": "Choose the French sentence.",
+              "choices": [
+                "je rentre à la maison",
+                "j'ai une maison",
+                "je suis à la maison"
+              ],
+              "correctAnswer": "je rentre à la maison",
+              "acceptedAnswers": [
+                "je rentre à la maison"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "je rentre à la maison is a practical evening sentence."
+            },
+            {
+              "id": "fr-routine-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type French for night.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "nuit",
+              "acceptedAnswers": [
+                "nuit"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "nuit means night."
+            },
+            {
+              "id": "fr-routine-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest tonight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je veux me reposer ce soir",
+              "acceptedAnswers": [
+                "Je veux me reposer ce soir"
+              ],
+              "tokens": [
+                "Je",
+                "veux",
+                "me",
+                "reposer",
+                "ce",
+                "soir"
+              ],
+              "correctTokens": [
+                "Je",
+                "veux",
+                "me",
+                "reposer",
+                "ce",
+                "soir"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This turns a simple want phrase into a real sentence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-grocery",
+      "unitNumber": 5,
+      "title": "Shop for groceries",
+      "theme": "Food market basics",
+      "iconName": "basket.fill",
+      "lessons": [
+        {
+          "id": "french-grocery-1",
+          "title": "Grocery words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "basket.fill",
+          "questions": [
+            {
+              "id": "fr-grocery-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "pomme",
+              "context": "What does this French word mean?",
+              "choices": [
+                "apple",
+                "cheese",
+                "rice"
+              ],
+              "correctAnswer": "apple",
+              "acceptedAnswers": [
+                "apple"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "pomme means apple."
+            },
+            {
+              "id": "fr-grocery-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "cheese",
+              "context": "Choose the French word.",
+              "choices": [
+                "fromage",
+                "riz",
+                "légumes"
+              ],
+              "correctAnswer": "fromage",
+              "acceptedAnswers": [
+                "fromage"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "fromage means cheese."
+            },
+            {
+              "id": "fr-grocery-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the food market basics words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "riz = rice, légumes = vegetables, pain = bread",
+              "acceptedAnswers": [
+                "riz = rice, légumes = vegetables, pain = bread"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "riz": "rice",
+                "légumes": "vegetables",
+                "pain": "bread"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "fr-grocery-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Je veux ___ pomme.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "une",
+                "un",
+                "des"
+              ],
+              "correctAnswer": "une",
+              "acceptedAnswers": [
+                "une"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "french-grocery-2",
+          "title": "Ask for quantities",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "fr-grocery-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How much does it cost?",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "Combien ça coûte ?",
+                "pain",
+                "eau"
+              ],
+              "correctAnswer": "Combien ça coûte ?",
+              "acceptedAnswers": [
+                "Combien ça coûte ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Combien ça coûte ? is a useful polite phrase."
+            },
+            {
+              "id": "fr-grocery-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full French sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "un kilo de riz",
+              "acceptedAnswers": [
+                "un kilo de riz"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "un kilo de riz means a kilo of rice."
+            },
+            {
+              "id": "fr-grocery-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Je veux une pomme",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je veux une pomme.",
+              "acceptedAnswers": [
+                "Je veux une pomme."
+              ],
+              "tokens": [
+                "Je",
+                "veux",
+                "une",
+                "pomme."
+              ],
+              "correctTokens": [
+                "Je",
+                "veux",
+                "une",
+                "pomme."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "fr-grocery-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "la caisse",
+              "context": "What does this French phrase mean?",
+              "choices": [
+                "checkout",
+                "apple",
+                "a kilo of rice"
+              ],
+              "correctAnswer": "checkout",
+              "acceptedAnswers": [
+                "checkout"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "la caisse means checkout."
+            }
+          ]
+        },
+        {
+          "id": "french-grocery-3",
+          "title": "Find items",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "fr-grocery-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Où ___ le fromage ?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "est",
+                "sont",
+                "vais"
+              ],
+              "correctAnswer": "est",
+              "acceptedAnswers": [
+                "est"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "fr-grocery-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "légumes = vegetables, pain = bread, eau = water",
+              "acceptedAnswers": [
+                "légumes = vegetables, pain = bread, eau = water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "légumes": "vegetables",
+                "pain": "bread",
+                "eau": "water"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "fr-grocery-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "J’ai besoin de riz.",
+              "acceptedAnswers": [
+                "J’ai besoin de riz."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "fr-grocery-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Où est le fromage ",
+              "choices": [
+
+              ],
+              "correctAnswer": "Où est le fromage ?",
+              "acceptedAnswers": [
+                "Où est le fromage ?"
+              ],
+              "tokens": [
+                "Où",
+                "est",
+                "le",
+                "fromage",
+                "?"
+              ],
+              "correctTokens": [
+                "Où",
+                "est",
+                "le",
+                "fromage",
+                "?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "french-grocery-4",
+          "title": "Checkout",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "fr-grocery-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "eau",
+              "context": "What does this French word mean?",
+              "choices": [
+                "water",
+                "apple",
+                "cheese"
+              ],
+              "correctAnswer": "water",
+              "acceptedAnswers": [
+                "water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "eau means water."
+            },
+            {
+              "id": "fr-grocery-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Je paie par carte.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Je paie par carte.",
+                "Je veux une pomme.",
+                "J’ai besoin de riz."
+              ],
+              "correctAnswer": "Je paie par carte.",
+              "acceptedAnswers": [
+                "Je paie par carte."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "fr-grocery-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Je paie ___ carte.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "par",
+                "avec",
+                "pour"
+              ],
+              "correctAnswer": "par",
+              "acceptedAnswers": [
+                "par"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "fr-grocery-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je paie par carte.",
+              "acceptedAnswers": [
+                "Je paie par carte."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-work",
+      "unitNumber": 6,
+      "title": "Work and study",
+      "theme": "Office and study basics",
+      "iconName": "briefcase.fill",
+      "lessons": [
+        {
+          "id": "french-work-1",
+          "title": "Desk words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "fr-work-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "réunion",
+              "context": "What does this French word mean?",
+              "choices": [
+                "meeting",
+                "computer",
+                "email"
+              ],
+              "correctAnswer": "meeting",
+              "acceptedAnswers": [
+                "meeting"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "réunion means meeting."
+            },
+            {
+              "id": "fr-work-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "computer",
+              "context": "Choose the French word.",
+              "choices": [
+                "ordinateur",
+                "courriel",
+                "projet"
+              ],
+              "correctAnswer": "ordinateur",
+              "acceptedAnswers": [
+                "ordinateur"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ordinateur means computer."
+            },
+            {
+              "id": "fr-work-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the office and study basics words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "courriel = email, projet = project, bureau = office",
+              "acceptedAnswers": [
+                "courriel = email, projet = project, bureau = office"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "courriel": "email",
+                "projet": "project",
+                "bureau": "office"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "fr-work-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "J’ai ___ réunion.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "une",
+                "un",
+                "des"
+              ],
+              "correctAnswer": "une",
+              "acceptedAnswers": [
+                "une"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "french-work-2",
+          "title": "Meetings",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "fr-work-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "I am ready.",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "Je suis prêt.",
+                "bureau",
+                "devoirs"
+              ],
+              "correctAnswer": "Je suis prêt.",
+              "acceptedAnswers": [
+                "Je suis prêt."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Je suis prêt. is a useful polite phrase."
+            },
+            {
+              "id": "fr-work-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full French sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "à trois heures",
+              "acceptedAnswers": [
+                "à trois heures"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "à trois heures means at three o’clock."
+            },
+            {
+              "id": "fr-work-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "J’ai une réunion",
+              "choices": [
+
+              ],
+              "correctAnswer": "J’ai une réunion.",
+              "acceptedAnswers": [
+                "J’ai une réunion."
+              ],
+              "tokens": [
+                "J’ai",
+                "une",
+                "réunion."
+              ],
+              "correctTokens": [
+                "J’ai",
+                "une",
+                "réunion."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "fr-work-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "la date limite",
+              "context": "What does this French phrase mean?",
+              "choices": [
+                "deadline",
+                "meeting",
+                "at three o’clock"
+              ],
+              "correctAnswer": "deadline",
+              "acceptedAnswers": [
+                "deadline"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "la date limite means deadline."
+            }
+          ]
+        },
+        {
+          "id": "french-work-3",
+          "title": "Study plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "fr-work-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je dois ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "étudier",
+                "manger",
+                "dormir"
+              ],
+              "correctAnswer": "étudier",
+              "acceptedAnswers": [
+                "étudier"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "fr-work-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "projet = project, bureau = office, devoirs = homework",
+              "acceptedAnswers": [
+                "projet = project, bureau = office, devoirs = homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "projet": "project",
+                "bureau": "office",
+                "devoirs": "homework"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "fr-work-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je dois étudier.",
+              "acceptedAnswers": [
+                "Je dois étudier."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "fr-work-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Où est le bureau ",
+              "choices": [
+
+              ],
+              "correctAnswer": "Où est le bureau ?",
+              "acceptedAnswers": [
+                "Où est le bureau ?"
+              ],
+              "tokens": [
+                "Où",
+                "est",
+                "le",
+                "bureau",
+                "?"
+              ],
+              "correctTokens": [
+                "Où",
+                "est",
+                "le",
+                "bureau",
+                "?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "french-work-4",
+          "title": "Deadlines",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "fr-work-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "devoirs",
+              "context": "What does this French word mean?",
+              "choices": [
+                "homework",
+                "meeting",
+                "computer"
+              ],
+              "correctAnswer": "homework",
+              "acceptedAnswers": [
+                "homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "devoirs means homework."
+            },
+            {
+              "id": "fr-work-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "J’envoie un courriel.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "J’envoie un courriel.",
+                "J’ai une réunion.",
+                "Je dois étudier."
+              ],
+              "correctAnswer": "J’envoie un courriel.",
+              "acceptedAnswers": [
+                "J’envoie un courriel."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "fr-work-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "J’envoie ___ courriel.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "un",
+                "une",
+                "des"
+              ],
+              "correctAnswer": "un",
+              "acceptedAnswers": [
+                "un"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "fr-work-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "J’envoie un courriel.",
+              "acceptedAnswers": [
+                "J’envoie un courriel."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-travel",
+      "unitNumber": 7,
+      "title": "Travel basics",
+      "theme": "Airport and hotel basics",
+      "iconName": "airplane",
+      "lessons": [
+        {
+          "id": "french-travel-1",
+          "title": "Airport words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "airplane",
+          "questions": [
+            {
+              "id": "fr-travel-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "aéroport",
+              "context": "What does this French word mean?",
+              "choices": [
+                "airport",
+                "hotel",
+                "passport"
+              ],
+              "correctAnswer": "airport",
+              "acceptedAnswers": [
+                "airport"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "aéroport means airport."
+            },
+            {
+              "id": "fr-travel-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hotel",
+              "context": "Choose the French word.",
+              "choices": [
+                "hôtel",
+                "passeport",
+                "valise"
+              ],
+              "correctAnswer": "hôtel",
+              "acceptedAnswers": [
+                "hôtel"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "hôtel means hotel."
+            },
+            {
+              "id": "fr-travel-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the airport and hotel basics words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "passeport = passport, valise = suitcase, billet = ticket",
+              "acceptedAnswers": [
+                "passeport = passport, valise = suitcase, billet = ticket"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "passeport": "passport",
+                "valise": "suitcase",
+                "billet": "ticket"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "fr-travel-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "J’ai ___ réservation.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "une",
+                "un",
+                "des"
+              ],
+              "correctAnswer": "une",
+              "acceptedAnswers": [
+                "une"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "french-travel-2",
+          "title": "Hotel check-in",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "fr-travel-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Can you help me?",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "Pouvez-vous m’aider ?",
+                "billet",
+                "gare"
+              ],
+              "correctAnswer": "Pouvez-vous m’aider ?",
+              "acceptedAnswers": [
+                "Pouvez-vous m’aider ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Pouvez-vous m’aider ? is a useful polite phrase."
+            },
+            {
+              "id": "fr-travel-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full French sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "une nuit",
+              "acceptedAnswers": [
+                "une nuit"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "une nuit means one night."
+            },
+            {
+              "id": "fr-travel-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "J’ai une réservation",
+              "choices": [
+
+              ],
+              "correctAnswer": "J’ai une réservation.",
+              "acceptedAnswers": [
+                "J’ai une réservation."
+              ],
+              "tokens": [
+                "J’ai",
+                "une",
+                "réservation."
+              ],
+              "correctTokens": [
+                "J’ai",
+                "une",
+                "réservation."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "fr-travel-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "l’enregistrement",
+              "context": "What does this French phrase mean?",
+              "choices": [
+                "check-in",
+                "airport",
+                "one night"
+              ],
+              "correctAnswer": "check-in",
+              "acceptedAnswers": [
+                "check-in"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "l’enregistrement means check-in."
+            }
+          ]
+        },
+        {
+          "id": "french-travel-3",
+          "title": "Ask for help",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "fr-travel-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Où ___ l’hôtel ?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "est",
+                "sont",
+                "vais"
+              ],
+              "correctAnswer": "est",
+              "acceptedAnswers": [
+                "est"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "fr-travel-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "valise = suitcase, billet = ticket, gare = train station",
+              "acceptedAnswers": [
+                "valise = suitcase, billet = ticket, gare = train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "valise": "suitcase",
+                "billet": "ticket",
+                "gare": "train station"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "fr-travel-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "J’ai besoin d’aide.",
+              "acceptedAnswers": [
+                "J’ai besoin d’aide."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "fr-travel-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Où est l’hôtel ",
+              "choices": [
+
+              ],
+              "correctAnswer": "Où est l’hôtel ?",
+              "acceptedAnswers": [
+                "Où est l’hôtel ?"
+              ],
+              "tokens": [
+                "Où",
+                "est",
+                "l’hôtel",
+                "?"
+              ],
+              "correctTokens": [
+                "Où",
+                "est",
+                "l’hôtel",
+                "?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "french-travel-4",
+          "title": "Travel plans",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "fr-travel-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "gare",
+              "context": "What does this French word mean?",
+              "choices": [
+                "train station",
+                "airport",
+                "hotel"
+              ],
+              "correctAnswer": "train station",
+              "acceptedAnswers": [
+                "train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "gare means train station."
+            },
+            {
+              "id": "fr-travel-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Je vais à la gare.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Je vais à la gare.",
+                "J’ai une réservation.",
+                "J’ai besoin d’aide."
+              ],
+              "correctAnswer": "Je vais à la gare.",
+              "acceptedAnswers": [
+                "Je vais à la gare."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "fr-travel-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Je vais ___ la gare.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "à",
+                "de",
+                "avec"
+              ],
+              "correctAnswer": "à",
+              "acceptedAnswers": [
+                "à"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "fr-travel-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je vais à la gare.",
+              "acceptedAnswers": [
+                "Je vais à la gare."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "french-feelings",
+      "unitNumber": 8,
+      "title": "Feelings and plans",
+      "theme": "Mood and weekend basics",
+      "iconName": "heart.fill",
+      "lessons": [
+        {
+          "id": "french-feelings-1",
+          "title": "Feelings",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "heart.fill",
+          "questions": [
+            {
+              "id": "fr-feelings-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "heureux",
+              "context": "What does this French word mean?",
+              "choices": [
+                "happy",
+                "tired",
+                "busy"
+              ],
+              "correctAnswer": "happy",
+              "acceptedAnswers": [
+                "happy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "heureux means happy."
+            },
+            {
+              "id": "fr-feelings-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "tired",
+              "context": "Choose the French word.",
+              "choices": [
+                "fatigué",
+                "occupé",
+                "calme"
+              ],
+              "correctAnswer": "fatigué",
+              "acceptedAnswers": [
+                "fatigué"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "fatigué means tired."
+            },
+            {
+              "id": "fr-feelings-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the mood and weekend basics words.",
+              "context": "Connect French to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "occupé = busy, calme = calm, demain = tomorrow",
+              "acceptedAnswers": [
+                "occupé = busy, calme = calm, demain = tomorrow"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "occupé": "busy",
+                "calme": "calm",
+                "demain": "tomorrow"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "fr-feelings-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Je ___ fatigué.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "suis",
+                "ai",
+                "vais"
+              ],
+              "correctAnswer": "suis",
+              "acceptedAnswers": [
+                "suis"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "french-feelings-2",
+          "title": "Preferences",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "fr-feelings-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How are you?",
+              "context": "Choose the French phrase.",
+              "choices": [
+                "Comment ça va ?",
+                "demain",
+                "week-end"
+              ],
+              "correctAnswer": "Comment ça va ?",
+              "acceptedAnswers": [
+                "Comment ça va ?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Comment ça va ? is a useful polite phrase."
+            },
+            {
+              "id": "fr-feelings-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full French sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ce week-end",
+              "acceptedAnswers": [
+                "ce week-end"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ce week-end means this weekend."
+            },
+            {
+              "id": "fr-feelings-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Je suis fatigué",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je suis fatigué.",
+              "acceptedAnswers": [
+                "Je suis fatigué."
+              ],
+              "tokens": [
+                "Je",
+                "suis",
+                "fatigué."
+              ],
+              "correctTokens": [
+                "Je",
+                "suis",
+                "fatigué."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "fr-feelings-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "je me sens bien",
+              "context": "What does this French phrase mean?",
+              "choices": [
+                "I feel good",
+                "happy",
+                "this weekend"
+              ],
+              "correctAnswer": "I feel good",
+              "acceptedAnswers": [
+                "I feel good"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "je me sens bien means I feel good."
+            }
+          ]
+        },
+        {
+          "id": "french-feelings-3",
+          "title": "Weekend plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "fr-feelings-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Je veux me ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "reposer",
+                "payer",
+                "trouver"
+              ],
+              "correctAnswer": "reposer",
+              "acceptedAnswers": [
+                "reposer"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "fr-feelings-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "calme = calm, demain = tomorrow, week-end = weekend",
+              "acceptedAnswers": [
+                "calme = calm, demain = tomorrow, week-end = weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "calme": "calm",
+                "demain": "tomorrow",
+                "week-end": "weekend"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "fr-feelings-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Je veux me reposer.",
+              "acceptedAnswers": [
+                "Je veux me reposer."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "fr-feelings-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Demain, je travaille",
+              "choices": [
+
+              ],
+              "correctAnswer": "Demain, je travaille.",
+              "acceptedAnswers": [
+                "Demain, je travaille."
+              ],
+              "tokens": [
+                "Demain,",
+                "je",
+                "travaille."
+              ],
+              "correctTokens": [
+                "Demain,",
+                "je",
+                "travaille."
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "french-feelings-4",
+          "title": "Small talk",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "fr-feelings-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "week-end",
+              "context": "What does this French word mean?",
+              "choices": [
+                "weekend",
+                "happy",
+                "tired"
+              ],
+              "correctAnswer": "weekend",
+              "acceptedAnswers": [
+                "weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "week-end means weekend."
+            },
+            {
+              "id": "fr-feelings-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "J’aime le week-end.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "J’aime le week-end.",
+                "Je suis fatigué.",
+                "Je veux me reposer."
+              ],
+              "correctAnswer": "J’aime le week-end.",
+              "acceptedAnswers": [
+                "J’aime le week-end."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "fr-feelings-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Demain, je ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "travaille",
+                "fromage",
+                "gare"
+              ],
+              "correctAnswer": "travaille",
+              "acceptedAnswers": [
+                "travaille"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "fr-feelings-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full French sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "J’aime le week-end.",
+              "acceptedAnswers": [
+                "J’aime le week-end."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

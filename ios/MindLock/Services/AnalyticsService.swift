@@ -1,5 +1,8 @@
 import Foundation
 import os
+#if canImport(PostHog)
+import PostHog
+#endif
 
 @MainActor
 final class AnalyticsService {
@@ -8,8 +11,28 @@ final class AnalyticsService {
     private let logger = Logger(subsystem: "com.lucaszambranonavia.mindlock", category: "Analytics")
     private let defaults = UserDefaults.standard
     private let sessionId = UUID().uuidString
+    private var isPostHogConfigured = false
 
     private init() {}
+
+    func configure() {
+        guard !isPostHogConfigured else { return }
+        guard let apiKey = AppConfiguration.postHogAPIKey() else {
+            logger.info("PostHog disabled: missing MindLockPostHogAPIKey")
+            return
+        }
+
+#if canImport(PostHog)
+        let config = PostHogConfig(apiKey: apiKey, host: AppConfiguration.postHogHostURL().absoluteString)
+        config.captureApplicationLifecycleEvents = false
+        config.captureScreenViews = false
+        PostHogSDK.shared.setup(config)
+        isPostHogConfigured = true
+        logger.info("PostHog configured")
+#else
+        logger.warning("PostHog disabled: SDK is not linked")
+#endif
+    }
 
     func track(_ event: AnalyticsEvent, properties: [String: AnalyticsValue] = [:]) {
         var payload = properties
@@ -20,15 +43,31 @@ final class AnalyticsService {
 
         appendLocalEvent(name: event.rawValue, properties: payload)
         logger.info("event=\(event.rawValue, privacy: .public) properties=\(payload.debugDescription, privacy: .public)")
+
+#if canImport(PostHog)
+        guard isPostHogConfigured else { return }
+        PostHogSDK.shared.capture(event.rawValue, properties: payload.mapValues(\.postHogValue))
+#endif
     }
 
     func identifyCurrentUser() {
-        track(.userIdentified, properties: [
+        let userProperties: [String: AnalyticsValue] = [
             "user_id": .string(UserIdentity.shared.userId),
             "subscription_active": .bool(SharedSettings.isSubscriptionActive()),
             "preferred_language": .string(SharedSettings.preferredLearningLanguage().rawValue),
             "unlock_method": .string(SharedSettings.preferredUnlockMechanism().rawValue)
-        ])
+        ]
+
+#if canImport(PostHog)
+        if isPostHogConfigured {
+            PostHogSDK.shared.identify(
+                UserIdentity.shared.userId,
+                userProperties: userProperties.mapValues(\.postHogValue)
+            )
+        }
+#endif
+
+        track(.userIdentified, properties: userProperties)
     }
 
     private func appendLocalEvent(name: String, properties: [String: AnalyticsValue]) {
@@ -102,6 +141,15 @@ enum AnalyticsValue: CustomDebugStringConvertible {
         case .int(let value): return "\(value)"
         case .double(let value): return "\(value)"
         case .bool(let value): return value ? "true" : "false"
+        }
+    }
+
+    var postHogValue: Any {
+        switch self {
+        case .string(let value): return value
+        case .int(let value): return value
+        case .double(let value): return value
+        case .bool(let value): return value
         }
     }
 

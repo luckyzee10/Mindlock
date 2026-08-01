@@ -173,11 +173,13 @@ class ScreenTimeManager: ObservableObject {
     
     func temporaryUnlock(tokens: [ApplicationToken], duration: TimeInterval) {
         guard !tokens.isEmpty else { return }
-        DailyLimitsManager.shared.refreshBlockingNow()
+        SharedSettings.applyCurrentShieldState(reason: "temporary unlock granted")
+        SharedSettings.scheduleTemporaryUnlockExpiryMonitoring()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            SharedSettings.removeTemporaryUnlocks(for: tokens)
-            DailyLimitsManager.shared.refreshBlockingNow()
+            _ = SharedSettings.activeTemporaryUnlocks()
+            SharedSettings.applyCurrentShieldState(reason: "temporary unlock foreground expiry")
+            SharedSettings.scheduleTemporaryUnlockExpiryMonitoring()
             print("🔒 Temporary unlock expired for \(tokens.count) app(s)")
         }
     }
@@ -384,16 +386,11 @@ class ScreenTimeManager: ObservableObject {
 
     private func applyManualTimeBlock(_ block: SharedSettings.TimeBlock) {
         guard isAuthorized else { return }
-        var tokens = BlockListManager.shared.selection.applicationTokens
-        guard !tokens.isEmpty else { return }
-        let suppress = SharedSettings.activeTemporaryUnlocks()
-        tokens = Set(tokens.filter { suppress[SharedSettings.tokenKey($0)] == nil })
-        guard !tokens.isEmpty else { return }
-
-        let store = ManagedSettingsStore()
-        var shielded = store.shield.applications ?? []
-        shielded.formUnion(tokens)
-        store.shield.applications = shielded
+        let tokens = BlockListManager.shared.selection.applicationTokens
+        guard !tokens.isEmpty else {
+            print("⚠️ Time Block \(block.name) active, but no apps are selected to shield")
+            return
+        }
 
         SharedSettings.setActiveTokens(Array(tokens), forBlockId: block.id)
         let remaining = block.remainingSeconds()
@@ -401,6 +398,7 @@ class ScreenTimeManager: ObservableObject {
         let endsAt = Date().addingTimeInterval(remaining).timeIntervalSince1970
         let state = SharedSettings.ActiveTimeBlockState(id: block.id, name: block.name, endsAt: endsAt)
         SharedSettings.setActiveTimeBlockState(state, forBlockId: block.id)
+        let shielded = SharedSettings.applyCurrentShieldState(reason: "manual time block active")
 
         manualTimeBlockWorkItems[block.id]?.cancel()
         let workItem = DispatchWorkItem { [weak self] in
@@ -408,7 +406,7 @@ class ScreenTimeManager: ObservableObject {
         }
         manualTimeBlockWorkItems[block.id] = workItem
         DispatchQueue.main.asyncAfter(deadline: .now() + remaining, execute: workItem)
-        print("🧱 Manually enforced Time Block \(block.name) for \(tokens.count) app(s)")
+        print("🧱 Manually enforced Time Block \(block.name) for \(tokens.count) intended app(s); shielded now=\(shielded.count)")
     }
 
     private func clearTimeBlock(blockId: String) {
@@ -418,21 +416,8 @@ class ScreenTimeManager: ObservableObject {
         let tokensToRemove = Set(SharedSettings.activeTokens(forBlockId: blockId))
         SharedSettings.clearActiveTokens(forBlockId: blockId)
         SharedSettings.removeActiveTimeBlockState(forBlockId: blockId)
-        guard !tokensToRemove.isEmpty else { return }
-
-        var tokensStillNeeded = Set<ApplicationToken>()
-        for state in SharedSettings.activeTimeBlockStates() {
-            let tokens = SharedSettings.activeTokens(forBlockId: state.id)
-            tokensStillNeeded.formUnion(tokens)
-        }
-
-        let removable = tokensToRemove.subtracting(tokensStillNeeded)
-        guard !removable.isEmpty else { return }
-        let store = ManagedSettingsStore()
-        var shielded = store.shield.applications ?? []
-        shielded.subtract(removable)
-        store.shield.applications = shielded
-        print("🧱 Cleared Time Block \(blockId) shields for \(removable.count) app(s)")
+        let shielded = SharedSettings.applyCurrentShieldState(reason: "time block cleared")
+        print("🧱 Cleared Time Block \(blockId) ledger for \(tokensToRemove.count) intended app(s); shielded now=\(shielded.count)")
     }
     
     // MARK: - Debug Methods

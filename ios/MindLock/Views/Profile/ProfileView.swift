@@ -24,6 +24,9 @@ struct ProfileView: View {
         .onReceive(NotificationCenter.default.publisher(for: SharedSettings.analyticsUpdatedNotification)) { _ in
             viewModel.refresh()
         }
+        .onReceive(NotificationCenter.default.publisher(for: SharedSettings.learningLanguageChangedNotification)) { _ in
+            viewModel.refresh()
+        }
     }
     
     private var heroCard: some View {

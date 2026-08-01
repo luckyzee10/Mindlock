@@ -26,12 +26,12 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
             // demo: no-op
         } else if activity == .daily {
             _ = SharedSettings.performMidnightRollover(referenceDate: Date())
-            let store = ManagedSettingsStore()
-            store.shield.applications = [] as Set<ApplicationToken>
-            SharedSettings.setBlockingState(false)
             SharedSettings.clearLimitEvent()
             SharedSettings.clearLimitShieldTokens()
+            SharedSettings.applyCurrentShieldState(reason: "daily interval start")
             print("🌅 Cleared shields and refreshed limits for new interval")
+        } else if activity == SharedSettings.temporaryUnlockExpiryActivityName {
+            print("⏰ Temporary unlock expiry monitoring started")
         } else if activity.rawValue.hasPrefix("tb_") {
             // Time Block start: if the block is active today, apply shields for selected apps (respect unlocks)
             let blockId = String(activity.rawValue.dropFirst(3))
@@ -40,17 +40,11 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
                 print("ℹ️ TimeBlock \(activity.rawValue) not active today; skipping")
                 return
             }
-            var tokenSet = SharedSettings.storedApplicationTokens()
+            let tokenSet = SharedSettings.storedApplicationTokens()
             if tokenSet.isEmpty {
                 print("ℹ️ No selected apps for TimeBlock")
                 return
             }
-            let suppress = SharedSettings.activeTemporaryUnlocks()
-            tokenSet = Set(tokenSet.filter { suppress[SharedSettings.tokenKey($0)] == nil })
-            let store = ManagedSettingsStore()
-            var shielded = store.shield.applications ?? []
-            shielded.formUnion(tokenSet)
-            store.shield.applications = shielded
             SharedSettings.setActiveTokens(Array(tokenSet), forBlockId: blockId)
             if let endDate = Self.endDate(for: block, reference: now) {
                 let state = SharedSettings.ActiveTimeBlockState(
@@ -60,7 +54,8 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
                 )
                 SharedSettings.setActiveTimeBlockState(state, forBlockId: blockId)
             }
-            print("🧱 TimeBlock applied shields for \(tokenSet.count) app(s)")
+            let shielded = SharedSettings.applyCurrentShieldState(reason: "time block interval start")
+            print("🧱 TimeBlock registered \(tokenSet.count) intended app(s); shielded now=\(shielded.count)")
         }
 
         SharedSettings.sharedDefaults?.set(Date().timeIntervalSince1970, forKey: "monitor.heartbeat")
@@ -77,12 +72,13 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
             let added = SharedSettings.activeTokens(forBlockId: blockId)
             SharedSettings.clearActiveTokens(forBlockId: blockId)
             SharedSettings.removeActiveTimeBlockState(forBlockId: blockId)
-            guard !added.isEmpty else { return }
-            let store = ManagedSettingsStore()
-            var shielded = store.shield.applications ?? []
-            shielded.subtract(Set(added))
-            store.shield.applications = shielded
-            print("🧱 TimeBlock removed shields for \(added.count) app(s)")
+            let shielded = SharedSettings.applyCurrentShieldState(reason: "time block interval end")
+            print("🧱 TimeBlock removed \(added.count) intended app(s); shielded now=\(shielded.count)")
+        } else if activity == SharedSettings.temporaryUnlockExpiryActivityName {
+            _ = SharedSettings.activeTemporaryUnlocks()
+            let shielded = SharedSettings.applyCurrentShieldState(reason: "temporary unlock monitor expiry")
+            SharedSettings.scheduleTemporaryUnlockExpiryMonitoring()
+            print("⏰ Temporary unlock expiry applied; shielded now=\(shielded.count)")
         }
     }
 
@@ -121,25 +117,13 @@ public class MindLockActivityMonitor: DeviceActivityMonitor {
             return
         }
 
-        let activeSuppressions = SharedSettings.activeTemporaryUnlocks()
-        let tokensToShield = Set(tokens.filter { activeSuppressions[SharedSettings.tokenKey($0)] == nil })
-        if tokensToShield.isEmpty {
-            if let soonestExpiry = activeSuppressions.values.min() {
-                print("⏳ Limit reached during an active unlock (expires \(soonestExpiry)). Skipping shield update.")
-            } else {
-                print("⏳ Limit reached but temporary unlock state prevented shielding.")
-            }
-            return
-        }
+        let intendedTokens = Set(tokens)
+        SharedSettings.storeLimitEvent(name: event.rawValue, blockedTokens: Array(intendedTokens))
+        SharedSettings.addLimitShieldTokens(intendedTokens)
 
-        SharedSettings.storeLimitEvent(name: event.rawValue, blockedTokens: Array(tokensToShield))
-        SharedSettings.addLimitShieldTokens(tokensToShield)
-
-        let store = ManagedSettingsStore()
-        var shielded = store.shield.applications ?? []
-        shielded.formUnion(tokensToShield)
-        store.shield.applications = shielded
-        print("🔒 Blocked \(tokensToShield.count) application(s) due to limit reached (per-app)")
+        let shielded = SharedSettings.applyCurrentShieldState(reason: "limit threshold reached")
+        SharedSettings.scheduleTemporaryUnlockExpiryMonitoring()
+        print("🔒 Registered \(intendedTokens.count) limit-blocked app(s); shielded now=\(shielded.count)")
     }
     
     public override func eventWillReachThresholdWarning(_ event: DeviceActivityEvent.Name, activity: DeviceActivityName) {

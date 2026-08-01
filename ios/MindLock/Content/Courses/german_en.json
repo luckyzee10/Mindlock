@@ -1,0 +1,3721 @@
+{
+  "courseId": "german_en",
+  "version": 1,
+  "sourceLanguage": "en",
+  "targetLanguage": "german",
+  "displayName": "German",
+  "sections": [
+    {
+      "id": "german-cafe",
+      "unitNumber": 1,
+      "title": "Order at a cafe",
+      "theme": "Cafe basics",
+      "iconName": "cup.and.saucer.fill",
+      "lessons": [
+        {
+          "id": "german-cafe-1",
+          "title": "Cafe words",
+          "subtitle": "Coffee, water, and bread",
+          "iconName": "cup.and.saucer.fill",
+          "questions": [
+            {
+              "id": "de-cafe-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Kaffee",
+              "context": "What does this German word mean?",
+              "choices": [
+                "coffee",
+                "tea",
+                "milk"
+              ],
+              "correctAnswer": "coffee",
+              "acceptedAnswers": [
+                "coffee"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Kaffee is the core word for coffee."
+            },
+            {
+              "id": "de-cafe-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "water",
+              "context": "Choose the German word.",
+              "choices": [
+                "Wasser",
+                "Brot",
+                "Tisch"
+              ],
+              "correctAnswer": "Wasser",
+              "acceptedAnswers": [
+                "Wasser"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wasser means water."
+            },
+            {
+              "id": "de-cafe-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the cafe words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Brot = bread, Milch = milk, Zucker = sugar",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Brot": "bread",
+                "Milch": "milk",
+                "Zucker": "sugar"
+              },
+              "learningNote": "These are practical cafe and breakfast words."
+            },
+            {
+              "id": "de-cafe-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ich möchte ___ Kaffee.",
+              "context": "Fill in: I want a coffee.",
+              "choices": [
+                "einen",
+                "eine",
+                "ein"
+              ],
+              "correctAnswer": "einen",
+              "acceptedAnswers": [
+                "einen"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use einen for masculine accusative nouns like Kaffee."
+            }
+          ]
+        },
+        {
+          "id": "german-cafe-2",
+          "title": "Ask politely",
+          "subtitle": "Please and thank you",
+          "iconName": "hand.thumbsup.fill",
+          "questions": [
+            {
+              "id": "de-cafe-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "please",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "bitte",
+                "gute Nacht",
+                "gern geschehen"
+              ],
+              "correctAnswer": "bitte",
+              "acceptedAnswers": [
+                "bitte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bitte is the polite way to say please."
+            },
+            {
+              "id": "de-cafe-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type German for thank you.",
+              "context": "Use the common everyday phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "danke",
+              "acceptedAnswers": [
+                "danke",
+                "dankeschön"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "danke means thank you."
+            },
+            {
+              "id": "de-cafe-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "A coffee, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Einen Kaffee, bitte",
+              "acceptedAnswers": [
+                "Einen Kaffee, bitte"
+              ],
+              "tokens": [
+                "Einen",
+                "Kaffee,",
+                "bitte"
+              ],
+              "correctTokens": [
+                "Einen",
+                "Kaffee,",
+                "bitte"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is enough to order politely."
+            },
+            {
+              "id": "de-cafe-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "gern geschehen",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "you're welcome",
+                "good morning",
+                "excuse me"
+              ],
+              "correctAnswer": "you're welcome",
+              "acceptedAnswers": [
+                "you're welcome"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "gern geschehen is a common reply to thank you."
+            }
+          ]
+        },
+        {
+          "id": "german-cafe-3",
+          "title": "Order food",
+          "subtitle": "I want and I have",
+          "iconName": "fork.knife",
+          "questions": [
+            {
+              "id": "de-cafe-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich ___ ein Sandwich.",
+              "context": "Fill in: I want a sandwich.",
+              "choices": [
+                "möchte",
+                "möchtest",
+                "möchten"
+              ],
+              "correctAnswer": "möchte",
+              "acceptedAnswers": [
+                "möchte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ich möchte is a polite way to say I would like."
+            },
+            {
+              "id": "de-cafe-3-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ich habe Hunger",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am hungry",
+                "I am thirsty",
+                "I am tired"
+              ],
+              "correctAnswer": "I am hungry",
+              "acceptedAnswers": [
+                "I am hungry"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ich habe Hunger means I am hungry."
+            },
+            {
+              "id": "de-cafe-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I want bread and water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich möchte Brot und Wasser",
+              "acceptedAnswers": [
+                "Ich möchte Brot und Wasser"
+              ],
+              "tokens": [
+                "Ich",
+                "möchte",
+                "Brot",
+                "und",
+                "Wasser"
+              ],
+              "correctTokens": [
+                "Ich",
+                "möchte",
+                "Brot",
+                "und",
+                "Wasser"
+              ],
+              "pairs": {
+              },
+              "learningNote": "und connects words like and in English."
+            },
+            {
+              "id": "de-cafe-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the order words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Hunger = hunger, ich habe = I have, möchte = I want",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "möchte": "I want",
+                "ich habe": "I have",
+                "Hunger": "hunger"
+              },
+              "learningNote": "These phrases help users ask for food quickly."
+            }
+          ]
+        },
+        {
+          "id": "german-cafe-4",
+          "title": "Pay the bill",
+          "subtitle": "Numbers and checkout",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "de-cafe-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "die Rechnung",
+              "context": "What do you ask for at the end of a meal?",
+              "choices": [
+                "the bill",
+                "the door",
+                "the table"
+              ],
+              "correctAnswer": "the bill",
+              "acceptedAnswers": [
+                "the bill"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "die Rechnung is the check or bill."
+            },
+            {
+              "id": "de-cafe-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How much is it?",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "Wie viel kostet das?",
+                "Wo ist das?",
+                "Wie heißt du?"
+              ],
+              "correctAnswer": "Wie viel kostet das?",
+              "acceptedAnswers": [
+                "Wie viel kostet das?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wie viel kostet das? asks about price."
+            },
+            {
+              "id": "de-cafe-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type German for three.",
+              "context": "One word or numeral form.",
+              "choices": [
+
+              ],
+              "correctAnswer": "drei",
+              "acceptedAnswers": [
+                "drei",
+                "3"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "drei means three."
+            },
+            {
+              "id": "de-cafe-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "The bill, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Die Rechnung, bitte",
+              "acceptedAnswers": [
+                "Die Rechnung, bitte"
+              ],
+              "tokens": [
+                "Die",
+                "Rechnung,",
+                "bitte"
+              ],
+              "correctTokens": [
+                "Die",
+                "Rechnung,",
+                "bitte"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the practical phrase to close a restaurant interaction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-meet",
+      "unitNumber": 2,
+      "title": "Meet someone new",
+      "theme": "Introductions",
+      "iconName": "person.2.fill",
+      "lessons": [
+        {
+          "id": "german-meet-1",
+          "title": "Say hello",
+          "subtitle": "Greetings",
+          "iconName": "hand.wave.fill",
+          "questions": [
+            {
+              "id": "de-meet-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hallo",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hello",
+                "goodbye",
+                "thanks"
+              ],
+              "correctAnswer": "hello",
+              "acceptedAnswers": [
+                "hello"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "hallo is a common greeting."
+            },
+            {
+              "id": "de-meet-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "good morning",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "guten Morgen",
+                "gute Nacht",
+                "auf Wiedersehen"
+              ],
+              "correctAnswer": "guten Morgen",
+              "acceptedAnswers": [
+                "guten Morgen"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "guten Morgen is used early in the day."
+            },
+            {
+              "id": "de-meet-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match greetings.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "auf Wiedersehen = goodbye, danke = thanks, hallo = hello",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "hallo": "hello",
+                "auf Wiedersehen": "goodbye",
+                "danke": "thanks"
+              },
+              "learningNote": "These cover the start and end of simple conversations."
+            },
+            {
+              "id": "de-meet-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type German for hello.",
+              "context": "Use the common greeting.",
+              "choices": [
+
+              ],
+              "correctAnswer": "hallo",
+              "acceptedAnswers": [
+                "hallo",
+                "guten tag"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "hallo starts everyday conversations."
+            }
+          ]
+        },
+        {
+          "id": "german-meet-2",
+          "title": "Names",
+          "subtitle": "Ask and answer",
+          "iconName": "person.text.rectangle.fill",
+          "questions": [
+            {
+              "id": "de-meet-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "What is your name?",
+              "context": "Choose the German question.",
+              "choices": [
+                "Wie heißt du?",
+                "Wo wohnst du?",
+                "Was möchtest du?"
+              ],
+              "correctAnswer": "Wie heißt du?",
+              "acceptedAnswers": [
+                "Wie heißt du?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wie heißt du? asks for someone's name."
+            },
+            {
+              "id": "de-meet-2-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "My name is Ana.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich heiße Ana",
+              "acceptedAnswers": [
+                "Ich heiße Ana"
+              ],
+              "tokens": [
+                "Ich",
+                "heiße",
+                "Ana"
+              ],
+              "correctTokens": [
+                "Ich",
+                "heiße",
+                "Ana"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the simplest self-introduction pattern."
+            },
+            {
+              "id": "de-meet-2-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich ___ Luis.",
+              "context": "Fill in: My name is Luis.",
+              "choices": [
+                "heiße",
+                "heißt",
+                "heißen"
+              ],
+              "correctAnswer": "heiße",
+              "acceptedAnswers": [
+                "heiße"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ich heiße means my name is."
+            },
+            {
+              "id": "de-meet-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type German for my name is.",
+              "context": "Use the common phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ich heiße",
+              "acceptedAnswers": [
+                "ich heiße",
+                "heiße"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use this before saying your name."
+            }
+          ]
+        },
+        {
+          "id": "german-meet-3",
+          "title": "Where from?",
+          "subtitle": "Countries and origin",
+          "iconName": "globe.americas.fill",
+          "questions": [
+            {
+              "id": "de-meet-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ich komme aus Kolumbien",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am from Colombia",
+                "I live in Colombia",
+                "I go to Colombia"
+              ],
+              "correctAnswer": "I am from Colombia",
+              "acceptedAnswers": [
+                "I am from Colombia"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "aus means from."
+            },
+            {
+              "id": "de-meet-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich ___ aus den USA.",
+              "context": "Fill in: I am from the United States.",
+              "choices": [
+                "komme",
+                "kommst",
+                "kommt"
+              ],
+              "correctAnswer": "komme",
+              "acceptedAnswers": [
+                "komme"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ich komme aus means I come from."
+            },
+            {
+              "id": "de-meet-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where are you from?",
+              "choices": [
+
+              ],
+              "correctAnswer": "Woher kommst du?",
+              "acceptedAnswers": [
+                "Woher kommst du?"
+              ],
+              "tokens": [
+                "Woher",
+                "kommst",
+                "du?"
+              ],
+              "correctTokens": [
+                "Woher",
+                "kommst",
+                "du?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a natural first-conversation question."
+            },
+            {
+              "id": "de-meet-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match identity words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "aus = from, du bist = you are, ich komme = I come",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ich komme": "I come",
+                "du bist": "you are",
+                "aus": "from"
+              },
+              "learningNote": "Identity and origin phrases show up constantly."
+            }
+          ]
+        },
+        {
+          "id": "german-meet-4",
+          "title": "Nice to meet you",
+          "subtitle": "Polite small talk",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "de-meet-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "freut mich",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "nice to meet you",
+                "very tired",
+                "many thanks"
+              ],
+              "correctAnswer": "nice to meet you",
+              "acceptedAnswers": [
+                "nice to meet you"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "freut mich is useful when meeting someone."
+            },
+            {
+              "id": "de-meet-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How are you?",
+              "context": "Choose the German question.",
+              "choices": [
+                "Wie geht es dir?",
+                "Wie viel kostet das?",
+                "Wo ist das?"
+              ],
+              "correctAnswer": "Wie geht es dir?",
+              "acceptedAnswers": [
+                "Wie geht es dir?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wie geht es dir? asks how someone is doing."
+            },
+            {
+              "id": "de-meet-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type German for good or well.",
+              "context": "Use the short conversational reply.",
+              "choices": [
+
+              ],
+              "correctAnswer": "gut",
+              "acceptedAnswers": [
+                "gut"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "gut is a common short reply."
+            },
+            {
+              "id": "de-meet-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I am well, thank you.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Mir geht es gut, danke",
+              "acceptedAnswers": [
+                "Mir geht es gut, danke"
+              ],
+              "tokens": [
+                "Mir",
+                "geht",
+                "es",
+                "gut,",
+                "danke"
+              ],
+              "correctTokens": [
+                "Mir",
+                "geht",
+                "es",
+                "gut,",
+                "danke"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This keeps a greeting exchange polite and simple."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-city",
+      "unitNumber": 3,
+      "title": "Find your way around",
+      "theme": "City travel",
+      "iconName": "map.fill",
+      "lessons": [
+        {
+          "id": "german-city-1",
+          "title": "Places",
+          "subtitle": "Streets and stations",
+          "iconName": "building.2.fill",
+          "questions": [
+            {
+              "id": "de-city-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Straße",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "street",
+                "store",
+                "chair"
+              ],
+              "correctAnswer": "street",
+              "acceptedAnswers": [
+                "street"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Straße means street."
+            },
+            {
+              "id": "de-city-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "station",
+              "context": "Choose the German word.",
+              "choices": [
+                "Bahnhof",
+                "Schule",
+                "Ecke"
+              ],
+              "correctAnswer": "Bahnhof",
+              "acceptedAnswers": [
+                "Bahnhof"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Bahnhof is useful for transit."
+            },
+            {
+              "id": "de-city-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match city places.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Bank = bank, Geschäft = store, Park = park",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Geschäft": "store",
+                "Bank": "bank",
+                "Park": "park"
+              },
+              "learningNote": "These are common landmarks."
+            },
+            {
+              "id": "de-city-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type German for park.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Park",
+              "acceptedAnswers": [
+                "Park",
+                "park"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Park means park."
+            }
+          ]
+        },
+        {
+          "id": "german-city-2",
+          "title": "Directions",
+          "subtitle": "Left, right, straight",
+          "iconName": "arrow.triangle.turn.up.right.circle.fill",
+          "questions": [
+            {
+              "id": "de-city-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "rechts",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "right",
+                "left",
+                "straight"
+              ],
+              "correctAnswer": "right",
+              "acceptedAnswers": [
+                "right"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "rechts means right as a direction."
+            },
+            {
+              "id": "de-city-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "links",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "left",
+                "near",
+                "far"
+              ],
+              "correctAnswer": "left",
+              "acceptedAnswers": [
+                "left"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "links means left."
+            },
+            {
+              "id": "de-city-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Go straight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Geh geradeaus",
+              "acceptedAnswers": [
+                "Geh geradeaus"
+              ],
+              "tokens": [
+                "Geh",
+                "geradeaus"
+              ],
+              "correctTokens": [
+                "Geh",
+                "geradeaus"
+              ],
+              "pairs": {
+              },
+              "learningNote": "A compact direction phrase is easier to use in the moment."
+            },
+            {
+              "id": "de-city-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Bieg ___ ab.",
+              "context": "Fill in: Turn right.",
+              "choices": [
+                "rechts",
+                "links",
+                "weit"
+              ],
+              "correctAnswer": "rechts",
+              "acceptedAnswers": [
+                "rechts"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Bieg rechts ab means turn right."
+            }
+          ]
+        },
+        {
+          "id": "german-city-3",
+          "title": "Ask where",
+          "subtitle": "Find what you need",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "de-city-3-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Where is the bathroom?",
+              "context": "Choose the German question.",
+              "choices": [
+                "Wo ist die Toilette?",
+                "Wie viel kostet die Toilette?",
+                "Wie ist die Toilette?"
+              ],
+              "correctAnswer": "Wo ist die Toilette?",
+              "acceptedAnswers": [
+                "Wo ist die Toilette?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wo ist das? starts where-is questions."
+            },
+            {
+              "id": "de-city-3-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where is the bank?",
+              "choices": [
+
+              ],
+              "correctAnswer": "Wo ist die Bank?",
+              "acceptedAnswers": [
+                "Wo ist die Bank?"
+              ],
+              "tokens": [
+                "Wo",
+                "ist",
+                "die",
+                "Bank?"
+              ],
+              "correctTokens": [
+                "Wo",
+                "ist",
+                "die",
+                "Bank?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Swap in different place words after the where-is pattern."
+            },
+            {
+              "id": "de-city-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type German for bathroom.",
+              "context": "Use the common travel word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Toilette",
+              "acceptedAnswers": [
+                "Toilette",
+                "toilette"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Toilette means bathroom."
+            },
+            {
+              "id": "de-city-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match question words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "wie = how, wie viel = how much, wo = where",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "wo": "where",
+                "wie viel": "how much",
+                "wie": "how"
+              },
+              "learningNote": "Question words unlock more flexible conversation."
+            }
+          ]
+        },
+        {
+          "id": "german-city-4",
+          "title": "Transportation",
+          "subtitle": "Buses and trains",
+          "iconName": "bus.fill",
+          "questions": [
+            {
+              "id": "de-city-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Zug",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "train",
+                "bus",
+                "taxi"
+              ],
+              "correctAnswer": "train",
+              "acceptedAnswers": [
+                "train"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Zug means train."
+            },
+            {
+              "id": "de-city-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ticket",
+              "context": "Choose the German word.",
+              "choices": [
+                "Fahrkarte",
+                "Tasche",
+                "Flasche"
+              ],
+              "correctAnswer": "Fahrkarte",
+              "acceptedAnswers": [
+                "Fahrkarte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Fahrkarte is the practical word for ticket."
+            },
+            {
+              "id": "de-city-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich brauche eine ___.",
+              "context": "Fill in: I need a ticket.",
+              "choices": [
+                "Fahrkarte",
+                "Zug",
+                "Park"
+              ],
+              "correctAnswer": "Fahrkarte",
+              "acceptedAnswers": [
+                "Fahrkarte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ich brauche means I need."
+            },
+            {
+              "id": "de-city-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need a ticket for the bus.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich brauche eine Fahrkarte für den Bus",
+              "acceptedAnswers": [
+                "Ich brauche eine Fahrkarte für den Bus"
+              ],
+              "tokens": [
+                "Ich",
+                "brauche",
+                "eine",
+                "Fahrkarte",
+                "für",
+                "den",
+                "Bus"
+              ],
+              "correctTokens": [
+                "Ich",
+                "brauche",
+                "eine",
+                "Fahrkarte",
+                "für",
+                "den",
+                "Bus"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This combines need, ticket, and bus into one usable phrase."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-routine",
+      "unitNumber": 4,
+      "title": "Talk about your day",
+      "theme": "Daily routine",
+      "iconName": "sun.max.fill",
+      "lessons": [
+        {
+          "id": "german-routine-1",
+          "title": "Home",
+          "subtitle": "Rooms and objects",
+          "iconName": "house.fill",
+          "questions": [
+            {
+              "id": "de-routine-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Haus",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "house",
+                "table",
+                "morning"
+              ],
+              "correctAnswer": "house",
+              "acceptedAnswers": [
+                "house"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Haus means house or home."
+            },
+            {
+              "id": "de-routine-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "kitchen",
+              "context": "Choose the German word.",
+              "choices": [
+                "Küche",
+                "Zimmer",
+                "Essen"
+              ],
+              "correctAnswer": "Küche",
+              "acceptedAnswers": [
+                "Küche"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Küche means kitchen."
+            },
+            {
+              "id": "de-routine-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match home words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Stuhl = chair, Tisch = table, Tür = door",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Tisch": "table",
+                "Stuhl": "chair",
+                "Tür": "door"
+              },
+              "learningNote": "These are everyday home nouns."
+            },
+            {
+              "id": "de-routine-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type German for door.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Tür",
+              "acceptedAnswers": [
+                "Tür",
+                "tur"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Tür means door."
+            }
+          ]
+        },
+        {
+          "id": "german-routine-2",
+          "title": "Morning",
+          "subtitle": "Wake up and start",
+          "iconName": "sunrise.fill",
+          "questions": [
+            {
+              "id": "de-routine-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Morgen",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "morning",
+                "night",
+                "week"
+              ],
+              "correctAnswer": "morning",
+              "acceptedAnswers": [
+                "morning"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Morgen means morning."
+            },
+            {
+              "id": "de-routine-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich ___ früh auf.",
+              "context": "Fill in: I wake up early.",
+              "choices": [
+                "stehe",
+                "sitze",
+                "ruhe"
+              ],
+              "correctAnswer": "stehe",
+              "acceptedAnswers": [
+                "stehe"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ich stehe früh auf means I get up early."
+            },
+            {
+              "id": "de-routine-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I drink coffee in the morning.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich trinke morgens Kaffee",
+              "acceptedAnswers": [
+                "Ich trinke morgens Kaffee"
+              ],
+              "tokens": [
+                "Ich",
+                "trinke",
+                "morgens",
+                "Kaffee"
+              ],
+              "correctTokens": [
+                "Ich",
+                "trinke",
+                "morgens",
+                "Kaffee"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This connects a routine action with time of day."
+            },
+            {
+              "id": "de-routine-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type German for early.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "früh",
+              "acceptedAnswers": [
+                "früh",
+                "fruh"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "früh means early."
+            }
+          ]
+        },
+        {
+          "id": "german-routine-3",
+          "title": "Work day",
+          "subtitle": "Tasks and time",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "de-routine-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Arbeit",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "work",
+                "walk",
+                "weather"
+              ],
+              "correctAnswer": "work",
+              "acceptedAnswers": [
+                "work"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Arbeit can mean work or job depending on context."
+            },
+            {
+              "id": "de-routine-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I study",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "ich lerne",
+                "ich arbeite",
+                "ich gehe"
+              ],
+              "correctAnswer": "ich lerne",
+              "acceptedAnswers": [
+                "ich lerne"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ich lerne means I study."
+            },
+            {
+              "id": "de-routine-3-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich ___ um neun.",
+              "context": "Fill in: I work at nine.",
+              "choices": [
+                "arbeite",
+                "arbeitest",
+                "arbeitet"
+              ],
+              "correctAnswer": "arbeite",
+              "acceptedAnswers": [
+                "arbeite"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ich arbeite means I work."
+            },
+            {
+              "id": "de-routine-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I study German at night.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich lerne abends Deutsch",
+              "acceptedAnswers": [
+                "Ich lerne abends Deutsch"
+              ],
+              "tokens": [
+                "Ich",
+                "lerne",
+                "abends",
+                "Deutsch"
+              ],
+              "correctTokens": [
+                "Ich",
+                "lerne",
+                "abends",
+                "Deutsch"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a useful habit-building sentence."
+            }
+          ]
+        },
+        {
+          "id": "german-routine-4",
+          "title": "Evening",
+          "subtitle": "Plans and rest",
+          "iconName": "moon.stars.fill",
+          "questions": [
+            {
+              "id": "de-routine-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ich bin müde",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am tired",
+                "I am busy",
+                "I am ready"
+              ],
+              "correctAnswer": "I am tired",
+              "acceptedAnswers": [
+                "I am tired"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ich bin müde means I am tired."
+            },
+            {
+              "id": "de-routine-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am going home",
+              "context": "Choose the German sentence.",
+              "choices": [
+                "ich gehe nach Hause",
+                "ich habe ein Haus",
+                "ich bin zu Hause"
+              ],
+              "correctAnswer": "ich gehe nach Hause",
+              "acceptedAnswers": [
+                "ich gehe nach Hause"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ich gehe nach Hause is a practical evening sentence."
+            },
+            {
+              "id": "de-routine-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type German for night.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Nacht",
+              "acceptedAnswers": [
+                "Nacht",
+                "nacht"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Nacht means night."
+            },
+            {
+              "id": "de-routine-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest tonight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich möchte heute Abend ausruhen",
+              "acceptedAnswers": [
+                "Ich möchte heute Abend ausruhen"
+              ],
+              "tokens": [
+                "Ich",
+                "möchte",
+                "heute",
+                "Abend",
+                "ausruhen"
+              ],
+              "correctTokens": [
+                "Ich",
+                "möchte",
+                "heute",
+                "Abend",
+                "ausruhen"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This turns a simple want phrase into a real sentence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-grocery",
+      "unitNumber": 5,
+      "title": "Shop for groceries",
+      "theme": "Food market basics",
+      "iconName": "basket.fill",
+      "lessons": [
+        {
+          "id": "german-grocery-1",
+          "title": "Grocery words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "basket.fill",
+          "questions": [
+            {
+              "id": "de-grocery-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Apfel",
+              "context": "What does this German word mean?",
+              "choices": [
+                "apple",
+                "cheese",
+                "rice"
+              ],
+              "correctAnswer": "apple",
+              "acceptedAnswers": [
+                "apple"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Apfel means apple."
+            },
+            {
+              "id": "de-grocery-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "cheese",
+              "context": "Choose the German word.",
+              "choices": [
+                "Käse",
+                "Reis",
+                "Gemüse"
+              ],
+              "correctAnswer": "Käse",
+              "acceptedAnswers": [
+                "Käse"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Käse means cheese."
+            },
+            {
+              "id": "de-grocery-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the food market basics words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Reis = rice, Gemüse = vegetables, Brot = bread",
+              "acceptedAnswers": [
+                "Reis = rice, Gemüse = vegetables, Brot = bread"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Reis": "rice",
+                "Gemüse": "vegetables",
+                "Brot": "bread"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "de-grocery-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ich möchte ___ Apfel.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "einen",
+                "eine",
+                "ein"
+              ],
+              "correctAnswer": "einen",
+              "acceptedAnswers": [
+                "einen"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "german-grocery-2",
+          "title": "Ask for quantities",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "de-grocery-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How much does it cost?",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "Wie viel kostet das?",
+                "Brot",
+                "Wasser"
+              ],
+              "correctAnswer": "Wie viel kostet das?",
+              "acceptedAnswers": [
+                "Wie viel kostet das?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wie viel kostet das? is a useful polite phrase."
+            },
+            {
+              "id": "de-grocery-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full German sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ein Kilo Reis",
+              "acceptedAnswers": [
+                "ein Kilo Reis"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ein Kilo Reis means a kilo of rice."
+            },
+            {
+              "id": "de-grocery-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Ich möchte einen Apfel",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich möchte einen Apfel.",
+              "acceptedAnswers": [
+                "Ich möchte einen Apfel."
+              ],
+              "tokens": [
+                "Ich",
+                "möchte",
+                "einen",
+                "Apfel."
+              ],
+              "correctTokens": [
+                "Ich",
+                "möchte",
+                "einen",
+                "Apfel."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "de-grocery-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "die Kasse",
+              "context": "What does this German phrase mean?",
+              "choices": [
+                "checkout",
+                "apple",
+                "a kilo of rice"
+              ],
+              "correctAnswer": "checkout",
+              "acceptedAnswers": [
+                "checkout"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "die Kasse means checkout."
+            }
+          ]
+        },
+        {
+          "id": "german-grocery-3",
+          "title": "Find items",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "de-grocery-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Wo ___ der Käse?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "ist",
+                "sind",
+                "gehe"
+              ],
+              "correctAnswer": "ist",
+              "acceptedAnswers": [
+                "ist"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "de-grocery-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Gemüse = vegetables, Brot = bread, Wasser = water",
+              "acceptedAnswers": [
+                "Gemüse = vegetables, Brot = bread, Wasser = water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Gemüse": "vegetables",
+                "Brot": "bread",
+                "Wasser": "water"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "de-grocery-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich brauche Reis.",
+              "acceptedAnswers": [
+                "Ich brauche Reis."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "de-grocery-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Wo ist der Käse",
+              "choices": [
+
+              ],
+              "correctAnswer": "Wo ist der Käse?",
+              "acceptedAnswers": [
+                "Wo ist der Käse?"
+              ],
+              "tokens": [
+                "Wo",
+                "ist",
+                "der",
+                "Käse?"
+              ],
+              "correctTokens": [
+                "Wo",
+                "ist",
+                "der",
+                "Käse?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "german-grocery-4",
+          "title": "Checkout",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "de-grocery-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Wasser",
+              "context": "What does this German word mean?",
+              "choices": [
+                "water",
+                "apple",
+                "cheese"
+              ],
+              "correctAnswer": "water",
+              "acceptedAnswers": [
+                "water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wasser means water."
+            },
+            {
+              "id": "de-grocery-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Ich zahle mit Karte.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Ich zahle mit Karte.",
+                "Ich möchte einen Apfel.",
+                "Ich brauche Reis."
+              ],
+              "correctAnswer": "Ich zahle mit Karte.",
+              "acceptedAnswers": [
+                "Ich zahle mit Karte."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "de-grocery-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Ich zahle ___ Karte.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "mit",
+                "für",
+                "von"
+              ],
+              "correctAnswer": "mit",
+              "acceptedAnswers": [
+                "mit"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "de-grocery-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich zahle mit Karte.",
+              "acceptedAnswers": [
+                "Ich zahle mit Karte."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-work",
+      "unitNumber": 6,
+      "title": "Work and study",
+      "theme": "Office and study basics",
+      "iconName": "briefcase.fill",
+      "lessons": [
+        {
+          "id": "german-work-1",
+          "title": "Desk words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "de-work-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Besprechung",
+              "context": "What does this German word mean?",
+              "choices": [
+                "meeting",
+                "computer",
+                "email"
+              ],
+              "correctAnswer": "meeting",
+              "acceptedAnswers": [
+                "meeting"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Besprechung means meeting."
+            },
+            {
+              "id": "de-work-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "computer",
+              "context": "Choose the German word.",
+              "choices": [
+                "Computer",
+                "E-Mail",
+                "Projekt"
+              ],
+              "correctAnswer": "Computer",
+              "acceptedAnswers": [
+                "Computer"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Computer means computer."
+            },
+            {
+              "id": "de-work-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the office and study basics words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "E-Mail = email, Projekt = project, Büro = office",
+              "acceptedAnswers": [
+                "E-Mail = email, Projekt = project, Büro = office"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "E-Mail": "email",
+                "Projekt": "project",
+                "Büro": "office"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "de-work-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ich habe ___ Besprechung.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "eine",
+                "einen",
+                "ein"
+              ],
+              "correctAnswer": "eine",
+              "acceptedAnswers": [
+                "eine"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "german-work-2",
+          "title": "Meetings",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "de-work-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "I am ready.",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "Ich bin bereit.",
+                "Büro",
+                "Hausaufgaben"
+              ],
+              "correctAnswer": "Ich bin bereit.",
+              "acceptedAnswers": [
+                "Ich bin bereit."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ich bin bereit. is a useful polite phrase."
+            },
+            {
+              "id": "de-work-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full German sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "um drei Uhr",
+              "acceptedAnswers": [
+                "um drei Uhr"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "um drei Uhr means at three o’clock."
+            },
+            {
+              "id": "de-work-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Ich habe eine Besprechung",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich habe eine Besprechung.",
+              "acceptedAnswers": [
+                "Ich habe eine Besprechung."
+              ],
+              "tokens": [
+                "Ich",
+                "habe",
+                "eine",
+                "Besprechung."
+              ],
+              "correctTokens": [
+                "Ich",
+                "habe",
+                "eine",
+                "Besprechung."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "de-work-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "die Frist",
+              "context": "What does this German phrase mean?",
+              "choices": [
+                "deadline",
+                "meeting",
+                "at three o’clock"
+              ],
+              "correctAnswer": "deadline",
+              "acceptedAnswers": [
+                "deadline"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "die Frist means deadline."
+            }
+          ]
+        },
+        {
+          "id": "german-work-3",
+          "title": "Study plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "de-work-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich muss ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "lernen",
+                "essen",
+                "schlafen"
+              ],
+              "correctAnswer": "lernen",
+              "acceptedAnswers": [
+                "lernen"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "de-work-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Projekt = project, Büro = office, Hausaufgaben = homework",
+              "acceptedAnswers": [
+                "Projekt = project, Büro = office, Hausaufgaben = homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Projekt": "project",
+                "Büro": "office",
+                "Hausaufgaben": "homework"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "de-work-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich muss lernen.",
+              "acceptedAnswers": [
+                "Ich muss lernen."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "de-work-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Wo ist das Büro",
+              "choices": [
+
+              ],
+              "correctAnswer": "Wo ist das Büro?",
+              "acceptedAnswers": [
+                "Wo ist das Büro?"
+              ],
+              "tokens": [
+                "Wo",
+                "ist",
+                "das",
+                "Büro?"
+              ],
+              "correctTokens": [
+                "Wo",
+                "ist",
+                "das",
+                "Büro?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "german-work-4",
+          "title": "Deadlines",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "de-work-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Hausaufgaben",
+              "context": "What does this German word mean?",
+              "choices": [
+                "homework",
+                "meeting",
+                "computer"
+              ],
+              "correctAnswer": "homework",
+              "acceptedAnswers": [
+                "homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Hausaufgaben means homework."
+            },
+            {
+              "id": "de-work-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Ich sende eine E-Mail.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Ich sende eine E-Mail.",
+                "Ich habe eine Besprechung.",
+                "Ich muss lernen."
+              ],
+              "correctAnswer": "Ich sende eine E-Mail.",
+              "acceptedAnswers": [
+                "Ich sende eine E-Mail."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "de-work-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Ich sende ___ E-Mail.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "eine",
+                "einen",
+                "ein"
+              ],
+              "correctAnswer": "eine",
+              "acceptedAnswers": [
+                "eine"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "de-work-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich sende eine E-Mail.",
+              "acceptedAnswers": [
+                "Ich sende eine E-Mail."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-travel",
+      "unitNumber": 7,
+      "title": "Travel basics",
+      "theme": "Airport and hotel basics",
+      "iconName": "airplane",
+      "lessons": [
+        {
+          "id": "german-travel-1",
+          "title": "Airport words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "airplane",
+          "questions": [
+            {
+              "id": "de-travel-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Flughafen",
+              "context": "What does this German word mean?",
+              "choices": [
+                "airport",
+                "hotel",
+                "passport"
+              ],
+              "correctAnswer": "airport",
+              "acceptedAnswers": [
+                "airport"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Flughafen means airport."
+            },
+            {
+              "id": "de-travel-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hotel",
+              "context": "Choose the German word.",
+              "choices": [
+                "Hotel",
+                "Pass",
+                "Koffer"
+              ],
+              "correctAnswer": "Hotel",
+              "acceptedAnswers": [
+                "Hotel"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Hotel means hotel."
+            },
+            {
+              "id": "de-travel-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the airport and hotel basics words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Pass = passport, Koffer = suitcase, Fahrkarte = ticket",
+              "acceptedAnswers": [
+                "Pass = passport, Koffer = suitcase, Fahrkarte = ticket"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Pass": "passport",
+                "Koffer": "suitcase",
+                "Fahrkarte": "ticket"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "de-travel-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ich habe ___ Reservierung.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "eine",
+                "einen",
+                "ein"
+              ],
+              "correctAnswer": "eine",
+              "acceptedAnswers": [
+                "eine"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "german-travel-2",
+          "title": "Hotel check-in",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "de-travel-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Can you help me?",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "Können Sie mir helfen?",
+                "Fahrkarte",
+                "Bahnhof"
+              ],
+              "correctAnswer": "Können Sie mir helfen?",
+              "acceptedAnswers": [
+                "Können Sie mir helfen?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Können Sie mir helfen? is a useful polite phrase."
+            },
+            {
+              "id": "de-travel-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full German sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "eine Nacht",
+              "acceptedAnswers": [
+                "eine Nacht"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "eine Nacht means one night."
+            },
+            {
+              "id": "de-travel-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Ich habe eine Reservierung",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich habe eine Reservierung.",
+              "acceptedAnswers": [
+                "Ich habe eine Reservierung."
+              ],
+              "tokens": [
+                "Ich",
+                "habe",
+                "eine",
+                "Reservierung."
+              ],
+              "correctTokens": [
+                "Ich",
+                "habe",
+                "eine",
+                "Reservierung."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "de-travel-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "das Einchecken",
+              "context": "What does this German phrase mean?",
+              "choices": [
+                "check-in",
+                "airport",
+                "one night"
+              ],
+              "correctAnswer": "check-in",
+              "acceptedAnswers": [
+                "check-in"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "das Einchecken means check-in."
+            }
+          ]
+        },
+        {
+          "id": "german-travel-3",
+          "title": "Ask for help",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "de-travel-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Wo ___ das Hotel?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "ist",
+                "sind",
+                "gehe"
+              ],
+              "correctAnswer": "ist",
+              "acceptedAnswers": [
+                "ist"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "de-travel-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Koffer = suitcase, Fahrkarte = ticket, Bahnhof = train station",
+              "acceptedAnswers": [
+                "Koffer = suitcase, Fahrkarte = ticket, Bahnhof = train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "Koffer": "suitcase",
+                "Fahrkarte": "ticket",
+                "Bahnhof": "train station"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "de-travel-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich brauche Hilfe.",
+              "acceptedAnswers": [
+                "Ich brauche Hilfe."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "de-travel-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Wo ist das Hotel",
+              "choices": [
+
+              ],
+              "correctAnswer": "Wo ist das Hotel?",
+              "acceptedAnswers": [
+                "Wo ist das Hotel?"
+              ],
+              "tokens": [
+                "Wo",
+                "ist",
+                "das",
+                "Hotel?"
+              ],
+              "correctTokens": [
+                "Wo",
+                "ist",
+                "das",
+                "Hotel?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "german-travel-4",
+          "title": "Travel plans",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "de-travel-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Bahnhof",
+              "context": "What does this German word mean?",
+              "choices": [
+                "train station",
+                "airport",
+                "hotel"
+              ],
+              "correctAnswer": "train station",
+              "acceptedAnswers": [
+                "train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Bahnhof means train station."
+            },
+            {
+              "id": "de-travel-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Ich gehe zum Bahnhof.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Ich gehe zum Bahnhof.",
+                "Ich habe eine Reservierung.",
+                "Ich brauche Hilfe."
+              ],
+              "correctAnswer": "Ich gehe zum Bahnhof.",
+              "acceptedAnswers": [
+                "Ich gehe zum Bahnhof."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "de-travel-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Ich gehe ___ Bahnhof.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "zum",
+                "mit",
+                "von"
+              ],
+              "correctAnswer": "zum",
+              "acceptedAnswers": [
+                "zum"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "de-travel-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich gehe zum Bahnhof.",
+              "acceptedAnswers": [
+                "Ich gehe zum Bahnhof."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "german-feelings",
+      "unitNumber": 8,
+      "title": "Feelings and plans",
+      "theme": "Mood and weekend basics",
+      "iconName": "heart.fill",
+      "lessons": [
+        {
+          "id": "german-feelings-1",
+          "title": "Feelings",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "heart.fill",
+          "questions": [
+            {
+              "id": "de-feelings-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "glücklich",
+              "context": "What does this German word mean?",
+              "choices": [
+                "happy",
+                "tired",
+                "busy"
+              ],
+              "correctAnswer": "happy",
+              "acceptedAnswers": [
+                "happy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "glücklich means happy."
+            },
+            {
+              "id": "de-feelings-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "tired",
+              "context": "Choose the German word.",
+              "choices": [
+                "müde",
+                "beschäftigt",
+                "ruhig"
+              ],
+              "correctAnswer": "müde",
+              "acceptedAnswers": [
+                "müde"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "müde means tired."
+            },
+            {
+              "id": "de-feelings-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the mood and weekend basics words.",
+              "context": "Connect German to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "beschäftigt = busy, ruhig = calm, morgen = tomorrow",
+              "acceptedAnswers": [
+                "beschäftigt = busy, ruhig = calm, morgen = tomorrow"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "beschäftigt": "busy",
+                "ruhig": "calm",
+                "morgen": "tomorrow"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "de-feelings-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ich ___ müde.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "bin",
+                "habe",
+                "gehe"
+              ],
+              "correctAnswer": "bin",
+              "acceptedAnswers": [
+                "bin"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "german-feelings-2",
+          "title": "Preferences",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "de-feelings-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How are you?",
+              "context": "Choose the German phrase.",
+              "choices": [
+                "Wie geht es dir?",
+                "morgen",
+                "Wochenende"
+              ],
+              "correctAnswer": "Wie geht es dir?",
+              "acceptedAnswers": [
+                "Wie geht es dir?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wie geht es dir? is a useful polite phrase."
+            },
+            {
+              "id": "de-feelings-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full German sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "dieses Wochenende",
+              "acceptedAnswers": [
+                "dieses Wochenende"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "dieses Wochenende means this weekend."
+            },
+            {
+              "id": "de-feelings-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Ich bin müde",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich bin müde.",
+              "acceptedAnswers": [
+                "Ich bin müde."
+              ],
+              "tokens": [
+                "Ich",
+                "bin",
+                "müde."
+              ],
+              "correctTokens": [
+                "Ich",
+                "bin",
+                "müde."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "de-feelings-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ich fühle mich gut",
+              "context": "What does this German phrase mean?",
+              "choices": [
+                "I feel good",
+                "happy",
+                "this weekend"
+              ],
+              "correctAnswer": "I feel good",
+              "acceptedAnswers": [
+                "I feel good"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ich fühle mich gut means I feel good."
+            }
+          ]
+        },
+        {
+          "id": "german-feelings-3",
+          "title": "Weekend plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "de-feelings-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ich möchte mich ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "ausruhen",
+                "zahlen",
+                "finden"
+              ],
+              "correctAnswer": "ausruhen",
+              "acceptedAnswers": [
+                "ausruhen"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "de-feelings-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ruhig = calm, morgen = tomorrow, Wochenende = weekend",
+              "acceptedAnswers": [
+                "ruhig = calm, morgen = tomorrow, Wochenende = weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ruhig": "calm",
+                "morgen": "tomorrow",
+                "Wochenende": "weekend"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "de-feelings-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich möchte mich ausruhen.",
+              "acceptedAnswers": [
+                "Ich möchte mich ausruhen."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "de-feelings-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Morgen arbeite ich",
+              "choices": [
+
+              ],
+              "correctAnswer": "Morgen arbeite ich.",
+              "acceptedAnswers": [
+                "Morgen arbeite ich."
+              ],
+              "tokens": [
+                "Morgen",
+                "arbeite",
+                "ich."
+              ],
+              "correctTokens": [
+                "Morgen",
+                "arbeite",
+                "ich."
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "german-feelings-4",
+          "title": "Small talk",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "de-feelings-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Wochenende",
+              "context": "What does this German word mean?",
+              "choices": [
+                "weekend",
+                "happy",
+                "tired"
+              ],
+              "correctAnswer": "weekend",
+              "acceptedAnswers": [
+                "weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Wochenende means weekend."
+            },
+            {
+              "id": "de-feelings-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Ich mag das Wochenende.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Ich mag das Wochenende.",
+                "Ich bin müde.",
+                "Ich möchte mich ausruhen."
+              ],
+              "correctAnswer": "Ich mag das Wochenende.",
+              "acceptedAnswers": [
+                "Ich mag das Wochenende."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "de-feelings-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Morgen ___ ich.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "arbeite",
+                "Käse",
+                "Bahnhof"
+              ],
+              "correctAnswer": "arbeite",
+              "acceptedAnswers": [
+                "arbeite"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "de-feelings-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full German sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ich mag das Wochenende.",
+              "acceptedAnswers": [
+                "Ich mag das Wochenende."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

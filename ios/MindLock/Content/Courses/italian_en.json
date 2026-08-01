@@ -1,0 +1,3686 @@
+{
+  "courseId": "italian_en",
+  "version": 1,
+  "sourceLanguage": "en",
+  "targetLanguage": "italian",
+  "displayName": "Italian",
+  "sections": [
+    {
+      "id": "italian-cafe",
+      "unitNumber": 1,
+      "title": "Order at a cafe",
+      "theme": "Cafe basics",
+      "iconName": "cup.and.saucer.fill",
+      "lessons": [
+        {
+          "id": "italian-cafe-1",
+          "title": "Cafe words",
+          "subtitle": "Coffee, water, and bread",
+          "iconName": "cup.and.saucer.fill",
+          "questions": [
+            {
+              "id": "it-cafe-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "caffè",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "coffee",
+                "tea",
+                "milk"
+              ],
+              "correctAnswer": "coffee",
+              "acceptedAnswers": [
+                "coffee"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "caffè is the core word for coffee."
+            },
+            {
+              "id": "it-cafe-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "water",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "acqua",
+                "pane",
+                "tavolo"
+              ],
+              "correctAnswer": "acqua",
+              "acceptedAnswers": [
+                "acqua"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "acqua means water."
+            },
+            {
+              "id": "it-cafe-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the cafe words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "latte = milk, pane = bread, zucchero = sugar",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "pane": "bread",
+                "latte": "milk",
+                "zucchero": "sugar"
+              },
+              "learningNote": "These are practical cafe and breakfast words."
+            },
+            {
+              "id": "it-cafe-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Voglio ___ caffè.",
+              "context": "Fill in: I want a coffee.",
+              "choices": [
+                "un",
+                "una",
+                "dei"
+              ],
+              "correctAnswer": "un",
+              "acceptedAnswers": [
+                "un"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use un before masculine singular nouns like caffè."
+            }
+          ]
+        },
+        {
+          "id": "italian-cafe-2",
+          "title": "Ask politely",
+          "subtitle": "Please and thank you",
+          "iconName": "hand.thumbsup.fill",
+          "questions": [
+            {
+              "id": "it-cafe-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "please",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "per favore",
+                "buona notte",
+                "prego"
+              ],
+              "correctAnswer": "per favore",
+              "acceptedAnswers": [
+                "per favore"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "per favore is the polite way to say please."
+            },
+            {
+              "id": "it-cafe-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Italian for thank you.",
+              "context": "Use the common everyday phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "grazie",
+              "acceptedAnswers": [
+                "grazie"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "grazie means thank you."
+            },
+            {
+              "id": "it-cafe-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "A coffee, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Un caffè, per favore",
+              "acceptedAnswers": [
+                "Un caffè, per favore"
+              ],
+              "tokens": [
+                "Un",
+                "caffè,",
+                "per",
+                "favore"
+              ],
+              "correctTokens": [
+                "Un",
+                "caffè,",
+                "per",
+                "favore"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is enough to order politely."
+            },
+            {
+              "id": "it-cafe-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "prego",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "you're welcome",
+                "good morning",
+                "excuse me"
+              ],
+              "correctAnswer": "you're welcome",
+              "acceptedAnswers": [
+                "you're welcome"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "prego is a common reply to thank you."
+            }
+          ]
+        },
+        {
+          "id": "italian-cafe-3",
+          "title": "Order food",
+          "subtitle": "I want and I have",
+          "iconName": "fork.knife",
+          "questions": [
+            {
+              "id": "it-cafe-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Io ___ un panino.",
+              "context": "Fill in: I want a sandwich.",
+              "choices": [
+                "voglio",
+                "vuole",
+                "vogliono"
+              ],
+              "correctAnswer": "voglio",
+              "acceptedAnswers": [
+                "voglio"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Voglio means I want."
+            },
+            {
+              "id": "it-cafe-3-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ho fame",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am hungry",
+                "I am thirsty",
+                "I am tired"
+              ],
+              "correctAnswer": "I am hungry",
+              "acceptedAnswers": [
+                "I am hungry"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ho fame means I am hungry."
+            },
+            {
+              "id": "it-cafe-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I want bread and water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Voglio pane e acqua",
+              "acceptedAnswers": [
+                "Voglio pane e acqua"
+              ],
+              "tokens": [
+                "Voglio",
+                "pane",
+                "e",
+                "acqua"
+              ],
+              "correctTokens": [
+                "Voglio",
+                "pane",
+                "e",
+                "acqua"
+              ],
+              "pairs": {
+              },
+              "learningNote": "e connects words like and in English."
+            },
+            {
+              "id": "it-cafe-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the order words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "fame = hunger, ho = I have, voglio = I want",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "voglio": "I want",
+                "ho": "I have",
+                "fame": "hunger"
+              },
+              "learningNote": "These phrases help users ask for food quickly."
+            }
+          ]
+        },
+        {
+          "id": "italian-cafe-4",
+          "title": "Pay the bill",
+          "subtitle": "Numbers and checkout",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "it-cafe-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "il conto",
+              "context": "What do you ask for at the end of a meal?",
+              "choices": [
+                "the bill",
+                "the door",
+                "the table"
+              ],
+              "correctAnswer": "the bill",
+              "acceptedAnswers": [
+                "the bill"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "il conto is the check or bill."
+            },
+            {
+              "id": "it-cafe-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How much is it?",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "Quanto costa?",
+                "Dov'è?",
+                "Come ti chiami?"
+              ],
+              "correctAnswer": "Quanto costa?",
+              "acceptedAnswers": [
+                "Quanto costa?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Quanto costa? asks about price."
+            },
+            {
+              "id": "it-cafe-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Italian for three.",
+              "context": "One word or numeral form.",
+              "choices": [
+
+              ],
+              "correctAnswer": "tre",
+              "acceptedAnswers": [
+                "tre",
+                "3"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "tre means three."
+            },
+            {
+              "id": "it-cafe-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "The bill, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Il conto, per favore",
+              "acceptedAnswers": [
+                "Il conto, per favore"
+              ],
+              "tokens": [
+                "Il",
+                "conto,",
+                "per",
+                "favore"
+              ],
+              "correctTokens": [
+                "Il",
+                "conto,",
+                "per",
+                "favore"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the practical phrase to close a restaurant interaction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-meet",
+      "unitNumber": 2,
+      "title": "Meet someone new",
+      "theme": "Introductions",
+      "iconName": "person.2.fill",
+      "lessons": [
+        {
+          "id": "italian-meet-1",
+          "title": "Say hello",
+          "subtitle": "Greetings",
+          "iconName": "hand.wave.fill",
+          "questions": [
+            {
+              "id": "it-meet-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "ciao",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hello",
+                "goodbye",
+                "thanks"
+              ],
+              "correctAnswer": "hello",
+              "acceptedAnswers": [
+                "hello"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ciao is a common greeting."
+            },
+            {
+              "id": "it-meet-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "good morning",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "buongiorno",
+                "buona notte",
+                "arrivederci"
+              ],
+              "correctAnswer": "buongiorno",
+              "acceptedAnswers": [
+                "buongiorno"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "buongiorno is used early in the day."
+            },
+            {
+              "id": "it-meet-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match greetings.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "arrivederci = goodbye, ciao = hello, grazie = thanks",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ciao": "hello",
+                "arrivederci": "goodbye",
+                "grazie": "thanks"
+              },
+              "learningNote": "These cover the start and end of simple conversations."
+            },
+            {
+              "id": "it-meet-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Italian for hello.",
+              "context": "Use the common greeting.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ciao",
+              "acceptedAnswers": [
+                "ciao",
+                "buongiorno"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ciao starts everyday conversations."
+            }
+          ]
+        },
+        {
+          "id": "italian-meet-2",
+          "title": "Names",
+          "subtitle": "Ask and answer",
+          "iconName": "person.text.rectangle.fill",
+          "questions": [
+            {
+              "id": "it-meet-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "What is your name?",
+              "context": "Choose the Italian question.",
+              "choices": [
+                "Come ti chiami?",
+                "Dove vivi?",
+                "Che cosa vuoi?"
+              ],
+              "correctAnswer": "Come ti chiami?",
+              "acceptedAnswers": [
+                "Come ti chiami?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Come ti chiami? asks for someone's name."
+            },
+            {
+              "id": "it-meet-2-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "My name is Ana.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Mi chiamo Ana",
+              "acceptedAnswers": [
+                "Mi chiamo Ana"
+              ],
+              "tokens": [
+                "Mi",
+                "chiamo",
+                "Ana"
+              ],
+              "correctTokens": [
+                "Mi",
+                "chiamo",
+                "Ana"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the simplest self-introduction pattern."
+            },
+            {
+              "id": "it-meet-2-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Mi ___ Luis.",
+              "context": "Fill in: My name is Luis.",
+              "choices": [
+                "chiamo",
+                "chiami",
+                "chiama"
+              ],
+              "correctAnswer": "chiamo",
+              "acceptedAnswers": [
+                "chiamo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Mi chiamo means my name is."
+            },
+            {
+              "id": "it-meet-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Italian for my name is.",
+              "context": "Use the common phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "mi chiamo",
+              "acceptedAnswers": [
+                "mi chiamo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use this before saying your name."
+            }
+          ]
+        },
+        {
+          "id": "italian-meet-3",
+          "title": "Where from?",
+          "subtitle": "Countries and origin",
+          "iconName": "globe.americas.fill",
+          "questions": [
+            {
+              "id": "it-meet-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "vengo dalla Colombia",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am from Colombia",
+                "I live in Colombia",
+                "I go to Colombia"
+              ],
+              "correctAnswer": "I am from Colombia",
+              "acceptedAnswers": [
+                "I am from Colombia"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "da means from."
+            },
+            {
+              "id": "it-meet-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Io ___ dagli Stati Uniti.",
+              "context": "Fill in: I am from the United States.",
+              "choices": [
+                "vengo",
+                "vieni",
+                "viene"
+              ],
+              "correctAnswer": "vengo",
+              "acceptedAnswers": [
+                "vengo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Vengo da means I come from."
+            },
+            {
+              "id": "it-meet-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where are you from?",
+              "choices": [
+
+              ],
+              "correctAnswer": "Di dove sei?",
+              "acceptedAnswers": [
+                "Di dove sei?"
+              ],
+              "tokens": [
+                "Di",
+                "dove",
+                "sei?"
+              ],
+              "correctTokens": [
+                "Di",
+                "dove",
+                "sei?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a natural first-conversation question."
+            },
+            {
+              "id": "it-meet-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match identity words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "da = from, sei = you are, vengo = I come",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "vengo": "I come",
+                "sei": "you are",
+                "da": "from"
+              },
+              "learningNote": "Identity and origin phrases show up constantly."
+            }
+          ]
+        },
+        {
+          "id": "italian-meet-4",
+          "title": "Nice to meet you",
+          "subtitle": "Polite small talk",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "it-meet-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "piacere",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "nice to meet you",
+                "very tired",
+                "many thanks"
+              ],
+              "correctAnswer": "nice to meet you",
+              "acceptedAnswers": [
+                "nice to meet you"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "piacere is useful when meeting someone."
+            },
+            {
+              "id": "it-meet-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How are you?",
+              "context": "Choose the Italian question.",
+              "choices": [
+                "Come stai?",
+                "Quanto costa?",
+                "Dov'è?"
+              ],
+              "correctAnswer": "Come stai?",
+              "acceptedAnswers": [
+                "Come stai?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Come stai? asks how someone is doing."
+            },
+            {
+              "id": "it-meet-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Italian for good or well.",
+              "context": "Use the short conversational reply.",
+              "choices": [
+
+              ],
+              "correctAnswer": "bene",
+              "acceptedAnswers": [
+                "bene"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bene is a common short reply."
+            },
+            {
+              "id": "it-meet-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I am well, thank you.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Sto bene, grazie",
+              "acceptedAnswers": [
+                "Sto bene, grazie"
+              ],
+              "tokens": [
+                "Sto",
+                "bene,",
+                "grazie"
+              ],
+              "correctTokens": [
+                "Sto",
+                "bene,",
+                "grazie"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This keeps a greeting exchange polite and simple."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-city",
+      "unitNumber": 3,
+      "title": "Find your way around",
+      "theme": "City travel",
+      "iconName": "map.fill",
+      "lessons": [
+        {
+          "id": "italian-city-1",
+          "title": "Places",
+          "subtitle": "Streets and stations",
+          "iconName": "building.2.fill",
+          "questions": [
+            {
+              "id": "it-city-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "strada",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "street",
+                "store",
+                "chair"
+              ],
+              "correctAnswer": "street",
+              "acceptedAnswers": [
+                "street"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "strada means street."
+            },
+            {
+              "id": "it-city-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "station",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "stazione",
+                "scuola",
+                "angolo"
+              ],
+              "correctAnswer": "stazione",
+              "acceptedAnswers": [
+                "stazione"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "stazione is useful for transit."
+            },
+            {
+              "id": "it-city-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match city places.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "banca = bank, negozio = store, parco = park",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "negozio": "store",
+                "banca": "bank",
+                "parco": "park"
+              },
+              "learningNote": "These are common landmarks."
+            },
+            {
+              "id": "it-city-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Italian for park.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "parco",
+              "acceptedAnswers": [
+                "parco"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "parco means park."
+            }
+          ]
+        },
+        {
+          "id": "italian-city-2",
+          "title": "Directions",
+          "subtitle": "Left, right, straight",
+          "iconName": "arrow.triangle.turn.up.right.circle.fill",
+          "questions": [
+            {
+              "id": "it-city-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "destra",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "right",
+                "left",
+                "straight"
+              ],
+              "correctAnswer": "right",
+              "acceptedAnswers": [
+                "right"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "destra means right as a direction."
+            },
+            {
+              "id": "it-city-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "sinistra",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "left",
+                "near",
+                "far"
+              ],
+              "correctAnswer": "left",
+              "acceptedAnswers": [
+                "left"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "sinistra means left."
+            },
+            {
+              "id": "it-city-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Go straight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Vai dritto",
+              "acceptedAnswers": [
+                "Vai dritto"
+              ],
+              "tokens": [
+                "Vai",
+                "dritto"
+              ],
+              "correctTokens": [
+                "Vai",
+                "dritto"
+              ],
+              "pairs": {
+              },
+              "learningNote": "A compact direction phrase is easier to use in the moment."
+            },
+            {
+              "id": "it-city-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Gira a ___.",
+              "context": "Fill in: Turn right.",
+              "choices": [
+                "destra",
+                "sinistra",
+                "lontano"
+              ],
+              "correctAnswer": "destra",
+              "acceptedAnswers": [
+                "destra"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Gira a destra means turn right."
+            }
+          ]
+        },
+        {
+          "id": "italian-city-3",
+          "title": "Ask where",
+          "subtitle": "Find what you need",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "it-city-3-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Where is the bathroom?",
+              "context": "Choose the Italian question.",
+              "choices": [
+                "Dov'è il bagno?",
+                "Quanto costa il bagno?",
+                "Com'è il bagno?"
+              ],
+              "correctAnswer": "Dov'è il bagno?",
+              "acceptedAnswers": [
+                "Dov'è il bagno?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Dov'è? starts where-is questions."
+            },
+            {
+              "id": "it-city-3-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where is the bank?",
+              "choices": [
+
+              ],
+              "correctAnswer": "Dov'è la banca?",
+              "acceptedAnswers": [
+                "Dov'è la banca?"
+              ],
+              "tokens": [
+                "Dov'è",
+                "la",
+                "banca?"
+              ],
+              "correctTokens": [
+                "Dov'è",
+                "la",
+                "banca?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Swap in different place words after the where-is pattern."
+            },
+            {
+              "id": "it-city-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Italian for bathroom.",
+              "context": "Use the common travel word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "bagno",
+              "acceptedAnswers": [
+                "bagno"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "bagno means bathroom."
+            },
+            {
+              "id": "it-city-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match question words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "come = how, dove = where, quanto = how much",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "dove": "where",
+                "quanto": "how much",
+                "come": "how"
+              },
+              "learningNote": "Question words unlock more flexible conversation."
+            }
+          ]
+        },
+        {
+          "id": "italian-city-4",
+          "title": "Transportation",
+          "subtitle": "Buses and trains",
+          "iconName": "bus.fill",
+          "questions": [
+            {
+              "id": "it-city-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "treno",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "train",
+                "bus",
+                "taxi"
+              ],
+              "correctAnswer": "train",
+              "acceptedAnswers": [
+                "train"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "treno means train."
+            },
+            {
+              "id": "it-city-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ticket",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "biglietto",
+                "borsa",
+                "bottiglia"
+              ],
+              "correctAnswer": "biglietto",
+              "acceptedAnswers": [
+                "biglietto"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "biglietto is the practical word for ticket."
+            },
+            {
+              "id": "it-city-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Ho bisogno di un ___.",
+              "context": "Fill in: I need a ticket.",
+              "choices": [
+                "biglietto",
+                "treno",
+                "parco"
+              ],
+              "correctAnswer": "biglietto",
+              "acceptedAnswers": [
+                "biglietto"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ho bisogno means I need."
+            },
+            {
+              "id": "it-city-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need a ticket for the bus.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ho bisogno di un biglietto per l'autobus",
+              "acceptedAnswers": [
+                "Ho bisogno di un biglietto per l'autobus"
+              ],
+              "tokens": [
+                "Ho",
+                "bisogno",
+                "di",
+                "un",
+                "biglietto",
+                "per",
+                "l'autobus"
+              ],
+              "correctTokens": [
+                "Ho",
+                "bisogno",
+                "di",
+                "un",
+                "biglietto",
+                "per",
+                "l'autobus"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This combines need, ticket, and bus into one usable phrase."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-routine",
+      "unitNumber": 4,
+      "title": "Talk about your day",
+      "theme": "Daily routine",
+      "iconName": "sun.max.fill",
+      "lessons": [
+        {
+          "id": "italian-routine-1",
+          "title": "Home",
+          "subtitle": "Rooms and objects",
+          "iconName": "house.fill",
+          "questions": [
+            {
+              "id": "it-routine-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "casa",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "house",
+                "table",
+                "morning"
+              ],
+              "correctAnswer": "house",
+              "acceptedAnswers": [
+                "house"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "casa means house or home."
+            },
+            {
+              "id": "it-routine-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "kitchen",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "cucina",
+                "stanza",
+                "cibo"
+              ],
+              "correctAnswer": "cucina",
+              "acceptedAnswers": [
+                "cucina"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "cucina means kitchen."
+            },
+            {
+              "id": "it-routine-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match home words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "porta = door, sedia = chair, tavolo = table",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "tavolo": "table",
+                "sedia": "chair",
+                "porta": "door"
+              },
+              "learningNote": "These are everyday home nouns."
+            },
+            {
+              "id": "it-routine-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Italian for door.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "porta",
+              "acceptedAnswers": [
+                "porta"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "porta means door."
+            }
+          ]
+        },
+        {
+          "id": "italian-routine-2",
+          "title": "Morning",
+          "subtitle": "Wake up and start",
+          "iconName": "sunrise.fill",
+          "questions": [
+            {
+              "id": "it-routine-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "mattina",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "morning",
+                "night",
+                "week"
+              ],
+              "correctAnswer": "morning",
+              "acceptedAnswers": [
+                "morning"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "mattina means morning."
+            },
+            {
+              "id": "it-routine-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Mi ___ presto.",
+              "context": "Fill in: I wake up early.",
+              "choices": [
+                "alzo",
+                "siedo",
+                "riposo"
+              ],
+              "correctAnswer": "alzo",
+              "acceptedAnswers": [
+                "alzo"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Mi alzo means I get up."
+            },
+            {
+              "id": "it-routine-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I drink coffee in the morning.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Bevo caffè la mattina",
+              "acceptedAnswers": [
+                "Bevo caffè la mattina"
+              ],
+              "tokens": [
+                "Bevo",
+                "caffè",
+                "la",
+                "mattina"
+              ],
+              "correctTokens": [
+                "Bevo",
+                "caffè",
+                "la",
+                "mattina"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This connects a routine action with time of day."
+            },
+            {
+              "id": "it-routine-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Italian for early.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "presto",
+              "acceptedAnswers": [
+                "presto"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "presto means early."
+            }
+          ]
+        },
+        {
+          "id": "italian-routine-3",
+          "title": "Work day",
+          "subtitle": "Tasks and time",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "it-routine-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "lavoro",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "work",
+                "walk",
+                "weather"
+              ],
+              "correctAnswer": "work",
+              "acceptedAnswers": [
+                "work"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "lavoro can mean work or job depending on context."
+            },
+            {
+              "id": "it-routine-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I study",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "studio",
+                "lavoro",
+                "cammino"
+              ],
+              "correctAnswer": "studio",
+              "acceptedAnswers": [
+                "studio"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "studio means I study."
+            },
+            {
+              "id": "it-routine-3-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Io ___ alle nove.",
+              "context": "Fill in: I work at nine.",
+              "choices": [
+                "lavoro",
+                "lavori",
+                "lavora"
+              ],
+              "correctAnswer": "lavoro",
+              "acceptedAnswers": [
+                "lavoro"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Lavoro means I work."
+            },
+            {
+              "id": "it-routine-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I study Italian at night.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Studio italiano la sera",
+              "acceptedAnswers": [
+                "Studio italiano la sera"
+              ],
+              "tokens": [
+                "Studio",
+                "italiano",
+                "la",
+                "sera"
+              ],
+              "correctTokens": [
+                "Studio",
+                "italiano",
+                "la",
+                "sera"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a useful habit-building sentence."
+            }
+          ]
+        },
+        {
+          "id": "italian-routine-4",
+          "title": "Evening",
+          "subtitle": "Plans and rest",
+          "iconName": "moon.stars.fill",
+          "questions": [
+            {
+              "id": "it-routine-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "sono stanco",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am tired",
+                "I am busy",
+                "I am ready"
+              ],
+              "correctAnswer": "I am tired",
+              "acceptedAnswers": [
+                "I am tired"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "sono stanco means I am tired."
+            },
+            {
+              "id": "it-routine-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am going home",
+              "context": "Choose the Italian sentence.",
+              "choices": [
+                "vado a casa",
+                "ho una casa",
+                "sono a casa"
+              ],
+              "correctAnswer": "vado a casa",
+              "acceptedAnswers": [
+                "vado a casa"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "vado a casa is a practical evening sentence."
+            },
+            {
+              "id": "it-routine-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Italian for night.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "notte",
+              "acceptedAnswers": [
+                "notte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "notte means night."
+            },
+            {
+              "id": "it-routine-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest tonight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Voglio riposare stasera",
+              "acceptedAnswers": [
+                "Voglio riposare stasera"
+              ],
+              "tokens": [
+                "Voglio",
+                "riposare",
+                "stasera"
+              ],
+              "correctTokens": [
+                "Voglio",
+                "riposare",
+                "stasera"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This turns a simple want phrase into a real sentence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-grocery",
+      "unitNumber": 5,
+      "title": "Shop for groceries",
+      "theme": "Food market basics",
+      "iconName": "basket.fill",
+      "lessons": [
+        {
+          "id": "italian-grocery-1",
+          "title": "Grocery words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "basket.fill",
+          "questions": [
+            {
+              "id": "it-grocery-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "mela",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "apple",
+                "cheese",
+                "rice"
+              ],
+              "correctAnswer": "apple",
+              "acceptedAnswers": [
+                "apple"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "mela means apple."
+            },
+            {
+              "id": "it-grocery-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "cheese",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "formaggio",
+                "riso",
+                "verdure"
+              ],
+              "correctAnswer": "formaggio",
+              "acceptedAnswers": [
+                "formaggio"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "formaggio means cheese."
+            },
+            {
+              "id": "it-grocery-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the food market basics words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "riso = rice, verdure = vegetables, pane = bread",
+              "acceptedAnswers": [
+                "riso = rice, verdure = vegetables, pane = bread"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "riso": "rice",
+                "verdure": "vegetables",
+                "pane": "bread"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "it-grocery-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Voglio ___ mela.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "una",
+                "un",
+                "dei"
+              ],
+              "correctAnswer": "una",
+              "acceptedAnswers": [
+                "una"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "italian-grocery-2",
+          "title": "Ask for quantities",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "it-grocery-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How much does it cost?",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "Quanto costa?",
+                "pane",
+                "acqua"
+              ],
+              "correctAnswer": "Quanto costa?",
+              "acceptedAnswers": [
+                "Quanto costa?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Quanto costa? is a useful polite phrase."
+            },
+            {
+              "id": "it-grocery-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "un chilo di riso",
+              "acceptedAnswers": [
+                "un chilo di riso"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "un chilo di riso means a kilo of rice."
+            },
+            {
+              "id": "it-grocery-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Voglio una mela",
+              "choices": [
+
+              ],
+              "correctAnswer": "Voglio una mela.",
+              "acceptedAnswers": [
+                "Voglio una mela."
+              ],
+              "tokens": [
+                "Voglio",
+                "una",
+                "mela."
+              ],
+              "correctTokens": [
+                "Voglio",
+                "una",
+                "mela."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "it-grocery-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "la cassa",
+              "context": "What does this Italian phrase mean?",
+              "choices": [
+                "checkout",
+                "apple",
+                "a kilo of rice"
+              ],
+              "correctAnswer": "checkout",
+              "acceptedAnswers": [
+                "checkout"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "la cassa means checkout."
+            }
+          ]
+        },
+        {
+          "id": "italian-grocery-3",
+          "title": "Find items",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "it-grocery-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Dov’è ___ formaggio?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "il",
+                "la",
+                "gli"
+              ],
+              "correctAnswer": "il",
+              "acceptedAnswers": [
+                "il"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "it-grocery-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "verdure = vegetables, pane = bread, acqua = water",
+              "acceptedAnswers": [
+                "verdure = vegetables, pane = bread, acqua = water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "verdure": "vegetables",
+                "pane": "bread",
+                "acqua": "water"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "it-grocery-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ho bisogno di riso.",
+              "acceptedAnswers": [
+                "Ho bisogno di riso."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "it-grocery-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Dov’è il formaggio",
+              "choices": [
+
+              ],
+              "correctAnswer": "Dov’è il formaggio?",
+              "acceptedAnswers": [
+                "Dov’è il formaggio?"
+              ],
+              "tokens": [
+                "Dov’è",
+                "il",
+                "formaggio?"
+              ],
+              "correctTokens": [
+                "Dov’è",
+                "il",
+                "formaggio?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "italian-grocery-4",
+          "title": "Checkout",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "it-grocery-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "acqua",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "water",
+                "apple",
+                "cheese"
+              ],
+              "correctAnswer": "water",
+              "acceptedAnswers": [
+                "water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "acqua means water."
+            },
+            {
+              "id": "it-grocery-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Pago con la carta.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Pago con la carta.",
+                "Voglio una mela.",
+                "Ho bisogno di riso."
+              ],
+              "correctAnswer": "Pago con la carta.",
+              "acceptedAnswers": [
+                "Pago con la carta."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "it-grocery-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Pago ___ la carta.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "con",
+                "per",
+                "di"
+              ],
+              "correctAnswer": "con",
+              "acceptedAnswers": [
+                "con"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "it-grocery-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Pago con la carta.",
+              "acceptedAnswers": [
+                "Pago con la carta."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-work",
+      "unitNumber": 6,
+      "title": "Work and study",
+      "theme": "Office and study basics",
+      "iconName": "briefcase.fill",
+      "lessons": [
+        {
+          "id": "italian-work-1",
+          "title": "Desk words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "it-work-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "riunione",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "meeting",
+                "computer",
+                "email"
+              ],
+              "correctAnswer": "meeting",
+              "acceptedAnswers": [
+                "meeting"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "riunione means meeting."
+            },
+            {
+              "id": "it-work-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "computer",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "computer",
+                "email",
+                "progetto"
+              ],
+              "correctAnswer": "computer",
+              "acceptedAnswers": [
+                "computer"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "computer means computer."
+            },
+            {
+              "id": "it-work-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the office and study basics words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "email = email, progetto = project, ufficio = office",
+              "acceptedAnswers": [
+                "email = email, progetto = project, ufficio = office"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "email": "email",
+                "progetto": "project",
+                "ufficio": "office"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "it-work-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ho ___ riunione.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "una",
+                "un",
+                "dei"
+              ],
+              "correctAnswer": "una",
+              "acceptedAnswers": [
+                "una"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "italian-work-2",
+          "title": "Meetings",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "it-work-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "I am ready.",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "Sono pronto.",
+                "ufficio",
+                "compiti"
+              ],
+              "correctAnswer": "Sono pronto.",
+              "acceptedAnswers": [
+                "Sono pronto."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Sono pronto. is a useful polite phrase."
+            },
+            {
+              "id": "it-work-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "alle tre",
+              "acceptedAnswers": [
+                "alle tre"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "alle tre means at three o’clock."
+            },
+            {
+              "id": "it-work-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Ho una riunione",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ho una riunione.",
+              "acceptedAnswers": [
+                "Ho una riunione."
+              ],
+              "tokens": [
+                "Ho",
+                "una",
+                "riunione."
+              ],
+              "correctTokens": [
+                "Ho",
+                "una",
+                "riunione."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "it-work-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "la scadenza",
+              "context": "What does this Italian phrase mean?",
+              "choices": [
+                "deadline",
+                "meeting",
+                "at three o’clock"
+              ],
+              "correctAnswer": "deadline",
+              "acceptedAnswers": [
+                "deadline"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "la scadenza means deadline."
+            }
+          ]
+        },
+        {
+          "id": "italian-work-3",
+          "title": "Study plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "it-work-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Devo ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "studiare",
+                "mangiare",
+                "dormire"
+              ],
+              "correctAnswer": "studiare",
+              "acceptedAnswers": [
+                "studiare"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "it-work-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "progetto = project, ufficio = office, compiti = homework",
+              "acceptedAnswers": [
+                "progetto = project, ufficio = office, compiti = homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "progetto": "project",
+                "ufficio": "office",
+                "compiti": "homework"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "it-work-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Devo studiare.",
+              "acceptedAnswers": [
+                "Devo studiare."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "it-work-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Dov’è l’ufficio",
+              "choices": [
+
+              ],
+              "correctAnswer": "Dov’è l’ufficio?",
+              "acceptedAnswers": [
+                "Dov’è l’ufficio?"
+              ],
+              "tokens": [
+                "Dov’è",
+                "l’ufficio?"
+              ],
+              "correctTokens": [
+                "Dov’è",
+                "l’ufficio?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "italian-work-4",
+          "title": "Deadlines",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "it-work-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "compiti",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "homework",
+                "meeting",
+                "computer"
+              ],
+              "correctAnswer": "homework",
+              "acceptedAnswers": [
+                "homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "compiti means homework."
+            },
+            {
+              "id": "it-work-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Invio un’email.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Invio un’email.",
+                "Ho una riunione.",
+                "Devo studiare."
+              ],
+              "correctAnswer": "Invio un’email.",
+              "acceptedAnswers": [
+                "Invio un’email."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "it-work-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Invio ___ email.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "un’",
+                "una",
+                "dei"
+              ],
+              "correctAnswer": "un’",
+              "acceptedAnswers": [
+                "un’"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "it-work-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Invio un’email.",
+              "acceptedAnswers": [
+                "Invio un’email."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-travel",
+      "unitNumber": 7,
+      "title": "Travel basics",
+      "theme": "Airport and hotel basics",
+      "iconName": "airplane",
+      "lessons": [
+        {
+          "id": "italian-travel-1",
+          "title": "Airport words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "airplane",
+          "questions": [
+            {
+              "id": "it-travel-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "aeroporto",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "airport",
+                "hotel",
+                "passport"
+              ],
+              "correctAnswer": "airport",
+              "acceptedAnswers": [
+                "airport"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "aeroporto means airport."
+            },
+            {
+              "id": "it-travel-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hotel",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "hotel",
+                "passaporto",
+                "valigia"
+              ],
+              "correctAnswer": "hotel",
+              "acceptedAnswers": [
+                "hotel"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "hotel means hotel."
+            },
+            {
+              "id": "it-travel-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the airport and hotel basics words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "passaporto = passport, valigia = suitcase, biglietto = ticket",
+              "acceptedAnswers": [
+                "passaporto = passport, valigia = suitcase, biglietto = ticket"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "passaporto": "passport",
+                "valigia": "suitcase",
+                "biglietto": "ticket"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "it-travel-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Ho ___ prenotazione.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "una",
+                "un",
+                "dei"
+              ],
+              "correctAnswer": "una",
+              "acceptedAnswers": [
+                "una"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "italian-travel-2",
+          "title": "Hotel check-in",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "it-travel-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Can you help me?",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "Può aiutarmi?",
+                "biglietto",
+                "stazione"
+              ],
+              "correctAnswer": "Può aiutarmi?",
+              "acceptedAnswers": [
+                "Può aiutarmi?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Può aiutarmi? is a useful polite phrase."
+            },
+            {
+              "id": "it-travel-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "una notte",
+              "acceptedAnswers": [
+                "una notte"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "una notte means one night."
+            },
+            {
+              "id": "it-travel-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Ho una prenotazione",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ho una prenotazione.",
+              "acceptedAnswers": [
+                "Ho una prenotazione."
+              ],
+              "tokens": [
+                "Ho",
+                "una",
+                "prenotazione."
+              ],
+              "correctTokens": [
+                "Ho",
+                "una",
+                "prenotazione."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "it-travel-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "il check-in",
+              "context": "What does this Italian phrase mean?",
+              "choices": [
+                "check-in",
+                "airport",
+                "one night"
+              ],
+              "correctAnswer": "check-in",
+              "acceptedAnswers": [
+                "check-in"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "il check-in means check-in."
+            }
+          ]
+        },
+        {
+          "id": "italian-travel-3",
+          "title": "Ask for help",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "it-travel-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Dov’è ___ hotel?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "l’",
+                "la",
+                "gli"
+              ],
+              "correctAnswer": "l’",
+              "acceptedAnswers": [
+                "l’"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "it-travel-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "valigia = suitcase, biglietto = ticket, stazione = train station",
+              "acceptedAnswers": [
+                "valigia = suitcase, biglietto = ticket, stazione = train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "valigia": "suitcase",
+                "biglietto": "ticket",
+                "stazione": "train station"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "it-travel-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Ho bisogno di aiuto.",
+              "acceptedAnswers": [
+                "Ho bisogno di aiuto."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "it-travel-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Dov’è l’hotel",
+              "choices": [
+
+              ],
+              "correctAnswer": "Dov’è l’hotel?",
+              "acceptedAnswers": [
+                "Dov’è l’hotel?"
+              ],
+              "tokens": [
+                "Dov’è",
+                "l’hotel?"
+              ],
+              "correctTokens": [
+                "Dov’è",
+                "l’hotel?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "italian-travel-4",
+          "title": "Travel plans",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "it-travel-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "stazione",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "train station",
+                "airport",
+                "hotel"
+              ],
+              "correctAnswer": "train station",
+              "acceptedAnswers": [
+                "train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "stazione means train station."
+            },
+            {
+              "id": "it-travel-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Vado alla stazione.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Vado alla stazione.",
+                "Ho una prenotazione.",
+                "Ho bisogno di aiuto."
+              ],
+              "correctAnswer": "Vado alla stazione.",
+              "acceptedAnswers": [
+                "Vado alla stazione."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "it-travel-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Vado ___ stazione.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "alla",
+                "con",
+                "di"
+              ],
+              "correctAnswer": "alla",
+              "acceptedAnswers": [
+                "alla"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "it-travel-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Vado alla stazione.",
+              "acceptedAnswers": [
+                "Vado alla stazione."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "italian-feelings",
+      "unitNumber": 8,
+      "title": "Feelings and plans",
+      "theme": "Mood and weekend basics",
+      "iconName": "heart.fill",
+      "lessons": [
+        {
+          "id": "italian-feelings-1",
+          "title": "Feelings",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "heart.fill",
+          "questions": [
+            {
+              "id": "it-feelings-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "felice",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "happy",
+                "tired",
+                "busy"
+              ],
+              "correctAnswer": "happy",
+              "acceptedAnswers": [
+                "happy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "felice means happy."
+            },
+            {
+              "id": "it-feelings-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "tired",
+              "context": "Choose the Italian word.",
+              "choices": [
+                "stanco",
+                "occupato",
+                "calmo"
+              ],
+              "correctAnswer": "stanco",
+              "acceptedAnswers": [
+                "stanco"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "stanco means tired."
+            },
+            {
+              "id": "it-feelings-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the mood and weekend basics words.",
+              "context": "Connect Italian to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "occupato = busy, calmo = calm, domani = tomorrow",
+              "acceptedAnswers": [
+                "occupato = busy, calmo = calm, domani = tomorrow"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "occupato": "busy",
+                "calmo": "calm",
+                "domani": "tomorrow"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "it-feelings-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "Sono ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "stanco",
+                "riso",
+                "aeroporto"
+              ],
+              "correctAnswer": "stanco",
+              "acceptedAnswers": [
+                "stanco"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "italian-feelings-2",
+          "title": "Preferences",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "it-feelings-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How are you?",
+              "context": "Choose the Italian phrase.",
+              "choices": [
+                "Come va?",
+                "domani",
+                "fine settimana"
+              ],
+              "correctAnswer": "Come va?",
+              "acceptedAnswers": [
+                "Come va?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Come va? is a useful polite phrase."
+            },
+            {
+              "id": "it-feelings-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "questo fine settimana",
+              "acceptedAnswers": [
+                "questo fine settimana"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "questo fine settimana means this weekend."
+            },
+            {
+              "id": "it-feelings-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Sono stanco",
+              "choices": [
+
+              ],
+              "correctAnswer": "Sono stanco.",
+              "acceptedAnswers": [
+                "Sono stanco."
+              ],
+              "tokens": [
+                "Sono",
+                "stanco."
+              ],
+              "correctTokens": [
+                "Sono",
+                "stanco."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "it-feelings-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "mi sento bene",
+              "context": "What does this Italian phrase mean?",
+              "choices": [
+                "I feel good",
+                "happy",
+                "this weekend"
+              ],
+              "correctAnswer": "I feel good",
+              "acceptedAnswers": [
+                "I feel good"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "mi sento bene means I feel good."
+            }
+          ]
+        },
+        {
+          "id": "italian-feelings-3",
+          "title": "Weekend plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "it-feelings-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "Voglio ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "riposare",
+                "pagare",
+                "trovare"
+              ],
+              "correctAnswer": "riposare",
+              "acceptedAnswers": [
+                "riposare"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "it-feelings-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "calmo = calm, domani = tomorrow, fine settimana = weekend",
+              "acceptedAnswers": [
+                "calmo = calm, domani = tomorrow, fine settimana = weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "calmo": "calm",
+                "domani": "tomorrow",
+                "fine settimana": "weekend"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "it-feelings-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Voglio riposare.",
+              "acceptedAnswers": [
+                "Voglio riposare."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "it-feelings-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "Domani lavoro",
+              "choices": [
+
+              ],
+              "correctAnswer": "Domani lavoro.",
+              "acceptedAnswers": [
+                "Domani lavoro."
+              ],
+              "tokens": [
+                "Domani",
+                "lavoro."
+              ],
+              "correctTokens": [
+                "Domani",
+                "lavoro."
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "italian-feelings-4",
+          "title": "Small talk",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "it-feelings-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "fine settimana",
+              "context": "What does this Italian word mean?",
+              "choices": [
+                "weekend",
+                "happy",
+                "tired"
+              ],
+              "correctAnswer": "weekend",
+              "acceptedAnswers": [
+                "weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "fine settimana means weekend."
+            },
+            {
+              "id": "it-feelings-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "Mi piace il fine settimana.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "Mi piace il fine settimana.",
+                "Sono stanco.",
+                "Voglio riposare."
+              ],
+              "correctAnswer": "Mi piace il fine settimana.",
+              "acceptedAnswers": [
+                "Mi piace il fine settimana."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "it-feelings-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "Domani ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "lavoro",
+                "formaggio",
+                "stazione"
+              ],
+              "correctAnswer": "lavoro",
+              "acceptedAnswers": [
+                "lavoro"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "it-feelings-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Italian sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "Mi piace il fine settimana.",
+              "acceptedAnswers": [
+                "Mi piace il fine settimana."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

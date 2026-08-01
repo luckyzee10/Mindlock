@@ -1,0 +1,3661 @@
+{
+  "courseId": "korean_en",
+  "version": 1,
+  "sourceLanguage": "en",
+  "targetLanguage": "korean",
+  "displayName": "Korean",
+  "sections": [
+    {
+      "id": "korean-cafe",
+      "unitNumber": 1,
+      "title": "Order at a cafe",
+      "theme": "Cafe basics",
+      "iconName": "cup.and.saucer.fill",
+      "lessons": [
+        {
+          "id": "korean-cafe-1",
+          "title": "Cafe words",
+          "subtitle": "Coffee, water, and bread",
+          "iconName": "cup.and.saucer.fill",
+          "questions": [
+            {
+              "id": "ko-cafe-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "커피",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "coffee",
+                "tea",
+                "milk"
+              ],
+              "correctAnswer": "coffee",
+              "acceptedAnswers": [
+                "coffee"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "커피 is the core word for coffee."
+            },
+            {
+              "id": "ko-cafe-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "water",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "물",
+                "빵",
+                "테이블"
+              ],
+              "correctAnswer": "물",
+              "acceptedAnswers": [
+                "물"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "물 means water."
+            },
+            {
+              "id": "ko-cafe-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the cafe words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "빵 = bread, 설탕 = sugar, 우유 = milk",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "빵": "bread",
+                "우유": "milk",
+                "설탕": "sugar"
+              },
+              "learningNote": "These are practical cafe and breakfast words."
+            },
+            {
+              "id": "ko-cafe-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "커피 ___ 주세요.",
+              "context": "Fill in: I want a coffee.",
+              "choices": [
+                "한 잔",
+                "안녕",
+                "밤"
+              ],
+              "correctAnswer": "한 잔",
+              "acceptedAnswers": [
+                "한 잔"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "한 잔 means one cup."
+            }
+          ]
+        },
+        {
+          "id": "korean-cafe-2",
+          "title": "Ask politely",
+          "subtitle": "Please and thank you",
+          "iconName": "hand.thumbsup.fill",
+          "questions": [
+            {
+              "id": "ko-cafe-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "please",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "주세요",
+                "안녕히 주무세요",
+                "천만에요"
+              ],
+              "correctAnswer": "주세요",
+              "acceptedAnswers": [
+                "주세요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "주세요 is the polite way to say please."
+            },
+            {
+              "id": "ko-cafe-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Korean for thank you.",
+              "context": "Use the common everyday phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "감사합니다",
+              "acceptedAnswers": [
+                "감사합니다",
+                "고마워요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "감사합니다 means thank you."
+            },
+            {
+              "id": "ko-cafe-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "A coffee, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "커피 한 잔 주세요",
+              "acceptedAnswers": [
+                "커피 한 잔 주세요"
+              ],
+              "tokens": [
+                "커피",
+                "한",
+                "잔",
+                "주세요"
+              ],
+              "correctTokens": [
+                "커피",
+                "한",
+                "잔",
+                "주세요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is enough to order politely."
+            },
+            {
+              "id": "ko-cafe-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "천만에요",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "you're welcome",
+                "good morning",
+                "excuse me"
+              ],
+              "correctAnswer": "you're welcome",
+              "acceptedAnswers": [
+                "you're welcome"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "천만에요 is a common reply to thank you."
+            }
+          ]
+        },
+        {
+          "id": "korean-cafe-3",
+          "title": "Order food",
+          "subtitle": "I want and I have",
+          "iconName": "fork.knife",
+          "questions": [
+            {
+              "id": "ko-cafe-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "샌드위치를 ___.",
+              "context": "Fill in: I want a sandwich.",
+              "choices": [
+                "원해요",
+                "가요",
+                "마셔요"
+              ],
+              "correctAnswer": "원해요",
+              "acceptedAnswers": [
+                "원해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "원해요 means I want."
+            },
+            {
+              "id": "ko-cafe-3-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "배고파요",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am hungry",
+                "I am thirsty",
+                "I am tired"
+              ],
+              "correctAnswer": "I am hungry",
+              "acceptedAnswers": [
+                "I am hungry"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "배고파요 means I am hungry."
+            },
+            {
+              "id": "ko-cafe-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I want bread and water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "빵과 물을 원해요",
+              "acceptedAnswers": [
+                "빵과 물을 원해요"
+              ],
+              "tokens": [
+                "빵과",
+                "물을",
+                "원해요"
+              ],
+              "correctTokens": [
+                "빵과",
+                "물을",
+                "원해요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "과 connects words like and in English."
+            },
+            {
+              "id": "ko-cafe-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the order words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "배고픔 = hunger, 원해요 = I want, 있어요 = I have",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "원해요": "I want",
+                "있어요": "I have",
+                "배고픔": "hunger"
+              },
+              "learningNote": "These phrases help users ask for food quickly."
+            }
+          ]
+        },
+        {
+          "id": "korean-cafe-4",
+          "title": "Pay the bill",
+          "subtitle": "Numbers and checkout",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "ko-cafe-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "계산서",
+              "context": "What do you ask for at the end of a meal?",
+              "choices": [
+                "the bill",
+                "the door",
+                "the table"
+              ],
+              "correctAnswer": "the bill",
+              "acceptedAnswers": [
+                "the bill"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "계산서 is the check or bill."
+            },
+            {
+              "id": "ko-cafe-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How much is it?",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "얼마예요?",
+                "어디예요?",
+                "이름이 뭐예요?"
+              ],
+              "correctAnswer": "얼마예요?",
+              "acceptedAnswers": [
+                "얼마예요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "얼마예요? asks about price."
+            },
+            {
+              "id": "ko-cafe-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Korean for three.",
+              "context": "One word or numeral form.",
+              "choices": [
+
+              ],
+              "correctAnswer": "삼",
+              "acceptedAnswers": [
+                "삼",
+                "셋",
+                "3"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "삼 means three."
+            },
+            {
+              "id": "ko-cafe-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "The bill, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "계산서 주세요",
+              "acceptedAnswers": [
+                "계산서 주세요"
+              ],
+              "tokens": [
+                "계산서",
+                "주세요"
+              ],
+              "correctTokens": [
+                "계산서",
+                "주세요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the practical phrase to close a restaurant interaction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-meet",
+      "unitNumber": 2,
+      "title": "Meet someone new",
+      "theme": "Introductions",
+      "iconName": "person.2.fill",
+      "lessons": [
+        {
+          "id": "korean-meet-1",
+          "title": "Say hello",
+          "subtitle": "Greetings",
+          "iconName": "hand.wave.fill",
+          "questions": [
+            {
+              "id": "ko-meet-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "안녕하세요",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hello",
+                "goodbye",
+                "thanks"
+              ],
+              "correctAnswer": "hello",
+              "acceptedAnswers": [
+                "hello"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "안녕하세요 is a common greeting."
+            },
+            {
+              "id": "ko-meet-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "good morning",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "좋은 아침이에요",
+                "안녕히 주무세요",
+                "안녕히 가세요"
+              ],
+              "correctAnswer": "좋은 아침이에요",
+              "acceptedAnswers": [
+                "좋은 아침이에요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "좋은 아침이에요 is used early in the day."
+            },
+            {
+              "id": "ko-meet-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match greetings.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "감사합니다 = thanks, 안녕하세요 = hello, 안녕히 가세요 = goodbye",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "안녕하세요": "hello",
+                "안녕히 가세요": "goodbye",
+                "감사합니다": "thanks"
+              },
+              "learningNote": "These cover the start and end of simple conversations."
+            },
+            {
+              "id": "ko-meet-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Korean for hello.",
+              "context": "Use the common greeting.",
+              "choices": [
+
+              ],
+              "correctAnswer": "안녕하세요",
+              "acceptedAnswers": [
+                "안녕하세요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "안녕하세요 starts everyday conversations."
+            }
+          ]
+        },
+        {
+          "id": "korean-meet-2",
+          "title": "Names",
+          "subtitle": "Ask and answer",
+          "iconName": "person.text.rectangle.fill",
+          "questions": [
+            {
+              "id": "ko-meet-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "What is your name?",
+              "context": "Choose the Korean question.",
+              "choices": [
+                "이름이 뭐예요?",
+                "어디에 살아요?",
+                "무엇을 원해요?"
+              ],
+              "correctAnswer": "이름이 뭐예요?",
+              "acceptedAnswers": [
+                "이름이 뭐예요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "이름이 뭐예요? asks for someone's name."
+            },
+            {
+              "id": "ko-meet-2-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "My name is Ana.",
+              "choices": [
+
+              ],
+              "correctAnswer": "제 이름은 아나예요",
+              "acceptedAnswers": [
+                "제 이름은 아나예요"
+              ],
+              "tokens": [
+                "제",
+                "이름은",
+                "아나예요"
+              ],
+              "correctTokens": [
+                "제",
+                "이름은",
+                "아나예요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the simplest self-introduction pattern."
+            },
+            {
+              "id": "ko-meet-2-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "제 이름은 루이스___요.",
+              "context": "Fill in: My name is Luis.",
+              "choices": [
+                "예",
+                "가",
+                "를"
+              ],
+              "correctAnswer": "예",
+              "acceptedAnswers": [
+                "예"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "예요 completes polite identity statements."
+            },
+            {
+              "id": "ko-meet-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Korean for my name is.",
+              "context": "Use the common phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "제 이름은",
+              "acceptedAnswers": [
+                "제 이름은",
+                "저는"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use this before saying your name."
+            }
+          ]
+        },
+        {
+          "id": "korean-meet-3",
+          "title": "Where from?",
+          "subtitle": "Countries and origin",
+          "iconName": "globe.americas.fill",
+          "questions": [
+            {
+              "id": "ko-meet-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "저는 콜롬비아에서 왔어요",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am from Colombia",
+                "I live in Colombia",
+                "I go to Colombia"
+              ],
+              "correctAnswer": "I am from Colombia",
+              "acceptedAnswers": [
+                "I am from Colombia"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "에서 means from."
+            },
+            {
+              "id": "ko-meet-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "저는 미국___ 왔어요.",
+              "context": "Fill in: I am from the United States.",
+              "choices": [
+                "에서",
+                "으로",
+                "하고"
+              ],
+              "correctAnswer": "에서",
+              "acceptedAnswers": [
+                "에서"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "에서 marks from in this sentence."
+            },
+            {
+              "id": "ko-meet-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where are you from?",
+              "choices": [
+
+              ],
+              "correctAnswer": "어디에서 왔어요?",
+              "acceptedAnswers": [
+                "어디에서 왔어요?"
+              ],
+              "tokens": [
+                "어디에서",
+                "왔어요?"
+              ],
+              "correctTokens": [
+                "어디에서",
+                "왔어요?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a natural first-conversation question."
+            },
+            {
+              "id": "ko-meet-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match identity words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "당신은 = you, 에서 = from, 저는 = I",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "저는": "I",
+                "당신은": "you",
+                "에서": "from"
+              },
+              "learningNote": "Identity and origin phrases show up constantly."
+            }
+          ]
+        },
+        {
+          "id": "korean-meet-4",
+          "title": "Nice to meet you",
+          "subtitle": "Polite small talk",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "ko-meet-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "반가워요",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "nice to meet you",
+                "very tired",
+                "many thanks"
+              ],
+              "correctAnswer": "nice to meet you",
+              "acceptedAnswers": [
+                "nice to meet you"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "반가워요 is useful when meeting someone."
+            },
+            {
+              "id": "ko-meet-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How are you?",
+              "context": "Choose the Korean question.",
+              "choices": [
+                "어떻게 지내요?",
+                "얼마예요?",
+                "어디예요?"
+              ],
+              "correctAnswer": "어떻게 지내요?",
+              "acceptedAnswers": [
+                "어떻게 지내요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "어떻게 지내요? asks how someone is doing."
+            },
+            {
+              "id": "ko-meet-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Korean for good or well.",
+              "context": "Use the short conversational reply.",
+              "choices": [
+
+              ],
+              "correctAnswer": "잘",
+              "acceptedAnswers": [
+                "잘",
+                "좋아요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "잘 is a common short reply."
+            },
+            {
+              "id": "ko-meet-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I am well, thank you.",
+              "choices": [
+
+              ],
+              "correctAnswer": "잘 지내요, 감사합니다",
+              "acceptedAnswers": [
+                "잘 지내요, 감사합니다"
+              ],
+              "tokens": [
+                "잘",
+                "지내요,",
+                "감사합니다"
+              ],
+              "correctTokens": [
+                "잘",
+                "지내요,",
+                "감사합니다"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This keeps a greeting exchange polite and simple."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-city",
+      "unitNumber": 3,
+      "title": "Find your way around",
+      "theme": "City travel",
+      "iconName": "map.fill",
+      "lessons": [
+        {
+          "id": "korean-city-1",
+          "title": "Places",
+          "subtitle": "Streets and stations",
+          "iconName": "building.2.fill",
+          "questions": [
+            {
+              "id": "ko-city-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "거리",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "street",
+                "store",
+                "chair"
+              ],
+              "correctAnswer": "street",
+              "acceptedAnswers": [
+                "street"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "거리 means street."
+            },
+            {
+              "id": "ko-city-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "station",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "역",
+                "학교",
+                "모퉁이"
+              ],
+              "correctAnswer": "역",
+              "acceptedAnswers": [
+                "역"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "역 is useful for transit."
+            },
+            {
+              "id": "ko-city-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match city places.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "가게 = store, 공원 = park, 은행 = bank",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "가게": "store",
+                "은행": "bank",
+                "공원": "park"
+              },
+              "learningNote": "These are common landmarks."
+            },
+            {
+              "id": "ko-city-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Korean for park.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "공원",
+              "acceptedAnswers": [
+                "공원"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "공원 means park."
+            }
+          ]
+        },
+        {
+          "id": "korean-city-2",
+          "title": "Directions",
+          "subtitle": "Left, right, straight",
+          "iconName": "arrow.triangle.turn.up.right.circle.fill",
+          "questions": [
+            {
+              "id": "ko-city-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "오른쪽",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "right",
+                "left",
+                "straight"
+              ],
+              "correctAnswer": "right",
+              "acceptedAnswers": [
+                "right"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "오른쪽 means right as a direction."
+            },
+            {
+              "id": "ko-city-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "왼쪽",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "left",
+                "near",
+                "far"
+              ],
+              "correctAnswer": "left",
+              "acceptedAnswers": [
+                "left"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "왼쪽 means left."
+            },
+            {
+              "id": "ko-city-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Go straight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "쭉 가세요",
+              "acceptedAnswers": [
+                "쭉 가세요"
+              ],
+              "tokens": [
+                "쭉",
+                "가세요"
+              ],
+              "correctTokens": [
+                "쭉",
+                "가세요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "A compact direction phrase is easier to use in the moment."
+            },
+            {
+              "id": "ko-city-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "___으로 도세요.",
+              "context": "Fill in: Turn right.",
+              "choices": [
+                "오른쪽",
+                "왼쪽",
+                "멀리"
+              ],
+              "correctAnswer": "오른쪽",
+              "acceptedAnswers": [
+                "오른쪽"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "오른쪽으로 도세요 means turn right."
+            }
+          ]
+        },
+        {
+          "id": "korean-city-3",
+          "title": "Ask where",
+          "subtitle": "Find what you need",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ko-city-3-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Where is the bathroom?",
+              "context": "Choose the Korean question.",
+              "choices": [
+                "화장실이 어디예요?",
+                "화장실은 얼마예요?",
+                "화장실은 어때요?"
+              ],
+              "correctAnswer": "화장실이 어디예요?",
+              "acceptedAnswers": [
+                "화장실이 어디예요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "어디예요? starts where-is questions."
+            },
+            {
+              "id": "ko-city-3-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where is the bank?",
+              "choices": [
+
+              ],
+              "correctAnswer": "은행이 어디예요?",
+              "acceptedAnswers": [
+                "은행이 어디예요?"
+              ],
+              "tokens": [
+                "은행이",
+                "어디예요?"
+              ],
+              "correctTokens": [
+                "은행이",
+                "어디예요?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Swap in different place words after the where-is pattern."
+            },
+            {
+              "id": "ko-city-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Korean for bathroom.",
+              "context": "Use the common travel word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "화장실",
+              "acceptedAnswers": [
+                "화장실"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "화장실 means bathroom."
+            },
+            {
+              "id": "ko-city-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match question words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "어디 = where, 어떻게 = how, 얼마 = how much",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "어디": "where",
+                "얼마": "how much",
+                "어떻게": "how"
+              },
+              "learningNote": "Question words unlock more flexible conversation."
+            }
+          ]
+        },
+        {
+          "id": "korean-city-4",
+          "title": "Transportation",
+          "subtitle": "Buses and trains",
+          "iconName": "bus.fill",
+          "questions": [
+            {
+              "id": "ko-city-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "기차",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "train",
+                "bus",
+                "taxi"
+              ],
+              "correctAnswer": "train",
+              "acceptedAnswers": [
+                "train"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "기차 means train."
+            },
+            {
+              "id": "ko-city-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ticket",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "표",
+                "가방",
+                "병"
+              ],
+              "correctAnswer": "표",
+              "acceptedAnswers": [
+                "표"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "표 is the practical word for ticket."
+            },
+            {
+              "id": "ko-city-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "표가 ___요.",
+              "context": "Fill in: I need a ticket.",
+              "choices": [
+                "표",
+                "기차",
+                "공원"
+              ],
+              "correctAnswer": "표",
+              "acceptedAnswers": [
+                "표"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "필요해요 means I need."
+            },
+            {
+              "id": "ko-city-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need a ticket for the bus.",
+              "choices": [
+
+              ],
+              "correctAnswer": "버스 표가 필요해요",
+              "acceptedAnswers": [
+                "버스 표가 필요해요"
+              ],
+              "tokens": [
+                "버스",
+                "표가",
+                "필요해요"
+              ],
+              "correctTokens": [
+                "버스",
+                "표가",
+                "필요해요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This combines need, ticket, and bus into one usable phrase."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-routine",
+      "unitNumber": 4,
+      "title": "Talk about your day",
+      "theme": "Daily routine",
+      "iconName": "sun.max.fill",
+      "lessons": [
+        {
+          "id": "korean-routine-1",
+          "title": "Home",
+          "subtitle": "Rooms and objects",
+          "iconName": "house.fill",
+          "questions": [
+            {
+              "id": "ko-routine-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "집",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "house",
+                "table",
+                "morning"
+              ],
+              "correctAnswer": "house",
+              "acceptedAnswers": [
+                "house"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "집 means house or home."
+            },
+            {
+              "id": "ko-routine-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "kitchen",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "부엌",
+                "방",
+                "음식"
+              ],
+              "correctAnswer": "부엌",
+              "acceptedAnswers": [
+                "부엌"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "부엌 means kitchen."
+            },
+            {
+              "id": "ko-routine-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match home words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "문 = door, 의자 = chair, 테이블 = table",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "테이블": "table",
+                "의자": "chair",
+                "문": "door"
+              },
+              "learningNote": "These are everyday home nouns."
+            },
+            {
+              "id": "ko-routine-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Korean for door.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "문",
+              "acceptedAnswers": [
+                "문"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "문 means door."
+            }
+          ]
+        },
+        {
+          "id": "korean-routine-2",
+          "title": "Morning",
+          "subtitle": "Wake up and start",
+          "iconName": "sunrise.fill",
+          "questions": [
+            {
+              "id": "ko-routine-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "아침",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "morning",
+                "night",
+                "week"
+              ],
+              "correctAnswer": "morning",
+              "acceptedAnswers": [
+                "morning"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "아침 means morning."
+            },
+            {
+              "id": "ko-routine-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "일찍 ___어요.",
+              "context": "Fill in: I wake up early.",
+              "choices": [
+                "일어났",
+                "먹었",
+                "쉬었"
+              ],
+              "correctAnswer": "일어났",
+              "acceptedAnswers": [
+                "일어났"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "일찍 일어났어요 means I woke up early."
+            },
+            {
+              "id": "ko-routine-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I drink coffee in the morning.",
+              "choices": [
+
+              ],
+              "correctAnswer": "아침에 커피를 마셔요",
+              "acceptedAnswers": [
+                "아침에 커피를 마셔요"
+              ],
+              "tokens": [
+                "아침에",
+                "커피를",
+                "마셔요"
+              ],
+              "correctTokens": [
+                "아침에",
+                "커피를",
+                "마셔요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This connects a routine action with time of day."
+            },
+            {
+              "id": "ko-routine-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Korean for early.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "일찍",
+              "acceptedAnswers": [
+                "일찍"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "일찍 means early."
+            }
+          ]
+        },
+        {
+          "id": "korean-routine-3",
+          "title": "Work day",
+          "subtitle": "Tasks and time",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "ko-routine-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "일",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "work",
+                "walk",
+                "weather"
+              ],
+              "correctAnswer": "work",
+              "acceptedAnswers": [
+                "work"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "일 can mean work or job depending on context."
+            },
+            {
+              "id": "ko-routine-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I study",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "공부해요",
+                "일해요",
+                "걸어요"
+              ],
+              "correctAnswer": "공부해요",
+              "acceptedAnswers": [
+                "공부해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "공부해요 means I study."
+            },
+            {
+              "id": "ko-routine-3-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "아홉 시에 ___요.",
+              "context": "Fill in: I work at nine.",
+              "choices": [
+                "일해",
+                "걸어",
+                "먹어"
+              ],
+              "correctAnswer": "일해",
+              "acceptedAnswers": [
+                "일해"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "일해요 means I work."
+            },
+            {
+              "id": "ko-routine-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I study Korean at night.",
+              "choices": [
+
+              ],
+              "correctAnswer": "밤에 한국어를 공부해요",
+              "acceptedAnswers": [
+                "밤에 한국어를 공부해요"
+              ],
+              "tokens": [
+                "밤에",
+                "한국어를",
+                "공부해요"
+              ],
+              "correctTokens": [
+                "밤에",
+                "한국어를",
+                "공부해요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a useful habit-building sentence."
+            }
+          ]
+        },
+        {
+          "id": "korean-routine-4",
+          "title": "Evening",
+          "subtitle": "Plans and rest",
+          "iconName": "moon.stars.fill",
+          "questions": [
+            {
+              "id": "ko-routine-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "피곤해요",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am tired",
+                "I am busy",
+                "I am ready"
+              ],
+              "correctAnswer": "I am tired",
+              "acceptedAnswers": [
+                "I am tired"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "피곤해요 means I am tired."
+            },
+            {
+              "id": "ko-routine-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am going home",
+              "context": "Choose the Korean sentence.",
+              "choices": [
+                "집에 가요",
+                "집이 있어요",
+                "집에 있어요"
+              ],
+              "correctAnswer": "집에 가요",
+              "acceptedAnswers": [
+                "집에 가요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "집에 가요 is a practical evening sentence."
+            },
+            {
+              "id": "ko-routine-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Korean for night.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "밤",
+              "acceptedAnswers": [
+                "밤"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "밤 means night."
+            },
+            {
+              "id": "ko-routine-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest tonight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "오늘 밤에 쉬고 싶어요",
+              "acceptedAnswers": [
+                "오늘 밤에 쉬고 싶어요"
+              ],
+              "tokens": [
+                "오늘",
+                "밤에",
+                "쉬고",
+                "싶어요"
+              ],
+              "correctTokens": [
+                "오늘",
+                "밤에",
+                "쉬고",
+                "싶어요"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This turns a simple want phrase into a real sentence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-grocery",
+      "unitNumber": 5,
+      "title": "Shop for groceries",
+      "theme": "Food market basics",
+      "iconName": "basket.fill",
+      "lessons": [
+        {
+          "id": "korean-grocery-1",
+          "title": "Grocery words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "basket.fill",
+          "questions": [
+            {
+              "id": "ko-grocery-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "사과",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "apple",
+                "cheese",
+                "rice"
+              ],
+              "correctAnswer": "apple",
+              "acceptedAnswers": [
+                "apple"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "사과 means apple."
+            },
+            {
+              "id": "ko-grocery-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "cheese",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "치즈",
+                "밥",
+                "채소"
+              ],
+              "correctAnswer": "치즈",
+              "acceptedAnswers": [
+                "치즈"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "치즈 means cheese."
+            },
+            {
+              "id": "ko-grocery-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the food market basics words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "밥 = rice, 채소 = vegetables, 빵 = bread",
+              "acceptedAnswers": [
+                "밥 = rice, 채소 = vegetables, 빵 = bread"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "밥": "rice",
+                "채소": "vegetables",
+                "빵": "bread"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ko-grocery-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "사과를 ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "원해요",
+                "어디예요",
+                "가요"
+              ],
+              "correctAnswer": "원해요",
+              "acceptedAnswers": [
+                "원해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "korean-grocery-2",
+          "title": "Ask for quantities",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ko-grocery-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How much does it cost?",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "얼마예요?",
+                "빵",
+                "물"
+              ],
+              "correctAnswer": "얼마예요?",
+              "acceptedAnswers": [
+                "얼마예요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "얼마예요? is a useful polite phrase."
+            },
+            {
+              "id": "ko-grocery-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "밥 한 공기",
+              "acceptedAnswers": [
+                "밥 한 공기"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "밥 한 공기 means one bowl of rice."
+            },
+            {
+              "id": "ko-grocery-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "사과를 원해요",
+              "choices": [
+
+              ],
+              "correctAnswer": "사과를 원해요.",
+              "acceptedAnswers": [
+                "사과를 원해요."
+              ],
+              "tokens": [
+                "사과를",
+                "원해요."
+              ],
+              "correctTokens": [
+                "사과를",
+                "원해요."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ko-grocery-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "계산대",
+              "context": "What does this Korean phrase mean?",
+              "choices": [
+                "checkout",
+                "apple",
+                "one bowl of rice"
+              ],
+              "correctAnswer": "checkout",
+              "acceptedAnswers": [
+                "checkout"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "계산대 means checkout."
+            }
+          ]
+        },
+        {
+          "id": "korean-grocery-3",
+          "title": "Find items",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ko-grocery-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "치즈는 ___?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "어디예요",
+                "언제예요",
+                "누구예요"
+              ],
+              "correctAnswer": "어디예요",
+              "acceptedAnswers": [
+                "어디예요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ko-grocery-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "채소 = vegetables, 빵 = bread, 물 = water",
+              "acceptedAnswers": [
+                "채소 = vegetables, 빵 = bread, 물 = water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "채소": "vegetables",
+                "빵": "bread",
+                "물": "water"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ko-grocery-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "밥이 필요해요.",
+              "acceptedAnswers": [
+                "밥이 필요해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ko-grocery-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "치즈는 어디예요",
+              "choices": [
+
+              ],
+              "correctAnswer": "치즈는 어디예요?",
+              "acceptedAnswers": [
+                "치즈는 어디예요?"
+              ],
+              "tokens": [
+                "치즈는",
+                "어디예요?"
+              ],
+              "correctTokens": [
+                "치즈는",
+                "어디예요?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "korean-grocery-4",
+          "title": "Checkout",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ko-grocery-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "물",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "water",
+                "apple",
+                "cheese"
+              ],
+              "correctAnswer": "water",
+              "acceptedAnswers": [
+                "water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "물 means water."
+            },
+            {
+              "id": "ko-grocery-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "카드로 계산해요.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "카드로 계산해요.",
+                "사과를 원해요.",
+                "밥이 필요해요."
+              ],
+              "correctAnswer": "카드로 계산해요.",
+              "acceptedAnswers": [
+                "카드로 계산해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ko-grocery-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "카드로 ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "계산해요",
+                "먹어요",
+                "봐요"
+              ],
+              "correctAnswer": "계산해요",
+              "acceptedAnswers": [
+                "계산해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ko-grocery-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "카드로 계산해요.",
+              "acceptedAnswers": [
+                "카드로 계산해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-work",
+      "unitNumber": 6,
+      "title": "Work and study",
+      "theme": "Office and study basics",
+      "iconName": "briefcase.fill",
+      "lessons": [
+        {
+          "id": "korean-work-1",
+          "title": "Desk words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "ko-work-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "회의",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "meeting",
+                "computer",
+                "email"
+              ],
+              "correctAnswer": "meeting",
+              "acceptedAnswers": [
+                "meeting"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "회의 means meeting."
+            },
+            {
+              "id": "ko-work-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "computer",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "컴퓨터",
+                "이메일",
+                "프로젝트"
+              ],
+              "correctAnswer": "컴퓨터",
+              "acceptedAnswers": [
+                "컴퓨터"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "컴퓨터 means computer."
+            },
+            {
+              "id": "ko-work-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the office and study basics words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "이메일 = email, 프로젝트 = project, 사무실 = office",
+              "acceptedAnswers": [
+                "이메일 = email, 프로젝트 = project, 사무실 = office"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "이메일": "email",
+                "프로젝트": "project",
+                "사무실": "office"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ko-work-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "회의가 ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "있어요",
+                "먹어요",
+                "마셔요"
+              ],
+              "correctAnswer": "있어요",
+              "acceptedAnswers": [
+                "있어요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "korean-work-2",
+          "title": "Meetings",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ko-work-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "I am ready.",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "준비됐어요.",
+                "사무실",
+                "숙제"
+              ],
+              "correctAnswer": "준비됐어요.",
+              "acceptedAnswers": [
+                "준비됐어요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "준비됐어요. is a useful polite phrase."
+            },
+            {
+              "id": "ko-work-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "세 시에",
+              "acceptedAnswers": [
+                "세 시에"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "세 시에 means at three o’clock."
+            },
+            {
+              "id": "ko-work-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "회의가 있어요",
+              "choices": [
+
+              ],
+              "correctAnswer": "회의가 있어요.",
+              "acceptedAnswers": [
+                "회의가 있어요."
+              ],
+              "tokens": [
+                "회의가",
+                "있어요."
+              ],
+              "correctTokens": [
+                "회의가",
+                "있어요."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ko-work-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "마감일",
+              "context": "What does this Korean phrase mean?",
+              "choices": [
+                "deadline",
+                "meeting",
+                "at three o’clock"
+              ],
+              "correctAnswer": "deadline",
+              "acceptedAnswers": [
+                "deadline"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "마감일 means deadline."
+            }
+          ]
+        },
+        {
+          "id": "korean-work-3",
+          "title": "Study plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ko-work-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "공부해야 ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "해요",
+                "물",
+                "역"
+              ],
+              "correctAnswer": "해요",
+              "acceptedAnswers": [
+                "해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ko-work-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "프로젝트 = project, 사무실 = office, 숙제 = homework",
+              "acceptedAnswers": [
+                "프로젝트 = project, 사무실 = office, 숙제 = homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "프로젝트": "project",
+                "사무실": "office",
+                "숙제": "homework"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ko-work-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "공부해야 해요.",
+              "acceptedAnswers": [
+                "공부해야 해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ko-work-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "사무실은 어디예요",
+              "choices": [
+
+              ],
+              "correctAnswer": "사무실은 어디예요?",
+              "acceptedAnswers": [
+                "사무실은 어디예요?"
+              ],
+              "tokens": [
+                "사무실은",
+                "어디예요?"
+              ],
+              "correctTokens": [
+                "사무실은",
+                "어디예요?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "korean-work-4",
+          "title": "Deadlines",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ko-work-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "숙제",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "homework",
+                "meeting",
+                "computer"
+              ],
+              "correctAnswer": "homework",
+              "acceptedAnswers": [
+                "homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "숙제 means homework."
+            },
+            {
+              "id": "ko-work-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "이메일을 보내요.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "이메일을 보내요.",
+                "회의가 있어요.",
+                "공부해야 해요."
+              ],
+              "correctAnswer": "이메일을 보내요.",
+              "acceptedAnswers": [
+                "이메일을 보내요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ko-work-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "이메일을 ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "보내요",
+                "자요",
+                "사요"
+              ],
+              "correctAnswer": "보내요",
+              "acceptedAnswers": [
+                "보내요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ko-work-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "이메일을 보내요.",
+              "acceptedAnswers": [
+                "이메일을 보내요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-travel",
+      "unitNumber": 7,
+      "title": "Travel basics",
+      "theme": "Airport and hotel basics",
+      "iconName": "airplane",
+      "lessons": [
+        {
+          "id": "korean-travel-1",
+          "title": "Airport words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "airplane",
+          "questions": [
+            {
+              "id": "ko-travel-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "공항",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "airport",
+                "hotel",
+                "passport"
+              ],
+              "correctAnswer": "airport",
+              "acceptedAnswers": [
+                "airport"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "공항 means airport."
+            },
+            {
+              "id": "ko-travel-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hotel",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "호텔",
+                "여권",
+                "가방"
+              ],
+              "correctAnswer": "호텔",
+              "acceptedAnswers": [
+                "호텔"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "호텔 means hotel."
+            },
+            {
+              "id": "ko-travel-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the airport and hotel basics words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "여권 = passport, 가방 = suitcase, 표 = ticket",
+              "acceptedAnswers": [
+                "여권 = passport, 가방 = suitcase, 표 = ticket"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "여권": "passport",
+                "가방": "suitcase",
+                "표": "ticket"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ko-travel-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "예약이 ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "있어요",
+                "계산해요",
+                "읽어요"
+              ],
+              "correctAnswer": "있어요",
+              "acceptedAnswers": [
+                "있어요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "korean-travel-2",
+          "title": "Hotel check-in",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ko-travel-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Can you help me?",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "도와주실 수 있어요?",
+                "표",
+                "역"
+              ],
+              "correctAnswer": "도와주실 수 있어요?",
+              "acceptedAnswers": [
+                "도와주실 수 있어요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "도와주실 수 있어요? is a useful polite phrase."
+            },
+            {
+              "id": "ko-travel-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "하룻밤",
+              "acceptedAnswers": [
+                "하룻밤"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "하룻밤 means one night."
+            },
+            {
+              "id": "ko-travel-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "예약이 있어요",
+              "choices": [
+
+              ],
+              "correctAnswer": "예약이 있어요.",
+              "acceptedAnswers": [
+                "예약이 있어요."
+              ],
+              "tokens": [
+                "예약이",
+                "있어요."
+              ],
+              "correctTokens": [
+                "예약이",
+                "있어요."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ko-travel-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "체크인",
+              "context": "What does this Korean phrase mean?",
+              "choices": [
+                "check-in",
+                "airport",
+                "one night"
+              ],
+              "correctAnswer": "check-in",
+              "acceptedAnswers": [
+                "check-in"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "체크인 means check-in."
+            }
+          ]
+        },
+        {
+          "id": "korean-travel-3",
+          "title": "Ask for help",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ko-travel-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "호텔은 ___?",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "어디예요",
+                "언제예요",
+                "뭐예요"
+              ],
+              "correctAnswer": "어디예요",
+              "acceptedAnswers": [
+                "어디예요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ko-travel-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "가방 = suitcase, 표 = ticket, 역 = train station",
+              "acceptedAnswers": [
+                "가방 = suitcase, 표 = ticket, 역 = train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "가방": "suitcase",
+                "표": "ticket",
+                "역": "train station"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ko-travel-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "도움이 필요해요.",
+              "acceptedAnswers": [
+                "도움이 필요해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ko-travel-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "호텔은 어디예요",
+              "choices": [
+
+              ],
+              "correctAnswer": "호텔은 어디예요?",
+              "acceptedAnswers": [
+                "호텔은 어디예요?"
+              ],
+              "tokens": [
+                "호텔은",
+                "어디예요?"
+              ],
+              "correctTokens": [
+                "호텔은",
+                "어디예요?"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "korean-travel-4",
+          "title": "Travel plans",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ko-travel-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "역",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "train station",
+                "airport",
+                "hotel"
+              ],
+              "correctAnswer": "train station",
+              "acceptedAnswers": [
+                "train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "역 means train station."
+            },
+            {
+              "id": "ko-travel-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "역에 가요.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "역에 가요.",
+                "예약이 있어요.",
+                "도움이 필요해요."
+              ],
+              "correctAnswer": "역에 가요.",
+              "acceptedAnswers": [
+                "역에 가요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ko-travel-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "역에 ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "가요",
+                "먹어요",
+                "마셔요"
+              ],
+              "correctAnswer": "가요",
+              "acceptedAnswers": [
+                "가요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ko-travel-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "역에 가요.",
+              "acceptedAnswers": [
+                "역에 가요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "korean-feelings",
+      "unitNumber": 8,
+      "title": "Feelings and plans",
+      "theme": "Mood and weekend basics",
+      "iconName": "heart.fill",
+      "lessons": [
+        {
+          "id": "korean-feelings-1",
+          "title": "Feelings",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "heart.fill",
+          "questions": [
+            {
+              "id": "ko-feelings-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "행복해요",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "happy",
+                "tired",
+                "busy"
+              ],
+              "correctAnswer": "happy",
+              "acceptedAnswers": [
+                "happy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "행복해요 means happy."
+            },
+            {
+              "id": "ko-feelings-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "tired",
+              "context": "Choose the Korean word.",
+              "choices": [
+                "피곤해요",
+                "바빠요",
+                "차분해요"
+              ],
+              "correctAnswer": "피곤해요",
+              "acceptedAnswers": [
+                "피곤해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "피곤해요 means tired."
+            },
+            {
+              "id": "ko-feelings-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the mood and weekend basics words.",
+              "context": "Connect Korean to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "바빠요 = busy, 차분해요 = calm, 내일 = tomorrow",
+              "acceptedAnswers": [
+                "바빠요 = busy, 차분해요 = calm, 내일 = tomorrow"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "바빠요": "busy",
+                "차분해요": "calm",
+                "내일": "tomorrow"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ko-feelings-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "저는 ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "피곤해요",
+                "공항",
+                "물"
+              ],
+              "correctAnswer": "피곤해요",
+              "acceptedAnswers": [
+                "피곤해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "korean-feelings-2",
+          "title": "Preferences",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ko-feelings-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How are you?",
+              "context": "Choose the Korean phrase.",
+              "choices": [
+                "어떻게 지내요?",
+                "내일",
+                "주말"
+              ],
+              "correctAnswer": "어떻게 지내요?",
+              "acceptedAnswers": [
+                "어떻게 지내요?"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "어떻게 지내요? is a useful polite phrase."
+            },
+            {
+              "id": "ko-feelings-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "이번 주말",
+              "acceptedAnswers": [
+                "이번 주말"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "이번 주말 means this weekend."
+            },
+            {
+              "id": "ko-feelings-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "저는 피곤해요",
+              "choices": [
+
+              ],
+              "correctAnswer": "저는 피곤해요.",
+              "acceptedAnswers": [
+                "저는 피곤해요."
+              ],
+              "tokens": [
+                "저는",
+                "피곤해요."
+              ],
+              "correctTokens": [
+                "저는",
+                "피곤해요."
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ko-feelings-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "기분이 좋아요",
+              "context": "What does this Korean phrase mean?",
+              "choices": [
+                "I feel good",
+                "happy",
+                "this weekend"
+              ],
+              "correctAnswer": "I feel good",
+              "acceptedAnswers": [
+                "I feel good"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "기분이 좋아요 means I feel good."
+            }
+          ]
+        },
+        {
+          "id": "korean-feelings-3",
+          "title": "Weekend plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ko-feelings-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "쉬고 ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "싶어요",
+                "계산해요",
+                "봐요"
+              ],
+              "correctAnswer": "싶어요",
+              "acceptedAnswers": [
+                "싶어요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ko-feelings-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "차분해요 = calm, 내일 = tomorrow, 주말 = weekend",
+              "acceptedAnswers": [
+                "차분해요 = calm, 내일 = tomorrow, 주말 = weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "차분해요": "calm",
+                "내일": "tomorrow",
+                "주말": "weekend"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ko-feelings-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "쉬고 싶어요.",
+              "acceptedAnswers": [
+                "쉬고 싶어요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ko-feelings-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "내일 일해요",
+              "choices": [
+
+              ],
+              "correctAnswer": "내일 일해요.",
+              "acceptedAnswers": [
+                "내일 일해요."
+              ],
+              "tokens": [
+                "내일",
+                "일해요."
+              ],
+              "correctTokens": [
+                "내일",
+                "일해요."
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "korean-feelings-4",
+          "title": "Small talk",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ko-feelings-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "주말",
+              "context": "What does this Korean word mean?",
+              "choices": [
+                "weekend",
+                "happy",
+                "tired"
+              ],
+              "correctAnswer": "weekend",
+              "acceptedAnswers": [
+                "weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "주말 means weekend."
+            },
+            {
+              "id": "ko-feelings-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "주말을 좋아해요.",
+              "context": "Choose the meaning.",
+              "choices": [
+                "주말을 좋아해요.",
+                "저는 피곤해요.",
+                "쉬고 싶어요."
+              ],
+              "correctAnswer": "주말을 좋아해요.",
+              "acceptedAnswers": [
+                "주말을 좋아해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ko-feelings-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "내일 ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "일해요",
+                "치즈",
+                "역"
+              ],
+              "correctAnswer": "일해요",
+              "acceptedAnswers": [
+                "일해요"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ko-feelings-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Korean sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "주말을 좋아해요.",
+              "acceptedAnswers": [
+                "주말을 좋아해요."
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

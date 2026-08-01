@@ -19,6 +19,7 @@ struct MindLockApp: App {
                 .environmentObject(limitsManager)
                 .environmentObject(paymentManager)
                 .onAppear {
+                    AnalyticsService.shared.configure()
                     AnalyticsService.shared.track(.appOpened)
                     AnalyticsService.shared.identifyCurrentUser()
                     NotificationManager.shared.configure()
@@ -32,12 +33,14 @@ struct MindLockApp: App {
                 }
                 .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
                     AnalyticsService.shared.track(.appForegrounded)
+                    processSharedLimitEvents()
+                    refreshShieldStateFromLedger(reason: "app foregrounded")
                     // Re-check on every foreground entry
                     reevaluateScreenTimePrompt()
                     Task { await paymentManager.refreshSubscriptionStatus() }
                 }
                 .sheet(isPresented: $showScreenTimePrompt) {
-                    ScreenTimeEnablePrompt(onEnable: {
+                    ScreenTimeEnablePrompt(onContinue: {
                         Task {
                             do {
                                 try await screenTimeManager.requestAuthorization()
@@ -47,8 +50,6 @@ struct MindLockApp: App {
                             // Reevaluate after attempt
                             reevaluateScreenTimePrompt()
                         }
-                    }, onNotNow: {
-                        showScreenTimePrompt = false
                     })
                 }
                 // Keep prompt state in sync with the manager's published status (no re-check loop)
@@ -101,6 +102,13 @@ struct MindLockApp: App {
         print("🎯 Ready to present unlock flow for \(event.blockedTokens.count) apps")
     }
 
+    private func refreshShieldStateFromLedger(reason: String) {
+        screenTimeManager.enforceActiveTimeBlocksNow()
+        limitsManager.refreshBlockingNow()
+        SharedSettings.scheduleTemporaryUnlockExpiryMonitoring()
+        print("🛡️ Refreshed shield state from ledger: \(reason)")
+    }
+
     private func reevaluateScreenTimePrompt() {
         // Only prompt after onboarding has completed
         let onboardingDone = UserDefaults.standard.bool(forKey: "onboardingCompleted")
@@ -138,8 +146,7 @@ struct MindLockApp: App {
 
 // MARK: - Screen Time Enable Prompt
 private struct ScreenTimeEnablePrompt: View {
-    let onEnable: () -> Void
-    let onNotNow: () -> Void
+    let onContinue: () -> Void
     var body: some View {
         ZStack {
             DesignSystem.AppBackground()
@@ -148,19 +155,17 @@ private struct ScreenTimeEnablePrompt: View {
                     Image(systemName: "clock.badge.exclamationmark")
                         .font(.system(size: 40, weight: .semibold))
                         .foregroundColor(DesignSystem.Colors.primary)
-                    Text("Enable Screen Time")
+                    Text("Screen Time Access")
                         .font(DesignSystem.Typography.title1)
                         .fontWeight(.bold)
                         .foregroundColor(DesignSystem.Colors.textPrimary)
-                    Text("We noticed you haven't enabled Screen Time yet. Remember, MindLock needs Screen Time access in order to track and enforce limits and keep your phone use on track!")
+                    Text("MindLock uses Screen Time access to monitor usage and enforce the limits you create.")
                         .font(DesignSystem.Typography.body)
                         .foregroundColor(DesignSystem.Colors.textSecondary)
                         .multilineTextAlignment(.center)
                 }
-                Button("Enable Screen Time", action: onEnable)
+                Button("Continue", action: onContinue)
                     .mindLockButton(style: .primary)
-                Button("Not now") { onNotNow() }
-                    .mindLockButton(style: .ghost)
             }
             .padding(.horizontal, DesignSystem.Spacing.lg)
         }

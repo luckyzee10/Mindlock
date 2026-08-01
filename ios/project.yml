@@ -6,6 +6,11 @@ configs:
   Debug: debug
   Release: release
 
+packages:
+  PostHog:
+    url: https://github.com/PostHog/posthog-ios.git
+    from: 3.0.0
+
 targets:
   MindLock:
     type: application
@@ -22,6 +27,8 @@ targets:
         INFOPLIST_FILE: MindLock/Info.plist
         CODE_SIGN_STYLE: Automatic
         TARGETED_DEVICE_FAMILY: "1"
+        POSTHOG_API_KEY: ""
+        POSTHOG_HOST: "https://us.i.posthog.com"
     entitlements:
       path: MindLock/MindLock.entitlements
       properties:
@@ -31,6 +38,10 @@ targets:
     info:
       path: MindLock/Info.plist
       properties:
+        CFBundleShortVersionString: "1.01"
+        CFBundleVersion: "31"
+        MindLockPostHogAPIKey: $(POSTHOG_API_KEY)
+        MindLockPostHogHost: $(POSTHOG_HOST)
         UILaunchScreen: {}
         UIRequiresFullScreen: true
         UISupportedInterfaceOrientations:
@@ -46,6 +57,8 @@ targets:
       - sdk: ManagedSettings.framework
       - sdk: DeviceActivity.framework
       - sdk: _DeviceActivity_SwiftUI.framework
+      - package: PostHog
+        product: PostHog
     postBuildScripts:
       - name: EmbedUsageReportExtension
         basedOnDependencyAnalysis: false
@@ -78,6 +91,8 @@ targets:
     info:
       path: MindLockMonitor/Info.plist
       properties:
+        CFBundleShortVersionString: "1.01"
+        CFBundleVersion: "31"
         CFBundleDisplayName: MindLock Monitor
         NSExtension:
           NSExtensionPointIdentifier: com.apple.deviceactivity.monitor-extension
@@ -105,9 +120,18 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.lucaszambranonavia.mindlock.shieldui
         CODE_SIGN_STYLE: Automatic
         INFOPLIST_FILE: MindLockShieldUI/Info.plist
+        CODE_SIGN_ENTITLEMENTS: MindLockShieldUI/MindLockShieldUI.entitlements
+    entitlements:
+      path: MindLockShieldUI/MindLockShieldUI.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        com.apple.security.application-groups:
+          - group.com.YLUUT5U99U.mindlock
     info:
       path: MindLockShieldUI/Info.plist
       properties:
+        CFBundleShortVersionString: "1.01"
+        CFBundleVersion: "31"
         CFBundleDisplayName: MindLock Shield
         NSExtension:
           NSExtensionPointIdentifier: com.apple.ManagedSettingsUI.shield-configuration-service
@@ -135,6 +159,8 @@ targets:
     info:
       path: MindLockUsageReport/Info.plist
       properties:
+        CFBundleShortVersionString: "1.01"
+        CFBundleVersion: "31"
         CFBundleDisplayName: MindLock Usage Report
         EXAppExtensionAttributes:
           EXExtensionPointIdentifier: com.apple.deviceactivityui.report-extension
@@ -144,6 +170,19 @@ targets:
       - sdk: FamilyControls.framework
       - sdk: ManagedSettingsUI.framework
 
+  MindLockTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MindLockTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.lucaszambranonavia.mindlock.tests
+        CODE_SIGN_STYLE: Automatic
+    dependencies:
+      - target: MindLock
+
 schemes:
   MindLock:
     build:
@@ -151,3 +190,7 @@ schemes:
         MindLock: all
         MindLockMonitor: all
         MindLockShieldUI: all
+        MindLockTests: [test]
+    test:
+      targets:
+        - MindLockTests

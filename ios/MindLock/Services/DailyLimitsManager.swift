@@ -127,7 +127,8 @@ class DailyLimitsManager: ObservableObject {
         saveTodayUsage()
         
         // Check if limit exceeded and trigger blocking if needed
-        if hasExceededLimit(for: token) {
+        if let limit = getCurrentLimit(for: token),
+           todayUsage.hasExceededLimit(for: token, limit: limit) {
             triggerBlocking(for: token)
         }
     }
@@ -211,13 +212,19 @@ class DailyLimitsManager: ObservableObject {
             return
         }
 
-        let duration = TimeInterval(minutes * 60)
+        let duration: TimeInterval
+        if minutes >= 24 * 60 {
+            duration = secondsUntilMidnight(from: Date())
+        } else {
+            duration = TimeInterval(minutes * 60)
+        }
         let expiry = Date().addingTimeInterval(duration)
+        let grantedMinutes = max(1, Int(ceil(duration / 60)))
         SharedSettings.setTemporaryUnlock(for: tokens, until: expiry)
-        SharedSettings.recordUnlock(kind: .free(minutes: Double(minutes)))
+        SharedSettings.recordUnlock(kind: .free(minutes: Double(grantedMinutes)))
         ScreenTimeManager.shared.temporaryUnlock(tokens: tokens, duration: duration)
         recentlyBlockedTokens.removeAll(where: { tokens.contains($0) })
-        print("⏳ Granted free unlock for \(minutes) minutes on \(tokens.count) app(s)")
+        print("⏳ Granted free unlock for \(grantedMinutes) minutes on \(tokens.count) app(s)")
     }
 
     
@@ -271,34 +278,29 @@ class DailyLimitsManager: ObservableObject {
     /// Reevaluate ManagedSettings blocking after limits change.
     private func recomputeBlockingAfterLimitChange() {
         let selectedTokens = ScreenTimeManager.shared.selectedApps.applicationTokens
-        let activeSuppressions = SharedSettings.activeTemporaryUnlocks()
-        let suppressedIds = Set(activeSuppressions.keys)
         // Compute the set of tokens that have exceeded their limit
         var blockedSet = Set<ApplicationToken>()
         for token in selectedTokens {
-            if suppressedIds.contains(SharedSettings.tokenKey(token)) {
-                continue
+            guard let limit = getCurrentLimit(for: token) else { continue }
+            if todayUsage.hasExceededLimit(for: token, limit: limit) {
+                blockedSet.insert(token)
             }
-            if hasExceededLimit(for: token) { blockedSet.insert(token) }
         }
 
-        let store = ManagedSettingsStore()
         if blockedSet.isEmpty {
-            store.clearAllSettings()
-            isBlocking = false
             recentlyBlockedTokens = []
             SharedSettings.clearLimitShieldTokens()
-            SharedSettings.setBlockingState(false)
-            print("🔓 Cleared blocking after limit change (no apps exceeded)")
+            let shielded = SharedSettings.applyCurrentShieldState(reason: "limit recompute: no exceeded apps")
+            isBlocking = !shielded.isEmpty
+            print("🔓 Cleared limit blocking after limit change")
             return
         }
 
-        store.shield.applications = blockedSet
         isBlocking = true
         recentlyBlockedTokens = Array(blockedSet)
         SharedSettings.setLimitShieldTokens(blockedSet)
-        SharedSettings.setBlockingState(true)
-        print("🔒 Applied per-app blocking to \(blockedSet.count) app(s)")
+        let shielded = SharedSettings.applyCurrentShieldState(reason: "limit recompute: exceeded apps")
+        print("🔒 Applied per-app blocking to \(blockedSet.count) app(s); total shielded=\(shielded.count)")
     }
 
     private func backfillUsageForPendingBlock() {
@@ -383,7 +385,11 @@ class DailyLimitsManager: ObservableObject {
     }
     
     private func allLimitedTokens() -> [ApplicationToken] {
-        Array(ScreenTimeManager.shared.selectedApps.applicationTokens)
+        let shieldedTokens = SharedSettings.currentShieldSnapshot().activelyShieldedTokens
+        if !shieldedTokens.isEmpty {
+            return Array(shieldedTokens)
+        }
+        return Array(ScreenTimeManager.shared.selectedApps.applicationTokens)
     }
 
     /// Public wrapper to re-apply blocking immediately based on current selection

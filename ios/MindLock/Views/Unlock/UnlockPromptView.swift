@@ -162,8 +162,8 @@ struct UnlockPromptView: View {
             )
             benefitRow(
                 icon: "chart.bar.fill",
-                title: "Understand your habits.",
-                detail: "See real Screen Time usage directly in the Usage tab."
+                title: "Track your journey.",
+                detail: "Follow Spanish lessons, progress, XP, and completed units."
             )
             benefitRow(
                 icon: "text.book.closed.fill",
@@ -236,6 +236,8 @@ struct UnlockPromptView: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
 
+            legalLinks
+
             if let failureMessage = failureMessage {
                 Text(failureMessage)
                     .font(DesignSystem.Typography.caption)
@@ -249,8 +251,6 @@ struct UnlockPromptView: View {
             .font(DesignSystem.Typography.callout.weight(.semibold))
             .foregroundColor(DesignSystem.Colors.primary)
             .disabled(paymentManager.isProcessing)
-
-            legalLinks
         }
         .frame(maxWidth: .infinity)
     }
@@ -280,7 +280,7 @@ struct UnlockPromptView: View {
                 HStack(alignment: .center, spacing: DesignSystem.Spacing.md) {
                     VStack(alignment: .leading, spacing: 7) {
                         HStack(spacing: DesignSystem.Spacing.sm) {
-                            Text(product.planTitle)
+                            Text(product.subscriptionTitle)
                                 .font(DesignSystem.Typography.headline.weight(.heavy))
                                 .foregroundColor(DesignSystem.Colors.textPrimary)
 
@@ -298,6 +298,10 @@ struct UnlockPromptView: View {
                         Text(product.freeTrialDescription ?? product.billingSummary)
                             .font(DesignSystem.Typography.callout)
                             .foregroundColor(DesignSystem.Colors.textSecondary)
+
+                        Text(product.renewalDisclosure)
+                            .font(DesignSystem.Typography.caption)
+                            .foregroundColor(DesignSystem.Colors.textTertiary)
                     }
 
                     Spacer(minLength: DesignSystem.Spacing.sm)
@@ -344,10 +348,10 @@ struct UnlockPromptView: View {
             Link("Privacy Policy", destination: privacyPolicyURL)
             Text("•")
                 .foregroundColor(DesignSystem.Colors.textTertiary)
-            Link("Terms of Use", destination: termsURL)
+            Link("Terms of Use (EULA)", destination: termsURL)
         }
         .font(DesignSystem.Typography.caption.weight(.semibold))
-        .foregroundColor(DesignSystem.Colors.textSecondary)
+        .foregroundColor(DesignSystem.Colors.primary)
         .padding(.top, DesignSystem.Spacing.xs)
     }
 
@@ -465,6 +469,10 @@ struct UnlockPromptView: View {
 }
 
 private extension Product {
+    var subscriptionTitle: String {
+        "MindLock+ \(planTitle)"
+    }
+
     var planTitle: String {
         switch subscription?.subscriptionPeriod.unit {
         case .year:
@@ -499,7 +507,31 @@ private extension Product {
     }
 
     var billingSummary: String {
-        "\(displayPrice) billed \(subscriptionPeriodDescription)"
+        "\(subscriptionLengthDescription) • \(displayPrice)"
+    }
+
+    var renewalDisclosure: String {
+        switch subscription?.subscriptionPeriod.unit {
+        case .year:
+            return "Auto-renews annually until canceled."
+        case .month:
+            return "Auto-renews monthly until canceled."
+        case .week:
+            return "Auto-renews weekly until canceled."
+        case .day:
+            return "Auto-renews daily until canceled."
+        case nil:
+            return "Auto-renews until canceled."
+        @unknown default:
+            return "Auto-renews until canceled."
+        }
+    }
+
+    var subscriptionLengthDescription: String {
+        guard let period = subscription?.subscriptionPeriod else {
+            return "Auto-renewable subscription"
+        }
+        return "\(period.readableDescription) subscription"
     }
 
     var perDayPriceText: String {

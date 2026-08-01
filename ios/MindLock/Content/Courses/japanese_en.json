@@ -1,0 +1,3658 @@
+{
+  "courseId": "japanese_en",
+  "version": 1,
+  "sourceLanguage": "en",
+  "targetLanguage": "japanese",
+  "displayName": "Japanese",
+  "sections": [
+    {
+      "id": "japanese-cafe",
+      "unitNumber": 1,
+      "title": "Order at a cafe",
+      "theme": "Cafe basics",
+      "iconName": "cup.and.saucer.fill",
+      "lessons": [
+        {
+          "id": "japanese-cafe-1",
+          "title": "Cafe words",
+          "subtitle": "Coffee, water, and bread",
+          "iconName": "cup.and.saucer.fill",
+          "questions": [
+            {
+              "id": "ja-cafe-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "コーヒー",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "coffee",
+                "tea",
+                "milk"
+              ],
+              "correctAnswer": "coffee",
+              "acceptedAnswers": [
+                "coffee"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "コーヒー is the core word for coffee."
+            },
+            {
+              "id": "ja-cafe-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "water",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "水",
+                "パン",
+                "テーブル"
+              ],
+              "correctAnswer": "水",
+              "acceptedAnswers": [
+                "水"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "水 means water."
+            },
+            {
+              "id": "ja-cafe-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the cafe words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "パン = bread, 牛乳 = milk, 砂糖 = sugar",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "パン": "bread",
+                "牛乳": "milk",
+                "砂糖": "sugar"
+              },
+              "learningNote": "These are practical cafe and breakfast words."
+            },
+            {
+              "id": "ja-cafe-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "コーヒーを___。",
+              "context": "Fill in: I want a coffee.",
+              "choices": [
+                "ください",
+                "ありがとう",
+                "おはよう"
+              ],
+              "correctAnswer": "ください",
+              "acceptedAnswers": [
+                "ください"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ください makes a polite request."
+            }
+          ]
+        },
+        {
+          "id": "japanese-cafe-2",
+          "title": "Ask politely",
+          "subtitle": "Please and thank you",
+          "iconName": "hand.thumbsup.fill",
+          "questions": [
+            {
+              "id": "ja-cafe-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "please",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "お願いします",
+                "おやすみなさい",
+                "どういたしまして"
+              ],
+              "correctAnswer": "お願いします",
+              "acceptedAnswers": [
+                "お願いします"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "お願いします is the polite way to say please."
+            },
+            {
+              "id": "ja-cafe-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Japanese for thank you.",
+              "context": "Use the common everyday phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ありがとう",
+              "acceptedAnswers": [
+                "ありがとう",
+                "ありがとうございます"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ありがとう means thank you."
+            },
+            {
+              "id": "ja-cafe-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "A coffee, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "コーヒーを ください",
+              "acceptedAnswers": [
+                "コーヒーを ください"
+              ],
+              "tokens": [
+                "コーヒーを",
+                "ください"
+              ],
+              "correctTokens": [
+                "コーヒーを",
+                "ください"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is enough to order politely."
+            },
+            {
+              "id": "ja-cafe-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "どういたしまして",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "you're welcome",
+                "good morning",
+                "excuse me"
+              ],
+              "correctAnswer": "you're welcome",
+              "acceptedAnswers": [
+                "you're welcome"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "どういたしまして is a common reply to thank you."
+            }
+          ]
+        },
+        {
+          "id": "japanese-cafe-3",
+          "title": "Order food",
+          "subtitle": "I want and I have",
+          "iconName": "fork.knife",
+          "questions": [
+            {
+              "id": "ja-cafe-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "サンドイッチが___。",
+              "context": "Fill in: I want a sandwich.",
+              "choices": [
+                "ほしいです",
+                "あります",
+                "行きます"
+              ],
+              "correctAnswer": "ほしいです",
+              "acceptedAnswers": [
+                "ほしいです"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ほしいです means I want something."
+            },
+            {
+              "id": "ja-cafe-3-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "お腹が空きました",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am hungry",
+                "I am thirsty",
+                "I am tired"
+              ],
+              "correctAnswer": "I am hungry",
+              "acceptedAnswers": [
+                "I am hungry"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "お腹が空きました means I am hungry."
+            },
+            {
+              "id": "ja-cafe-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I want bread and water.",
+              "choices": [
+
+              ],
+              "correctAnswer": "パンと 水が ほしいです",
+              "acceptedAnswers": [
+                "パンと 水が ほしいです"
+              ],
+              "tokens": [
+                "パンと",
+                "水が",
+                "ほしいです"
+              ],
+              "correctTokens": [
+                "パンと",
+                "水が",
+                "ほしいです"
+              ],
+              "pairs": {
+              },
+              "learningNote": "と connects words like and in English."
+            },
+            {
+              "id": "ja-cafe-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the order words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "あります = I have, ほしいです = I want, 空腹 = hunger",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ほしいです": "I want",
+                "あります": "I have",
+                "空腹": "hunger"
+              },
+              "learningNote": "These phrases help users ask for food quickly."
+            }
+          ]
+        },
+        {
+          "id": "japanese-cafe-4",
+          "title": "Pay the bill",
+          "subtitle": "Numbers and checkout",
+          "iconName": "creditcard.fill",
+          "questions": [
+            {
+              "id": "ja-cafe-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "お会計",
+              "context": "What do you ask for at the end of a meal?",
+              "choices": [
+                "the bill",
+                "the door",
+                "the table"
+              ],
+              "correctAnswer": "the bill",
+              "acceptedAnswers": [
+                "the bill"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "お会計 is the check or bill."
+            },
+            {
+              "id": "ja-cafe-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How much is it?",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "いくらですか？",
+                "どこですか？",
+                "お名前は何ですか？"
+              ],
+              "correctAnswer": "いくらですか？",
+              "acceptedAnswers": [
+                "いくらですか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "いくらですか？ asks about price."
+            },
+            {
+              "id": "ja-cafe-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Japanese for three.",
+              "context": "One word or numeral form.",
+              "choices": [
+
+              ],
+              "correctAnswer": "三",
+              "acceptedAnswers": [
+                "三",
+                "さん",
+                "3"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "三 means three."
+            },
+            {
+              "id": "ja-cafe-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "The bill, please.",
+              "choices": [
+
+              ],
+              "correctAnswer": "お会計を お願いします",
+              "acceptedAnswers": [
+                "お会計を お願いします"
+              ],
+              "tokens": [
+                "お会計を",
+                "お願いします"
+              ],
+              "correctTokens": [
+                "お会計を",
+                "お願いします"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the practical phrase to close a restaurant interaction."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-meet",
+      "unitNumber": 2,
+      "title": "Meet someone new",
+      "theme": "Introductions",
+      "iconName": "person.2.fill",
+      "lessons": [
+        {
+          "id": "japanese-meet-1",
+          "title": "Say hello",
+          "subtitle": "Greetings",
+          "iconName": "hand.wave.fill",
+          "questions": [
+            {
+              "id": "ja-meet-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "こんにちは",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "hello",
+                "goodbye",
+                "thanks"
+              ],
+              "correctAnswer": "hello",
+              "acceptedAnswers": [
+                "hello"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "こんにちは is a common greeting."
+            },
+            {
+              "id": "ja-meet-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "good morning",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "おはようございます",
+                "おやすみなさい",
+                "さようなら"
+              ],
+              "correctAnswer": "おはようございます",
+              "acceptedAnswers": [
+                "おはようございます"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "おはようございます is used early in the day."
+            },
+            {
+              "id": "ja-meet-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match greetings.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ありがとう = thanks, こんにちは = hello, さようなら = goodbye",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "こんにちは": "hello",
+                "さようなら": "goodbye",
+                "ありがとう": "thanks"
+              },
+              "learningNote": "These cover the start and end of simple conversations."
+            },
+            {
+              "id": "ja-meet-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "easy",
+              "prompt": "Type Japanese for hello.",
+              "context": "Use the common greeting.",
+              "choices": [
+
+              ],
+              "correctAnswer": "こんにちは",
+              "acceptedAnswers": [
+                "こんにちは"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "こんにちは starts everyday conversations."
+            }
+          ]
+        },
+        {
+          "id": "japanese-meet-2",
+          "title": "Names",
+          "subtitle": "Ask and answer",
+          "iconName": "person.text.rectangle.fill",
+          "questions": [
+            {
+              "id": "ja-meet-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "What is your name?",
+              "context": "Choose the Japanese question.",
+              "choices": [
+                "お名前は何ですか？",
+                "どこに住んでいますか？",
+                "何がほしいですか？"
+              ],
+              "correctAnswer": "お名前は何ですか？",
+              "acceptedAnswers": [
+                "お名前は何ですか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "お名前は何ですか？ asks for someone's name."
+            },
+            {
+              "id": "ja-meet-2-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "easy",
+              "prompt": "Build the sentence.",
+              "context": "My name is Ana.",
+              "choices": [
+
+              ],
+              "correctAnswer": "私の 名前は アナです",
+              "acceptedAnswers": [
+                "私の 名前は アナです"
+              ],
+              "tokens": [
+                "私の",
+                "名前は",
+                "アナです"
+              ],
+              "correctTokens": [
+                "私の",
+                "名前は",
+                "アナです"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is the simplest self-introduction pattern."
+            },
+            {
+              "id": "ja-meet-2-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "私の名前はルイス___。",
+              "context": "Fill in: My name is Luis.",
+              "choices": [
+                "です",
+                "ます",
+                "から"
+              ],
+              "correctAnswer": "です",
+              "acceptedAnswers": [
+                "です"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "です makes the sentence polite."
+            },
+            {
+              "id": "ja-meet-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Japanese for my name is.",
+              "context": "Use the common phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "私の名前は",
+              "acceptedAnswers": [
+                "私の名前は",
+                "わたしのなまえは"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Use this before saying your name."
+            }
+          ]
+        },
+        {
+          "id": "japanese-meet-3",
+          "title": "Where from?",
+          "subtitle": "Countries and origin",
+          "iconName": "globe.americas.fill",
+          "questions": [
+            {
+              "id": "ja-meet-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "コロンビア出身です",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am from Colombia",
+                "I live in Colombia",
+                "I go to Colombia"
+              ],
+              "correctAnswer": "I am from Colombia",
+              "acceptedAnswers": [
+                "I am from Colombia"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "から means from."
+            },
+            {
+              "id": "ja-meet-3-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "アメリカ___です。",
+              "context": "Fill in: I am from the United States.",
+              "choices": [
+                "出身",
+                "名前",
+                "水"
+              ],
+              "correctAnswer": "出身",
+              "acceptedAnswers": [
+                "出身"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "出身 means origin or from."
+            },
+            {
+              "id": "ja-meet-3-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where are you from?",
+              "choices": [
+
+              ],
+              "correctAnswer": "どこの 出身 ですか？",
+              "acceptedAnswers": [
+                "どこの 出身 ですか？"
+              ],
+              "tokens": [
+                "どこの",
+                "出身",
+                "ですか？"
+              ],
+              "correctTokens": [
+                "どこの",
+                "出身",
+                "ですか？"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a natural first-conversation question."
+            },
+            {
+              "id": "ja-meet-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match identity words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "あなた = you, から = from, 私 = I",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "私": "I",
+                "あなた": "you",
+                "から": "from"
+              },
+              "learningNote": "Identity and origin phrases show up constantly."
+            }
+          ]
+        },
+        {
+          "id": "japanese-meet-4",
+          "title": "Nice to meet you",
+          "subtitle": "Polite small talk",
+          "iconName": "sparkles",
+          "questions": [
+            {
+              "id": "ja-meet-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "はじめまして",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "nice to meet you",
+                "very tired",
+                "many thanks"
+              ],
+              "correctAnswer": "nice to meet you",
+              "acceptedAnswers": [
+                "nice to meet you"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "はじめまして is useful when meeting someone."
+            },
+            {
+              "id": "ja-meet-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "How are you?",
+              "context": "Choose the Japanese question.",
+              "choices": [
+                "元気ですか？",
+                "いくらですか？",
+                "どこですか？"
+              ],
+              "correctAnswer": "元気ですか？",
+              "acceptedAnswers": [
+                "元気ですか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "元気ですか？ asks how someone is doing."
+            },
+            {
+              "id": "ja-meet-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Japanese for good or well.",
+              "context": "Use the short conversational reply.",
+              "choices": [
+
+              ],
+              "correctAnswer": "元気",
+              "acceptedAnswers": [
+                "元気",
+                "げんき"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "元気 is a common short reply."
+            },
+            {
+              "id": "ja-meet-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "I am well, thank you.",
+              "choices": [
+
+              ],
+              "correctAnswer": "元気です、 ありがとう",
+              "acceptedAnswers": [
+                "元気です、 ありがとう"
+              ],
+              "tokens": [
+                "元気です、",
+                "ありがとう"
+              ],
+              "correctTokens": [
+                "元気です、",
+                "ありがとう"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This keeps a greeting exchange polite and simple."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-city",
+      "unitNumber": 3,
+      "title": "Find your way around",
+      "theme": "City travel",
+      "iconName": "map.fill",
+      "lessons": [
+        {
+          "id": "japanese-city-1",
+          "title": "Places",
+          "subtitle": "Streets and stations",
+          "iconName": "building.2.fill",
+          "questions": [
+            {
+              "id": "ja-city-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "通り",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "street",
+                "store",
+                "chair"
+              ],
+              "correctAnswer": "street",
+              "acceptedAnswers": [
+                "street"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "通り means street."
+            },
+            {
+              "id": "ja-city-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "station",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "駅",
+                "学校",
+                "角"
+              ],
+              "correctAnswer": "駅",
+              "acceptedAnswers": [
+                "駅"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "駅 is useful for transit."
+            },
+            {
+              "id": "ja-city-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match city places.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "公園 = park, 店 = store, 銀行 = bank",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "店": "store",
+                "銀行": "bank",
+                "公園": "park"
+              },
+              "learningNote": "These are common landmarks."
+            },
+            {
+              "id": "ja-city-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Japanese for park.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "公園",
+              "acceptedAnswers": [
+                "公園",
+                "こうえん"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "公園 means park."
+            }
+          ]
+        },
+        {
+          "id": "japanese-city-2",
+          "title": "Directions",
+          "subtitle": "Left, right, straight",
+          "iconName": "arrow.triangle.turn.up.right.circle.fill",
+          "questions": [
+            {
+              "id": "ja-city-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "右",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "right",
+                "left",
+                "straight"
+              ],
+              "correctAnswer": "right",
+              "acceptedAnswers": [
+                "right"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "右 means right as a direction."
+            },
+            {
+              "id": "ja-city-2-q2",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "左",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "left",
+                "near",
+                "far"
+              ],
+              "correctAnswer": "left",
+              "acceptedAnswers": [
+                "left"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "左 means left."
+            },
+            {
+              "id": "ja-city-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Go straight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "まっすぐ 行ってください",
+              "acceptedAnswers": [
+                "まっすぐ 行ってください"
+              ],
+              "tokens": [
+                "まっすぐ",
+                "行ってください"
+              ],
+              "correctTokens": [
+                "まっすぐ",
+                "行ってください"
+              ],
+              "pairs": {
+              },
+              "learningNote": "A compact direction phrase is easier to use in the moment."
+            },
+            {
+              "id": "ja-city-2-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "___に曲がってください。",
+              "context": "Fill in: Turn right.",
+              "choices": [
+                "右",
+                "左",
+                "遠い"
+              ],
+              "correctAnswer": "右",
+              "acceptedAnswers": [
+                "右"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "右に曲がってください means turn right."
+            }
+          ]
+        },
+        {
+          "id": "japanese-city-3",
+          "title": "Ask where",
+          "subtitle": "Find what you need",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ja-city-3-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Where is the bathroom?",
+              "context": "Choose the Japanese question.",
+              "choices": [
+                "トイレはどこですか？",
+                "トイレはいくらですか？",
+                "トイレはどうですか？"
+              ],
+              "correctAnswer": "トイレはどこですか？",
+              "acceptedAnswers": [
+                "トイレはどこですか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "どこですか？ starts where-is questions."
+            },
+            {
+              "id": "ja-city-3-q2",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "Where is the bank?",
+              "choices": [
+
+              ],
+              "correctAnswer": "銀行は どこ ですか？",
+              "acceptedAnswers": [
+                "銀行は どこ ですか？"
+              ],
+              "tokens": [
+                "銀行は",
+                "どこ",
+                "ですか？"
+              ],
+              "correctTokens": [
+                "銀行は",
+                "どこ",
+                "ですか？"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Swap in different place words after the where-is pattern."
+            },
+            {
+              "id": "ja-city-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Japanese for bathroom.",
+              "context": "Use the common travel word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "トイレ",
+              "acceptedAnswers": [
+                "トイレ"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "トイレ means bathroom."
+            },
+            {
+              "id": "ja-city-3-q4",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match question words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "いくら = how much, どう = how, どこ = where",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "どこ": "where",
+                "いくら": "how much",
+                "どう": "how"
+              },
+              "learningNote": "Question words unlock more flexible conversation."
+            }
+          ]
+        },
+        {
+          "id": "japanese-city-4",
+          "title": "Transportation",
+          "subtitle": "Buses and trains",
+          "iconName": "bus.fill",
+          "questions": [
+            {
+              "id": "ja-city-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "電車",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "train",
+                "bus",
+                "taxi"
+              ],
+              "correctAnswer": "train",
+              "acceptedAnswers": [
+                "train"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "電車 means train."
+            },
+            {
+              "id": "ja-city-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "ticket",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "切符",
+                "かばん",
+                "ボトル"
+              ],
+              "correctAnswer": "切符",
+              "acceptedAnswers": [
+                "切符"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "切符 is the practical word for ticket."
+            },
+            {
+              "id": "ja-city-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "___が必要です。",
+              "context": "Fill in: I need a ticket.",
+              "choices": [
+                "切符",
+                "電車",
+                "公園"
+              ],
+              "correctAnswer": "切符",
+              "acceptedAnswers": [
+                "切符"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "必要です means I need."
+            },
+            {
+              "id": "ja-city-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I need a ticket for the bus.",
+              "choices": [
+
+              ],
+              "correctAnswer": "バスの 切符が 必要です",
+              "acceptedAnswers": [
+                "バスの 切符が 必要です"
+              ],
+              "tokens": [
+                "バスの",
+                "切符が",
+                "必要です"
+              ],
+              "correctTokens": [
+                "バスの",
+                "切符が",
+                "必要です"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This combines need, ticket, and bus into one usable phrase."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-routine",
+      "unitNumber": 4,
+      "title": "Talk about your day",
+      "theme": "Daily routine",
+      "iconName": "sun.max.fill",
+      "lessons": [
+        {
+          "id": "japanese-routine-1",
+          "title": "Home",
+          "subtitle": "Rooms and objects",
+          "iconName": "house.fill",
+          "questions": [
+            {
+              "id": "ja-routine-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "家",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "house",
+                "table",
+                "morning"
+              ],
+              "correctAnswer": "house",
+              "acceptedAnswers": [
+                "house"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "家 means house or home."
+            },
+            {
+              "id": "ja-routine-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "kitchen",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "台所",
+                "部屋",
+                "食べ物"
+              ],
+              "correctAnswer": "台所",
+              "acceptedAnswers": [
+                "台所"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "台所 means kitchen."
+            },
+            {
+              "id": "ja-routine-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match home words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "テーブル = table, ドア = door, 椅子 = chair",
+              "acceptedAnswers": [
+
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "テーブル": "table",
+                "椅子": "chair",
+                "ドア": "door"
+              },
+              "learningNote": "These are everyday home nouns."
+            },
+            {
+              "id": "ja-routine-1-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Japanese for door.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ドア",
+              "acceptedAnswers": [
+                "ドア"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ドア means door."
+            }
+          ]
+        },
+        {
+          "id": "japanese-routine-2",
+          "title": "Morning",
+          "subtitle": "Wake up and start",
+          "iconName": "sunrise.fill",
+          "questions": [
+            {
+              "id": "ja-routine-2-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "朝",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "morning",
+                "night",
+                "week"
+              ],
+              "correctAnswer": "morning",
+              "acceptedAnswers": [
+                "morning"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "朝 means morning."
+            },
+            {
+              "id": "ja-routine-2-q2",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "早く___。",
+              "context": "Fill in: I wake up early.",
+              "choices": [
+                "起きます",
+                "食べます",
+                "休みます"
+              ],
+              "correctAnswer": "起きます",
+              "acceptedAnswers": [
+                "起きます"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "起きます means wake up or get up."
+            },
+            {
+              "id": "ja-routine-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I drink coffee in the morning.",
+              "choices": [
+
+              ],
+              "correctAnswer": "朝に コーヒーを 飲みます",
+              "acceptedAnswers": [
+                "朝に コーヒーを 飲みます"
+              ],
+              "tokens": [
+                "朝に",
+                "コーヒーを",
+                "飲みます"
+              ],
+              "correctTokens": [
+                "朝に",
+                "コーヒーを",
+                "飲みます"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This connects a routine action with time of day."
+            },
+            {
+              "id": "ja-routine-2-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type Japanese for early.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "早く",
+              "acceptedAnswers": [
+                "早く",
+                "はやく"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "早く means early."
+            }
+          ]
+        },
+        {
+          "id": "japanese-routine-3",
+          "title": "Work day",
+          "subtitle": "Tasks and time",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "ja-routine-3-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "仕事",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "work",
+                "walk",
+                "weather"
+              ],
+              "correctAnswer": "work",
+              "acceptedAnswers": [
+                "work"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "仕事 can mean work or job depending on context."
+            },
+            {
+              "id": "ja-routine-3-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I study",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "勉強します",
+                "働きます",
+                "歩きます"
+              ],
+              "correctAnswer": "勉強します",
+              "acceptedAnswers": [
+                "勉強します"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "勉強します means I study."
+            },
+            {
+              "id": "ja-routine-3-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "九時に___。",
+              "context": "Fill in: I work at nine.",
+              "choices": [
+                "働きます",
+                "歩きます",
+                "食べます"
+              ],
+              "correctAnswer": "働きます",
+              "acceptedAnswers": [
+                "働きます"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "働きます means I work."
+            },
+            {
+              "id": "ja-routine-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I study Japanese at night.",
+              "choices": [
+
+              ],
+              "correctAnswer": "夜に 日本語を 勉強します",
+              "acceptedAnswers": [
+                "夜に 日本語を 勉強します"
+              ],
+              "tokens": [
+                "夜に",
+                "日本語を",
+                "勉強します"
+              ],
+              "correctTokens": [
+                "夜に",
+                "日本語を",
+                "勉強します"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This is a useful habit-building sentence."
+            }
+          ]
+        },
+        {
+          "id": "japanese-routine-4",
+          "title": "Evening",
+          "subtitle": "Plans and rest",
+          "iconName": "moon.stars.fill",
+          "questions": [
+            {
+              "id": "ja-routine-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "疲れています",
+              "context": "Choose the English meaning.",
+              "choices": [
+                "I am tired",
+                "I am busy",
+                "I am ready"
+              ],
+              "correctAnswer": "I am tired",
+              "acceptedAnswers": [
+                "I am tired"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "疲れています means I am tired."
+            },
+            {
+              "id": "ja-routine-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "I am going home",
+              "context": "Choose the Japanese sentence.",
+              "choices": [
+                "家に帰ります",
+                "家があります",
+                "家にいます"
+              ],
+              "correctAnswer": "家に帰ります",
+              "acceptedAnswers": [
+                "家に帰ります"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "家に帰ります is a practical evening sentence."
+            },
+            {
+              "id": "ja-routine-4-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type Japanese for night.",
+              "context": "One word.",
+              "choices": [
+
+              ],
+              "correctAnswer": "夜",
+              "acceptedAnswers": [
+                "夜",
+                "よる"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "夜 means night."
+            },
+            {
+              "id": "ja-routine-4-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "hard",
+              "prompt": "Build the sentence.",
+              "context": "I want to rest tonight.",
+              "choices": [
+
+              ],
+              "correctAnswer": "今夜 休みたいです",
+              "acceptedAnswers": [
+                "今夜 休みたいです"
+              ],
+              "tokens": [
+                "今夜",
+                "休みたいです"
+              ],
+              "correctTokens": [
+                "今夜",
+                "休みたいです"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This turns a simple want phrase into a real sentence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-grocery",
+      "unitNumber": 5,
+      "title": "Shop for groceries",
+      "theme": "Food market basics",
+      "iconName": "basket.fill",
+      "lessons": [
+        {
+          "id": "japanese-grocery-1",
+          "title": "Grocery words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "basket.fill",
+          "questions": [
+            {
+              "id": "ja-grocery-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "りんご",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "apple",
+                "cheese",
+                "rice"
+              ],
+              "correctAnswer": "apple",
+              "acceptedAnswers": [
+                "apple"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "りんご means apple."
+            },
+            {
+              "id": "ja-grocery-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "cheese",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "チーズ",
+                "ご飯",
+                "野菜"
+              ],
+              "correctAnswer": "チーズ",
+              "acceptedAnswers": [
+                "チーズ"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "チーズ means cheese."
+            },
+            {
+              "id": "ja-grocery-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the food market basics words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ご飯 = rice, 野菜 = vegetables, パン = bread",
+              "acceptedAnswers": [
+                "ご飯 = rice, 野菜 = vegetables, パン = bread"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "ご飯": "rice",
+                "野菜": "vegetables",
+                "パン": "bread"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ja-grocery-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "りんごが ___です。",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "ほしい",
+                "どこ",
+                "行きます"
+              ],
+              "correctAnswer": "ほしい",
+              "acceptedAnswers": [
+                "ほしい"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "japanese-grocery-2",
+          "title": "Ask for quantities",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ja-grocery-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How much does it cost?",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "いくらですか？",
+                "パン",
+                "水"
+              ],
+              "correctAnswer": "いくらですか？",
+              "acceptedAnswers": [
+                "いくらですか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "いくらですか？ is a useful polite phrase."
+            },
+            {
+              "id": "ja-grocery-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ご飯を 一つ",
+              "acceptedAnswers": [
+                "ご飯を 一つ"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ご飯を 一つ means one rice."
+            },
+            {
+              "id": "ja-grocery-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "りんごが ほしいです",
+              "choices": [
+
+              ],
+              "correctAnswer": "りんごが ほしいです。",
+              "acceptedAnswers": [
+                "りんごが ほしいです。"
+              ],
+              "tokens": [
+                "りんごが",
+                "ほしいです。"
+              ],
+              "correctTokens": [
+                "りんごが",
+                "ほしいです。"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ja-grocery-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "レジ",
+              "context": "What does this Japanese phrase mean?",
+              "choices": [
+                "checkout",
+                "apple",
+                "one rice"
+              ],
+              "correctAnswer": "checkout",
+              "acceptedAnswers": [
+                "checkout"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "レジ means checkout."
+            }
+          ]
+        },
+        {
+          "id": "japanese-grocery-3",
+          "title": "Find items",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ja-grocery-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "チーズは ___ですか？",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "どこ",
+                "いつ",
+                "だれ"
+              ],
+              "correctAnswer": "どこ",
+              "acceptedAnswers": [
+                "どこ"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ja-grocery-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "野菜 = vegetables, パン = bread, 水 = water",
+              "acceptedAnswers": [
+                "野菜 = vegetables, パン = bread, 水 = water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "野菜": "vegetables",
+                "パン": "bread",
+                "水": "water"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ja-grocery-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "ご飯が 必要です。",
+              "acceptedAnswers": [
+                "ご飯が 必要です。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ja-grocery-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "チーズは どこですか",
+              "choices": [
+
+              ],
+              "correctAnswer": "チーズは どこですか？",
+              "acceptedAnswers": [
+                "チーズは どこですか？"
+              ],
+              "tokens": [
+                "チーズは",
+                "どこですか？"
+              ],
+              "correctTokens": [
+                "チーズは",
+                "どこですか？"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "japanese-grocery-4",
+          "title": "Checkout",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ja-grocery-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "水",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "water",
+                "apple",
+                "cheese"
+              ],
+              "correctAnswer": "water",
+              "acceptedAnswers": [
+                "water"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "水 means water."
+            },
+            {
+              "id": "ja-grocery-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "カードで 払います。",
+              "context": "Choose the meaning.",
+              "choices": [
+                "カードで 払います。",
+                "りんごが ほしいです。",
+                "ご飯が 必要です。"
+              ],
+              "correctAnswer": "カードで 払います。",
+              "acceptedAnswers": [
+                "カードで 払います。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ja-grocery-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "カードで ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "払います",
+                "食べます",
+                "見ます"
+              ],
+              "correctAnswer": "払います",
+              "acceptedAnswers": [
+                "払います"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ja-grocery-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "カードで 払います。",
+              "acceptedAnswers": [
+                "カードで 払います。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-work",
+      "unitNumber": 6,
+      "title": "Work and study",
+      "theme": "Office and study basics",
+      "iconName": "briefcase.fill",
+      "lessons": [
+        {
+          "id": "japanese-work-1",
+          "title": "Desk words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "briefcase.fill",
+          "questions": [
+            {
+              "id": "ja-work-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "会議",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "meeting",
+                "computer",
+                "email"
+              ],
+              "correctAnswer": "meeting",
+              "acceptedAnswers": [
+                "meeting"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "会議 means meeting."
+            },
+            {
+              "id": "ja-work-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "computer",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "パソコン",
+                "メール",
+                "プロジェクト"
+              ],
+              "correctAnswer": "パソコン",
+              "acceptedAnswers": [
+                "パソコン"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "パソコン means computer."
+            },
+            {
+              "id": "ja-work-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the office and study basics words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "メール = email, プロジェクト = project, 会社 = office",
+              "acceptedAnswers": [
+                "メール = email, プロジェクト = project, 会社 = office"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "メール": "email",
+                "プロジェクト": "project",
+                "会社": "office"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ja-work-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "会議が ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "あります",
+                "食べます",
+                "飲みます"
+              ],
+              "correctAnswer": "あります",
+              "acceptedAnswers": [
+                "あります"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "japanese-work-2",
+          "title": "Meetings",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ja-work-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "I am ready.",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "準備できました。",
+                "会社",
+                "宿題"
+              ],
+              "correctAnswer": "準備できました。",
+              "acceptedAnswers": [
+                "準備できました。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "準備できました。 is a useful polite phrase."
+            },
+            {
+              "id": "ja-work-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "三時に",
+              "acceptedAnswers": [
+                "三時に"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "三時に means at three o’clock."
+            },
+            {
+              "id": "ja-work-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "会議が あります",
+              "choices": [
+
+              ],
+              "correctAnswer": "会議が あります。",
+              "acceptedAnswers": [
+                "会議が あります。"
+              ],
+              "tokens": [
+                "会議が",
+                "あります。"
+              ],
+              "correctTokens": [
+                "会議が",
+                "あります。"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ja-work-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "締め切り",
+              "context": "What does this Japanese phrase mean?",
+              "choices": [
+                "deadline",
+                "meeting",
+                "at three o’clock"
+              ],
+              "correctAnswer": "deadline",
+              "acceptedAnswers": [
+                "deadline"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "締め切り means deadline."
+            }
+          ]
+        },
+        {
+          "id": "japanese-work-3",
+          "title": "Study plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ja-work-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "___しなければ なりません。",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "勉強",
+                "水",
+                "駅"
+              ],
+              "correctAnswer": "勉強",
+              "acceptedAnswers": [
+                "勉強"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ja-work-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "プロジェクト = project, 会社 = office, 宿題 = homework",
+              "acceptedAnswers": [
+                "プロジェクト = project, 会社 = office, 宿題 = homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "プロジェクト": "project",
+                "会社": "office",
+                "宿題": "homework"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ja-work-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "勉強しなければ なりません。",
+              "acceptedAnswers": [
+                "勉強しなければ なりません。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ja-work-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "会社は どこですか",
+              "choices": [
+
+              ],
+              "correctAnswer": "会社は どこですか？",
+              "acceptedAnswers": [
+                "会社は どこですか？"
+              ],
+              "tokens": [
+                "会社は",
+                "どこですか？"
+              ],
+              "correctTokens": [
+                "会社は",
+                "どこですか？"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "japanese-work-4",
+          "title": "Deadlines",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ja-work-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "宿題",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "homework",
+                "meeting",
+                "computer"
+              ],
+              "correctAnswer": "homework",
+              "acceptedAnswers": [
+                "homework"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "宿題 means homework."
+            },
+            {
+              "id": "ja-work-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "メールを 送ります。",
+              "context": "Choose the meaning.",
+              "choices": [
+                "メールを 送ります。",
+                "会議が あります。",
+                "勉強しなければ なりません。"
+              ],
+              "correctAnswer": "メールを 送ります。",
+              "acceptedAnswers": [
+                "メールを 送ります。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ja-work-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "メールを ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "送ります",
+                "寝ます",
+                "買います"
+              ],
+              "correctAnswer": "送ります",
+              "acceptedAnswers": [
+                "送ります"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ja-work-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "メールを 送ります。",
+              "acceptedAnswers": [
+                "メールを 送ります。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-travel",
+      "unitNumber": 7,
+      "title": "Travel basics",
+      "theme": "Airport and hotel basics",
+      "iconName": "airplane",
+      "lessons": [
+        {
+          "id": "japanese-travel-1",
+          "title": "Airport words",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "airplane",
+          "questions": [
+            {
+              "id": "ja-travel-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "空港",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "airport",
+                "hotel",
+                "passport"
+              ],
+              "correctAnswer": "airport",
+              "acceptedAnswers": [
+                "airport"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "空港 means airport."
+            },
+            {
+              "id": "ja-travel-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "hotel",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "ホテル",
+                "パスポート",
+                "スーツケース"
+              ],
+              "correctAnswer": "ホテル",
+              "acceptedAnswers": [
+                "ホテル"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "ホテル means hotel."
+            },
+            {
+              "id": "ja-travel-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the airport and hotel basics words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "パスポート = passport, スーツケース = suitcase, 切符 = ticket",
+              "acceptedAnswers": [
+                "パスポート = passport, スーツケース = suitcase, 切符 = ticket"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "パスポート": "passport",
+                "スーツケース": "suitcase",
+                "切符": "ticket"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ja-travel-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "予約が ___.",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "あります",
+                "払います",
+                "読みます"
+              ],
+              "correctAnswer": "あります",
+              "acceptedAnswers": [
+                "あります"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "japanese-travel-2",
+          "title": "Hotel check-in",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ja-travel-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Can you help me?",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "手伝って くれますか？",
+                "切符",
+                "駅"
+              ],
+              "correctAnswer": "手伝って くれますか？",
+              "acceptedAnswers": [
+                "手伝って くれますか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "手伝って くれますか？ is a useful polite phrase."
+            },
+            {
+              "id": "ja-travel-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "一泊",
+              "acceptedAnswers": [
+                "一泊"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "一泊 means one night."
+            },
+            {
+              "id": "ja-travel-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "予約が あります",
+              "choices": [
+
+              ],
+              "correctAnswer": "予約が あります。",
+              "acceptedAnswers": [
+                "予約が あります。"
+              ],
+              "tokens": [
+                "予約が",
+                "あります。"
+              ],
+              "correctTokens": [
+                "予約が",
+                "あります。"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ja-travel-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "チェックイン",
+              "context": "What does this Japanese phrase mean?",
+              "choices": [
+                "check-in",
+                "airport",
+                "one night"
+              ],
+              "correctAnswer": "check-in",
+              "acceptedAnswers": [
+                "check-in"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "チェックイン means check-in."
+            }
+          ]
+        },
+        {
+          "id": "japanese-travel-3",
+          "title": "Ask for help",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ja-travel-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "ホテルは ___ですか？",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "どこ",
+                "いつ",
+                "なに"
+              ],
+              "correctAnswer": "どこ",
+              "acceptedAnswers": [
+                "どこ"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ja-travel-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "スーツケース = suitcase, 切符 = ticket, 駅 = train station",
+              "acceptedAnswers": [
+                "スーツケース = suitcase, 切符 = ticket, 駅 = train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "スーツケース": "suitcase",
+                "切符": "ticket",
+                "駅": "train station"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ja-travel-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "助けが 必要です。",
+              "acceptedAnswers": [
+                "助けが 必要です。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ja-travel-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "ホテルは どこですか",
+              "choices": [
+
+              ],
+              "correctAnswer": "ホテルは どこですか？",
+              "acceptedAnswers": [
+                "ホテルは どこですか？"
+              ],
+              "tokens": [
+                "ホテルは",
+                "どこですか？"
+              ],
+              "correctTokens": [
+                "ホテルは",
+                "どこですか？"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "japanese-travel-4",
+          "title": "Travel plans",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ja-travel-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "駅",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "train station",
+                "airport",
+                "hotel"
+              ],
+              "correctAnswer": "train station",
+              "acceptedAnswers": [
+                "train station"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "駅 means train station."
+            },
+            {
+              "id": "ja-travel-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "駅へ 行きます。",
+              "context": "Choose the meaning.",
+              "choices": [
+                "駅へ 行きます。",
+                "予約が あります。",
+                "助けが 必要です。"
+              ],
+              "correctAnswer": "駅へ 行きます。",
+              "acceptedAnswers": [
+                "駅へ 行きます。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ja-travel-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "駅へ ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "行きます",
+                "食べます",
+                "飲みます"
+              ],
+              "correctAnswer": "行きます",
+              "acceptedAnswers": [
+                "行きます"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ja-travel-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "駅へ 行きます。",
+              "acceptedAnswers": [
+                "駅へ 行きます。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "japanese-feelings",
+      "unitNumber": 8,
+      "title": "Feelings and plans",
+      "theme": "Mood and weekend basics",
+      "iconName": "heart.fill",
+      "lessons": [
+        {
+          "id": "japanese-feelings-1",
+          "title": "Feelings",
+          "subtitle": "Build practical vocabulary",
+          "iconName": "heart.fill",
+          "questions": [
+            {
+              "id": "ja-feelings-1-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "うれしい",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "happy",
+                "tired",
+                "busy"
+              ],
+              "correctAnswer": "happy",
+              "acceptedAnswers": [
+                "happy"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "うれしい means happy."
+            },
+            {
+              "id": "ja-feelings-1-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "tired",
+              "context": "Choose the Japanese word.",
+              "choices": [
+                "疲れた",
+                "忙しい",
+                "落ち着いた"
+              ],
+              "correctAnswer": "疲れた",
+              "acceptedAnswers": [
+                "疲れた"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "疲れた means tired."
+            },
+            {
+              "id": "ja-feelings-1-q3",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "Match the mood and weekend basics words.",
+              "context": "Connect Japanese to English.",
+              "choices": [
+
+              ],
+              "correctAnswer": "忙しい = busy, 落ち着いた = calm, 明日 = tomorrow",
+              "acceptedAnswers": [
+                "忙しい = busy, 落ち着いた = calm, 明日 = tomorrow"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "忙しい": "busy",
+                "落ち着いた": "calm",
+                "明日": "tomorrow"
+              },
+              "learningNote": "These words unlock practical everyday situations."
+            },
+            {
+              "id": "ja-feelings-1-q4",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "easy",
+              "prompt": "私は ___います。",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "疲れて",
+                "空港",
+                "水"
+              ],
+              "correctAnswer": "疲れて",
+              "acceptedAnswers": [
+                "疲れて"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Small grammar words make the sentence sound natural."
+            }
+          ]
+        },
+        {
+          "id": "japanese-feelings-2",
+          "title": "Preferences",
+          "subtitle": "Make the request clear",
+          "iconName": "text.bubble.fill",
+          "questions": [
+            {
+              "id": "ja-feelings-2-q1",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "easy",
+              "prompt": "How are you?",
+              "context": "Choose the Japanese phrase.",
+              "choices": [
+                "元気ですか？",
+                "明日",
+                "週末"
+              ],
+              "correctAnswer": "元気ですか？",
+              "acceptedAnswers": [
+                "元気ですか？"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "元気ですか？ is a useful polite phrase."
+            },
+            {
+              "id": "ja-feelings-2-q2",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "medium",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Recall the phrase from memory.",
+              "choices": [
+
+              ],
+              "correctAnswer": "今週末",
+              "acceptedAnswers": [
+                "今週末"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "今週末 means this weekend."
+            },
+            {
+              "id": "ja-feelings-2-q3",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the sentence.",
+              "context": "私は 疲れています",
+              "choices": [
+
+              ],
+              "correctAnswer": "私は 疲れています。",
+              "acceptedAnswers": [
+                "私は 疲れています。"
+              ],
+              "tokens": [
+                "私は",
+                "疲れています。"
+              ],
+              "correctTokens": [
+                "私は",
+                "疲れています。"
+              ],
+              "pairs": {
+              },
+              "learningNote": "Ordering words builds real speaking confidence."
+            },
+            {
+              "id": "ja-feelings-2-q4",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "気分がいいです",
+              "context": "What does this Japanese phrase mean?",
+              "choices": [
+                "I feel good",
+                "happy",
+                "this weekend"
+              ],
+              "correctAnswer": "I feel good",
+              "acceptedAnswers": [
+                "I feel good"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "気分がいいです means I feel good."
+            }
+          ]
+        },
+        {
+          "id": "japanese-feelings-3",
+          "title": "Weekend plans",
+          "subtitle": "Ask and understand answers",
+          "iconName": "location.fill",
+          "questions": [
+            {
+              "id": "ja-feelings-3-q1",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "medium",
+              "prompt": "___たいです。",
+              "context": "Fill in the missing word.",
+              "choices": [
+                "休み",
+                "払い",
+                "見"
+              ],
+              "correctAnswer": "休み",
+              "acceptedAnswers": [
+                "休み"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "This pattern helps you ask where something is."
+            },
+            {
+              "id": "ja-feelings-3-q2",
+              "type": "connectPairs",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "Match the useful words.",
+              "context": "Connect the practical pairs.",
+              "choices": [
+
+              ],
+              "correctAnswer": "落ち着いた = calm, 明日 = tomorrow, 週末 = weekend",
+              "acceptedAnswers": [
+                "落ち着いた = calm, 明日 = tomorrow, 週末 = weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+                "落ち着いた": "calm",
+                "明日": "tomorrow",
+                "週末": "weekend"
+              },
+              "learningNote": "Pair matching strengthens fast recognition."
+            },
+            {
+              "id": "ja-feelings-3-q3",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Practice typing the full phrase.",
+              "choices": [
+
+              ],
+              "correctAnswer": "休みたいです。",
+              "acceptedAnswers": [
+                "休みたいです。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Typed recall is harder, but it creates stronger memory."
+            },
+            {
+              "id": "ja-feelings-3-q4",
+              "type": "sentenceOrdering",
+              "skill": "sentenceBuilding",
+              "difficulty": "medium",
+              "prompt": "Build the question or sentence.",
+              "context": "明日 働きます。",
+              "choices": [
+
+              ],
+              "correctAnswer": "明日 働きます。",
+              "acceptedAnswers": [
+                "明日 働きます。"
+              ],
+              "tokens": [
+                "明日",
+                "働きます。"
+              ],
+              "correctTokens": [
+                "明日",
+                "働きます。"
+              ],
+              "pairs": {
+              },
+              "learningNote": "This structure is useful in real conversations."
+            }
+          ]
+        },
+        {
+          "id": "japanese-feelings-4",
+          "title": "Small talk",
+          "subtitle": "Finish the interaction",
+          "iconName": "checkmark.circle.fill",
+          "questions": [
+            {
+              "id": "ja-feelings-4-q1",
+              "type": "multipleChoice",
+              "skill": "vocabulary",
+              "difficulty": "medium",
+              "prompt": "週末",
+              "context": "What does this Japanese word mean?",
+              "choices": [
+                "weekend",
+                "happy",
+                "tired"
+              ],
+              "correctAnswer": "weekend",
+              "acceptedAnswers": [
+                "weekend"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "週末 means weekend."
+            },
+            {
+              "id": "ja-feelings-4-q2",
+              "type": "reverseTranslation",
+              "skill": "vocabulary",
+              "difficulty": "hard",
+              "prompt": "週末が 好きです。",
+              "context": "Choose the meaning.",
+              "choices": [
+                "週末が 好きです。",
+                "私は 疲れています。",
+                "休みたいです。"
+              ],
+              "correctAnswer": "週末が 好きです。",
+              "acceptedAnswers": [
+                "週末が 好きです。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Recognize this full practical sentence."
+            },
+            {
+              "id": "ja-feelings-4-q3",
+              "type": "fillBlank",
+              "skill": "grammar",
+              "difficulty": "hard",
+              "prompt": "明日 ___.",
+              "context": "Complete the sentence.",
+              "choices": [
+                "働きます",
+                "チーズ",
+                "駅"
+              ],
+              "correctAnswer": "働きます",
+              "acceptedAnswers": [
+                "働きます"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Harder fill-in-the-blank questions test grammar in context."
+            },
+            {
+              "id": "ja-feelings-4-q4",
+              "type": "typedAnswer",
+              "skill": "recall",
+              "difficulty": "hard",
+              "prompt": "Type the full Japanese sentence.",
+              "context": "Finish with full-sentence recall.",
+              "choices": [
+
+              ],
+              "correctAnswer": "週末が 好きです。",
+              "acceptedAnswers": [
+                "週末が 好きです。"
+              ],
+              "tokens": [
+
+              ],
+              "correctTokens": [
+
+              ],
+              "pairs": {
+              },
+              "learningNote": "Full-sentence recall is the strongest version of practice."
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
